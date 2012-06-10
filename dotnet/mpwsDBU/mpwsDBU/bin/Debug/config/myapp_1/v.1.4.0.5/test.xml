@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="windows-1251"?>
-<!--
-test Configuration Data File
-do not modity anything inside the document section
-geretated by XmlDocumentParser v1.6
--->
-<document name="test" version="1.4.0.5" parent=".test">
-    <property name="textBox1" value="qqqqq" />
-</document>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="windows-1251" ?> 
-<document name="connectionConfiguration">
-
-    <property name="server" value="localhost"/>
-    <property name="database" value="mpws_db"/>
-    <property name="login" value="admin"/>
-    <property name="password" value="1234"/>
-
-</document>
