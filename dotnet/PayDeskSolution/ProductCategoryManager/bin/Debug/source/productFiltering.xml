@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="windows-1251" ?> 
+<document name="productFiltering">
+
+
+    <!-- General configuration KITCHEN -->
+    <section name="productCategory_01">
+        <property name="level" value="1"/>
+        <property name="title" value="Кухня"/>
+        <property name="showProducts" value="false"/>
+        <property name="filter" value="00"/>
+        <section name="productCategory_0100">
+            <property name="level" value="2"/>
+            <property name="title" value="Салати"/>
+            <property name="showProducts" value="false"/>
+            <property name="filter" value="0002"/>
+        </section>
+        <section name="productCategory_0101">
+            <property name="level" value="2"/>
+            <property name="title" value="Холодні зак."/>
+            <property name="showProducts" value="false"/>
+            <property name="filter" value="0001"/>
+        </section>
+        <section name="productCategory_0102">
+            <property name="level" value="2"/>
+            <property name="title" value="Додатки"/>
+            <property name="showProducts" value="false"/>
+            <property name="filter" value="5107"/>
+        </section>
+		<section name="productCategory_0103">
+			<property name="level" value="2"/>
+			<property name="title" value="1 страви"/>
+			<property name="showProducts" value="false"/>
+			<property name="filter" value="0004"/>
+		</section>
+		<section name="productCategory_0104">
+			<property name="level" value="2"/>
+			<property name="title" value="Гарячі закуски"/>
+			<property name="showProducts" value="false"/>
+			<property name="filter" value="0003"/>
+		</section>
+		<section name="productCategory_0105">
+			<property name="level" value="2"/>
+			<property name="title" value="Паста"/>
+			<property name="showProducts" value="false"/>
+			<property name="filter" value="0005"/>
+		</section>
+		<section name="productCategory_0106">
+			<property name="level" value="2"/>
+			<property name="title" value="2 страви"/>
+			<property name="showProducts" value="false"/>
+			<property name="filter" value="0006"/>
+			<section name="productCategory_010601">
+				<property name="level" value="3"/>
+				<property name="title" value="з риби"/>
+				<property name="showProducts" value="false"/>
+				<property name="filter" value="000601"/>
+			</section>
+			<section name="productCategory_010602">
+				<property name="level" value="3"/>
+				<property name="title" value="з мяса"/>
+				<property name="showProducts" value="false"/>
+				<property name="filter" value="000602"/>
+			</section>
+			<section name="productCategory_010603">
+				<property name="level" value="3"/>
+				<property name="title" value="з птиці"/>
+				<property name="showProducts" value="false"/>
+				<property name="filter" value="000603"/>
+			</section>
+			<section name="productCategory_010604">
+				<property name="level" value="3"/>
+				<property name="title" value="вареники"/>
+				<property name="showProducts" value="false"/>
+				<property name="filter" value="000604"/>
+			</section>
+		</section>
+		<section name="productCategory_0107">
+			<property name="level" value="1"/>
+			<property name="title" value="Гарніри"/>
+			<property name="showProducts" value="false"/>
+			<property name="filter" value="0007"/>
+		</section>
+		<section name="productCategory_0108">
+			<property name="level" value="1"/>
+			<property name="title" value="Сніданки"/>
+			<property name="showProducts" value="false"/>
+			<property name="filter" value="0009"/>
+		</section>
+    </section>
+
+    <!-- General configuration DESSERT -->
+    <section name="productCategory_02">
+        <property name="level" value="1"/>
+        <property name="title" value="Десерти"/>
+        <property name="showProducts" value="false"/>
+        <property name="filter" value="0008"/>
+        <section name="productCategory_0201">
+            <property name="level" value="2"/>
+            <property name="title" value="кондитерка"/>
+            <property name="showProducts" value="false"/>
+            <property name="filter" value="5106"/>
+        </section>
+    </section>
+
+    <!-- General configuration BAR -->
+    <section name="productCategory_03">
+        <property name="level" value="1"/>
+        <property name="title" value="Бар"/>
+        <property name="showProducts" value="false"/>
+        <property name="filter" value="51"/>
+		<section name="productCategory_0301">
+			<property name="level" value="2"/>
+			<property name="title" value="Бар Без.алк"/>
+			<property name="showProducts" value="false"/>
+			<property name="filter" value="51"/>
+			<section name="productCategory_030101">
+				<property name="level" value="3"/>
+				<property name="title" value="напої"/>
+				<property name="showProducts" value="false"/>
+				<property name="filter" value="5101"/>
+				<section name="productCategory_03010101">
+					<property name="level" value="4"/>
+					<property name="title" value="кава"/>
+					<property name="showProducts" value="false"/>
+					<property name="filter" value="510101"/>
+				</section>
+				<section name="productCategory_03010102">
+					<property name="level" value="4"/>
+					<property name="title" value="чай"/>
+					<property name="showProducts" value="false"/>
+					<property name="filter" value="510102"/>
+				</section>
+				<section name="productCategory_03010103">
+					<property name="level" value="4"/>
+					<property name="title" value="фреш"/>
+					<property name="showProducts" value="false"/>
+					<property name="filter" value="510103"/>
+				</section>
+				<section name="productCategory_03010104">
+					<property name="level" value="4"/>
+					<property name="title" value="б/а.коктелі"/>
+					<property name="showProducts" value="false"/>
+					<property name="filter" value="510104"/>
+				</section>
+				<section name="productCategory_03010105">
+					<property name="level" value="4"/>
+					<property name="title" value="кав.кокт."/>
+					<property name="showProducts" value="false"/>
+					<property name="filter" value="510105"/>
+				</section>
+			</section>
+			<section name="productCategory_030102">
+				<property name="level" value="3"/>
+				<property name="title" value="вода.мін."/>
+				<property name="showProducts" value="false"/>
+				<property name="filter" value="5102"/>
+			</section>
+			<section name="productCategory_030103">
+				<property name="level" value="3"/>
+				<property name="title" value="вода.сол."/>
+				<property name="showProducts" value="false"/>
+				<property name="filter" value="5103"/>
+			</section>
+			<section name="productCategory_030104">
+				<property name="level" value="3"/>
+				<property name="title" value="соки"/>
+				<property name="showProducts" value="false"/>
+				<property name="filter" value="5104"/>
+			</section>
+			<section name="productCategory_030105">
+				<property name="level" value="3"/>
+				<property name="title" value="прод.бару"/>
+				<property name="showProducts" value="false"/>
+				<property name="filter" value="5105"/>
+			</section>
+		</section>
+		<section name="productCategory_0302">
+			<property name="level" value="2"/>
+			<property name="title" value="Алкоголь"/>
+			<property name="showProducts" value="false"/>
+			<property name="filter" value="50"/>
+			<section name="productCategory_030201">
+				<property name="level" value="3"/>
+				<property name="title" value="Коктелі"/>
+				<property name="showProducts" value="false"/>
+				<property name="filter" value="5001"/>
+			</section>
+			<section name="productCategory_030202">
+				<property name="level" value="3"/>
+				<property name="title" value="Горілка"/>
+				<property name="showProducts" value="false"/>
+				<property name="filter" value="5002"/>
+			</section>
+			<section name="productCategory_030203">
+				<property name="level" value="3"/>
+				<property name="title" value="Коньяк"/>
+				<property name="showProducts" value="false"/>
+				<property name="filter" value="5003"/>
+			</section>
+			<section name="productCategory_030204">
+				<property name="level" value="3"/>
+				<property name="title" value="Лікер"/>
+				<property name="showProducts" value="false"/>
+				<property name="filter" value="5004"/>
+			</section>
+			<section name="productCategory_030205">
+				<property name="level" value="3"/>
+				<property name="title" value="Вино"/>
+				<property name="showProducts" value="false"/>
+				<property name="filter" value="5005"/>
+			</section>
+			<section name="productCategory_030206">
+				<property name="level" value="3"/>
+				<property name="title" value="Пиво"/>
+				<property name="showProducts" value="false"/>
+				<property name="filter" value="5006"/>
+			</section>
+			<section name="productCategory_030207">
+				<property name="level" value="3"/>
+				<property name="title" value="Віскі"/>
+				<property name="showProducts" value="false"/>
+				<property name="filter" value="5007"/>
+			</section>
+			<section name="productCategory_030208">
+				<property name="level" value="3"/>
+				<property name="title" value="Ром"/>
+				<property name="showProducts" value="false"/>
+				<property name="filter" value="5008"/>
+			</section>
+		</section>
+    </section>
+
+</document>

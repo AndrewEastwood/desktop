@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="windows-1251" ?> 
+<document name="formatConfiguration">
+
+    <!--
+        upload mode:
+        INSERT
+        DELETE
+        UPLOAD
+    -->
+    <property name="uploadMode" value="INSERT"/>
+    
+    <!-- 
+        use only selected rows from loacal table
+    -->
+    
+    <property name="affectSelectedRows" value="false"/> 
+
+    <!-- 
+        clear all data before each action
+    -->
+    <property name="alwaysTruncate" value="true" />
+
+    <!-- 
+        if true then before each upload or sync
+        data from server will be copied into local file
+    -->
+
+    <property name="autoBackup" value="true"/>
+
+    <!-- 
+        data formatting
+    -->
+
+    <property name="useRecordIdAsRowIndex" value="true"/>
+    <property name="escapeValues" value="true"/>
+    <property name="columnFormat" value="`{0}`"/>
+    <property name="valueFormat" value="'{0}'"/>
+
+</document>

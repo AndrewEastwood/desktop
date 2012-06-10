@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+connection Configuration Data File
+do not modity anything inside the document section
+geretated by XmlDocumentParser v1.5
+-->
+<document name="connectionConfiguration" version="1.4.0.2">
+    <property name="login" value="2222" />
+    <property name="server" value="4444" />
+    <property name="database" value="3333" />
+    <property name="password" value="1111" />
+</document>

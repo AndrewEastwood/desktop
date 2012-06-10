@@ -1,0 +1,180 @@
+//Info values (is as type). [S]
+        //-------------------------------------
+        //00 - subUnit (byte)
+        //01 - subUnitName (string)
+        //02 - payDesk (byte)
+        //03 - cashierName (string)
+        //04 - currentDateTime (DateTime)
+        //05 - chequeNumber (string)
+        //06 - chequeType (bool) fix || !fix
+        //07 - retirveCheque (bool)
+        //08 - chequeSuma (double)
+        //09 - realSuma (double)
+        //10 - --null-- payment Type [cash] (string)
+        //11 - --null-- payment Type [card] (string)
+        //12 - --null-- payment Type [credit] (string)
+        //13 - --null-- payment Type [cheque] (string)
+        //14 - buyers money [cash] (double)
+        //15 - buyers money [card] (double)
+        //16 - buyers money [credit] (double)
+        //17 - buyers money [cheque] (double)
+        //18 - billNumber (string)
+        //19 - billComment (string)
+        //20 - buyersCash (double)
+        //21 - buyersRest (double)
+        //22 - useTotDiscount (bool)
+        //23 - discountPercent (double)
+        //24 - [-discountPercent] (double)
+        //25 - discountCash (double)
+        //26 - [-discountCash] (double)
+        //27 - discountConstPercent (double)
+        //28 - -
+        //29 - E_discountPercent[] (double)
+        //30 - E_discountCash[] (double)
+        //31 - discountCommonPercent (double)
+        //32 - discountCommonCash (double)
+        //33 - -
+        //34 - -
+        //35 - -
+        //36 - -
+        //37 - -
+        //38 - -
+        //39 - -
+
+        //Info values (type parsed to string (used SiMaks)).
+        //40 - -
+        //41 - -
+        //42 - -
+        //43 - -
+        //44 - -
+        //45 - -
+        //46 - -
+        //47 - -
+        //48 - chequeSuma (double)
+        //49 - realSuma (double)
+        //50 - -
+        //51 - -
+        //52 - -
+        //53 - -
+        //54 - buyers money [cash] (double)
+        //55 - buyers money [card] (double)
+        //56 - buyers money [credit] (double)
+        //57 - buyers money [cheque] (double)
+        //58 - -
+        //59 - -
+        //60 - buyersCash (double)
+        //61 - buyersRest (double)
+        //62 - -
+        //63 - discountPercent (double)
+        //64 - [-discountPercent] (double)
+        //65 - discountCash (double)
+        //66 - [-discountCash] (double)
+        //67 - discountConstPercent (double)
+        //68 - -
+        //69 - E_discountPercent[] (double)
+        //70 - E_discountCash[] (double) 
+        //71 - discountCommonPercent (double)
+        //72 - discountCommonCash (double)
+        //73 - -
+        //74 - -
+        //75 - -
+        //76 - -
+        //77 - -
+        //78 - -
+        //79 - -
+        
+        //Info values (type parsed to string (used DiMaks)).
+        //80 - -
+        //81 - -
+        //82 - -
+        //83 - -
+        //84 - -
+        //85 - -
+        //86 - -
+        //87 - -
+        //88 - chequeSuma (double)
+        //89 - realSuma (double)
+        //90 - -
+        //91 - -
+        //92 - -
+        //93 - -
+        //94 - buyers money [cash] (double)
+        //95 - buyers money [card] (double)
+        //96 - buyers money [credit] (double)
+        //97 - buyers money [cheque] (double)
+        //98 - billNumber (string)
+        //99 - billComment (string)
+        //100 - buyersCash (double)
+        //101 - buyersRest (double)
+        //102 - -
+        //103 - discountPercent (double)
+        //104 - [-discountPercent] (double)
+        //105 - discountCash (double)
+        //106 - [-discountCash] (double)
+        //107 - discountConstPercent (double)
+        //108 - -
+        //109 - E_discountPercent[] (double)
+        //110 - E_discountCash[] (double) 
+        //111 - discountCommonPercent (double)
+        //112 - discountCommonCash (double)
+        //113 - -
+        //114 - -
+        //115 - -
+        //116 - -
+        //117 - -
+        //118 - -
+        //119 - -
+                    
+//Output Format [W]
+        //-------------------------------------
+        //00 - articleName (string)
+        //01 - articleDecription (string)
+        //02 - articleUnit (string)
+        //03 - articleTaxChar (char)
+        //04 - articlePrice (double)
+        //05 - articleDose (double)
+        //06 - articleTaxValue (double)
+        //07 - articleDiscount (double)
+        //08 - articleSuma (doulble)
+        //09 - articleActualSum (double)
+        //10 - articleTaxMoney (double)
+        //11 - articleCashDiscount (double)
+        //12 - articleDoseDiff (double)
+
+        //static values parsed as string [Program decimal correction]
+        //20 - articlePrice (double)
+        //21 - articleDose (double)
+        //22 - articleTaxValue (double)
+        //23 - articleDiscount (double)
+        //24 - articleSuma (double)
+        //25 - articleActualSum (double)
+        //26 - articleTaxMoney (double)
+        //27 - articleCashDiscount (double)
+        //28 - articleDoseDiff (double)
+
+//Output Format [D] (used for printing deleted rows of bill)
+        //-------------------------------------
+        //00 - C (string)
+        //01 - ID (string)
+        //02 - BC (string)
+        //03 - NAME (string)
+        //04 - DESC (string)
+        //05 - UNIT (string)
+        //06 - VG (string)
+        //07 - TID (string)
+        //08 - TQ (string)
+        //09 - PACK (string)
+        //10 - WEIGHT (string)
+        //11 - PRICE (string)
+        //12 - PR1 (string)
+        //13 - PR2 (string)
+        //14 - PR3 (string)
+        //15 - Q2 (string)
+        //16 - Q3" (string)
+        
+        
+//Template variables [#]
+        //-------------------------------------
+        //LoAN - Limit of Article Name (byte)
+        //LoAD - Limit of Article Description (byte)
+        //TSpL - Total Symbols per Line (byte)

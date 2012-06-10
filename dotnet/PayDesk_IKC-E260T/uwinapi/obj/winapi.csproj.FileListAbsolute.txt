@@ -1,0 +1,5 @@
+G:\Projects\C#\clean\PayDesk_IKC-E260T\uwinapi\bin\Debug\winapi.dll
+G:\Projects\C#\clean\PayDesk_IKC-E260T\uwinapi\bin\Debug\winapi.pdb
+G:\Projects\C#\clean\PayDesk_IKC-E260T\uwinapi\obj\Debug\ResolveAssemblyReference.cache
+G:\Projects\C#\clean\PayDesk_IKC-E260T\uwinapi\obj\Debug\winapi.dll
+G:\Projects\C#\clean\PayDesk_IKC-E260T\uwinapi\obj\Debug\winapi.pdb

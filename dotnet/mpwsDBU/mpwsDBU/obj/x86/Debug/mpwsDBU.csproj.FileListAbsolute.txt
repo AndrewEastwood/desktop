@@ -1,0 +1,86 @@
+c:\users\aivaskev\documents\visual studio 2010\Projects\mpwsDBU\mpwsDBU\bin\Debug\mpwsDBU.exe
+c:\users\aivaskev\documents\visual studio 2010\Projects\mpwsDBU\mpwsDBU\bin\Debug\mpwsDBU.pdb
+c:\users\aivaskev\documents\visual studio 2010\Projects\mpwsDBU\mpwsDBU\bin\Debug\Excel.dll
+c:\users\aivaskev\documents\visual studio 2010\Projects\mpwsDBU\mpwsDBU\bin\Debug\ICSharpCode.SharpZipLib.dll
+c:\users\aivaskev\documents\visual studio 2010\Projects\mpwsDBU\mpwsDBU\obj\x86\Debug\ResolveAssemblyReference.cache
+c:\users\aivaskev\documents\visual studio 2010\Projects\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.Properties.Resources.resources
+c:\users\aivaskev\documents\visual studio 2010\Projects\mpwsDBU\mpwsDBU\obj\x86\Debug\GenerateResource.read.1.tlog
+c:\users\aivaskev\documents\visual studio 2010\Projects\mpwsDBU\mpwsDBU\obj\x86\Debug\GenerateResource.write.1.tlog
+c:\users\aivaskev\documents\visual studio 2010\Projects\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.exe
+c:\users\aivaskev\documents\visual studio 2010\Projects\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.pdb
+c:\users\aivaskev\documents\visual studio 2010\Projects\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.Form1.resources
+c:\users\aivaskev\documents\visual studio 2010\Projects\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.sqlPreview.resources
+c:\users\aivaskev\documents\visual studio 2010\Projects\mpwsDBU\mpwsDBU\bin\Debug\mpwsDBU.exe.config
+c:\users\aivaskev\documents\visual studio 2010\Projects\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.settings.resources
+c:\users\aivaskev\documents\visual studio 2010\Projects\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.excelDataView.resources
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\mpwsDBU.exe.config
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.exe
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.pdb
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.com.SplashScreen.resources
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.excelDataView.resources
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.Form1.resources
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.lib.WaitWindow.resources
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.Properties.Resources.resources
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.settings.resources
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.sqlPreview.resources
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\GenerateResource.read.1.tlog
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\GenerateResource.write.1.tlog
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\mpwsDBU.exe
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\mpwsDBU.pdb
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\components.dll
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\ICSharpCode.SharpZipLib.dll
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\Microsoft.CSharp.dll
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\Npgsql.dll
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\Ionic.Zip.dll
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\Mono.Security.dll
+D:\Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\components.pdb
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\ResolveAssemblyReference.cache
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.com.SplashScreen.resources
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.excelDataView.resources
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.Form1.resources
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.lib.WaitWindow.resources
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.Properties.Resources.resources
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.settings.resources
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.sqlPreview.resources
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\GenerateResource.read.1.tlog
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\GenerateResource.write.1.tlog
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\mpwsDBU.exe.config
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\mpwsDBU.exe
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\mpwsDBU.pdb
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\components.dll
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\ICSharpCode.SharpZipLib.dll
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\Microsoft.CSharp.dll
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\MySql.Data.dll
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\Npgsql.dll
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\Ionic.Zip.dll
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\Mono.Security.dll
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\components.pdb
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.exe
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.pdb
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\Excel.dll
+F:\My Dropbox\devcenter\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.TestAppSettings.resources
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.exe
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.pdb
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\mpwsDBU.exe
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\mpwsDBU.pdb
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\components.dll
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\Excel.dll
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\ICSharpCode.SharpZipLib.dll
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\Microsoft.CSharp.dll
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\MySql.Data.dll
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\Npgsql.dll
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\Ionic.Zip.dll
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\Mono.Security.dll
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\bin\Debug\components.pdb
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\ResolveAssemblyReference.cache
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.com.SplashScreen.resources
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.excelDataView.resources
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.Form1.resources
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.lib.WaitWindow.resources
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.Properties.Resources.resources
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.settings.resources
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.sqlPreview.resources
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\mpwsDBU.TestAppSettings.resources
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\GenerateResource.read.1.tlog
+F:\Develop\C#\mpwsDBU\mpwsDBU\mpwsDBU\obj\x86\Debug\GenerateResource.write.1.tlog

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+connection Configuration Data File
+do not modity anything inside the document section
+geretated by XmlDocumentParser v1.5
+-->
+<document name="connectionConfiguration" version="1.4">
+    <property name="login" value="admin" />
+    <property name="server" value="localhost" />
+    <property name="database" value="mpws_db" />
+    <property name="test" value="53465654654" />
+    <property name="password" value="1111" />
+</document>

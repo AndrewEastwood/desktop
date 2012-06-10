@@ -1,0 +1,479 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PayDesk</name>
+    </assembly>
+    <members>
+        <member name="F:PayDesk.Service.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.Service.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.Service.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:PayDesk.Service.LoadUsersList">
+            <summary>
+            Завантаження списку користувачів
+            </summary>
+        </member>
+        <member name="M:PayDesk.Service.LoadUserInfo(System.Int32)">
+            <summary>
+            Завантаження інформації користувача
+            </summary>
+            <param name="id">Код користувача</param>
+        </member>
+        <member name="M:PayDesk.Service.SaveUser(System.Int32)">
+            <summary>
+            Збереження параметрів користувача
+            </summary>
+            <param name="id">Код користувача</param>
+        </member>
+        <member name="M:PayDesk.Service.RecognizeSchema(System.Boolean[])">
+            <summary>
+            Перевірка параметрів користувача з існуючими схемами
+            </summary>
+            <param name="schema">Список існуючих схем</param>
+            <returns>Назва схеми, яка співападає з параметрами користувачів</returns>
+        </member>
+        <member name="M:PayDesk.Service.ClearUserPage(System.Int32)">
+            <summary>
+            Очищення параметрів користувача
+            </summary>
+            <param name="id">Код користувача</param>
+        </member>
+        <member name="F:PayDesk.StartupDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.StartupDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.StartupDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:PayDesk.Settings.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.Settings.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.Settings.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:PayDesk.DiscountRule.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.DiscountRule.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.DiscountRule.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:PayDesk.Admin.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.Admin.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.Admin.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:PayDesk.BillsList.button1_Click(System.Object,System.EventArgs)">
+            <summary>
+            Завантаження рахунку
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:PayDesk.BillsList.DeleteBill(System.Data.DataTable)">
+            <summary>
+            Видалення рахунку
+            </summary>
+            <param name="bill">Рахунок</param>
+            <returns></returns>
+        </member>
+        <member name="F:PayDesk.BillsList.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.BillsList.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.BillsList.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="P:PayDesk.BillsList.LoadedBill">
+            <summary>
+            Завантажений рахунок
+            </summary>
+        </member>
+        <member name="M:PayDesk.Main.OnLoad(System.EventArgs)">
+            <summary>
+            Перевизначений метод для виконання операцій відновлення
+            інтерфейсу та інших параметрів програми під час її завантаження
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:PayDesk.Main.WndProc(System.Windows.Forms.Message@)">
+            <summary>
+            Перевизначений метод обробки повідомлень.
+            </summary>
+            <param name="m">Повідомлення</param>
+        </member>
+        <member name="M:PayDesk.Main.Menu_ItemClicked(System.Object,System.Windows.Forms.ToolStripItemClickedEventArgs)">
+            <summary>
+            Обробляє виконання операцій відповідно до того, який пункт меню був вибраний
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:PayDesk.Main.RowsRemoved_MyEvent(System.Boolean)">
+            <summary>
+            Обробляє чек після видалення одного або всіх товару(ів).
+            (обраховує суму, відновлує фільтрацію таблиці товарів, оновлює повідомлення на панелях)
+            </summary>
+            <param name="updateCustomer">Якщо true то результати обчислення будуть ще виведені на дисплей ФП</param>
+        </member>
+        <member name="M:PayDesk.Main.UpdateSumInfo(System.Boolean)">
+            <summary>
+            Виконує обрахунок суми товарів, які знаходяться в таблиці чеку
+            а також вираховує коефіціенти знижок чи надбавок
+            </summary>
+            <param name="updateCustomer">Якщо true то результати обчислення будуть ще виведені на дисплей ФП</param>
+        </member>
+        <member name="M:PayDesk.Main.CloseCheque(System.Boolean)">
+            <summary>
+            Закриття чеку
+            </summary>
+            <param name="fix">Якщо true то чек є фіскальний</param>
+        </member>
+        <member name="F:PayDesk.Main.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.Main.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.Main.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:PayDesk.BaseChanges.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.BaseChanges.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.BaseChanges.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:PayDesk.DiscountSettings.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.DiscountSettings.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.DiscountSettings.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:PayDesk.UpdateWnd.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.UpdateWnd.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.UpdateWnd.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:PayDesk.ColumnsEditorBox.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.ColumnsEditorBox.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.ColumnsEditorBox.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:PayDesk.DiscountRequest.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.DiscountRequest.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.DiscountRequest.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:PayDesk.DiscountRequest.SetDiscount(System.Double[]@,System.Double[]@)">
+            <summary>
+            Встановлє знижку або надбавку
+            </summary>
+            <param name="dm">Масив з значеннями знижки або надбавки для процентних значень</param>
+            <param name="cdm">Масив з значеннями знижки або надбавки для грошових значень</param>
+        </member>
+        <member name="F:PayDesk.Payment.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.Payment.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.Payment.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:PayDesk.BillSave.#ctor(System.Data.DataTable)">
+            <summary>
+            Конструктор
+            </summary>
+            <param name="dTable">Таблиця рахунку</param>
+        </member>
+        <member name="M:PayDesk.BillSave.button1_Click(System.Object,System.EventArgs)">
+            <summary>
+            Виконує збереження рахунку
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:PayDesk.BillSave.BillRequets_KeyDown(System.Object,System.Windows.Forms.KeyEventArgs)">
+            <summary>
+            Обробник клавіатури
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:PayDesk.BillSave.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.BillSave.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.BillSave.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:PayDesk.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:PayDesk.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:PayDesk.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="F:PayDesk.ChqNomRequest.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.ChqNomRequest.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.ChqNomRequest.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:PayDesk.AboutBox.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.AboutBox.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:PayDesk.AboutBox.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:PayDesk.Printing.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.Printing.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.Printing.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:PayDesk.Registration.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.Registration.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.Registration.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:PayDesk.FiscalFunctions.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.FiscalFunctions.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.FiscalFunctions.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:PayDesk.UnitFilter.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:PayDesk.UnitFilter.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:PayDesk.UnitFilter.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+    </members>
+</doc>

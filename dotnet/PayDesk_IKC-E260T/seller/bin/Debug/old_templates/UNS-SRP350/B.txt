@@ -1,0 +1,13 @@
+﻿#TSpL=42
+#LoAN=42
+#LoAD=42
+SРахунку № {5}
+SОфіціант: {6}
+W\r\n{0,-42}\r\nК-сть: {5}
+
+------------------------
+S{4:dd-MM-yy}        {4:HH:mm:ss}
+
+MHeader
+MStartMsg
+[hex:1D][hex:56][dec:49]

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<document name="mappingConfiguration">
+    <section name="TableValue" />
+    <section name="Indexes" />
+    <section name="TableField" />
+    <property name="defaultIndexFiledName" value="id" />
+    <section name="TableName">
+        <property name="products" value="mpws_articles" />
+    </section>
+</document>

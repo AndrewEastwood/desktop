@@ -1,0 +1,216 @@
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\bin\Debug\DATECS_EXELLIO.dll
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\bin\Debug\DATECS_EXELLIO.pdb
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\bin\Debug\winapi.dll
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\ResolveAssemblyReference.cache
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.UI.AppUI.Port.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.UI.AppUI.Tree.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.Customs.ReportX.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.Customs.ReportZ.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.DisplBotLine.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.DisplText.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.DisplTopLine.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetFixMem.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetFixTransState.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetLastZReport.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetSummsByDay.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetUserInfo.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.LineFeed.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.LoadLogo.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.OpenBox.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.PrintCopy.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.PrintFText.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.PrintNText.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.PrintSet.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByArts.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByDateFull.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByDateShort.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByNoFull.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByNoShort.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByTax.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByUsers.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportXZ.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ResetUserData.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ResetUserPass.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetAdminPass.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetDateTime.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetFixNum.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetGetArticle.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetGetMoney.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetSaleMode.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetSerialNum.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetTaxNum.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetTaxRate.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetUserName.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetUserPass.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\GenerateResource-ResGen.read.1.tlog
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\GenerateResource-ResGen.read.4.tlog
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\GenerateResource-ResGen.write.1.tlog
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.dll
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.pdb
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\bin\Debug\pgmod.dll
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\bin\Debug\pgmod.pdb
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.Components.UI.DriverUI.SetPrintParams.resources
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\bin\Debug\winapi.pdb
+F:\Develop\C#\PayDesk_DATECS_FP3530T\DATECS_EXELLIO\bin\Debug\winapi.xml
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\DATECS_EXELLIO.dll
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\DATECS_EXELLIO.pdb
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\components.dll
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\Npgsql.dll
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\Ionic.Zip.dll
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\Mono.Security.dll
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\components.pdb
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\ResolveAssemblyReference.cache
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.UI.AppUI.Port.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.UI.AppUI.Tree.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.Customs.ReportX.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.Customs.ReportZ.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.DisplBotLine.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.DisplText.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.DisplTopLine.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetFixMem.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetFixTransState.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetLastZReport.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetSummsByDay.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetUserInfo.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.LineFeed.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.LoadLogo.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.OpenBox.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.PrintCopy.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.PrintFText.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.PrintNText.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.PrintSet.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByArts.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByDateFull.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByDateShort.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByNoFull.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByNoShort.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByTax.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByUsers.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportXZ.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ResetUserData.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ResetUserPass.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetAdminPass.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetDateTime.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetFixNum.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetGetArticle.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetGetMoney.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.Components.UI.DriverUI.SetPrintParams.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetSaleMode.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetSerialNum.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetTaxNum.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetTaxRate.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetUserName.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetUserPass.resources
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\GenerateResource-ResGen.read.1.tlog
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\GenerateResource-ResGen.read.4.tlog
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\GenerateResource-ResGen.write.1.tlog
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.dll
+F:\Develop\C#\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.pdb
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\DATECS_EXELLIO.dll
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\DATECS_EXELLIO.pdb
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\components.dll
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\Npgsql.dll
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\Ionic.Zip.dll
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\Mono.Security.dll
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\components.pdb
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\ResolveAssemblyReference.cache
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.UI.AppUI.Port.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.UI.AppUI.Tree.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.Customs.ReportX.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.Customs.ReportZ.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.DisplBotLine.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.DisplText.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.DisplTopLine.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetFixMem.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetFixTransState.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetLastZReport.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetSummsByDay.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetUserInfo.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.LineFeed.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.LoadLogo.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.OpenBox.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.PrintCopy.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.PrintFText.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.PrintNText.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.PrintSet.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByArts.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByDateFull.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByDateShort.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByNoFull.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByNoShort.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByTax.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByUsers.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportXZ.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ResetUserData.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ResetUserPass.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetAdminPass.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetDateTime.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetFixNum.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetGetArticle.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetGetMoney.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.Components.UI.DriverUI.SetPrintParams.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetSaleMode.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetSerialNum.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetTaxNum.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetTaxRate.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetUserName.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetUserPass.resources
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\GenerateResource-ResGen.read.1.tlog
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\GenerateResource-ResGen.read.4.tlog
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\GenerateResource-ResGen.write.1.tlog
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.dll
+D:\My Development\Repository\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.pdb
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\DATECS_EXELLIO.dll
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\DATECS_EXELLIO.pdb
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\components.dll
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\Npgsql.dll
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\Ionic.Zip.dll
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\Mono.Security.dll
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\bin\Debug\components.pdb
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\ResolveAssemblyReference.cache
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.UI.AppUI.Port.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.UI.AppUI.Tree.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.Customs.ReportX.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.Customs.ReportZ.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.DisplBotLine.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.DisplText.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.DisplTopLine.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetFixMem.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetFixTransState.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetLastZReport.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetSummsByDay.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.GetUserInfo.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.LineFeed.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.LoadLogo.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.OpenBox.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.PrintCopy.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.PrintFText.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.PrintNText.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.PrintSet.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByArts.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByDateFull.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByDateShort.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByNoFull.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByNoShort.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByTax.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportByUsers.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ReportXZ.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ResetUserData.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.ResetUserPass.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetAdminPass.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetDateTime.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetFixNum.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetGetArticle.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetGetMoney.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.Components.UI.DriverUI.SetPrintParams.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetSaleMode.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetSerialNum.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetTaxNum.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetTaxRate.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetUserName.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.DriverUI.SetUserPass.resources
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\GenerateResource-ResGen.read.1.tlog
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\GenerateResource-ResGen.read.4.tlog
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\GenerateResource-ResGen.write.1.tlog
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.dll
+D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Plugin_DATECS_EXELLIO\obj\Debug\DATECS_EXELLIO.pdb

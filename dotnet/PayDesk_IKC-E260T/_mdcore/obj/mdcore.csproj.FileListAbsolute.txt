@@ -1,0 +1,14 @@
+G:\Projects\C#\clean\PayDesk_IKC-E260T\mdcore\bin\Debug\mdcore.dll
+G:\Projects\C#\clean\PayDesk_IKC-E260T\mdcore\bin\Debug\mdcore.pdb
+G:\Projects\C#\clean\PayDesk_IKC-E260T\mdcore\bin\Debug\winapi.dll
+G:\Projects\C#\clean\PayDesk_IKC-E260T\mdcore\bin\Debug\winapi.pdb
+G:\Projects\C#\clean\PayDesk_IKC-E260T\mdcore\bin\Debug\winapi.xml
+G:\Projects\C#\clean\PayDesk_IKC-E260T\mdcore\obj\Debug\ResolveAssemblyReference.cache
+G:\Projects\C#\clean\PayDesk_IKC-E260T\mdcore\obj\Debug\mdcore.InventList.resources
+G:\Projects\C#\clean\PayDesk_IKC-E260T\mdcore\obj\Debug\mdcore.MMessageBox.resources
+G:\Projects\C#\clean\PayDesk_IKC-E260T\mdcore\obj\Debug\mdcore.Request.resources
+G:\Projects\C#\clean\PayDesk_IKC-E260T\mdcore\obj\Debug\mdcore.Properties.Resources.resources
+G:\Projects\C#\clean\PayDesk_IKC-E260T\mdcore\obj\Debug\mdcore.csproj.GenerateResource.Cache
+G:\Projects\C#\clean\PayDesk_IKC-E260T\mdcore\obj\Debug\mdcore.dll
+G:\Projects\C#\clean\PayDesk_IKC-E260T\mdcore\obj\Debug\mdcore.pdb
+G:\Projects\C#\clean\PayDesk_IKC-E260T\mdcore\bin\Debug\mdcore.XML

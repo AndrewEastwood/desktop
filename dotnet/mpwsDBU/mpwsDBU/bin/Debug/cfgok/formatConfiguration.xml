@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+format Configuration Data File
+do not modity anything inside the document section
+geretated by XmlDocumentParser v1.6
+-->
+<document name="formatConfiguration" version="1.4.0.6">
+    <property name="autoBackup" value="True" />
+    <property name="uploadMode" value="INSERT" />
+    <property name="alwaysTruncate" value="False" />
+    <property name="affectSelectedRows" value="False" />
+    <property name="useRecordIdAsRowIndex" value="False" />
+    <property name="valueFormat" value="'{0}'" />
+    <property name="escapeValues" value="True" />
+    <property name="columnFormat" value="`{0}`" />
+</document>

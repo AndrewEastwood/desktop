@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+serialportconnect Configuration Data File
+do not modity anything inside the document section
+geretated by XmlDocumentParser v1.6
+-->
+<document name="serialPortConnect" version="1.4.0.3">
+    <!-- property name="working_portConfiguration" ref="portConfiguration.comports.com1"/ -->
+    <section name="normalPrinters">
+        <section name="datecsEP50">
+            <property name="SBITS" value="0" />
+            <property name="RATE" value="57600" />
+            <property name="WM" value="0" />
+            <property name="RC" value="0" />
+            <property name="DBITS" value="8" />
+            <property name="RT" value="-1" />
+            <property name="WC" value="0" />
+            <property name="RM" value="0" />
+            <property name="PARITY" value="0" />
+            <property name="PORT" value="COM1" />
+        </section>
+    </section>
+    <section name="legalPrinters">
+        <section name="datecsFP3530T">
+            <property name="SBITS" value="0" />
+            <property name="RATE" value="57600" />
+            <property name="WM" value="0" />
+            <property name="RC" value="0" />
+            <property name="DBITS" value="8" />
+            <property name="RT" value="-1" />
+            <property name="WC" value="0" />
+            <property name="RM" value="0" />
+            <property name="PARITY" value="0" />
+            <property name="PORT" value="COM1" />
+        </section>
+        <section name="icsE260T">
+            <property name="SBITS" value="0" />
+            <property name="RATE" value="57600" />
+            <property name="WM" value="0" />
+            <property name="RC" value="0" />
+            <property name="DBITS" value="8" />
+            <property name="RT" value="-1" />
+            <property name="WC" value="0" />
+            <property name="RM" value="0" />
+            <property name="PARITY" value="0" />
+            <property name="PORT" value="COM1" />
+        </section>
+        <section name="datecsEcellio">
+            <property name="SBITS" value="0" />
+            <property name="RATE" value="57600" />
+            <property name="WM" value="0" />
+            <property name="RC" value="0" />
+            <property name="DBITS" value="8" />
+            <property name="RT" value="-1" />
+            <property name="WC" value="0" />
+            <property name="RM" value="0" />
+            <property name="PARITY" value="0" />
+            <property name="PORT" value="COM1" />
+        </section>
+    </section>
+</document>

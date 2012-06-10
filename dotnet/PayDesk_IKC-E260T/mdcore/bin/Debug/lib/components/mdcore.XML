@@ -1,0 +1,470 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>mdcore</name>
+    </assembly>
+    <members>
+        <member name="F:mdcore.Components.UI.Request.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:mdcore.Components.UI.Request.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:mdcore.Components.UI.Request.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:mdcore.Lib.CoreLib">
+            <summary>
+            Main methods class.
+            Contained based methods.
+            </summary>
+        </member>
+        <member name="M:mdcore.Lib.CoreLib.CheckForUpdate">
+            <summary>
+            Перевірка на оновлення бази з товарами
+            </summary>
+            <returns>Масив з шляхами до нових файлів</returns>
+        </member>
+        <member name="M:mdcore.Lib.CoreLib.LoadData(System.String[],System.Boolean)">
+            <summary>
+            Завантаження інформації товарів
+            </summary>
+            <param name="localLoadedTempFiles">Шляхи до файлів</param>
+            <param name="onlyUpdate">Якщо ture то завантажувати інформацію лише з нових файлів в іншому випадку завантажувати з всіх</param>
+            <returns>Завантажена інформація</returns>
+        </member>
+        <member name="M:mdcore.Lib.CoreLib.AutomaticPrice(System.Double,System.Data.DataRow)">
+            <summary>
+            Calculate new price for article by definded rules for that article
+            </summary>
+            <param name="tot">Total of article</param>
+            <param name="dRow">Article's data row</param>
+            <returns>Return new price</returns>
+        </member>
+        <member name="M:mdcore.Lib.CoreLib.UpdateSumbyRules(System.Data.DataTable)">
+            <summary>
+            Перевірка вмісту чеу за правилами формування ціни
+            </summary>
+            <param name="dTable">Таблиця чеку</param>
+            <returns>Значення знижки або надбавки</returns>
+        </member>
+        <member name="M:mdcore.Lib.CoreLib.SaveCheque(System.Data.DataTable,System.Object[],System.Int32,System.String)">
+            <summary>
+            Збереження чеку в спеціальний документ
+            </summary>
+            <param name="dTable">Таблиця чеку</param>
+            <param name="param">Інформація чеку</param>
+            <param name="pType">Тип закриття чеку</param>
+            <param name="chqNom">Фіскальний номер чеку (якщо чек фіскальний)</param>
+            <returns>Номер закритого чеку (якщо чек не фіскальний то порядковий номер чеку інакше той самий фіскальний номер)</returns>
+        </member>
+        <member name="M:mdcore.Lib.CoreLib.NonFxChqsInfo(System.Double,System.String@)">
+            <summary>
+            Get information of non fiscalized orders
+            </summary>
+            <param name="suma">Current summa of order</param>
+            <param name="chqNom">Current order's number</param>
+            <returns>Return information of all non fiscalized orders.</returns>
+        </member>
+        <member name="M:mdcore.Lib.CoreLib.ChequeTableName(System.Double,System.Boolean,System.String,System.Boolean,System.Int32,System.String)">
+            <summary>
+            Створення назви для документу чеку
+            </summary>
+            <param name="suma">Сума чеку</param>
+            <param name="rep">Якщо true то чек вимагає накладної</param>
+            <param name="nom">Номер чеку</param>
+            <param name="ret">Якщо true то чек є чеком поверення в іншому випадку це звичайний чек</param>
+            <param name="pType">Тип закриття чеку</param>
+            <param name="znom">Номер Z-звіту (для фіскального чеку)</param>
+            <returns>Назва для файлу чеку</returns>
+        </member>
+        <member name="M:mdcore.Lib.CoreLib.SaveInvent(System.Data.DataTable,System.Boolean)">
+            <summary>
+            Збереження чеку інвентаризації
+            </summary>
+            <param name="dTable">Таблиця чеку</param>
+            <param name="isBackUp">Якщо true то чек буде збережено, як резервну копію
+            в іншому випадку буде чек буде збережено як кінцевий документ</param>
+        </member>
+        <member name="M:mdcore.Lib.CoreLib.OpenInvent">
+            <summary>
+            Відкриття інвентаризаційного чеку
+            </summary>
+            <returns>Таблиця інветаризаційного чеку</returns>
+        </member>
+        <member name="M:mdcore.Lib.CoreLib.AddArticleToCheque(System.Windows.Forms.DataGridView,System.Windows.Forms.DataGridView,System.Data.DataRow,System.Double,System.Data.DataTable)">
+            <summary>
+            Додавання товарк в чек або зміна кількості товару в чеку
+            </summary>
+            <param name="chqDGW">Таблиця чеку</param>
+            <param name="artDGW">Таблиця товарів (можливе застосування фільтру до записів)</param>
+            <param name="article">Запис з товаром</param>
+            <param name="startTotal">Стартова кількість</param>
+            <param name="artsTable">Оригінальна таблиця товарів (без затстосування фільтру до записів)</param>
+        </member>
+        <member name="M:mdcore.Lib.CoreLib.ShowArticleInfo(System.Windows.Forms.DataGridView,System.Windows.Forms.DataGridView)">
+            <summary>
+            Create short information about selected article
+            </summary>
+            <param name="grid1">Table of cheque</param>
+            <param name="grid2">Table of all articles</param>
+            <returns>Return short information about selected article. If no selected article it's return empty string.</returns>
+        </member>
+        <member name="M:mdcore.Lib.CoreLib.Authorize(System.String,System.String)">
+            <summary>
+            Авторизація користувача в системі
+            </summary>
+            <param name="pass">Пароль</param>
+            <param name="login">Логін</param>
+            <returns>Результат авторизації</returns>
+        </member>
+        <member name="M:mdcore.Lib.CoreLib.WriteLog(System.Exception,System.String)">
+            <summary>
+            Запис виникненої внутрішньої помилки в звіт
+            </summary>
+            <param name="e">Опис помилки</param>
+            <param name="methodName">Назва методу в якому відбулася помилка</param>
+        </member>
+        <member name="M:mdcore.Lib.CoreLib.VerifyAllFolders">
+            <summary>
+            Перевірка та сворення всіх необхідних директорій, які використовуються програмою
+            </summary>
+        </member>
+        <member name="M:mdcore.Lib.CoreLib.ClearFolder(System.String)">
+            <summary>
+            Очищення директорії
+            </summary>
+            <param name="path">Шлях до директорії</param>
+        </member>
+        <member name="M:mdcore.Lib.CoreLib.RegisterHotKey(System.Windows.Forms.Form,System.Windows.Forms.Keys,mdcore.Lib.CoreLib.MyHotKeys)">
+            <summary>
+            Реєстрація гарячої клавіші
+            </summary>
+            <param name="f">Вікно до якого будуть підвязані клавіші</param>
+            <param name="key">Клавіша або її комбінація</param>
+            <param name="keyID">Код клавіші (комбінації)</param>
+        </member>
+        <member name="M:mdcore.Lib.CoreLib.UnregisterHotKey(System.Windows.Forms.Form,System.Int32)">
+            <summary>
+            Розреєстрація гарачої клавіші
+            </summary>
+            <param name="f">Вікно, яке містить гарячі клавіші</param>
+            <param name="keyID">Код клавіші</param>
+        </member>
+        <member name="T:mdcore.Lib.CoreLib.MyHotKeys">
+            <summary>
+            Набір клавіш та їх комбінацій, які використовуються в програмі
+            </summary>
+        </member>
+        <member name="T:mdcore.Lib.CoreLib.MyMsgs">
+            <summary>
+            Набір повідомлень для виконання певних операцій
+            </summary>
+        </member>
+        <member name="M:mdcore.Config.ConfigManager.SerializeObject(System.Object,System.Type)">
+            <summary>
+            Method to convert a custom Object to XML string
+            </summary>
+            <param name="pObject">Object that is to be serialized to XML</param>
+            <returns>XML string</returns>
+        </member>
+        <member name="M:mdcore.Config.ConfigManager.DeserializeObject(System.String,System.Type)">
+            <summary>
+            Method to reconstruct an Object from XML string
+            </summary>
+            <param name="pXmlizedString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:mdcore.Config.ConfigManager.UTF8ByteArrayToString(System.Byte[])">
+            <summary>
+            To convert a Byte Array of Unicode values (UTF-8 encoded) to a complete String.
+            </summary>
+            <param name="characters">Unicode Byte Array to be converted to String</param>
+            <returns>String converted from Unicode Byte Array</returns>
+        </member>
+        <member name="M:mdcore.Config.ConfigManager.StringToUTF8ByteArray(System.String)">
+            <summary>
+            Converts the String to UTF8 Byte array and is used in De serialization
+            </summary>
+            <param name="pXmlString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:mdcore.Lib.DataWorkBill.BillWasChanged(System.String,System.Data.DataTable)">
+            <summary>
+            Detect if there was some changes of current bill
+            </summary>
+            <param name="pathToBillFolder">Path to folder with bills</param>
+            <param name="dtBill">Bill Object</param>
+            <returns>0 = without changes; 1 = with changes; 2 = bill is closed; -1 = bill doesn't exist;</returns>
+        </member>
+        <member name="M:mdcore.Config.AppConfig.SaveData">
+            <summary>
+            Виконує збереження параметрів програми
+            </summary>
+        </member>
+        <member name="M:mdcore.Config.AppConfig.ApiLoadData(mdcore.API.ApiManager)">
+            <summary>
+            Виконує відновлення значень параметрів програми
+            </summary>
+        </member>
+        <member name="M:mdcore.Lib.SecureLib.GetHDDSerialNumber(System.String)">
+            <summary>
+            method to retrieve the selected HDD's serial number
+            </summary>
+            <param name="strDriveLetter">Drive letter to retrieve serial number for</param>
+            <returns>the HDD's serial number</returns>
+        </member>
+        <member name="T:mdcore.Components.Objects.ModifyRegistry">
+            <summary>
+            An useful class to read/write/delete/count registry keys
+            </summary>
+        </member>
+        <member name="M:mdcore.Components.Objects.ModifyRegistry.Read(System.String)">
+            <summary>
+            To read a registry key.
+            input: KeyName (string)
+            output: value (string) 
+            </summary>
+        </member>
+        <member name="M:mdcore.Components.Objects.ModifyRegistry.Write(System.String,System.Object)">
+            <summary>
+            To write into a registry key.
+            input: KeyName (string) , Value (object)
+            output: true or false 
+            </summary>
+        </member>
+        <member name="M:mdcore.Components.Objects.ModifyRegistry.DeleteKey(System.String)">
+            <summary>
+            To delete a registry key.
+            input: KeyName (string)
+            output: true or false 
+            </summary>
+        </member>
+        <member name="M:mdcore.Components.Objects.ModifyRegistry.DeleteSubKeyTree">
+            <summary>
+            To delete a sub key and any child.
+            input: void
+            output: true or false 
+            </summary>
+        </member>
+        <member name="M:mdcore.Components.Objects.ModifyRegistry.SubKeyCount">
+            <summary>
+            Retrive the count of subkeys at the current key.
+            input: void
+            output: number of subkeys
+            </summary>
+        </member>
+        <member name="M:mdcore.Components.Objects.ModifyRegistry.ValueCount">
+            <summary>
+            Retrive the count of values in the key.
+            input: void
+            output: number of keys
+            </summary>
+        </member>
+        <member name="P:mdcore.Components.Objects.ModifyRegistry.ShowError">
+            <summary>
+            A property to show or hide error messages 
+            (default = false)
+            </summary>
+        </member>
+        <member name="P:mdcore.Components.Objects.ModifyRegistry.SubKey">
+            <summary>
+            A property to set the SubKey value
+            (default = "SOFTWARE\\" + Application.ProductName.ToUpper())
+            </summary>
+        </member>
+        <member name="P:mdcore.Components.Objects.ModifyRegistry.BaseRegistryKey">
+            <summary>
+            A property to set the BaseRegistryKey value.
+            (default = Registry.LocalMachine)
+            </summary>
+        </member>
+        <member name="T:mdcore.Config.UserConfig">
+            <summary>
+            User's configuration class
+            </summary>
+        </member>
+        <member name="M:mdcore.Config.UserConfig.LoadData(System.String)">
+            <summary>
+            Load user's settings
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:mdcore.Config.UserConfig.SaveData(System.String)">
+            <summary>
+            Save user's settings
+            </summary>
+            <param name="filePath">Path of configuration file</param>
+        </member>
+        <member name="P:mdcore.Config.UserConfig.UserID">
+            <summary>
+            Get or set user ID
+            </summary>
+        </member>
+        <member name="P:mdcore.Config.UserConfig.UserLogin">
+            <summary>
+            Get or set user login
+            </summary>
+        </member>
+        <member name="P:mdcore.Config.UserConfig.UserPassword">
+            <summary>
+            GetOr set user password
+            </summary>
+        </member>
+        <member name="P:mdcore.Config.UserConfig.AdminState">
+            <summary>
+            Get or set administrator's activity
+            </summary>
+        </member>
+        <member name="P:mdcore.Config.UserConfig.Properties">
+            <summary>
+            Get or set user access properties
+            </summary>
+        </member>
+        <member name="P:mdcore.Config.UserConfig.SchemaName">
+            <summary>
+            Get or set user definded schema
+            </summary>
+        </member>
+        <member name="P:mdcore.Config.UserConfig.UserFLogin">
+            <summary>
+            Get or set user login
+            </summary>
+        </member>
+        <member name="P:mdcore.Config.UserConfig.UserFPassword">
+            <summary>
+            GetOr set user password
+            </summary>
+        </member>
+        <member name="F:mdcore.Components.UI.InventList.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:mdcore.Components.UI.InventList.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:mdcore.Components.UI.InventList.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:mdcore.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:mdcore.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:mdcore.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="M:mdcore.Lib.DataWorkSource.CheckForUpdate">
+            <summary>
+            Перевірка на оновлення бази з товарами
+            </summary>
+            <returns>Масив з шляхами до нових файлів</returns>
+        </member>
+        <member name="M:mdcore.Lib.DataWorkSource.LoadData(System.String[],System.Boolean)">
+            <summary>
+            Завантаження інформації товарів
+            </summary>
+            <param name="localLoadedTempFiles">Шляхи до файлів</param>
+            <param name="onlyUpdate">Якщо ture то завантажувати інформацію лише з нових файлів в іншому випадку завантажувати з всіх</param>
+            <returns>Завантажена інформація</returns>
+        </member>
+        <member name="M:mdcore.Components.Objects.ComPort.Dispose(System.Boolean)">
+            <summary>
+            Perform disposing element
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:mdcore.Components.Objects.ComPort.SavePortConfig">
+            <summary>
+            Perform saving СОМ-port settings
+            </summary>
+        </member>
+        <member name="M:mdcore.Components.Objects.ComPort.LoadPortConfig">
+            <summary>
+            Завантаження і застосування параметрів СОМ-порту
+            </summary>
+        </member>
+        <member name="M:mdcore.Components.Objects.ComPort.Open(System.Int32)">
+            <summary>
+            Відкриття СОМ-порту
+            </summary>
+            <param name="portIndex">Номер порту</param>
+            <returns>Якщо true то СОМ-порт відкритий успішно</returns>
+        </member>
+        <member name="M:mdcore.Components.Objects.ComPort.Open(System.String)">
+            <summary>
+            Відкриття СОМ-порту
+            </summary>
+            <param name="portName">Назва порту</param>
+            <returns>Якщо true то СОМ-порт відкритий успішно</returns>
+        </member>
+        <member name="M:mdcore.Components.Objects.ComPort.Open">
+            <summary>
+            Відкриття порту за раніше вказани індекстом СОМ-порту
+            </summary>
+            <returns>Якщо true то СОМ-порт відкритий успішно</returns>
+        </member>
+        <member name="M:mdcore.Components.Objects.ComPort.ReOpen">
+            <summary>
+            Перевідкриття СОМ-порту
+            </summary>
+            <returns>Якщо true то СОМ-порт перевідкриття СОИ-порту відбулося успішно</returns>
+        </member>
+        <member name="M:mdcore.Components.Objects.ComPort.Read(System.Byte[]@,System.UInt32@)">
+            <summary>
+            Читання даних з СОМ-порту
+            </summary>
+            <param name="buffer">Буфер в який буде відбуватися читання інформації</param>
+            <param name="count">Кількість прочитаних байтів</param>
+            <returns>Якщо true то читання з СОМ-порту відбулося успішно</returns>
+        </member>
+        <member name="M:mdcore.Components.Objects.ComPort.Write(System.Byte[])">
+            <summary>
+            Відправка інформації на СОМ-порт
+            </summary>
+            <param name="SendArr">Інформація</param>
+            <returns>Якщо true то відправка інформації на СОМ-порт відбулася успішно</returns>
+        </member>
+        <member name="M:mdcore.Components.Objects.ComPort.Close">
+            <summary>
+            Закриття СОМ-порту
+            </summary>
+            <returns>Якщо true то СОМ-порт закритий успішно</returns>
+        </member>
+        <member name="T:mdcore.Lib.DataWorkOutput">
+            <summary>
+            Present Object Working With Output Devices
+            </summary>
+        </member>
+        <member name="M:mdcore.Lib.DataWorkOutput.Print(mdcore.Lib.DataWorkOutput.PrinterType,System.Data.DataTable)">
+            <summary>
+            
+            </summary>
+            <param name="type"></param>
+            <param name="printerData"></param>
+        </member>
+    </members>
+</doc>

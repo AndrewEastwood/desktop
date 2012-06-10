@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FF2E75C2-27A5-4847-A30C-891A38CB2B1C}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>mpwsDBU</RootNamespace>
+    <AssemblyName>mpwsDBU</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>New archive.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Excel">
+      <HintPath>..\ExcelDataReader_2.0.1.0\Excel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\ExcelDataReader_2.0.1.0\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.3.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp">
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="lib\SplashScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="lib\SplashScreen.Designer.cs">
+      <DependentUpon>SplashScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="corelib.cs" />
+    <Compile Include="DataLayoutCollection.cs" />
+    <Compile Include="dataUpload.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dataUpload.Designer.cs">
+      <DependentUpon>dataUpload.cs</DependentUpon>
+    </Compile>
+    <Compile Include="excelDataView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="excelDataView.Designer.cs">
+      <DependentUpon>excelDataView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="lib\WaitWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="lib\WaitWindow.Designer.cs">
+      <DependentUpon>WaitWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="sqlPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="sqlPreview.Designer.cs">
+      <DependentUpon>sqlPreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TestAppSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <EmbeddedResource Include="lib\SplashScreen.resx">
+      <DependentUpon>SplashScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="excelDataView.resx">
+      <DependentUpon>excelDataView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="lib\WaitWindow.resx">
+      <DependentUpon>WaitWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="settings.resx">
+      <DependentUpon>settings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="sqlPreview.resx">
+      <DependentUpon>sqlPreview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TestAppSettings.resx">
+      <DependentUpon>TestAppSettings.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon16_date.png" />
+    <None Include="Resources\icon16_sign-up.png" />
+    <None Include="Resources\icon16_refresh.png" />
+    <None Include="Resources\icon16_communication.png" />
+    <None Include="Resources\icon16_config.png" />
+    <None Include="bin\Debug\resources\Splash Screen.png" />
+    <Content Include="New archive.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Develop\C#\PayDeskSolution\components\components.csproj">
+      <Project>{BE1911B7-9DDA-4F5C-8B55-ED05673B4429}</Project>
+      <Name>components</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

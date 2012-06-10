@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<CommunicationPort>
+    <ComPortSettings>
+        <PortIndex>3</PortIndex>
+        <BaudRate>9600</BaudRate>
+        <Parity>0</Parity>
+        <DataBits>8</DataBits>
+        <StopBits>0</StopBits>
+        <ReadIntervalTimeout>4294967295</ReadIntervalTimeout>
+        <ReadTotalTimeoutMultiplier>0</ReadTotalTimeoutMultiplier>
+        <ReadTotalTimeoutConstant>0</ReadTotalTimeoutConstant>
+        <WriteTotalTimeoutMultiplier>0</WriteTotalTimeoutMultiplier>
+        <WriteTotalTimeoutConstant>0</WriteTotalTimeoutConstant>
+        <Tag>-</Tag>
+    </ComPortSettings>
+</CommunicationPort>

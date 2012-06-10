@@ -1,0 +1,358 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C5DF6468-7FA6-450A-915F-A7C22BF185B2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IKC_E260T</RootNamespace>
+    <AssemblyName>IKC_E260T</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Components\Attribute\CustomAccessMethod.cs" />
+    <Compile Include="Components\UI\AppUI\Access.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\UI\AppUI\Access.Designer.cs">
+      <DependentUpon>Access.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\AppUI\Config.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\UI\AppUI\Config.Designer.cs">
+      <DependentUpon>Config.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\AppUI\Port.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\UI\AppUI\Port.Designer.cs">
+      <DependentUpon>Port.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\AppUI\Tree.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\UI\AppUI\Tree.Designer.cs">
+      <DependentUpon>Tree.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Avans.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Avans.Designer.cs">
+      <DependentUpon>Avans.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\ChangeRate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\ChangeRate.Designer.cs">
+      <DependentUpon>ChangeRate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Comment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Comment.Designer.cs">
+      <DependentUpon>Comment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Customs\ReportX.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Customs\ReportX.Designer.cs">
+      <DependentUpon>ReportX.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Customs\ReportZ.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Customs\ReportZ.Designer.cs">
+      <DependentUpon>ReportZ.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Discount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Discount.Designer.cs">
+      <DependentUpon>Discount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Fiscalazation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Fiscalazation.Designer.cs">
+      <DependentUpon>Fiscalazation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\FpInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\FpInfo.Designer.cs">
+      <DependentUpon>FpInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\GetArticle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\GetArticle.Designer.cs">
+      <DependentUpon>GetArticle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\GetMemory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\GetMemory.Designer.cs">
+      <DependentUpon>GetMemory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Give.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Give.Designer.cs">
+      <DependentUpon>Give.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\LineSP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\LineSP.Designer.cs">
+      <DependentUpon>LineSP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\LoadBMP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\LoadBMP.Designer.cs">
+      <DependentUpon>LoadBMP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Payment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Payment.Designer.cs">
+      <DependentUpon>Payment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\PayMoney.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\PayMoney.Designer.cs">
+      <DependentUpon>PayMoney.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\PeriodicReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\PeriodicReport.Designer.cs">
+      <DependentUpon>PeriodicReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\PeriodicReport2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\PeriodicReport2.Designer.cs">
+      <DependentUpon>PeriodicReport2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\PeriodicReportShort.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\PeriodicReportShort.Designer.cs">
+      <DependentUpon>PeriodicReportShort.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\ProgArt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\ProgArt.Designer.cs">
+      <DependentUpon>ProgArt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Sale.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\Sale.Designer.cs">
+      <DependentUpon>Sale.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\SendCustomer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\SendCustomer.Designer.cs">
+      <DependentUpon>SendCustomer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\SetCashier.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\SetCashier.Designer.cs">
+      <DependentUpon>SetCashier.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\SetCod.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\SetCod.Designer.cs">
+      <DependentUpon>SetCod.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\SetDate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\SetDate.Designer.cs">
+      <DependentUpon>SetDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\SetHeadLine.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\SetHeadLine.Designer.cs">
+      <DependentUpon>SetHeadLine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\SetString.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\SetString.Designer.cs">
+      <DependentUpon>SetString.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\SetTaxRate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\SetTaxRate.Designer.cs">
+      <DependentUpon>SetTaxRate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\SetTime.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\SetTime.Designer.cs">
+      <DependentUpon>SetTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\TransPrint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\DriverUI\TransPrint.Designer.cs">
+      <DependentUpon>TransPrint.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Assembly.cs" />
+    <Compile Include="Config\Params.cs" />
+    <Compile Include="Config\Path.cs" />
+    <Compile Include="Plugin_IKC_E260T.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config\IKC_E260T.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Components\UI\AppUI\Port.resx">
+      <DependentUpon>Port.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\AppUI\Tree.resx">
+      <DependentUpon>Tree.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\Avans.resx">
+      <DependentUpon>Avans.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\ChangeRate.resx">
+      <DependentUpon>ChangeRate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\Comment.resx">
+      <DependentUpon>Comment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\Customs\ReportX.resx">
+      <DependentUpon>ReportX.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\Customs\ReportZ.resx">
+      <DependentUpon>ReportZ.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\Discount.resx">
+      <DependentUpon>Discount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\Fiscalazation.resx">
+      <DependentUpon>Fiscalazation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\FpInfo.resx">
+      <DependentUpon>FpInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\GetArticle.resx">
+      <DependentUpon>GetArticle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\GetMemory.resx">
+      <DependentUpon>GetMemory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\Give.resx">
+      <DependentUpon>Give.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\LineSP.resx">
+      <DependentUpon>LineSP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\LoadBMP.resx">
+      <DependentUpon>LoadBMP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\Payment.resx">
+      <DependentUpon>Payment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\PayMoney.resx">
+      <DependentUpon>PayMoney.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\PeriodicReport.resx">
+      <DependentUpon>PeriodicReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\PeriodicReport2.resx">
+      <DependentUpon>PeriodicReport2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\PeriodicReportShort.resx">
+      <DependentUpon>PeriodicReportShort.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\ProgArt.resx">
+      <DependentUpon>ProgArt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\Sale.resx">
+      <DependentUpon>Sale.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\SendCustomer.resx">
+      <DependentUpon>SendCustomer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\SetCashier.resx">
+      <DependentUpon>SetCashier.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\SetCod.resx">
+      <DependentUpon>SetCod.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\SetDate.resx">
+      <DependentUpon>SetDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\SetHeadLine.resx">
+      <DependentUpon>SetHeadLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\SetString.resx">
+      <DependentUpon>SetString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\SetTaxRate.resx">
+      <DependentUpon>SetTaxRate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\SetTime.resx">
+      <DependentUpon>SetTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\TransPrint.resx">
+      <DependentUpon>TransPrint.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\components\components.csproj">
+      <Project>{BE1911B7-9DDA-4F5C-8B55-ED05673B4429}</Project>
+      <Name>components</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

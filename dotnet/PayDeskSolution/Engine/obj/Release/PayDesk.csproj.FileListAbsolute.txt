@@ -1,0 +1,1 @@
+F:\Develop\C#\PayDesk_DATECS_FP3530T\seller\bin\Release\PayDesk.exe.config

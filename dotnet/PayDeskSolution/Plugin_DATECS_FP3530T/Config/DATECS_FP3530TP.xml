@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DATECS_FP3530T>
+  <DriverData>
+    <property name="Status" type="string[]">
+      <value id="0"></value>
+      <value id="1"></value>
+      <value id="2">Загальна помилка</value>
+      <value id="3">Механізм друку несправний</value>
+      <value id="4"></value>
+      <value id="5"></value>
+      <value id="6"></value>
+      <value id="7"></value>
+      <value id="8"></value>
+      <value id="9"></value>
+      <value id="10"></value>
+      <value id="11"></value>
+      <value id="12"></value>
+      <value id="13"></value>
+      <value id="15"></value>
+      <value id="15"></value>
+      <value id="16"></value>
+      <value id="17"></value>
+      <value id="18"></value>
+      <value id="19"></value>
+      <value id="20"></value>
+      <value id="21"></value>
+      <value id="22"></value>
+      <value id="23"></value>
+      <value id="24"></value>
+      <value id="25"></value>
+      <value id="26"></value>
+      <value id="27"></value>
+      <value id="28"></value>
+    </property>
+    <property name="ArtMemorySize" type="uint" value="11800"/>
+    <property name="UserNo" type="byte" value="0"/>
+    <property name="UserPwd" type="string" value="0000"/>
+    <property name="DeskNo" type="byte" value="1"/>
+    <property name="LastFunc" type="string" value="0"/>
+    <property name="LastArtNo" type="uint" value="1"/>
+    <property name="LastFOrderNo" type="uint" value="0"/>
+    <property name="LastNOrderNo" type="uint" value="0"/>
+    <property name="LastROrderNo" type="uint" value="0"/>
+  </DriverData>
+  <ErrorFlags>
+    <property name="FP_Sale" type="bool" value="false"/>
+    <property name="FP_PayMoney" type="bool" value="false"/>
+    <property name="FP_Payment" type="bool" value="false"/>
+    <property name="FP_Discount" type="bool" value="false"/>
+  </ErrorFlags>
+  <ComPort>
+  </ComPort>
+  <AllowedMethods>
+  </AllowedMethods>
+</DATECS_FP3530T>

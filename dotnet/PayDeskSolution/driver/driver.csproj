@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3C91D674-9568-42A9-A0DA-026C1A8FAB80}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>driver</RootNamespace>
+    <AssemblyName>driver</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\CoreConst.cs" />
+    <Compile Include="Common\Enums.cs" />
+    <Compile Include="Components\Objects\FormEx.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\Objects\FormEx.Designer.cs">
+      <DependentUpon>FormEx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\InventList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\InventList.Designer.cs">
+      <DependentUpon>InventList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\Request.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\Request.Designer.cs">
+      <DependentUpon>Request.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UserSchema.cs" />
+    <Compile Include="Config\AppConfig.cs" />
+    <Compile Include="Config\ConfigManager.cs" />
+    <Compile Include="Config\UserConfig.cs" />
+    <Compile Include="Lib\CoreLib.cs" />
+    <Compile Include="Lib\DataWorkBill.cs" />
+    <Compile Include="Lib\DataWorkCheque.cs" />
+    <Compile Include="Lib\DataWorkOutput.cs" />
+    <Compile Include="Lib\DataWorkShared.cs" />
+    <Compile Include="Lib\DataWorkSource.cs" />
+    <Compile Include="Lib\FileMgrLib.cs" />
+    <Compile Include="Lib\MathLib.cs" />
+    <Compile Include="Lib\SecureLib.cs" />
+    <Compile Include="Lib\ViewLib.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\activity2tr.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\connected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\S-LOGO.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\unPluged.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Components\UI\InventList.resx">
+      <DependentUpon>InventList.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\Request.resx">
+      <DependentUpon>Request.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\components\components.csproj">
+      <Project>{BE1911B7-9DDA-4F5C-8B55-ED05673B4429}</Project>
+      <Name>components</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\market.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

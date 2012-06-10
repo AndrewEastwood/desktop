@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+test Configuration Data File
+do not modity anything inside the document section
+geretated by XmlDocumentParser v1.6
+-->
+<document name="test" version="1.4.0.6">
+    <property name="textBox1" value="2222" />
+    <section name="dd">
+        <section name="listBox1">
+            <property name="1" value="1" />
+        </section>
+        <property name="dateTimePicker1" value="13.08.2011 15:03:50" />
+        <property name="domainUpDown1" value="2222" />
+        <section name="checkedListBox1">
+            <property name="2" value="R" />
+            <property name="1" value="Q" />
+        </section>
+    </section>
+    <!-- racking bar demo test -->
+    <property name="trackBar1" value="5" />
+    <!-- It sets limit for rows which are used -->
+    <property name="numericUpDown1" value="2222" />
+    <!-- rich text area demo test -->
+    <property name="richTextBox1" value="" />
+    <!-- demo check box -->
+    <property name="checkBox1" value="False" />
+    <section name="eee">
+        <section name="dataGridView1">
+            <section name="0">
+                <property name="A" value="222" />
+                <property name="B" value="222" />
+            </section>
+        </section>
+        <property name="comboBox1" value="C" />
+    </section>
+</document>

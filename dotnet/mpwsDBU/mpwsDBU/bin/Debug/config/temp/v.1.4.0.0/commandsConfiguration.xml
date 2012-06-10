@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+commands Configuration Data File
+do not modity anything inside the document section
+geretated by XmlDocumentParser v1.5
+-->
+<document name="commandsConfiguration" version="1.4.0.0">
+    <section name="sqlCommandList">
+        <section name="0">
+            <property name="ComdScript" value="213213213" />
+            <property name="Command" value="2424313" />
+        </section>
+    </section>
+</document>

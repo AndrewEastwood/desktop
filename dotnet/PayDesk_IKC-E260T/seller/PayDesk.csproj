@@ -1,0 +1,385 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C7FD4F0D-3010-4052-9F06-A9CAD068B2AF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>PayDesk</AssemblyName>
+    <RootNamespace>PayDesk</RootNamespace>
+    <Win32Resource>
+    </Win32Resource>
+    <ApplicationIcon>market.ico</ApplicationIcon>
+    <TargetZone>LocalIntranet</TargetZone>
+    <GenerateManifests>false</GenerateManifests>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <StartupObject>PayDesk.Program</StartupObject>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <PublishUrl>http://localhost/PayDesk/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>.\bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DocumentationFile>bin\Debug\PayDesk.XML</DocumentationFile>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>.\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ChqNomRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChqNomRequest.Designer.cs">
+      <DependentUpon>ChqNomRequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndAboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndAboutBox.Designer.cs">
+      <DependentUpon>uiWndAboutBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndAdmin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndAdmin.Designer.cs">
+      <DependentUpon>uiWndAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndBaseChanges.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndBaseChanges.Designer.cs">
+      <DependentUpon>uiWndBaseChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndChqNomRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndChqNomRequest.Designer.cs">
+      <DependentUpon>uiWndChqNomRequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndColumnsEditorBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndColumnsEditorBox.Designer.cs">
+      <DependentUpon>uiWndColumnsEditorBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndDiscountRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndDiscountRequest.Designer.cs">
+      <DependentUpon>uiWndDiscountRequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndDiscountRule.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndDiscountRule.Designer.cs">
+      <DependentUpon>uiWndDiscountRule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndDiscountSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndDiscountSettings.Designer.cs">
+      <DependentUpon>uiWndDiscountSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndFiscalFunctions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndFiscalFunctions.Designer.cs">
+      <DependentUpon>uiWndFiscalFunctions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndMain.Designer.cs">
+      <DependentUpon>uiWndMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndPayment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndPayment.Designer.cs">
+      <DependentUpon>uiWndPayment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndPrinting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndPrinting.Designer.cs">
+      <DependentUpon>uiWndPrinting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndRegistration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndRegistration.Designer.cs">
+      <DependentUpon>uiWndRegistration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndService.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndService.Designer.cs">
+      <DependentUpon>uiWndService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndSettings.Designer.cs">
+      <DependentUpon>uiWndSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndStartupDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndStartupDialog.Designer.cs">
+      <DependentUpon>uiWndStartupDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndUnitFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndUnitFilter.Designer.cs">
+      <DependentUpon>uiWndUnitFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\uiWndUpdateWnd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\uiWndUpdateWnd.Designer.cs">
+      <DependentUpon>uiWndUpdateWnd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\wndAdditional\uiWndAdditionalPortCommands.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\wndAdditional\uiWndAdditionalPortCommands.Designer.cs">
+      <DependentUpon>uiWndAdditionalPortCommands.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\wndBills\uiWndBillDateFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\wndBills\uiWndBillDateFilter.Designer.cs">
+      <DependentUpon>uiWndBillDateFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\wndBills\uiWndBillManagercs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\wndBills\uiWndBillManagercs.Designer.cs">
+      <DependentUpon>uiWndBillManagercs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\wndBills\uiWndBillPrint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\wndBills\uiWndBillPrint.Designer.cs">
+      <DependentUpon>uiWndBillPrint.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\wndBills\uiWndBillSave.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\wndBills\uiWndBillSave.Designer.cs">
+      <DependentUpon>uiWndBillSave.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\wndBills\uiWndBillsList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\wndBills\uiWndBillsList.Designer.cs">
+      <DependentUpon>uiWndBillsList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\UI\wndSettings\uiWndSettingsNumberRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\UI\wndSettings\uiWndSettingsNumberRequest.Designer.cs">
+      <DependentUpon>uiWndSettingsNumberRequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ChqNomRequest.resx">
+      <DependentUpon>ChqNomRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndAboutBox.resx">
+      <DependentUpon>uiWndAboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndAdmin.resx">
+      <DependentUpon>uiWndAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndBaseChanges.resx">
+      <DependentUpon>uiWndBaseChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndChqNomRequest.resx">
+      <DependentUpon>uiWndChqNomRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndColumnsEditorBox.resx">
+      <DependentUpon>uiWndColumnsEditorBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndDiscountRequest.resx">
+      <DependentUpon>uiWndDiscountRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndDiscountRule.resx">
+      <DependentUpon>uiWndDiscountRule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndDiscountSettings.resx">
+      <DependentUpon>uiWndDiscountSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndFiscalFunctions.resx">
+      <DependentUpon>uiWndFiscalFunctions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndMain.resx">
+      <DependentUpon>uiWndMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndPayment.resx">
+      <DependentUpon>uiWndPayment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndPrinting.resx">
+      <DependentUpon>uiWndPrinting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndRegistration.resx">
+      <DependentUpon>uiWndRegistration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndService.resx">
+      <DependentUpon>uiWndService.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndSettings.resx">
+      <DependentUpon>uiWndSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndStartupDialog.resx">
+      <DependentUpon>uiWndStartupDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndUnitFilter.resx">
+      <DependentUpon>uiWndUnitFilter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\uiWndUpdateWnd.resx">
+      <DependentUpon>uiWndUpdateWnd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\wndAdditional\uiWndAdditionalPortCommands.resx">
+      <DependentUpon>uiWndAdditionalPortCommands.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\wndBills\uiWndBillDateFilter.resx">
+      <DependentUpon>uiWndBillDateFilter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\wndBills\uiWndBillManagercs.resx">
+      <DependentUpon>uiWndBillManagercs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\wndBills\uiWndBillPrint.resx">
+      <DependentUpon>uiWndBillPrint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\wndBills\uiWndBillSave.resx">
+      <DependentUpon>uiWndBillSave.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\wndBills\uiWndBillsList.resx">
+      <DependentUpon>uiWndBillsList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\wndSettings\uiWndSettingsNumberRequest.resx">
+      <DependentUpon>uiWndSettingsNumberRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="market.ico" />
+    <None Include="Resources\UserFixFunc.png" />
+    <None Include="Resources\by_bc.png" />
+    <None Include="Resources\by_c.png" />
+    <None Include="Resources\by_name.png" />
+    <Content Include="Resources\edit.png" />
+    <None Include="Resources\naklad.png" />
+    <None Include="Resources\fp_ok.png" />
+    <None Include="Resources\fp_nok.png" />
+    <None Include="Resources\market.ico" />
+    <None Include="Resources\ok.png" />
+    <None Include="Resources\FpNotOk.png" />
+    <None Include="Resources\ExNotOk.png" />
+    <None Include="Resources\payment_card.png" />
+    <None Include="Resources\payment_cash.png" />
+    <None Include="Resources\payment_cheque.png" />
+    <None Include="Resources\payment_credit.png" />
+    <Content Include="Resources\S-LOGO.png" />
+    <Content Include="Resources\S-LOGO2.png" />
+    <Content Include="Resources\save.png" />
+    <None Include="Resources\startupActive.jpg" />
+    <None Include="Resources\startupDeactive.jpg" />
+    <None Include="Resources\wnd.png" />
+    <None Include="Resources\X2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BaseApplicationManifest Include="Properties\app.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FPService\FPService.csproj">
+      <Project>{0A299CAF-D739-4CC3-A527-5C6B67E48AC9}</Project>
+      <Name>FPService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\lib_sgmode\sgmode.csproj">
+      <Project>{12C9AF9A-1868-484C-8FF9-F88CB7826C86}</Project>
+      <Name>sgmode</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\mdcore\mdcore.csproj">
+      <Project>{F30B5495-0D1A-4A10-83C9-D1E9BAFE5A2F}</Project>
+      <Name>mdcore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\uwinapi\winapi.csproj">
+      <Project>{50CB20A6-24C1-4FE5-868D-031E4CFAF8A2}</Project>
+      <Name>winapi</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
+</Project>

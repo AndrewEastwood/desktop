@@ -1,0 +1,330 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C7FD4F0D-3010-4052-9F06-A9CAD068B2AF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>PayDesk</AssemblyName>
+    <RootNamespace>PayDesk</RootNamespace>
+    <Win32Resource>
+    </Win32Resource>
+    <ApplicationIcon>market.ico</ApplicationIcon>
+    <TargetZone>LocalIntranet</TargetZone>
+    <GenerateManifests>false</GenerateManifests>
+    <PublishUrl>http://localhost/PayDesk/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <StartupObject>PayDesk.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>.\bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DocumentationFile>bin\Debug\PayDesk.XML</DocumentationFile>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>.\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin.Designer.cs">
+      <DependentUpon>Admin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BillSave.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BillSave.Designer.cs">
+      <DependentUpon>BillSave.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ChqNomRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChqNomRequest.Designer.cs">
+      <DependentUpon>ChqNomRequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DiscountRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DiscountRequest.Designer.cs">
+      <DependentUpon>DiscountRequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DiscountRule.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DiscountRule.Designer.cs">
+      <DependentUpon>DiscountRule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DiscountSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DiscountSettings.Designer.cs">
+      <DependentUpon>DiscountSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BillsList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BillsList.Designer.cs">
+      <DependentUpon>BillsList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ColumnsEditorBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ColumnsEditorBox.Designer.cs">
+      <DependentUpon>ColumnsEditorBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FiscalFunctions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FiscalFunctions.Designer.cs">
+      <DependentUpon>FiscalFunctions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Registration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Registration.Designer.cs">
+      <DependentUpon>Registration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UnitFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UnitFilter.Designer.cs">
+      <DependentUpon>UnitFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BaseChanges.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BaseChanges.Designer.cs">
+      <DependentUpon>BaseChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MMessageBox.cs">
+    </Compile>
+    <Compile Include="MMessageBox.Designer.cs">
+      <DependentUpon>MMessageBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Payment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Payment.Designer.cs">
+      <DependentUpon>Payment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Printing.Designer.cs">
+      <DependentUpon>Printing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Printing.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StartupDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StartupDialog.Designer.cs">
+      <DependentUpon>StartupDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateWnd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UpdateWnd.Designer.cs">
+      <DependentUpon>UpdateWnd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Service.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Service.Designer.cs">
+      <DependentUpon>Service.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin.resx">
+      <DependentUpon>Admin.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BillSave.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>BillSave.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChqNomRequest.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ChqNomRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiscountRequest.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DiscountRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiscountRule.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DiscountRule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiscountSettings.resx">
+      <DependentUpon>DiscountSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BillsList.resx">
+      <DependentUpon>BillsList.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ColumnsEditorBox.resx">
+      <DependentUpon>ColumnsEditorBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FiscalFunctions.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FiscalFunctions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Registration.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Registration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnitFilter.resx">
+      <DependentUpon>UnitFilter.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BaseChanges.resx">
+      <DependentUpon>BaseChanges.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MMessageBox.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MMessageBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Payment.resx">
+      <DependentUpon>Payment.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Printing.resx">
+      <DependentUpon>Printing.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StartupDialog.resx">
+      <DependentUpon>StartupDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Service.resx">
+      <DependentUpon>Service.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UpdateWnd.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>UpdateWnd.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="market.ico" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="Resources\by_bc.png" />
+    <None Include="Resources\by_c.png" />
+    <None Include="Resources\by_name.png" />
+    <Content Include="Resources\edit.png" />
+    <None Include="Resources\naklad.png" />
+    <None Include="Resources\fp_ok.png" />
+    <None Include="Resources\fp_nok.png" />
+    <None Include="Resources\market.ico" />
+    <None Include="Resources\ok.png" />
+    <None Include="Resources\FpNotOk.png" />
+    <None Include="Resources\ExNotOk.png" />
+    <Content Include="Resources\S-LOGO.png" />
+    <Content Include="Resources\S-LOGO2.png" />
+    <Content Include="Resources\save.png" />
+    <None Include="Resources\startupActive.jpg" />
+    <None Include="Resources\startupDeactive.jpg" />
+    <None Include="Resources\wnd.png" />
+    <None Include="Resources\X2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BaseApplicationManifest Include="Properties\app.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FPService\FPService.csproj">
+      <Project>{0A299CAF-D739-4CC3-A527-5C6B67E48AC9}</Project>
+      <Name>FPService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\mdcore\mdcore.csproj">
+      <Project>{F30B5495-0D1A-4A10-83C9-D1E9BAFE5A2F}</Project>
+      <Name>mdcore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\uwinapi\winapi.csproj">
+      <Project>{50CB20A6-24C1-4FE5-868D-031E4CFAF8A2}</Project>
+      <Name>winapi</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
+</Project>

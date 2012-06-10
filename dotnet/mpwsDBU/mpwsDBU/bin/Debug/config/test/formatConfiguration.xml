@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<document name="formatConfiguration">
+    <property name="uploadMode" value="INSERT" />
+    <property name="alwaysTruncate" value="true" />
+    <property name="escapeValues" value="true" />
+    <property name="affectSelectedRows" value="false" />
+    <property name="useRecordIdAsRowIndex" value="true" />
+    <property name="columnFormat" value="`{0}`" />
+    <property name="autoBackup" value="true" />
+    <property name="valueFormat" value="'{0}'" />
+</document>

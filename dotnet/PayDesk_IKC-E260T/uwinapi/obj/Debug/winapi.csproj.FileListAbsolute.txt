@@ -1,0 +1,14 @@
+F:\Develop\C#\PayDesk_IKC-E260T\uwinapi\bin\Debug\winapi.dll
+F:\Develop\C#\PayDesk_IKC-E260T\uwinapi\bin\Debug\winapi.pdb
+F:\Develop\C#\RECONSTRUCTION\PayDesk_IKC-E260T\uwinapi\bin\Debug\lib\components\winapi.dll
+F:\Develop\C#\RECONSTRUCTION\PayDesk_IKC-E260T\uwinapi\bin\Debug\lib\components\winapi.pdb
+F:\Develop\C#\RECONSTRUCTION\PayDesk_IKC-E260T\uwinapi\bin\Debug\lib\components\winapi.XML
+F:\Develop\C#\RECONSTRUCTION\PayDesk_IKC-E260T\uwinapi\obj\Debug\ResolveAssemblyReference.cache
+F:\Develop\C#\RECONSTRUCTION\PayDesk_IKC-E260T\uwinapi\obj\Debug\winapi.dll
+F:\Develop\C#\RECONSTRUCTION\PayDesk_IKC-E260T\uwinapi\obj\Debug\winapi.pdb
+F:\Develop\C#\PayDesk_IKC-E260T\uwinapi\bin\Debug\lib\components\winapi.dll
+F:\Develop\C#\PayDesk_IKC-E260T\uwinapi\bin\Debug\lib\components\winapi.pdb
+F:\Develop\C#\PayDesk_IKC-E260T\uwinapi\bin\Debug\lib\components\winapi.XML
+F:\Develop\C#\PayDesk_IKC-E260T\uwinapi\obj\Debug\ResolveAssemblyReference.cache
+F:\Develop\C#\PayDesk_IKC-E260T\uwinapi\obj\Debug\winapi.dll
+F:\Develop\C#\PayDesk_IKC-E260T\uwinapi\obj\Debug\winapi.pdb

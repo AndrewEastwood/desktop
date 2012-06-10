@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="PayDesk.AboutBox" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>AboutBox.cs</FileName>
+      <HashCode>kIAAAAgAACAgCAUAAACAAAADAAAAEIAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.Admin" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Admin.cs</FileName>
+      <HashCode>AAAACAAAACAAABAAIACAAAACAAAIQAAAAGAAAABAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.BaseChanges" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>BaseChanges.cs</FileName>
+      <HashCode>AAAAAAAAACAAABACAACAAAACgAAIAIAAAEAAAACgAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.BillSave" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>BillSave.cs</FileName>
+      <HashCode>AAIAAAIAACAAABAAAACAIAACAAAIAAAAAEAQAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.BillsList" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>BillsList.cs</FileName>
+      <HashCode>AAAAAAAgBKAiABUkAACAJAASAAA4gAAAGHQAAgAgAAI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.ChqNomRequest" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ChqNomRequest.cs</FileName>
+      <HashCode>AAAAAAAAACAAABAAAACAAAgCBAAYAAAAAGAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.ColumnsEditorBox" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>ColumnsEditorBox.cs</FileName>
+      <HashCode>AAACAAAAQCAAABAAIAiAAAACAAgAAAAQIAAAQIAAAgA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.DiscountRequest" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DiscountRequest.cs</FileName>
+      <HashCode>ACAAAAAAACIAAABAAACAAAACAAAJAAAAEkACAAAAACI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.DiscountRule" Collapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DiscountRule.cs</FileName>
+      <HashCode>AAAAABAIACAAABMQIACAAAADAAAIAAACIGAEAAUAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.DiscountSettings" Collapsed="true">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>DiscountSettings.cs</FileName>
+      <HashCode>AACAAAEAACAAQBEQAACBEAADBAAIAAACAMAAABFBJEI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.FiscalFunctions" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>FiscalFunctions.cs</FileName>
+      <HashCode>AAAAAAEAACAAAEAACACAAAICAAAIAABAAEAACAAAAoA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.Main" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Main.cs</FileName>
+      <HashCode>m28RucJIyGNR14EmAUGAw4D+wrMQuauAQhVRQ5s2Bg0=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.MMessageBox" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>MMessageBox.cs</FileName>
+      <HashCode>AAAAAAAFAAAAAZAAIACKAAACJCAEQAAEAQAAAQBAIBg=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.Payment" Collapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Payment.cs</FileName>
+      <HashCode>ACQgAACAACAEABAAEACAIABCACAJAAAAMUCAARAAAAI=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.Printing" Collapsed="true">
+    <Position X="7.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Printing.cs</FileName>
+      <HashCode>ECAAAAAgACCAABAQAACFQABCAMAZEAhAEAABCAABBAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.Program" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Program.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAEAABAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.Registration" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Registration.cs</FileName>
+      <HashCode>AAAAAAAAACAAABCAAACAAAACAAAIAAAAEEAAAABAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.Service" Collapsed="true">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Service.cs</FileName>
+      <HashCode>8yCAUQ8AASwYYLR4AvKhIABiJMAdUEACMugeIYGhBAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.Settings" Collapsed="true">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Settings.cs</FileName>
+      <HashCode>/yKqJZoFASQwQDERBCSBZIpCBNw7FAgiMzBQCYUBBLQ=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.StartupDialog" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>StartupDialog.cs</FileName>
+      <HashCode>AGAAAAAAACEAABABACCAAAACBBAwAAEKEDASAwDBEAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.UnitFilter" Collapsed="true">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>UnitFilter.cs</FileName>
+      <HashCode>AAAAAAAAACAAAAAAAACAAAACBAAKIAAAIAAQQAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.UpdateWnd" Collapsed="true">
+    <Position X="4" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>UpdateWnd.cs</FileName>
+      <HashCode>AAAAAAAAACAAABAAAACAAAACAAAIAAAAAAAAAQAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PayDesk.Properties.Resources" Collapsed="true">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BACAAEUAAACAAAABCQADkBAAgQAAAEAAAEAAAgEAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+</ClassDiagram>

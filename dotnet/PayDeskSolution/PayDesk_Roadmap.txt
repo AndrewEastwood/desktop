@@ -1,0 +1,37 @@
+PayDesk Roadmap
+
+FEATURES:
+ 1. plugin system (DRIVER and GUI)
+ 2. profile mode
+ 3. xml options
+
+MODULES
+ 1. DATECS-FPU550
+ 2. DATECS-Excellio
+ 3. IKC FP3530T/E260T
+
+
+v.2.7
++ added sensor UI.
++ added new registration module
++ added simple xml parser
++ changed bill's UI manager
++ added bill's eraser
++ changed saving options for bill document
+
+v.3.0
+new data source storage
+implemented new method for data update
+implementing profile feature
+adding more registration keys for unlocking one of implemented featuures
+create new configuration module for merged display configuration (each xml file mean new configuration section)
++ fixed new printer name (number in name was 1 all time) in printers settings
+added port disposing in FP moduiles
+added payment balancer for each profile
++ added custom scrollbar in all bills window
+
+v.3.0.1
+make theme files for application
+separate sensor functionality into standalone dll file
+replace main variables with one data storage
+add loading screen

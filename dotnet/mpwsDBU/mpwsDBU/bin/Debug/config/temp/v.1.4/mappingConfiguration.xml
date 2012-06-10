@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+mapping Configuration Data File
+do not modity anything inside the document section
+geretated by XmlDocumentParser v1.5
+-->
+<document name="mappingConfiguration" version="1.4">
+    <section name="TableValue">
+    </section>
+    <property name="defaultIndexFiledName" value="id" />
+    <section name="TableDefaultValue">
+    </section>
+    <section name="TableName">
+        <section name="1">
+            <property name="dataGridViewTextBoxColumn1" value="Category" />
+            <property name="dataGridViewTextBoxColumn2" value="mpws_categories" />
+        </section>
+        <section name="0">
+            <property name="dataGridViewTextBoxColumn1" value="Product" />
+            <property name="dataGridViewTextBoxColumn2" value="mpws_articles" />
+        </section>
+    </section>
+    <section name="TableField">
+    </section>
+    <section name="Indexes">
+    </section>
+    <property name="useCustomIndexes" value="True" />
+</document>

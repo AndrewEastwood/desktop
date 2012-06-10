@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+format Configuration Data File
+do not modity anything inside the document section
+geretated by XmlDocumentParser v1.5
+-->
+<document name="formatConfiguration">
+    <!-- 
+        if true then before each upload or sync
+        data from server will be copied into local file
+    -->
+    <property name="autoBackup" value="True" />
+    <!--
+        upload mode:
+        INSERT
+        DELETE
+        UPLOAD
+    -->
+    <property name="uploadMode" value="INSERT" />
+    <!-- 
+        clear all data before each action
+    -->
+    <property name="alwaysTruncate" value="True" />
+    <!-- 
+        use only selected rows from loacal table
+    -->
+    <property name="affectSelectedRows" value="False" />
+    <!-- 
+        data formatting
+    -->
+    <property name="useRecordIdAsRowIndex" value="True" />
+    <property name="columnFormat" value="`{0}`" />
+    <property name="escapeValues" value="True" />
+    <property name="valueFormat" value="'{0}'" />
+</document>

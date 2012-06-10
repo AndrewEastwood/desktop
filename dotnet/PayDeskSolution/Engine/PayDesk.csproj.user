@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PublishUrlHistory>http://localhost/PayDesk/|publish\|C:\Users\Andrew\Desktop\seller\|C:\Documents and Settings\Администратор\Рабочий стол\tyty\</PublishUrlHistory>
+    <InstallUrlHistory>
+    </InstallUrlHistory>
+    <SupportUrlHistory>
+    </SupportUrlHistory>
+    <UpdateUrlHistory>
+    </UpdateUrlHistory>
+    <BootstrapperUrlHistory>
+    </BootstrapperUrlHistory>
+    <FallbackCulture>en-US</FallbackCulture>
+    <VerifyUploadedFiles>false</VerifyUploadedFiles>
+    <ProjectView>ProjectFiles</ProjectView>
+    <ErrorReportUrlHistory />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <StartWorkingDirectory>
+    </StartWorkingDirectory>
+    <StartAction>Project</StartAction>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ReferencePath>F:\Develop\C#\PayDesk_DATECS_FP3530T\seller\bin\Debug\lib\components\;F:\Develop\C#\PayDesk_DATECS_FP3530T\seller\bin\Debug\lib\plugins\;F:\Develop\C#\PayDesk_DATECS_FP3530T\seller\bin\Debug\lib\;F:\Develop\C#\PayDesk_DATECS_FP3530T\seller\bin\Debug\</ReferencePath>
+  </PropertyGroup>
+</Project>
