@@ -1179,6 +1179,7 @@
             this.chequeDGV.TabIndex = 1;
             this.chequeDGV.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.chequeDGV_CellBeginEdit);
             this.chequeDGV.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.chequeDGV_CellEndEdit);
+            this.chequeDGV.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DGV_MouseClick);
             this.chequeDGV.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseClick);
             this.chequeDGV.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseDoubleClick);
             this.chequeDGV.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.chequeDGV_RowsAdded);

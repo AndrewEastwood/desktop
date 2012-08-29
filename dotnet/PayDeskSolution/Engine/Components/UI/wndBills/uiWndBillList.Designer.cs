@@ -127,6 +127,8 @@
             this.listGrid.AllowUserToDeleteRows = false;
             this.listGrid.AllowUserToResizeColumns = false;
             this.listGrid.AllowUserToResizeRows = false;
+            //this.listGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            //this.listGrid.
             this.listGrid.BackgroundColor = System.Drawing.Color.White;
             this.listGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;

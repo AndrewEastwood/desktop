@@ -2533,10 +2533,33 @@ namespace PayDesk.Components.UI
         }//OK
 
         //COMMON EVENTS OF TABLES
-        private void DGV_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void DGV_MouseClick(object sender, MouseEventArgs e)
         {
             (sender as DataGridView).Select();
 
+            if (e.Button == MouseButtons.Right)
+            {
+                DataGridView.HitTestInfo info = chequeDGV.HitTest(e.X, e.Y);
+
+                if (info.ColumnIndex > 0 && info.RowIndex < 0)
+                {
+                    if ((sender as DataGridView).Name == "chequeDGV")
+                        закріпитиToolStripMenuItem.Checked = ConfigManager.Instance.CommonConfiguration.STYLE_ChqColumnLock;
+                    else
+                        закріпитиToolStripMenuItem.Checked = ConfigManager.Instance.CommonConfiguration.STYLE_ArtColumnLock;
+                    columnsEditor.Show(Control.MousePosition);
+                    return;
+                }
+                if ((sender as DataGridView).Name == "chequeDGV")
+                    chequeContextMenu.Show(Control.MousePosition);
+                else
+                    articleContextMenu.Show(Control.MousePosition);
+            }
+        }
+        private void DGV_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            (sender as DataGridView).Select();
+            /*
             if (e.Button == MouseButtons.Right)
             {
                 if (e.RowIndex < 0)
@@ -2553,7 +2576,7 @@ namespace PayDesk.Components.UI
                 else
                     articleContextMenu.Show(Control.MousePosition);
             }
-
+            */
             if (e.RowIndex < 0)
                 return;
 
@@ -3311,15 +3334,25 @@ namespace PayDesk.Components.UI
             //int index = 0;
             DataRow[] dRows = null;
             double discSUMA = 0.0;
-            double originalSuma = 0.0;
-            double originalVsRealSuma = 0.0;
-            double originalVsRealSumaByPercent = 0.0;
+
+
+            //procentnuj zagalnuj koeficient
+            if (useConstDisc)
+                discCommonPercent = discConstPercent;
+            else
+                discCommonPercent = discOnlyPercent;
+            if (discSUMA != 0.0)
+                discCommonPercent += (discOnlyCash * 100) / discSUMA;
+            discCommonPercent = MathLib.GetRoundedMoney(discCommonPercent);
+
 
             // restore native cheque sum
             // and set price acording to client's discount card
             //DataRow[] artRecord = null;
             double newPrice = 0.0;
             double newTmpPrice = 0.0; //bool isSet = false;
+            Hashtable profileDefinedTaxGrid = new Hashtable();
+            Hashtable profileCompatibleTaxGrid = new Hashtable();
             for (i = 0; i < Cheque.Rows.Count; i++)
             {
                 newPrice = MathLib.GetDouble(Cheque.Rows[i]["ORIGPRICE"]);
@@ -3334,7 +3367,45 @@ namespace PayDesk.Components.UI
                 {
                     //DataRow dRow = Cheque.Rows.Find(chequeDGV.CurrentRow.Cells["C"].Value);
                     //price = AppFunc.AutomaticPrice(thisTot, dRow);
-                    newPrice = CoreLib.AutomaticPrice(MathLib.GetDouble(Cheque.Rows[i]["TOT"].ToString()), Cheque.Rows[i]);
+                    double _newPrice = CoreLib.AutomaticPrice(MathLib.GetDouble(Cheque.Rows[i]["TOT"].ToString()), Cheque.Rows[i]);
+                    try
+                    {
+                        profileDefinedTaxGrid = (Hashtable)driver.Config.ConfigManager.Instance.CommonConfiguration.TAX_DefinedRates[Cheque.Rows[i]["F"]];
+                    }
+                    catch { }
+                    // new tax mode
+                    bool _thisRowCanUseDiscount = true;
+                    try
+                    {
+                        // get application tax char with compatible tax grid
+                        string[] definedTaxData = profileDefinedTaxGrid[Cheque.Rows[i]["VG"].ToString()].ToString().Split(';');
+                        _thisRowCanUseDiscount = Boolean.Parse(definedTaxData[1]);
+                    }
+                    catch { }
+
+                    if (_thisRowCanUseDiscount)
+                    {
+
+                        double _discountPrices = 0.0;
+                        //for (int ii = 0; ii < Cheque.Rows.Count; ii++)
+                        //{
+                        if (_newPrice != (double)Cheque.Rows[i]["ORIGPRICE"])
+                        {
+                            _discountPrices = 100 - _newPrice * 100 / (double)Cheque.Rows[i]["ORIGPRICE"];
+                            if (_discountPrices > discCommonPercent)
+                            {
+                                Cheque.Rows[i]["USEDDISC"] = Boolean.FalseString;
+                                newPrice = _newPrice;
+                            }
+                            else
+                            {
+                                Cheque.Rows[i]["USEDDISC"] = Boolean.TrueString;
+                                newPrice = MathLib.GetDouble(Cheque.Rows[i]["ORIGPRICE"]);
+                            }
+                        }
+                        else newPrice = _newPrice;
+                        //}
+                    } else newPrice = _newPrice;
                 }
                 else if (UserConfig.Properties[1] || UserConfig.Properties[2])
                 {
@@ -3346,18 +3417,34 @@ namespace PayDesk.Components.UI
             }
             chqSUMA = (double)Cheque.Compute("sum(SUM)", "");
             chqSUMA = MathLib.GetRoundedMoney(chqSUMA);
-            
-            this.realSUMA = this.chqSUMA;
-
-            // get original sum value
-            for (i = 0; i < Cheque.Rows.Count; i++)
-                originalSuma += MathLib.GetRoundedMoney(MathLib.GetDouble(Cheque.Rows[i]["ORIGPRICE"].ToString()) * MathLib.GetDouble(Cheque.Rows[i]["TOT"].ToString()));
-            // 
-            originalVsRealSuma = originalSuma - realSUMA;
-            originalVsRealSumaByPercent = 100 - (realSUMA * 100 / originalSuma);
+            realSUMA = chqSUMA;
 
 
-            // getting overall discount percent value 
+
+
+            // check if we apply discount ot second or third price 
+            /*if (UserConfig.Properties[8])
+            {
+                double _discountPrices = 0.0;
+                for (i = 0; i < Cheque.Rows.Count; i++)
+                {
+                    if ((double)Cheque.Rows[i]["PRICE"] != (double)Cheque.Rows[i]["ORIGPRICE"])
+                    {
+                        _discountPrices = 100 - (double)Cheque.Rows[i]["PRICE"] * 100 / (double)Cheque.Rows[i]["ORIGPRICE"];
+                        if (_discountPrices > discCommonPercent)
+                        {
+                            Cheque.Rows[i]["USEDDISC"] = Boolean.FalseString;
+                        }
+                        else
+                        {
+                            Cheque.Rows[i]["USEDDISC"] = Boolean.TrueString;
+                            Cheque.Rows[i]["PRICE"] = Cheque.Rows[i]["ORIGPRICE"];
+                        }
+                    }
+                }
+            }*/
+           
+            //select rows with discount mode
             try
             {
                 dRows = Cheque.Select("USEDDISC = " + Boolean.TrueString);
@@ -3380,67 +3467,51 @@ namespace PayDesk.Components.UI
                     this.discApplied = true;
             }
             catch { };
-            //procentnuj zagalnuj koeficient
-            if (useConstDisc)
-                discCommonPercent = discConstPercent;
-            else
-                discCommonPercent = discOnlyPercent;
-            // if some products do not allow discount
-            // we'll get their sum value and evaluate new discount percent value
-            if (discSUMA != 0.0)
-                discCommonPercent += (discOnlyCash * 100) / discSUMA;
-            discCommonPercent = MathLib.GetRoundedMoney(discCommonPercent);
 
-            bool clientDiscountIsBetter = (discCommonPercent > originalVsRealSumaByPercent);
-            
-            //select rows with discount mode
-            if (clientDiscountIsBetter)
+
+            DataRow[] prRows = null;
+            if (this.clientPriceNo != 0)
+                prRows = Cheque.Select("PR" + this.clientPriceNo + " <> 0");
+
+
+            if (_fl_useTotDisc && prRows == null)
             {
-
-                DataRow[] prRows = null;
-                if (this.clientPriceNo != 0)
-                    prRows = Cheque.Select("PR" + this.clientPriceNo + " <> 0");
-
-                if (_fl_useTotDisc && prRows == null)
+                //obrahunok realnoi sumu cheku zi znugkojy
+                if (useConstDisc)
                 {
-                    //obrahunok realnoi sumu cheku zi znugkojy
-                    if (useConstDisc)
-                    {
-                        dValue = (discConstPercent * discSUMA) / 100;
-                        dValue = MathLib.GetRoundedMoney(dValue);
-                        realSUMA -= dValue;
-                    }
-                    else
-                    {
-                        dValue = (discOnlyPercent * discSUMA) / 100;
-                        dValue = MathLib.GetRoundedMoney(dValue);
-                        realSUMA -= dValue;
-                        realSUMA -= discOnlyCash;
-                    }
+                    dValue = (discConstPercent * discSUMA) / 100;
+                    dValue = MathLib.GetRoundedMoney(dValue);
+                    realSUMA -= dValue;
                 }
                 else
                 {
-                    _fl_useTotDisc = false;
-                    for (i = 0; i < dRows.Length; i++)
-                    {
-                        // don't use discount when client want to has another price for current article
-                        if (this.clientPriceNo != 0 && MathLib.GetDouble(dRows[i]["PR" + this.clientPriceNo].ToString()) > 0.0)
-                        {
-                            dRows[i]["DISC"] = 0.0;
-                            continue;
-                        }
-                        dRows[i]["DISC"] = discCommonPercent;
-                        dValue = (discCommonPercent * (double)dRows[i]["SUM"]) / 100;
-                        //discValue = AppFunc.GetRoundedMoney(discValue);
-                        dValue = (double)dRows[i]["SUM"] - dValue;
-                        dRows[i]["ASUM"] = MathLib.GetRoundedMoney(dValue);
-                    }
-                    realSUMA = (double)Cheque.Compute("Sum(ASUM)", "");
+                    dValue = (discOnlyPercent * discSUMA) / 100;
+                    dValue = MathLib.GetRoundedMoney(dValue);
+                    realSUMA -= dValue;
+                    realSUMA -= discOnlyCash;
                 }
             }
             else
-                ResetDiscount();
+            {
+                _fl_useTotDisc = false;
+                for (i = 0; i < dRows.Length; i++)
+                {
+                    // don't use discount when client want to has another price for current article
+                    if (this.clientPriceNo != 0 && MathLib.GetDouble(dRows[i]["PR" + this.clientPriceNo].ToString()) > 0.0)
+                    {
+                        dRows[i]["DISC"] = 0.0;
+                        continue;
+                    }
+                    dRows[i]["DISC"] = discCommonPercent;
+                    dValue = (discCommonPercent * (double)dRows[i]["SUM"]) / 100;
+                    //discValue = AppFunc.GetRoundedMoney(discValue);
+                    dValue = (double)dRows[i]["SUM"] - dValue;
+                    dRows[i]["ASUM"] = MathLib.GetRoundedMoney(dValue);
+                }
+                realSUMA = (double)Cheque.Compute("Sum(ASUM)", "");
+            }
             realSUMA = MathLib.GetRoundedMoney(realSUMA);
+
             //vuvedennja zagalnogo koeficientu znugku v 2oh tupah
             //groshovuj koeficient
             discCommonCash = chqSUMA - realSUMA;
@@ -3449,8 +3520,8 @@ namespace PayDesk.Components.UI
             // calculating tax sum
             taxSUMA = 0.0;
 
-            Hashtable profileDefinedTaxGrid = new Hashtable();
-            Hashtable profileCompatibleTaxGrid = new Hashtable();
+            //Hashtable profileDefinedTaxGrid = new Hashtable();
+            //Hashtable profileCompatibleTaxGrid = new Hashtable();
             //bool taxGridError = false;
             //string[] definedTaxData = null;
             for (i = 0; i < Cheque.Rows.Count; i++)
@@ -4245,7 +4316,7 @@ namespace PayDesk.Components.UI
             clientPriceNo = 0;
             //discApplied = false;
             
-            відмінитиЗнижкунадбавкуToolStripMenuItem.Enabled = false;
+            //відмінитиЗнижкунадбавкуToolStripMenuItem.Enabled = false;
             відмінитиЗнижкунадбавкуToolStripMenuItem.Text = "Без знижки/надбавки";
             
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)

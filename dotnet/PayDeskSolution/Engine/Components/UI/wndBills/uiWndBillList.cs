@@ -282,6 +282,14 @@ namespace PayDesk.Components.UI.wndBills
                 this.ActivityControls(false);
                 button_billsList_unlock.Visible = false;
             }
+
+            //this.listGrid.BackgroundColor = this.listGrid.BackgroundColor;
+            //this.listGrid.Parent.BackColor = this.listGrid.BackgroundColor;
+            //this.listGrid.Refresh();
+            //this.listGrid.Parent.Refresh();
+            //this.listGrid.Update();
+            //this.listGrid.Invalidate();
+            this.listGrid.Focus();
         }
         /// <summary>
         /// 
