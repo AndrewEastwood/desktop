@@ -4,6 +4,6 @@
     <ProjectView>ShowAllFiles</ProjectView>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <StartArguments>mini</StartArguments>
+    <StartArguments>mode=mini wnd=-1 sp=300 runas=admin</StartArguments>
   </PropertyGroup>
 </Project>

@@ -41,7 +41,7 @@ namespace vk.Components.UI.Other
                 this.Text += " - " + ownerName;
             */
         }
-        public Com_VirtualKeyboard_Mini(int selectedWindowIndex)
+        public Com_VirtualKeyboard_Mini(int selectedWindowIndex, string runas)
             : this()
         {
             // autodetect
@@ -67,6 +67,9 @@ namespace vk.Components.UI.Other
             }
             else
                 this.selectedWindowIndex = selectedWindowIndex;
+
+            this.toolStrip1.Visible = runas.Equals("admin");
+
             WindowsAPI.OutputDebugString("sleep time (ms.) = " + Program.SleepTime);
         }
 
@@ -119,12 +122,6 @@ namespace vk.Components.UI.Other
 
         private void Com_VirtualKeyboard_FormClosing(object sender, FormClosingEventArgs e)
         {
-            mgr.Settings.windowWidth = this.Width;
-            mgr.Settings.windowHeight = this.Height;
-            mgr.Settings.windowLocX = this.Location.X;
-            mgr.Settings.windowLocY = this.Location.Y;
-            mgr.Settings.windowFontSize = this.Font.Size;
-            mgr.Save();
         }
         [DllImport("user32.dll", SetLastError = true)]
         static extern IntPtr GetWindow(IntPtr hWnd, uint uCmd);
@@ -527,8 +524,36 @@ namespace vk.Components.UI.Other
             else
                 this.Font = new Font(this.Font.FontFamily, this.Font.Size - 1);
 
-            button_size_more.Font = new Font(this.Font.FontFamily, 8.25F);
-            button_size_less.Font = new Font(this.Font.FontFamily, 8.25F);
+        }
+
+        // admin mode
+        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            switch (e.ClickedItem.Tag.ToString())
+            {
+                case "tsb_save":
+                    {
+                        mgr.Settings.windowWidth = this.Width;
+                        mgr.Settings.windowHeight = this.Height;
+                        mgr.Settings.windowLocX = this.Location.X;
+                        mgr.Settings.windowLocY = this.Location.Y;
+                        mgr.Settings.windowFontSize = this.Font.Size;
+                        mgr.Save();
+                        break;
+                    }
+                case "tsb_plus":
+                    {
+                        this.Font = new Font(this.Font.FontFamily, this.Font.Size + 1);
+                        //button_size_more.Font = new Font(this.Font.FontFamily, 8.25F);
+                        //button_size_less.Font = new Font(this.Font.FontFamily, 8.25F);
+                        break;
+                    }
+                case "tsb_minus":
+                    {
+                        this.Font = new Font(this.Font.FontFamily, this.Font.Size - 1);
+                        break;
+                    }
+            }
         }
 
     }

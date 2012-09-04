@@ -35,6 +35,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Components\szStorage\Ionic.Zip.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Security">
+      <HintPath>Components\PostgreSql\Mono.Security.dll</HintPath>
+    </Reference>
     <Reference Include="Npgsql">
       <HintPath>Components\PostgreSql\Npgsql.dll</HintPath>
     </Reference>

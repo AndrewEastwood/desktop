@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Collections;
 
 namespace vk
 {
@@ -13,7 +14,27 @@ namespace vk
         [STAThread]
         static void Main(string[] args)
         {
-            string appType = string.Empty;
+            // get arguments
+            Hashtable hargs = new Hashtable();
+            components.Components.ArgumentParser.Com_ArgumentParser.TransformArguments(hargs, args);
+
+            string appType = "mini";
+            int wndIdx = -1;
+            string runas = "user";
+
+            //MessageBox.Show("demo");
+            // override default
+            if (hargs.ContainsKey("sp"))
+                Program.SleepTime = int.Parse(hargs["sp"].ToString());
+            if (hargs.ContainsKey("mode"))
+                appType = hargs["mode"].ToString();
+            if (hargs.ContainsKey("wnd"))
+                wndIdx = int.Parse(hargs["wnd"].ToString());
+            if (hargs.ContainsKey("runas"))
+                runas = hargs["runas"].ToString();
+
+
+            /*string appType = string.Empty;
             int wndIdx = -1;
             Program.SleepTime = 100;
             if (args.Length != 0)
@@ -29,7 +50,9 @@ namespace vk
                         Program.SleepTime = int.Parse(args.GetValue(2).ToString());
                 }
                 catch { }
-            }
+            }*/
+
+
             // one copy only
             System.Threading.Mutex myMutex = null;
             try
@@ -52,7 +75,7 @@ namespace vk
             {
                 case "mini":
                     {
-                        Application.Run(new Components.UI.Other.Com_VirtualKeyboard_Mini(wndIdx));
+                        Application.Run(new Components.UI.Other.Com_VirtualKeyboard_Mini(wndIdx, runas));
                         break;
                     }
                 default:
