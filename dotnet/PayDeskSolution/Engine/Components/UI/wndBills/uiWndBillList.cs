@@ -559,7 +559,8 @@ namespace PayDesk.Components.UI.wndBills
                             (billInfo[CoreConst.COMMENT] != null)?billInfo[CoreConst.COMMENT].ToString().Replace("%20", " "):"", 
                             (double)props[CoreConst.ORDER_REAL_SUMA], 
                             bool.Parse(billInfo[CoreConst.IS_LOCKED].ToString()), 
-                            props[CoreConst.ORDER_NO]
+                            props[CoreConst.ORDER_NO],
+                            billInfo[CoreConst.DATETIME_LOCK]
                         }
                     );
 

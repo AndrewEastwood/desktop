@@ -33,6 +33,7 @@ namespace driver.Common
         public const string IS_LOCKED = "IS_LOCKED";
         public const string PATH = "PATH";
         public const string DELETED_ROWS = "DELETED_ROWS";
+        public const string DATETIME_LOCK = "DATETIME_LOCK";
 
         // discount structure
         public const string CONTAINER_DISC = "CN_DISC";

@@ -197,6 +197,8 @@ namespace driver.Lib
             billInfoStructure.Add(CoreConst.PATH, string.Empty);
             // Determinate that cheque is legal
             billInfoStructure.Add(CoreConst.DELETED_ROWS, new Dictionary<string, object[]>());
+            // Determinate that cheque is legal
+            billInfoStructure.Add(CoreConst.DATETIME_LOCK, "-");
             // Cheque Number
             //chequeInfoStructure.Add("CHEQUE_NO", null);
             // Cheque Suma with all discounts

@@ -196,7 +196,10 @@ namespace driver.Lib
             DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.IS_LOCKED, true);
             //dtBill.ExtendedProperties["LOCK"] = true;
             if (fxNo != string.Empty)
+            {
                 DataWorkShared.SetOrderProperty(dtBill, driver.Common.CoreConst.ORDER_NO, fxNo);
+                DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.DATETIME_LOCK, DateTime.Now.ToShortDateString());
+            }
             SaveBillToFile(dtBill);
         }
         public static void LockBill(DataTable dtBill)
