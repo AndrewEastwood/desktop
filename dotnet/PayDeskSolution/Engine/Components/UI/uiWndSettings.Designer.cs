@@ -211,6 +211,9 @@
             this.label29 = new System.Windows.Forms.Label();
             this.profiles_cBox_legalProfile = new System.Windows.Forms.ComboBox();
             this.profiles_btn_refresh = new System.Windows.Forms.Button();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.checkBox_pBills_ShowBillSumColumn = new System.Windows.Forms.CheckBox();
+            this.checkBox_pBills_ShowBillTotalSum = new System.Windows.Forms.CheckBox();
             this.PanelStyle.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage4.SuspendLayout();
@@ -256,6 +259,7 @@
             this.panel4.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // SaveButton
@@ -2003,6 +2007,7 @@
             // 
             // settings_content_tabControl_main_pBills
             // 
+            this.settings_content_tabControl_main_pBills.Controls.Add(this.groupBox6);
             this.settings_content_tabControl_main_pBills.Controls.Add(this.content_bills_groupBox_secure);
             this.settings_content_tabControl_main_pBills.Location = new System.Drawing.Point(4, 22);
             this.settings_content_tabControl_main_pBills.Name = "settings_content_tabControl_main_pBills";
@@ -2198,15 +2203,53 @@
             this.profiles_btn_refresh.UseVisualStyleBackColor = true;
             this.profiles_btn_refresh.Click += new System.EventHandler(this.button_Click);
             // 
+            // groupBox6
+            // 
+            this.groupBox6.AutoSize = true;
+            this.groupBox6.Controls.Add(this.checkBox_pBills_ShowBillSumColumn);
+            this.groupBox6.Controls.Add(this.checkBox_pBills_ShowBillTotalSum);
+            this.groupBox6.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox6.Location = new System.Drawing.Point(3, 80);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Padding = new System.Windows.Forms.Padding(20, 5, 20, 5);
+            this.groupBox6.Size = new System.Drawing.Size(326, 77);
+            this.groupBox6.TabIndex = 4;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Загальний список чеків";
+            // 
+            // checkBox_pBills_ShowBillSumColumn
+            // 
+            this.checkBox_pBills_ShowBillSumColumn.AutoSize = true;
+            this.checkBox_pBills_ShowBillSumColumn.Dock = System.Windows.Forms.DockStyle.Top;
+            this.checkBox_pBills_ShowBillSumColumn.Location = new System.Drawing.Point(20, 45);
+            this.checkBox_pBills_ShowBillSumColumn.Name = "checkBox_pBills_ShowBillSumColumn";
+            this.checkBox_pBills_ShowBillSumColumn.Padding = new System.Windows.Forms.Padding(0, 5, 5, 5);
+            this.checkBox_pBills_ShowBillSumColumn.Size = new System.Drawing.Size(286, 27);
+            this.checkBox_pBills_ShowBillSumColumn.TabIndex = 1;
+            this.checkBox_pBills_ShowBillSumColumn.Text = "Показувати колонку суми чеку";
+            this.checkBox_pBills_ShowBillSumColumn.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_pBills_ShowBillTotalSum
+            // 
+            this.checkBox_pBills_ShowBillTotalSum.AutoSize = true;
+            this.checkBox_pBills_ShowBillTotalSum.Dock = System.Windows.Forms.DockStyle.Top;
+            this.checkBox_pBills_ShowBillTotalSum.Location = new System.Drawing.Point(20, 18);
+            this.checkBox_pBills_ShowBillTotalSum.Name = "checkBox_pBills_ShowBillTotalSum";
+            this.checkBox_pBills_ShowBillTotalSum.Padding = new System.Windows.Forms.Padding(0, 5, 5, 5);
+            this.checkBox_pBills_ShowBillTotalSum.Size = new System.Drawing.Size(286, 27);
+            this.checkBox_pBills_ShowBillTotalSum.TabIndex = 4;
+            this.checkBox_pBills_ShowBillTotalSum.Text = "Показувати загальну суму чеків";
+            this.checkBox_pBills_ShowBillTotalSum.UseVisualStyleBackColor = true;
+            // 
             // uiWndSettings
             // 
             this.AcceptButton = this.SaveButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(490, 444);
+            this.Controls.Add(this.panelContent);
             this.Controls.Add(this.panelProfiles);
             this.Controls.Add(this.PanelSystem);
-            this.Controls.Add(this.panelContent);
             this.Controls.Add(this.PanelStyle);
             this.Controls.Add(this.PanelPDV);
             this.Controls.Add(this.treeView1);
@@ -2286,6 +2329,8 @@
             this.groupBox2.PerformLayout();
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2467,6 +2512,9 @@
         private System.Windows.Forms.Label label35;
         private System.Windows.Forms.ComboBox system_cBox_buyerBCReader;
         private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.CheckBox checkBox_pBills_ShowBillSumColumn;
+        private System.Windows.Forms.CheckBox checkBox_pBills_ShowBillTotalSum;
 
     }
 }

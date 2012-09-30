@@ -71,6 +71,12 @@ namespace PayDesk.Components.UI.wndBills
             
 
             this.fileSystemWatcher_billIFolder.Path = ConfigManager.Instance.CommonConfiguration.Path_Bills;
+
+            // hide total sum
+            this.label5.Visible = this.label6.Visible = ConfigManager.Instance.CommonConfiguration.Content_Bills_ShowBillTotalSum;
+
+            // hide column
+            this.sum.Visible = ConfigManager.Instance.CommonConfiguration.Content_Bills_ShowBillSumColumn;
         }
         /// <summary>
         /// 

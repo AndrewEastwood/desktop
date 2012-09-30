@@ -119,6 +119,8 @@ namespace PayDesk.Components.UI
             // --TabPage: Bills
             this.checkBox_pBills_DeleteBillAtEnd.Checked = ConfigManager.Instance.CommonConfiguration.Content_Bills_KeepAliveAfterCheque;
             this.content_bill_chBox_addCopyToArchive.Checked = ConfigManager.Instance.CommonConfiguration.Content_Bills_AddCopyToArchive;
+            this.checkBox_pBills_ShowBillSumColumn.Checked = ConfigManager.Instance.CommonConfiguration.Content_Bills_ShowBillSumColumn;
+            this.checkBox_pBills_ShowBillTotalSum.Checked = ConfigManager.Instance.CommonConfiguration.Content_Bills_ShowBillTotalSum;
             // --TabPage: Articles
             this.checkBox_pArticles_KeepOriginData.Checked = ConfigManager.Instance.CommonConfiguration.Content_Articles_KeepDataAfterImport;
 
@@ -765,6 +767,8 @@ namespace PayDesk.Components.UI
                 // --TabPage: Bills
                 ConfigManager.Instance.CommonConfiguration.Content_Bills_KeepAliveAfterCheque = this.checkBox_pBills_DeleteBillAtEnd.Checked;
                 ConfigManager.Instance.CommonConfiguration.Content_Bills_AddCopyToArchive = this.content_bill_chBox_addCopyToArchive.Checked;
+                ConfigManager.Instance.CommonConfiguration.Content_Bills_ShowBillSumColumn = this.checkBox_pBills_ShowBillSumColumn.Checked;
+                ConfigManager.Instance.CommonConfiguration.Content_Bills_ShowBillTotalSum = this.checkBox_pBills_ShowBillTotalSum.Checked;
                 // --TabPage: Articles
                 ConfigManager.Instance.CommonConfiguration.Content_Articles_KeepDataAfterImport = this.checkBox_pArticles_KeepOriginData.Checked;
 

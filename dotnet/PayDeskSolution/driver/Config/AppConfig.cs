@@ -228,16 +228,18 @@ namespace driver.Config
         public string Content_Cheques_CustomClientCardBC = string.Empty;
         public bool Content_Cheques_AddCopyToArchive = false;
         #endregion
-        #region Bills [2]
+        #region Bills [4]
         public bool Content_Bills_KeepAliveAfterCheque = true;
         public bool Content_Bills_AddCopyToArchive = false;
+        public bool Content_Bills_ShowBillSumColumn = false;
+        public bool Content_Bills_ShowBillTotalSum = false;
         #endregion
         #region Articles [1]
         public bool Content_Articles_KeepDataAfterImport = true;
 
         #endregion
         #endregion
-        const byte vars_content = 10;
+        const byte vars_content = 12;
 
         #region Skin
         #region Skin Sensor
