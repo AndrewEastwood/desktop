@@ -198,7 +198,7 @@ namespace driver.Lib
             if (fxNo != string.Empty)
             {
                 DataWorkShared.SetOrderProperty(dtBill, driver.Common.CoreConst.ORDER_NO, fxNo);
-                DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.DATETIME_LOCK, DateTime.Now.ToShortDateString());
+                DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.DATETIME_LOCK, DateTime.Now.ToString("MM-dd-yy H:mm:ss"));
             }
             SaveBillToFile(dtBill);
         }

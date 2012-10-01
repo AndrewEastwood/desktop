@@ -566,7 +566,7 @@ namespace PayDesk.Components.UI.wndBills
                             (double)props[CoreConst.ORDER_REAL_SUMA], 
                             bool.Parse(billInfo[CoreConst.IS_LOCKED].ToString()), 
                             props[CoreConst.ORDER_NO],
-                            billInfo[CoreConst.DATETIME_LOCK]
+                            (billInfo.ContainsKey(CoreConst.DATETIME_LOCK)?billInfo[CoreConst.DATETIME_LOCK]:"-")
                         }
                     );
 
