@@ -16,6 +16,7 @@ local.properties
 .settings/
 .loadpath
 *.pdb
+obj/
 
 # External tool builders
 .externalToolBuilders/
