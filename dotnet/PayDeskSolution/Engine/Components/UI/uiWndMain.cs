@@ -1504,10 +1504,13 @@ namespace PayDesk.Components.UI
             this.articleDGV.Invalidate();//
             this.articleDGV.Refresh();
             this.articleDGV.Update();
+            //this.articleDGV.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+            
             this.chequeDGV.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_ChequeRowHeight;
             this.chequeDGV.Invalidate();
             this.chequeDGV.Refresh();
             this.chequeDGV.Update();
+            //this.chequeDGV.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
 
         }//ok
         private void RefershMenus()
@@ -1578,7 +1581,7 @@ namespace PayDesk.Components.UI
                 // splitters
                 this.sensorDataPanel1.Container.Panel1Collapsed = !ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artnav;
                 this.sensorDataPanel1.Container.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_artnav;
-
+                this.sensorDataPanel1.NavigatorFont = ConfigManager.Instance.CommonConfiguration.skin_sensor_fontsize;
                 this.chequeContainer.Orientation = (Orientation)ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_orient;
                 //this.splitContainer_chequeControlContainer.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chqcontrols;
                 try
@@ -2488,7 +2491,7 @@ namespace PayDesk.Components.UI
             double addedTot = MathLib.GetDouble(chequeDGV["TOT", e.RowIndex].Value.ToString());
             addedTot = MathLib.GetRoundedDose(addedTot);
 
-            if (addedTot <= 0)
+            if (addedTot <= 0 && !this.сенсорToolStripMenuItem.Checked)
             {
                 MMessageBoxEx.Show(this.chequeDGV, "Помилкове значення кількості", Application.ProductName);
                 chequeDGV.BeginEdit(true);
@@ -2496,6 +2499,8 @@ namespace PayDesk.Components.UI
             else
             {
                 double thisTot = addedTot + MathLib.GetDouble(chequeDGV["TMPTOT", e.RowIndex].Value);
+                if (thisTot <= 0)
+                    thisTot = 1.0;
                 thisTot = MathLib.GetRoundedDose(thisTot);
                 double price = MathLib.GetDouble(chequeDGV["PRICE", e.RowIndex].Value.ToString());
                 if (UserConfig.Properties[8])
@@ -4892,19 +4897,33 @@ namespace PayDesk.Components.UI
                         Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_F7), new IntPtr(0));
                         break;
                     }
-
+                case "sub":
+                    {
+                        if (this.articleDGV.RowCount == 0)
+                            break;
+                        this.chequeDGV.Select();
+                        if (chequeDGV.CurrentRow != null)
+                        {
+                            DataRow[] article = Articles.Select("ID =" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString());
+                            if (article != null && article.Length == 1)
+                            {
+                                CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article[0], -ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles);
+                                SearchFilter(true, this.currSrchType, false);
+                            }
+                        }
+                        break;
+                    }
                 case "add":
                     {
                         if (this.articleDGV.RowCount == 0)
                             break;
-
+                        /*
                         if (this.articleDGV.Visible)
                         {
-                            this.articleDGV.Select();
                             Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
                             break;
                         }
-
+                        
                         if (this.currSrchType == 2 && this.SrchTbox.Text != string.Empty)
                         {
                             Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_F7), new IntPtr(0));
@@ -4917,8 +4936,18 @@ namespace PayDesk.Components.UI
                             this.chequeDGV.Select();
                             Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
                             break;
-                        }
+                        }*/
 
+                        this.chequeDGV.Select();
+                        if (chequeDGV.CurrentRow != null)
+                        {
+                            DataRow[] article = Articles.Select("ID =" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString());
+                            if (article != null && article.Length == 1)
+                            {
+                                CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article[0], ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles);
+                                SearchFilter(true, this.currSrchType, false);
+                            }
+                        }
                         break;
                     }
                 case "edit":

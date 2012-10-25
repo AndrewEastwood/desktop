@@ -123,7 +123,7 @@ namespace PayDesk.Components.UI.wndBills
             // Delete
             if (e.KeyValue == new KeyEventArgs(Keys.D).KeyValue && e.Alt)
             {
-                button_billsList_Delete.PerformClick();
+                //button_billsList_Delete.PerformClick();
                 return;
             }
             // Load selected bill
@@ -279,8 +279,14 @@ namespace PayDesk.Components.UI.wndBills
 
                 // shif v-scrollbar
                 //this.listGrid.Rows[ridx].Selected = true;
-                vScrollBar1.Value = rIdx;
-
+                try
+                {
+                    if (vScrollBar1.Maximum < rIdx)
+                        vScrollBar1.Value = vScrollBar1.Maximum;
+                    else
+                        vScrollBar1.Value = rIdx;
+                }
+                catch { }
 
             }
             else

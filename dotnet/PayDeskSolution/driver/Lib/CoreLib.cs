@@ -220,6 +220,10 @@ namespace driver.Lib
         /// <param name="artsTable">Оригінальна таблиця товарів (без затстосування фільтру до записів)</param>
         public static void AddArticleToCheque(DataGridView chqDGW, DataGridView artDGW, DataRow article, double startTotal, DataTable artsTable)
         {
+            AddArticleToCheque(chqDGW, artDGW, article, startTotal, artsTable, false);
+        }
+        public static void AddArticleToCheque(DataGridView chqDGW, DataGridView artDGW, DataRow article, double startTotal, DataTable artsTable, bool substract)
+        {
             //winapi.Funcs.OutputDebugString("A");
             Hashtable profileDefinedTaxGrid = new Hashtable();
             Hashtable profileCompatibleTaxGrid = new Hashtable();
@@ -298,7 +302,7 @@ namespace driver.Lib
             }
             
             //Add new row
-            if (!rowIsUpdated)
+            if (!rowIsUpdated && !substract)
             {
                 //winapi.Funcs.OutputDebugString("J");
                 dRow = cheque.NewRow();
@@ -353,7 +357,12 @@ namespace driver.Lib
                     if (!funcRezult) return;
                 }
                 else
-                    dRow["TOT"] = startTotal;
+                {
+                    if (substract)
+                        dRow["TOT"] = -startTotal;
+                    else
+                        dRow["TOT"] = -startTotal;
+                }
 
                 #region Sorting article by ID and adding
                 if (UserConfig.Properties[14] && cheque.Rows.Count != 0)

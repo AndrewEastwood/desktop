@@ -1138,7 +1138,6 @@
             this.chequeDGV.AllowUserToDeleteRows = false;
             this.chequeDGV.AllowUserToOrderColumns = true;
             this.chequeDGV.AllowUserToResizeRows = false;
-            this.chequeDGV.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.chequeDGV.BackgroundColor = System.Drawing.Color.White;
             this.chequeDGV.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.chequeDGV.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
@@ -1265,6 +1264,7 @@
             this.articleDGV.Size = new System.Drawing.Size(835, 312);
             this.articleDGV.StandardTab = true;
             this.articleDGV.TabIndex = 2;
+            this.articleDGV.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DGV_MouseClick);
             this.articleDGV.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseClick);
             this.articleDGV.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseDoubleClick);
             this.articleDGV.Enter += new System.EventHandler(this.DGV_Enter);

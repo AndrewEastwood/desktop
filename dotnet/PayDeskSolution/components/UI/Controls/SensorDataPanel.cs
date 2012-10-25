@@ -39,6 +39,12 @@ namespace components.UI.Controls
             set { this.tableLayoutPanel2 = value; }
         }
 
+        public Font NavigatorFont
+        {
+            get { return this.categoryNavBar1.Font; }
+            set { this.categoryNavBar1.Font = value; }
+        }
+
         private void button_sensor_productTop_Click(object sender, EventArgs e)
         {
             if (dataPlaceholder.Controls.Count != 0 && dataPlaceholder.Controls[0] != null)
