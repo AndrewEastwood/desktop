@@ -2121,6 +2121,12 @@ namespace PayDesk.Components.UI
                         if (changeState != 0)
                             break;
 
+
+                        /*for (int i = 0; i < 200; i++)
+                        {
+                            DataTable _testDT = this.PD_Order.Copy();
+                            DataWorkBill.SaveBill(true, i.ToString().PadLeft(4, '0'), "DEMO TEST", ref _testDT);
+                        }*/
                         uiWndBillSave bs = new uiWndBillSave(this.PD_Order);
                         if (bs.ShowDialog() == DialogResult.OK)
                         {
@@ -2498,9 +2504,13 @@ namespace PayDesk.Components.UI
             }
             else
             {
-                double thisTot = addedTot + MathLib.GetDouble(chequeDGV["TMPTOT", e.RowIndex].Value);
+                double activeTot = MathLib.GetDouble(chequeDGV["TMPTOT", e.RowIndex].Value);
+                double thisTot = addedTot + activeTot;
                 if (thisTot <= 0)
-                    thisTot = 1.0;
+                {
+                    if (activeTot < 1 && activeTot > 0) thisTot = activeTot;
+                    else thisTot = 1.0;
+                }
                 thisTot = MathLib.GetRoundedDose(thisTot);
                 double price = MathLib.GetDouble(chequeDGV["PRICE", e.RowIndex].Value.ToString());
                 if (UserConfig.Properties[8])
@@ -4904,7 +4914,8 @@ namespace PayDesk.Components.UI
                         this.chequeDGV.Select();
                         if (chequeDGV.CurrentRow != null)
                         {
-                            DataRow[] article = Articles.Select("ID =" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString());
+                            //DataRow[] article = Articles.Select("ID =" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString());
+                            DataRow[] article = Articles.Select("ID =\'" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString() + "\'");
                             if (article != null && article.Length == 1)
                             {
                                 CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article[0], -ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles);
@@ -4944,7 +4955,7 @@ namespace PayDesk.Components.UI
                             DataRow[] article = Articles.Select("ID =\'" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString() + "\'");
                             if (article != null && article.Length == 1)
                             {
-                                CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article[0], ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles);
+                                CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article[0], ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles, false, false);
                                 SearchFilter(true, this.currSrchType, false);
                             }
                         }

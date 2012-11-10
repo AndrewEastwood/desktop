@@ -220,9 +220,9 @@ namespace driver.Lib
         /// <param name="artsTable">Оригінальна таблиця товарів (без затстосування фільтру до записів)</param>
         public static void AddArticleToCheque(DataGridView chqDGW, DataGridView artDGW, DataRow article, double startTotal, DataTable artsTable)
         {
-            AddArticleToCheque(chqDGW, artDGW, article, startTotal, artsTable, false);
+            AddArticleToCheque(chqDGW, artDGW, article, startTotal, artsTable, false, true);
         }
-        public static void AddArticleToCheque(DataGridView chqDGW, DataGridView artDGW, DataRow article, double startTotal, DataTable artsTable, bool substract)
+        public static void AddArticleToCheque(DataGridView chqDGW, DataGridView artDGW, DataRow article, double startTotal, DataTable artsTable, bool substract, bool useFiltering)
         {
             //winapi.Funcs.OutputDebugString("A");
             Hashtable profileDefinedTaxGrid = new Hashtable();
@@ -266,7 +266,7 @@ namespace driver.Lib
             bool funcRezult = false;
             DataTable cheque = chqDGW.DataSource as DataTable;
 
-            if (UserConfig.Properties[9] && startTotal == driver.Config.ConfigManager.Instance.CommonConfiguration.APP_StartTotal)
+            if (UserConfig.Properties[9] && startTotal == driver.Config.ConfigManager.Instance.CommonConfiguration.APP_StartTotal && useFiltering)
                 startTotal = CheckByMask(article["UNIT"], startTotal);
 
             //Update existed rows
