@@ -288,15 +288,22 @@ namespace driver.Lib
         /// <returns>Масив з шляхами до нових файлів</returns>
         public static string[] CheckForUpdate_single()
         {
+            // EXCHANGE FILES
             string[] exFiles = new string[3];
             exFiles[0] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Exchnage + "\\" + string.Format("Art_{0:D2}", driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit) + ".SDF";
             exFiles[1] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Exchnage + "\\" + string.Format("Alt_{0:D2}", driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit) + ".SDF";
             exFiles[2] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Exchnage + "\\" + "Cli_BC.SDF";
+
+            // LOCAL FILES
             string[] localFiles = new string[3];
             localFiles[0] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Art_{0:D2}", driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit) + ".xml";
             localFiles[1] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Alt_{0:D2}", driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit) + ".xml";
             localFiles[2] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + "Cli.xml";
+
+            // TAKES DATE/TIME OF EACH EXCHANGE FILE
             DateTime dTime = new DateTime();
+    
+            // LIST OF NEW FILES TO DOWNLOAD
             string[] load = new string[3] { "", "", "" };
 
             //Com_WinApi.OutputDebugString("CheckUpdate_begin");
@@ -323,6 +330,7 @@ namespace driver.Lib
                 try
                 {
                     //Com_WinApi.OutputDebugString("check for index " + i);
+                    // CHECK IF EXCHANGE FILE AVAILABLE
                     if (AsyncFunc.FileExists(exFiles[i], driver.Config.ConfigManager.Instance.CommonConfiguration.APP_RefreshTimeout))
                     {
                         if (!AsyncFunc.FileExists(localFiles[i], driver.Config.ConfigManager.Instance.CommonConfiguration.APP_RefreshTimeout))
@@ -351,13 +359,16 @@ namespace driver.Lib
                     else
                         if (i == 0)
                         {
+                            // CHECK IF EXCHANGE FOLDER AVAILABLE
                             //Com_WinApi.OutputDebugString("Art file is unvaliable _ CheckUpdate_end");
                             if (!AsyncFunc.FileExists(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Exchnage, driver.Config.ConfigManager.Instance.CommonConfiguration.APP_RefreshTimeout))
                                 load[0] = CoreConst.STATE_LAN_ERROR;
                             return load;
                         }
                 }
-                catch { ; }
+                catch(Exception ex) {
+                    CoreLib.WriteLog(ex, "driver.Lib.CheckForUpdate_single");
+                }
 
             //Com_WinApi.OutputDebugString("CheckUpdate_end");
             return load;
