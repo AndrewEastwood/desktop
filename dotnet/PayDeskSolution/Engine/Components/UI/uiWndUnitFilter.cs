@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using driver.Config;
+using driver.Lib;
 //using mdcore;
 //using mdcore.Config;
 
@@ -89,7 +90,12 @@ namespace PayDesk.Components.UI
                     sw.Dispose();
                 }
             }
-            catch { return; }
+            catch (Exception ex)
+            {
+                CoreLib.WriteLog(ex, "PayDesk.Components.UI.uiWndUnitFilter.saveButton_Click");
+
+                return;
+            }
 
             DialogResult = DialogResult.OK;
             Close();

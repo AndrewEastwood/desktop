@@ -361,7 +361,7 @@ namespace driver.Lib
                     if (substract)
                         dRow["TOT"] = -startTotal;
                     else
-                        dRow["TOT"] = -startTotal;
+                        dRow["TOT"] = startTotal;
                 }
 
                 #region Sorting article by ID and adding
