@@ -22,16 +22,16 @@ namespace driver.Lib
         private static BinaryFormatter binF = new BinaryFormatter();
 
         /* general */
-        public static Hashtable CheckForUpdate()
+        public static void CheckForUpdate(ref Hashtable data)
         {
-            Hashtable data = new Hashtable();
+            data = new Hashtable();
 
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
                 data = CheckForUpdate_profile();
             else
                 data.Add(0, CheckForUpdate_single());
 
-            return data;
+            //return data;
         }
         public static string[] LoadFilesOnLocalTempFolder(string[] exchangeFiles, object profile)
         {
@@ -331,15 +331,20 @@ namespace driver.Lib
                 {
                     //Com_WinApi.OutputDebugString("check for index " + i);
                     // CHECK IF EXCHANGE FILE AVAILABLE
+                    Com_WinApi.OutputDebugString("MainThread: Looking for exchange file: " + exFiles[i]);
                     if (AsyncFunc.FileExists(exFiles[i], driver.Config.ConfigManager.Instance.CommonConfiguration.APP_RefreshTimeout))
                     {
+                        Com_WinApi.OutputDebugString("MainThread: Exchange file OK: " + exFiles[i]);
+                        Com_WinApi.OutputDebugString("MainThread: Looking for local file: " + exFiles[i]);
                         if (!AsyncFunc.FileExists(localFiles[i], driver.Config.ConfigManager.Instance.CommonConfiguration.APP_RefreshTimeout))
                         {
+                            Com_WinApi.OutputDebugString("MainThread: Local file is missed: " + exFiles[i]);
                             load[i] = exFiles[i];
                             driver.Config.ConfigManager.Instance.CommonConfiguration.ADD_updateDateTime[i] = Microsoft.VisualBasic.FileSystem.FileDateTime(exFiles[i]);
                         }
                         else
                         {
+                            Com_WinApi.OutputDebugString("MainThread: Local file OK: " + exFiles[i]);
                             dTime = Microsoft.VisualBasic.FileSystem.FileDateTime(exFiles[i]);
 
                             //hExFile = winapi.Funcs.CreateFile(exFiles[i], winapi.Enums.dwDesiredAccess.NONE,
@@ -351,12 +356,15 @@ namespace driver.Lib
 
                             if (dTime > driver.Config.ConfigManager.Instance.CommonConfiguration.ADD_updateDateTime[i])
                             {
+                                Com_WinApi.OutputDebugString("MainThread: Exchange file is newer than local: " + exFiles[i]);
                                 load[i] = exFiles[i];
                                 driver.Config.ConfigManager.Instance.CommonConfiguration.ADD_updateDateTime[i] = dTime;
                             }
                         }
                     }
                     else
+                    {
+                        Com_WinApi.OutputDebugString("MainThread: File does no exist: " + exFiles[i]);
                         if (i == 0)
                         {
                             // CHECK IF EXCHANGE FOLDER AVAILABLE
@@ -365,6 +373,7 @@ namespace driver.Lib
                                 load[0] = CoreConst.STATE_LAN_ERROR;
                             return load;
                         }
+                    }
                 }
                 catch(Exception ex) {
                     CoreLib.WriteLog(ex, "driver.Lib.CheckForUpdate_single");
@@ -373,8 +382,6 @@ namespace driver.Lib
             //Com_WinApi.OutputDebugString("CheckUpdate_end");
             return load;
         }//ok
-
-
 
 
         /* PayDesk Source Structure v2.0 */

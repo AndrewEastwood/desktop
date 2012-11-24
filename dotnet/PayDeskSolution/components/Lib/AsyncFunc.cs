@@ -8,10 +8,15 @@ using components.Components.WinApi;
 
 namespace components.Lib
 {
-    public static class AsyncFunc
+    public class AsyncFunc
     {
         private static object lastResult;
         private static Thread th;
+
+        public void demo()
+        {
+
+        }
 
         /// <summary>
         /// Check for valid file path.
@@ -35,7 +40,6 @@ namespace components.Lib
                 throw new TimeoutException("Timeout" + exceptionSuffix);
                 //return false;
             }
-
             if (lastResult != null)
                 return (bool)lastResult;
 
@@ -65,14 +69,14 @@ namespace components.Lib
         /// <param name="parameter">File name or directory path</param>
         private static void FileExsist(object path)
         {
-            Com_WinApi.OutputDebugString("FileExsist start");
+            Com_WinApi.OutputDebugString("FileExsist: start");
 
             if (path == null)
             {
                 lastResult = false;
                 return;
             }
-
+            //Thread.Sleep(10000);
             string fileName = path.ToString();
 
             if (string.IsNullOrEmpty(fileName))
@@ -89,14 +93,14 @@ namespace components.Lib
 
                 //if (winapi.Consts.ERROR_FILE_NOT_FOUND == error ||
                 //    winapi.Consts.ERROR_PATH_NOT_FOUND == error)
-                Com_WinApi.OutputDebugString("FileExsist end _ not valid atribute");
+                Com_WinApi.OutputDebugString("FileExsist: is not valid atribute");
                 lastResult = false;
                 return;
             }
 
             //isDirectory = 0 != (winapi.Consts.FILE_ATTRIBUTE_DIRECTORY & attributes);
 
-            Com_WinApi.OutputDebugString("FileExsist end");
+            Com_WinApi.OutputDebugString("FileExsist: end");
             lastResult = true;
         }
     }

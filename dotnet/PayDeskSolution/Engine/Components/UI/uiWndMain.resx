@@ -142,18 +142,18 @@
   <data name="DDM_Main.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         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
-        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
+        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
+        AAAm/sAwF6N03QAAAABJRU5ErkJggg==
 </value>
   </data>
   <metadata name="wndMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -171,15 +171,15 @@
   <data name="DDM_Plugins.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAK+wAA
-        CvsBy58dkAAAAZFJREFUOE+dk98rQ2EYx03ijl1MWxsR2llRk8WirF3ihit/gXtaKYpyISmSlZFotmmz
-        0ab8aBe7IOKC0Zg1oyhq5dKFtKuv533PzuLYypz69Pz+nvc8vUcBoET+2M+rfiWHu94VvxpZggnIWTyr
-        xGfmA6mMnVsW5+vjLy8kEE4PYOexE5G3wf8JHLz2IZDqQDjdX7zAwqkSu89W+FMm7L/0YOFEWfgT5o5U
-        4ByrMC/5ZLcfzPAmWxF6soj1LN97+A5mI5rcwtjSpMX57luxmWghEWPeOpvjAtPhGvgSnXDdGQgB7rgA
-        V5z5BvLJEpKV/K2EBWyOC0ztNcATN8J50wjnLcHsTVPWZ5bI5cS8984MNscFJoJ6cEJZGxQwSf56rB5r
-        xHqsTqyFBOpjSH16USDfPRgLNGP1WidypcM4xfK+mUNjbUGBUa8Ry1ENVqJqDouLuok2twmOSxWWLlRw
-        EDaPqTiBkY12+JPdOVj85xPQ/1XNBuRQvqp3qKKMKCdKJcEfS6QmNSEQbYRVhpZirfwkX7s3f2hG6sbx
-        AAAAAElFTkSuQmCC
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAK+gAA
+        CvoBGdj/dAAAAYpJREFUOE+dks9KQlEQxi8RtSsXNxQtigqvUKAkJS4Sl9WmVj1BDxBCUFDQIiIopCCL
+        SEwNTQsN+oMLF0XRpiw0FbOgoEDoASJcfc251yt1U8gWP76ZOTMf5wyHA8ApWb1qgpJKfaz2a5gV2fBn
+        8QP54pqoLK/ZIFYYw8GTFfH38f8ZnLyNIJwfQKwwWruB81KFwxc7Qnkzjl+H4LxQVX/C8hkPkXMeK3JM
+        uv9oQSBnQvTZJp2X+N4jLnEprikvjC1NXlzwwYTdbC+ZGCuesznRYCHWimDWCm/GQAjwpQV40yw2UExK
+        yCrHe1kb2JxoMH/UCX/aCE+qC557gmmquxQzJco1qR7IWMDmRIPZiB4i0ZJGBMxR7E52YJtwJ9uls6hA
+        fQy5Ty8ZVPog0+EebN3pJG51mKFc2bd4amyrajAVMGIjocFmQi3C8pp+osNnhuuGx/o1Dxfh8JtrM5jc
+        6UcoN1iG5X++AcdxLWxACdWbhyca64kGok42/LFEalITAtFH2BVoKdcqb/IFJh6lM8Dd1M8AAAAASUVO
+        RK5CYII=
 </value>
   </data>
   <data name="splitContainer1.Tag" mimetype="application/x-microsoft.net.object.binary.base64">

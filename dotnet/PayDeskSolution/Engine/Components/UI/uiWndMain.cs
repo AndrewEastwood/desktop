@@ -37,6 +37,7 @@ using components.Components.MMessageBox;
 using components.Components.HashObject;
 using components.Public;
 using components.UI.Controls;
+using System.Threading;
 //using comport;
 /*
  * Notes:
@@ -110,6 +111,9 @@ namespace PayDesk.Components.UI
         private bool _fl_isOk = false;
         //private bool _fl_modeChanged = false;
 
+        // inner events
+        //private event EventHandler<ExchangeEventArgs> OnCheckCompleted;
+
         private Hashtable GetAppStatements()
         {
             Hashtable currentStates = new Hashtable();
@@ -125,16 +129,17 @@ namespace PayDesk.Components.UI
         {
             InitializeComponent();
 
+            //OnCheckCompleted += new EventHandler<ExchangeEventArgs>(PostActionOnCheckComplete);
+            // DoSomething.OnNeedsUI += new EventHandler<EventArgs>(DoSomething_OnNeedsUI);
+
             dataContainer2 = DataWorkShared.GetDataContainer();
 
             // initialize statements
             dataContainer2.Structures[CoreConst.CONTAINER_STATE, CoreConst.STATE_CALC_USE_TOTAL_DISC] = true;
 
-
             dataContainer2.Structures[CoreConst.CONTAINER_STATE].UpdateMethod = this.GetAppStatements;
             //dataContainer2.Structures[CoreConst.CONTAINER_STATE] = this.GetAppStatements;
             dataContainer2.Structures[CoreConst.CONTAINER_STATE].Update();
-            
 
             //Program.AppPlugins.GetActive<IAppUI>().Execute(this);
                     
@@ -619,7 +624,7 @@ namespace PayDesk.Components.UI
             myHotKey = Keys.Control;
             CoreLib.RegisterHotKey(this, myHotKey, CoreLib.MyHotKeys.HK_Ctrl);
 
-            Com_WinApi.OutputDebugString("regHotKeys");
+            //Com_WinApi.OutputDebugString("regHotKeys");
         }
         /// <summary>
         /// Event of window deactivation
@@ -631,7 +636,7 @@ namespace PayDesk.Components.UI
             base.OnDeactivate(e);
             for (int i = 0x10; i < 0x20; i++)
                 CoreLib.UnregisterHotKey(this, i);
-            Com_WinApi.OutputDebugString("un_RegHotKeys");
+            //Com_WinApi.OutputDebugString("un_RegHotKeys");
         }
         /// <summary>
         /// Перевизначений метод обробки повідомлень.
@@ -1391,6 +1396,7 @@ namespace PayDesk.Components.UI
             RefreshWindowMenu();
 
             timer1.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate;
+            timer1.Start();
 
             bool needUpdate = false;
             if (currentModeIsSingle != ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
@@ -1563,7 +1569,7 @@ namespace PayDesk.Components.UI
         {
             if (this.сенсорToolStripMenuItem.Checked || force)
             {
-                Com_WinApi.OutputDebugString("RefershStyles_Sensor_Activated");
+                //Com_WinApi.OutputDebugString("RefershStyles_Sensor_Activated");
 
                 this.sensorPanel1.SensorType = ConfigManager.Instance.CommonConfiguration.skin_sensor_com_size_cheque;
 
@@ -2636,9 +2642,21 @@ namespace PayDesk.Components.UI
         /// </summary>
         /// <param name="sender">Timer object</param>
         /// <param name="e">Timer event arguments</param>
+
+        private static bool timerIsRunning = false;
+        
         private void timer1_Tick(object sender, EventArgs e)//lbl
         {
-            timer1.Stop();
+            if (timerIsRunning)
+            {
+                Com_WinApi.OutputDebugString("Main: timer is running");
+                return;
+            }
+
+            timerIsRunning = true;
+
+            Com_WinApi.OutputDebugString("Main: timer start");
+            //timer1.Stop();
             this.Update();
 
             if (Cheque.Rows.Count != 0)
@@ -2658,18 +2676,59 @@ namespace PayDesk.Components.UI
                 AltBC.Rows.Clear();
             }
 
-            Hashtable hfiles = DataWorkSource.CheckForUpdate();
+            Thread th = new Thread(new ThreadStart(BgWorker));
+            th.Start();
+            //this.BeginInvoke(new ExchangeScanner(ScanExchangeFolder), new object[] { null, EventArgs.Empty });
+            /*lock (this)
+            {
+                Thread th = new Thread(new ThreadStart(startCheckExchange));
+                th.Start();
+            }*/
+            Com_WinApi.OutputDebugString("Main: timer end");
+        }
 
-            Com_WinApi.OutputDebugString("MainWnd --- AddingData Begin");
+        //private delegate void ExchangeScanner(object sender, EventArgs ea);
+
+        private void BgWorker()
+        {
+            Com_WinApi.OutputDebugString("BgWorker: start");
+            Hashtable hfiles = new Hashtable();
+            DataWorkSource.CheckForUpdate(ref hfiles);
+            lock (this)
+            {
+                this.DDM_Scanner.Visible = true;
+                //Com_WinApi.OutputDebugString("MainWnd --- AddingData Begin");
+                PostActionOnCheckComplete(hfiles);
+                this.DDM_Scanner.Visible = false;
+                /*
+                for (int i = 0; i < 2; i++)
+                {
+                    this.CashLbl.Text = i.ToString();
+                    this.SrchTbox.Text = i.ToString();
+                    Thread.Sleep(10000);
+                }
+                this.timer1.Start();*/
+            }
+            timerIsRunning = false;
+            Com_WinApi.OutputDebugString("BgWorker: end");
+        }
+        
+        /* Checker callback */
+
+        private void PostActionOnCheckComplete(Hashtable hfiles)
+        {
 
             /* notification */
             /*
             */
+            this.DDM_Scanner.Value++;
+
             int currentProfileIndex = 0;
             int startupIndex = 0;
             bool notificationIsActive = false;
             uiWndUpdateWnd uw = new uiWndUpdateWnd(_fl_onlyUpdate);
 
+            this.DDM_Scanner.Value++;
 
             /* Data Loader v2.0 */
             //Com_HashObject newFiles = DataWorkSource.CheckGetDataSource(dataContainer2.Structures[CoreConst.CONTAINER_STATE].GetTypedProperty<bool>(CoreConst.STATE_DATA_UPDATE_ONLY));
@@ -2688,6 +2747,8 @@ namespace PayDesk.Components.UI
                 }
             }
 
+            this.DDM_Scanner.Value++;
+
             if (this.Summa.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
             {
                 this.Discount.Clear();
@@ -2699,15 +2760,18 @@ namespace PayDesk.Components.UI
                 }
             }
 
+            this.DDM_Scanner.Value++;
 
 
             //MessageBox.Show("done 1");
-
+            
             List<string> allProfiles = new List<string>();
             //bool wasUpdatedAtLeastOneSource = false;
             _fl_artUpdated = false;
             foreach (DictionaryEntry de in hfiles)
             {
+
+                this.DDM_Scanner.Value++;
 
                 string[] files = (string[])de.Value;
 
@@ -2715,6 +2779,7 @@ namespace PayDesk.Components.UI
 
                 /* detectiong for updates */
 
+                this.DDM_Scanner.Value++;
 
                 // server status
                 if (files[0] == CoreConst.STATE_LAN_ERROR && hfiles.Count == 1)
@@ -2722,13 +2787,15 @@ namespace PayDesk.Components.UI
                 else
                     DDM_UpdateStatus.Image = Properties.Resources.ok;
 
+                this.DDM_Scanner.Value++;
+
                 if ((files[0] == CoreConst.STATE_LAN_ERROR || files[0] == "") && files[1] == "" && files[2] == "" && _fl_onlyUpdate)
                 {
                     /* if only one profile */
                     if (hfiles.Count == 1)
                     //if (!_fl_artUpdated && (hfiles.Count == 1 || currentProfileIndex + 1 == hfiles.Count))
                     {
-                        timer1.Start();
+                        //timer1.Start();
                         GC.Collect();
                         /* close notification */
                         if (notificationIsActive)
@@ -2745,6 +2812,8 @@ namespace PayDesk.Components.UI
                 }
                 //MessageBox.Show("done 2");
 
+                this.DDM_Scanner.Value++;
+
                 if (!notificationIsActive)
                 {
                     uw.ShowUpdate(this);
@@ -2753,10 +2822,16 @@ namespace PayDesk.Components.UI
                     notificationIsActive = true;
                 }
 
+
+                this.DDM_Scanner.Value++;
+
                 /* loading */
 
                 //MessageBox.Show("done 3");
                 string[] localFiles = DataWorkSource.LoadFilesOnLocalTempFolder(files, de.Key);
+
+
+                this.DDM_Scanner.Value++;
 
                 if (currentProfileIndex == 0)
                     startupIndex = 0;
@@ -2765,15 +2840,21 @@ namespace PayDesk.Components.UI
                 object[] loadResult = DataWorkSource.LoadData(localFiles, _fl_onlyUpdate, de.Key, startupIndex);
 
 
+                this.DDM_Scanner.Value++;
+
                 ConfigManager.SaveConfiguration();
 
                 /* adding data */
 
 
+                this.DDM_Scanner.Value++;
+
                 //MessageBox.Show("done 4");
 
                 DataTable[] tables = (DataTable[])loadResult[0];
                 _fl_artUpdated = (bool)loadResult[1];
+
+                this.DDM_Scanner.Value++;
 
                 if (tables[0] != null)
                 {
@@ -2802,10 +2883,16 @@ namespace PayDesk.Components.UI
                     //wasUpdatedAtLeastOneSource = true;
                 }
 
+
+                this.DDM_Scanner.Value++;
+
                 //MessageBox.Show("done 5");
                 currentProfileIndex++;
 
             }
+
+
+            this.DDM_Scanner.Value++;
 
             //MessageBox.Show("done 6");
             /* Removing unused rows */
@@ -2814,13 +2901,16 @@ namespace PayDesk.Components.UI
             {
                 cleanupQuery += " F <> " + existedProfiles + " AND ";
             }
-            cleanupQuery = cleanupQuery.Trim(new char[] {' ', 'A', 'N', 'D' });
+            cleanupQuery = cleanupQuery.Trim(new char[] { ' ', 'A', 'N', 'D' });
             DataRow[] unusedRowsArt = Articles.Select(cleanupQuery);
             DataRow[] unusedRowsAlt = AltBC.Select(cleanupQuery);
             foreach (DataRow dr in unusedRowsArt)
                 dr.Delete();
             foreach (DataRow dr in unusedRowsAlt)
                 dr.Delete();
+
+
+            this.DDM_Scanner.Value++;
 
             //MessageBox.Show("done 7");
             /* close notification */
@@ -2829,6 +2919,9 @@ namespace PayDesk.Components.UI
                 uw.Close();
                 uw.Dispose();
             }
+
+
+            this.DDM_Scanner.Value++;
 
             //MessageBox.Show("done 8");
             Com_WinApi.OutputDebugString("MainWnd --- AddingData End");
@@ -2842,15 +2935,21 @@ namespace PayDesk.Components.UI
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
+
+            this.DDM_Scanner.Value++;
+
             //MessageBox.Show("done 9");
             _fl_onlyUpdate = true;
             _fl_SubUnitChanged = false;
 
-            this._fl_isOk = new Com_SecureRuntime().FullLoader();
-            this.label_uiWndmain_DemoShowArt.Visible = this.label_uiWndmain_DemoShowChq.Visible = !this._fl_isOk;
+            _fl_isOk = new Com_SecureRuntime().FullLoader();
+            label_uiWndmain_DemoShowArt.Visible = label_uiWndmain_DemoShowChq.Visible = !_fl_isOk;
             //MessageBox.Show("done 10");
 
-            timer1.Start();
+
+            this.DDM_Scanner.Value++;
+
+            //timer1.Start();
             SrchTbox.Select();
             GC.Collect();
 
@@ -2866,8 +2965,12 @@ namespace PayDesk.Components.UI
                         DDM_FPStatus.Image = Properties.Resources.FpNotOk;
                 }
                 catch { DDM_FPStatus.Image = Properties.Resources.FpNotOk; }
-            } else
+            }
+            else
                 DDM_FPStatus.Image = Properties.Resources.FpNotOk;
+
+
+            this.DDM_Scanner.Value++;
         }
 
         /// <summary>
@@ -5050,5 +5153,7 @@ namespace PayDesk.Components.UI
             }
         }
 
+
+        
     }
 }
