@@ -88,32 +88,82 @@ namespace Components.UI
 
         private void button_WndLoader_MakeCode_Click(object sender, EventArgs e)
         {
-            if (this.maskedTextBox1.Text == string.Empty ||
-                this.maskedTextBox3.Text == string.Empty)
+            if (customerName.Text == "" ||
+                clientRegCode.Text == "" ||
+                appType.Text == "" ||
+                customerType.Text == "" ||
+                deskNumber.Text == "")
             {
-                MessageBox.Show(this, "Fill all fileds", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "Fill all required (red) fileds", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if (this.maskedTextBox1.Text.Length != 0)
+            if (this.clientRegCode.Text.Length != 0)
             {
-                maskedTextBox2.Text = this.giveRegisrationNumber(this.maskedTextBox1.Text);
+                activationCode.Text = this.giveRegisrationNumber(this.clientRegCode.Text);
                 //if (!File.Exists("customers.txt"))
                 //File.CreateText("customers.txt").Dispose();
                 // saving customer
                 if (!Directory.Exists("customers"))
                     Directory.CreateDirectory("customers");
-                string customerFileName = string.Format("customers\\c_{0}-{1:MM-dd-yyyy}.txt", maskedTextBox3.Text, DateTime.Now);
+                string customerFileName = string.Format("customers\\c_{3}_{0}_k{2}_{4}-{1:MM-dd-yyyy}.txt", customerName.Text, DateTime.Now, deskNumber.Text, customerType.Text, appType.Text);
                 if (File.Exists(customerFileName))
                 {
                     MessageBox.Show("Customer already registered.\r\nEnter new customer name.");
                     return;
                 }
                 StreamWriter swr = File.CreateText(customerFileName);
-                swr.WriteLine(string.Format("/*= DATE: {4}\r\ncustomer: {0}\r\nPayDeskSn: {1}\r\nActivation No. {2}\r\n{3}", maskedTextBox3.Text, maskedTextBox1.Text, maskedTextBox2.Text, string.Empty.PadRight(20, '-'), DateTime.Now.ToString()));
+                StringBuilder customerFullInfo = new StringBuilder();
+                customerFullInfo.Append("Name: " + customerName.Text + "; ");
+                customerFullInfo.Append("Type: " + customerType.Text + "; ");
+                customerFullInfo.Append("App: " + appType.Text + "; ");
+                customerFullInfo.Append("Desk: " + deskNumber.Text + "; ");
+                customerFullInfo.Append("Comment: " + comment.Text + "; ");
+                swr.WriteLine(string.Format("/*= DATE: {4}\r\ncustomer: {0}\r\nPayDeskSn: {1}\r\nActivation No. {2}\r\n{3}", customerFullInfo.ToString() , clientRegCode.Text, activationCode.Text, string.Empty.PadRight(20, '-'), DateTime.Now.ToString()));
                 swr.Close();
                 swr.Dispose();
+
+                
+                MyLoader.Components.Customer c = new MyLoader.Components.Customer();
+                c.appType = appType.Text;
+                c.clientCode = clientRegCode.Text;
+                c.customerType = customerType.Text;
+                c.deskNumber = deskNumber.Text;
+                c.registerCode = activationCode.Text;
+                c.comment = customerFullInfo.ToString();
+
+                using (FileStream fs = new FileStream("customers\\inner.dat", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                {
+                    try
+                    {
+                        System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bfmt = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+
+                        MyLoader.Components.Customer[] all = null;
+                        List<MyLoader.Components.Customer> newList = new List<MyLoader.Components.Customer>();
+
+                        if (fs.Length == 0)
+                            all = new MyLoader.Components.Customer[1] { c };
+                        else
+                        {
+                            try
+                            {
+                                all = (MyLoader.Components.Customer[])bfmt.Deserialize(fs);
+                            }
+                            catch { };
+
+                            if (all != null)
+                                newList.AddRange(all);
+                            newList.Add(c);
+                        }
+
+                        bfmt.Serialize(fs, newList);
+                    }
+                    catch{}
+                }
+
             }
         }
+
     }
 }
