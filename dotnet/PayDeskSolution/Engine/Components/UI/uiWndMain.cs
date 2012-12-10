@@ -2676,30 +2676,38 @@ namespace PayDesk.Components.UI
                 AltBC.Rows.Clear();
             }
 
-            Thread th = new Thread(new ThreadStart(BgWorker));
-            th.Start();
+            //Thread th = new Thread(new ThreadStart(BgWorker));
+            //th.Start();
             //this.BeginInvoke(new ExchangeScanner(ScanExchangeFolder), new object[] { null, EventArgs.Empty });
             /*lock (this)
             {
                 Thread th = new Thread(new ThreadStart(startCheckExchange));
                 th.Start();
             }*/
+
+            BgWorker(true);
+
+            //timer1.Start();
+
             Com_WinApi.OutputDebugString("Main: timer end");
         }
 
         //private delegate void ExchangeScanner(object sender, EventArgs ea);
 
-        private void BgWorker()
+        private void BgWorker(bool async)
         {
             Com_WinApi.OutputDebugString("BgWorker: start");
             Hashtable hfiles = new Hashtable();
             DataWorkSource.CheckForUpdate(ref hfiles);
             lock (this)
             {
-                this.DDM_Scanner.Visible = true;
+                //this.DDM_Scanner.Visible = true;
                 //Com_WinApi.OutputDebugString("MainWnd --- AddingData Begin");
-                PostActionOnCheckComplete(hfiles);
-                this.DDM_Scanner.Visible = false;
+                if (async)
+                    PostActionOnCheckCompleteA(hfiles);
+                else
+                    PostActionOnCheckComplete(hfiles);
+                //this.DDM_Scanner.Visible = false;
                 /*
                 for (int i = 0; i < 2; i++)
                 {
@@ -2721,14 +2729,14 @@ namespace PayDesk.Components.UI
             /* notification */
             /*
             */
-            this.DDM_Scanner.Value++;
+            //this.DDM_Scanner.Value++;
 
             int currentProfileIndex = 0;
             int startupIndex = 0;
             bool notificationIsActive = false;
             uiWndUpdateWnd uw = new uiWndUpdateWnd(_fl_onlyUpdate);
 
-            this.DDM_Scanner.Value++;
+            //this.DDM_Scanner.Value++;
 
             /* Data Loader v2.0 */
             //Com_HashObject newFiles = DataWorkSource.CheckGetDataSource(dataContainer2.Structures[CoreConst.CONTAINER_STATE].GetTypedProperty<bool>(CoreConst.STATE_DATA_UPDATE_ONLY));
@@ -2747,7 +2755,7 @@ namespace PayDesk.Components.UI
                 }
             }
 
-            this.DDM_Scanner.Value++;
+            //this.DDM_Scanner.Value++;
 
             if (this.Summa.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
             {
@@ -2760,7 +2768,7 @@ namespace PayDesk.Components.UI
                 }
             }
 
-            this.DDM_Scanner.Value++;
+            //this.DDM_Scanner.Value++;
 
 
             //MessageBox.Show("done 1");
@@ -2771,7 +2779,7 @@ namespace PayDesk.Components.UI
             foreach (DictionaryEntry de in hfiles)
             {
 
-                this.DDM_Scanner.Value++;
+                //this.DDM_Scanner.Value++;
 
                 string[] files = (string[])de.Value;
 
@@ -2779,7 +2787,7 @@ namespace PayDesk.Components.UI
 
                 /* detectiong for updates */
 
-                this.DDM_Scanner.Value++;
+                //this.DDM_Scanner.Value++;
 
                 // server status
                 if (files[0] == CoreConst.STATE_LAN_ERROR && hfiles.Count == 1)
@@ -2787,7 +2795,7 @@ namespace PayDesk.Components.UI
                 else
                     DDM_UpdateStatus.Image = Properties.Resources.ok;
 
-                this.DDM_Scanner.Value++;
+                //this.DDM_Scanner.Value++;
 
                 if ((files[0] == CoreConst.STATE_LAN_ERROR || files[0] == "") && files[1] == "" && files[2] == "" && _fl_onlyUpdate)
                 {
@@ -2812,7 +2820,7 @@ namespace PayDesk.Components.UI
                 }
                 //MessageBox.Show("done 2");
 
-                this.DDM_Scanner.Value++;
+                //this.DDM_Scanner.Value++;
 
                 if (!notificationIsActive)
                 {
@@ -2823,7 +2831,7 @@ namespace PayDesk.Components.UI
                 }
 
 
-                this.DDM_Scanner.Value++;
+                //this.DDM_Scanner.Value++;
 
                 /* loading */
 
@@ -2831,7 +2839,7 @@ namespace PayDesk.Components.UI
                 string[] localFiles = DataWorkSource.LoadFilesOnLocalTempFolder(files, de.Key);
 
 
-                this.DDM_Scanner.Value++;
+                //this.DDM_Scanner.Value++;
 
                 if (currentProfileIndex == 0)
                     startupIndex = 0;
@@ -2840,21 +2848,21 @@ namespace PayDesk.Components.UI
                 object[] loadResult = DataWorkSource.LoadData(localFiles, _fl_onlyUpdate, de.Key, startupIndex);
 
 
-                this.DDM_Scanner.Value++;
-
+                //this.DDM_Scanner.Value++;
+                
                 ConfigManager.SaveConfiguration();
 
                 /* adding data */
 
 
-                this.DDM_Scanner.Value++;
+                //this.DDM_Scanner.Value++;
 
                 //MessageBox.Show("done 4");
 
                 DataTable[] tables = (DataTable[])loadResult[0];
                 _fl_artUpdated = (bool)loadResult[1];
 
-                this.DDM_Scanner.Value++;
+                //this.DDM_Scanner.Value++;
 
                 if (tables[0] != null)
                 {
@@ -2884,7 +2892,7 @@ namespace PayDesk.Components.UI
                 }
 
 
-                this.DDM_Scanner.Value++;
+                //this.DDM_Scanner.Value++;
 
                 //MessageBox.Show("done 5");
                 currentProfileIndex++;
@@ -2892,7 +2900,7 @@ namespace PayDesk.Components.UI
             }
 
 
-            this.DDM_Scanner.Value++;
+            //this.DDM_Scanner.Value++;
 
             //MessageBox.Show("done 6");
             /* Removing unused rows */
@@ -2910,7 +2918,7 @@ namespace PayDesk.Components.UI
                 dr.Delete();
 
 
-            this.DDM_Scanner.Value++;
+            //this.DDM_Scanner.Value++;
 
             //MessageBox.Show("done 7");
             /* close notification */
@@ -2921,7 +2929,7 @@ namespace PayDesk.Components.UI
             }
 
 
-            this.DDM_Scanner.Value++;
+            //this.DDM_Scanner.Value++;
 
             //MessageBox.Show("done 8");
             Com_WinApi.OutputDebugString("MainWnd --- AddingData End");
@@ -2930,13 +2938,13 @@ namespace PayDesk.Components.UI
             {
                 if (this.WindowState == FormWindowState.Minimized)
                     this.WindowState = FormWindowState.Normal;
-                this.BringToFront();
+                //this.BringToFront();
                 MMessageBoxEx.Show(this.chequeDGV, "Були внесені зміни в базу товарів", Application.ProductName,
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
 
-            this.DDM_Scanner.Value++;
+            //this.DDM_Scanner.Value++;
 
             //MessageBox.Show("done 9");
             _fl_onlyUpdate = true;
@@ -2947,10 +2955,10 @@ namespace PayDesk.Components.UI
             //MessageBox.Show("done 10");
 
 
-            this.DDM_Scanner.Value++;
+            //this.DDM_Scanner.Value++;
 
             //timer1.Start();
-            SrchTbox.Select();
+            innerActivateSearchBox();
             GC.Collect();
 
             /* device status */
@@ -2970,7 +2978,224 @@ namespace PayDesk.Components.UI
                 DDM_FPStatus.Image = Properties.Resources.FpNotOk;
 
 
-            this.DDM_Scanner.Value++;
+            //this.DDM_Scanner.Value++;
+        }
+
+        private void PostActionOnCheckCompleteA(Hashtable hfiles)
+        {
+            /* notification */
+            int currentProfileIndex = 0;
+            int startupIndex = 0;
+            bool notificationIsActive = false;
+            uiWndUpdateWnd uw = new uiWndUpdateWnd(_fl_onlyUpdate);
+
+            /* Data Loader v2.0 */
+            if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles && this.Cheques.Tables.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
+            {
+                DataWorkSource.CreateTables(ref Cheque, ref Articles, ref AltBC, ref Cards, ref Cheques);
+                this.CreateOrderStructure(this.Cheque);
+                foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
+                {
+                    this.CreateOrderStructure(this.Cheques.Tables[de.Key.ToString()]);
+                    this.Discount.Add(de.Key, DataWorkShared.GetStandartDiscountInfoStructure2());
+                    this.Summa.Add(de.Key, DataWorkShared.GetStandartCalculationInfoStructure2());
+                }
+            }
+
+            if (this.Summa.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
+            {
+                this.Discount.Clear();
+                this.Summa.Clear();
+                foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
+                {
+                    this.Discount.Add(de.Key, DataWorkShared.GetStandartDiscountInfoStructure2());
+                    this.Summa.Add(de.Key, DataWorkShared.GetStandartCalculationInfoStructure2());
+                }
+            }
+
+            List<string> allProfiles = new List<string>();
+            _fl_artUpdated = false;
+            foreach (DictionaryEntry de in hfiles)
+            {
+                string[] files = (string[])de.Value;
+                allProfiles.Add(de.Key.ToString());
+
+                /* detectiong for updates */
+
+                // server status
+                if (files[0] == CoreConst.STATE_LAN_ERROR && hfiles.Count == 1)
+                    DDM_UpdateStatus.Image = Properties.Resources.ExNotOk;
+                else
+                    DDM_UpdateStatus.Image = Properties.Resources.ok;
+
+                //this.DDM_Scanner.Value++;
+
+                if ((files[0] == CoreConst.STATE_LAN_ERROR || files[0] == "") && files[1] == "" && files[2] == "" && _fl_onlyUpdate)
+                {
+                    /* if only one profile */
+                    if (hfiles.Count == 1)
+                    //if (!_fl_artUpdated && (hfiles.Count == 1 || currentProfileIndex + 1 == hfiles.Count))
+                    {
+                        //timer1.Start();
+                        GC.Collect();
+                        /* close notification */
+                        if (notificationIsActive)
+                        {
+                            uw.Close();
+                            uw.Dispose();
+                        }
+                        return;
+                    }
+
+                    /* next turn */
+                    currentProfileIndex++;
+                    continue;
+                }
+
+                if (!notificationIsActive)
+                {
+                    uw.ShowUpdate(this);
+                    uw.Update();
+                    uw.Refresh();
+                    notificationIsActive = true;
+                }
+
+                /* loading */
+                string[] localFiles = DataWorkSource.LoadFilesOnLocalTempFolder(files, de.Key);
+
+                if (currentProfileIndex == 0)
+                    startupIndex = 0;
+                else
+                    startupIndex = Articles.Rows.Count;
+                object[] loadResult = DataWorkSource.LoadData(localFiles, _fl_onlyUpdate, de.Key, startupIndex);
+
+                ConfigManager.SaveConfiguration();
+
+                /* adding data */
+                DataTable[] tables = (DataTable[])loadResult[0];
+                _fl_artUpdated = (bool)loadResult[1];
+
+                //this.DDM_Scanner.Value++;
+
+                if (tables[0] != null)
+                {
+                    //Articles = tables[0].Copy();
+                    DataRow[] dRows = Articles.Select("F = " + de.Key);
+                    foreach (DataRow dr in dRows)
+                        dr.Delete();
+                    Articles.Merge(tables[0]);
+                    //wasUpdatedAtLeastOneSource = true;
+                }
+                if (tables[1] != null)
+                {
+                    //AltBC = tables[1].Copy();
+                    DataRow[] dRows = AltBC.Select("F = " + de.Key);
+                    foreach (DataRow dr in dRows)
+                        dr.Delete();
+                    AltBC.Merge(tables[1]);
+                    //wasUpdatedAtLeastOneSource = true;
+                }
+                if (tables[2] != null)
+                {
+                    //Cards = tables[2].Copy();
+                    //if (currentProfileIndex == 0)
+                    Cards.Rows.Clear();
+                    Cards.Merge(tables[2]);
+                    //wasUpdatedAtLeastOneSource = true;
+                }
+
+                currentProfileIndex++;
+            }
+
+            /* Removing unused rows */
+            string cleanupQuery = string.Empty;
+            foreach (string existedProfiles in allProfiles)
+            {
+                cleanupQuery += " F <> " + existedProfiles + " AND ";
+            }
+            cleanupQuery = cleanupQuery.Trim(new char[] { ' ', 'A', 'N', 'D' });
+            DataRow[] unusedRowsArt = Articles.Select(cleanupQuery);
+            DataRow[] unusedRowsAlt = AltBC.Select(cleanupQuery);
+            foreach (DataRow dr in unusedRowsArt)
+                dr.Delete();
+            foreach (DataRow dr in unusedRowsAlt)
+                dr.Delete();
+
+            /* close notification */
+            if (notificationIsActive)
+            {
+                uw.Close();
+                uw.Dispose();
+            }
+
+            Com_WinApi.OutputDebugString("MainWnd --- AddingData End");
+
+            if (_fl_artUpdated)
+            {
+                if (this.WindowState == FormWindowState.Minimized)
+                    SetControlPropertyThreadSafe(this, "WindowState", FormWindowState.Normal);//this.WindowState = FormWindowState.Normal;
+                //this.BringToFront();
+                MMessageBoxEx.Show(this.chequeDGV, "Були внесені зміни в базу товарів", Application.ProductName,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+
+            _fl_onlyUpdate = true;
+            _fl_SubUnitChanged = false;
+
+            _fl_isOk = new Com_SecureRuntime().FullLoader();
+
+            SetControlPropertyThreadSafe(label_uiWndmain_DemoShowArt, "Visible", !_fl_isOk);
+            SetControlPropertyThreadSafe(label_uiWndmain_DemoShowChq, "Visible", !_fl_isOk);
+            //label_uiWndmain_DemoShowArt.Visible = label_uiWndmain_DemoShowChq.Visible = !_fl_isOk;
+
+            
+            innerActivateSearchBox();
+            GC.Collect();
+
+            /* device status * /
+            if (Program.AppPlugins.IsActive(PluginType.FPDriver))
+            {
+                try
+                {
+                    bool status = (bool)Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_SetCashier", ConfigManager.Instance.CommonConfiguration.APP_PayDesk, UserConfig.UserFpLogin, UserConfig.UserFpPassword, UserConfig.UserID);
+                    if (status)
+                        SetControlPropertyThreadSafe(DDM_FPStatus, "Image", Properties.Resources.ok);
+                    else
+                        SetControlPropertyThreadSafe(DDM_FPStatus, "Image", Properties.Resources.FpNotOk);
+
+                }
+                catch { DDM_FPStatus.Image = Properties.Resources.FpNotOk; }
+            }
+            else
+                DDM_FPStatus.Image = Properties.Resources.FpNotOk;
+            */
+
+        }
+
+        private delegate void SetControlPropertyThreadSafeDelegate(Control control, string propertyName, object propertyValue);
+
+        public static void SetControlPropertyThreadSafe(Control control, string propertyName, object propertyValue)
+        {
+            if (control.InvokeRequired)
+            {
+                control.Invoke(new SetControlPropertyThreadSafeDelegate(SetControlPropertyThreadSafe), new object[] { control, propertyName, propertyValue });
+            }
+            else
+            {
+                control.GetType().InvokeMember(propertyName, System.Reflection.BindingFlags.SetProperty, null, control, new object[] { propertyValue });
+            }
+        }
+
+        private void innerActivateSearchBox()
+        {
+            if (SrchTbox.InvokeRequired)
+            {
+                this.Invoke(new MethodInvoker(innerActivateSearchBox));
+                return;
+            }
+            
+            SrchTbox.Select();
         }
 
         /// <summary>
