@@ -326,17 +326,18 @@ namespace driver.Lib
             //    return load;
             //}
             
+            int _runningTimeout = driver.Config.ConfigManager.Instance.CommonConfiguration.APP_RefreshTimeout;
             for (int i = 0; i < exFiles.Length; i++)
                 try
                 {
                     //Com_WinApi.OutputDebugString("check for index " + i);
                     // CHECK IF EXCHANGE FILE AVAILABLE
                     Com_WinApi.OutputDebugString("MainThread: Looking for exchange file: " + exFiles[i]);
-                    if (AsyncFunc.FileExists(exFiles[i], driver.Config.ConfigManager.Instance.CommonConfiguration.APP_RefreshTimeout))
+                    if (AsyncFunc.FileExists(exFiles[i], ((i == 0) ? _runningTimeout + 500 : _runningTimeout)))
                     {
                         Com_WinApi.OutputDebugString("MainThread: Exchange file OK: " + exFiles[i]);
                         Com_WinApi.OutputDebugString("MainThread: Looking for local file: " + exFiles[i]);
-                        if (!AsyncFunc.FileExists(localFiles[i], driver.Config.ConfigManager.Instance.CommonConfiguration.APP_RefreshTimeout))
+                        if (!AsyncFunc.FileExists(localFiles[i], _runningTimeout))
                         {
                             Com_WinApi.OutputDebugString("MainThread: Local file is missed: " + exFiles[i]);
                             load[i] = exFiles[i];

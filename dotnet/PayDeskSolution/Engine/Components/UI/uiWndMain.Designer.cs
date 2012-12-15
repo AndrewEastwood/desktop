@@ -58,6 +58,7 @@
             this.пошукПоКодуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.пошукПоШтрихкодуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.timerExchangeGrabber = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.DDM_billNom = new System.Windows.Forms.ToolStripStatusLabel();
             this.DDM_Status = new System.Windows.Forms.ToolStripStatusLabel();
@@ -349,6 +350,11 @@
             // 
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            //
+            // timerExchangeGrabber
+            //
+            this.timerExchangeGrabber.Interval = 1000;
+            this.timerExchangeGrabber.Tick += new System.EventHandler(this.timerExchangeGrabber_Tick);
             // 
             // folderBrowserDialog1
             // 
@@ -1362,6 +1368,7 @@
         #endregion
 
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer timerExchangeGrabber;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.ContextMenuStrip chequeContextMenu;
