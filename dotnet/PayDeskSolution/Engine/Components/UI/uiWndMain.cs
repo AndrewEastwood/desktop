@@ -1376,7 +1376,7 @@ namespace PayDesk.Components.UI
             if (m.Msg == (int)CoreLib.MyMsgs.WM_UPDATE)
             {
                 if (_fl_canUpdate)
-                    this.timer1_Tick(this.timer1, EventArgs.Empty);
+                    this.timer1_Tick(this.timerExchangeImport, EventArgs.Empty);
             }
         }
         /// <summary>
@@ -1392,11 +1392,9 @@ namespace PayDesk.Components.UI
             RefreshWindowMenu();
 
             // update import timer
-            timer1.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate;
-            timer1.Start();
+            timerExchangeImport.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate;
             // update exchange scanner timer
-            timerExchangeGrabber.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate - 5000;
-            timerExchangeGrabber.Start();
+            timerExchangeScanner.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate;
 
             bool needUpdate = false;
             if (_fl_singleMode != ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
@@ -1415,8 +1413,18 @@ namespace PayDesk.Components.UI
             }
 
             if (needUpdate)
-                timer1_Tick(timer1, EventArgs.Empty);
+                FetchProductData(true, true);
+                //timer1_Tick(timer1, EventArgs.Empty);
             //winapi.Funcs.OutputDebugString("UpdateMyControls_end");
+
+            if (!timerExchangeImport.Enabled && !timerExchangeScanner.Enabled)
+            {
+                timerExchangeScanner.Start();
+                // trigger import timer with delay of 2 sec.
+                Thread.Sleep(2000);
+                timerExchangeImport.Start();
+            }
+
         }
         #region InitCtrl SubMethods
         private void RefreshAppInformer()
@@ -1653,7 +1661,7 @@ namespace PayDesk.Components.UI
                     }
                 case "LastDBChanges":
                     {
-                        this.timer1_Tick(this.timer1, EventArgs.Empty);
+                        this.timer1_Tick(this.timerExchangeImport, EventArgs.Empty);
                         /*uiWndBaseChanges DBChanges = new uiWndBaseChanges();
                         if (DBChanges.ShowDialog() == DialogResult.OK)
                             timer1_Tick(timer1, EventArgs.Empty);
@@ -2646,38 +2654,28 @@ namespace PayDesk.Components.UI
         private void timerExchangeGrabber_Tick(object sender, EventArgs e)
         {
             Com_WinApi.OutputDebugString("Timer: exchange grabber fired");
-            DataWorkSource.CheckForUpdate(ref exchangeActiveFiles);
-
-
+            FetchProductData(true, false);
         }
         private void timer1_Tick(object sender, EventArgs e)//lbl
         {
 
             Com_WinApi.OutputDebugString("Timer: import data fired");
 
-            /*if (timerIsRunning)
+            if (_fl_importIsRunning)
             {
                 Com_WinApi.OutputDebugString("Main: timer is running");
                 return;
-            }*/
-
-
-            //timer1.Stop();
-            //this.Update();
+            }
 
             if (Cheque.Rows.Count != 0)
             {
                 _fl_canUpdate = true;
                 Com_WinApi.OutputDebugString("Main: timer is waiting for empty things");
-                //timer1.Start();
                 return;
             }
 
             Com_WinApi.OutputDebugString("Main: timer start");
-            //timerIsRunning = true;
             _fl_canUpdate = false;
-
-            //string[] files = DataWorkSource.CheckForUpdate();
 
             if (_fl_subUnitChanged)
             {
@@ -2701,16 +2699,20 @@ namespace PayDesk.Components.UI
                 th.Start();
             }*/
 
-            BgWorker(false, exchangeActiveFiles);
-
-            //timer1.Start();
+            FetchProductData(false, true);
+            _fl_importIsRunning = false;
 
             Com_WinApi.OutputDebugString("Main: timer end");
         }
 
-        //private delegate void ExchangeScanner(object sender, EventArgs ea);
-
-        private void BgWorker(Hashtable data) { BgWorker(true, data); }
+        private void FetchProductData(bool doCheck, bool doImport)
+        {
+            if (doCheck)
+                DataWorkSource.CheckForUpdate(ref exchangeActiveFiles);
+            if (doImport)
+                BgWorker(false, exchangeActiveFiles);
+        }
+        
         private void BgWorker(bool async, Hashtable data)
         {
             Com_WinApi.OutputDebugString("BgWorker: start");
@@ -3317,8 +3319,6 @@ namespace PayDesk.Components.UI
             /* perform update for all profiles if it necessary */
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
             {
-
-
 
                 DataRow[] profileDataRows = null;
                 string[] filterProductIDs = null;
@@ -5408,6 +5408,20 @@ namespace PayDesk.Components.UI
         }
 
 
-        
+
+        #region General Event Handlers
+        #endregion
+
+        #region UI
+        #endregion
+
+        #region Application Timers
+        #endregion
+
+        #region Application Properties
+        #endregion
+
+        #region Helpful Methods
+        #endregion
     }
 }

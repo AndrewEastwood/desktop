@@ -57,8 +57,8 @@
             this.пошукПоНазвіToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.пошукПоКодуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.пошукПоШтрихкодуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.timerExchangeGrabber = new System.Windows.Forms.Timer(this.components);
+            this.timerExchangeImport = new System.Windows.Forms.Timer(this.components);
+            this.timerExchangeScanner = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.DDM_billNom = new System.Windows.Forms.ToolStripStatusLabel();
             this.DDM_Status = new System.Windows.Forms.ToolStripStatusLabel();
@@ -348,13 +348,13 @@
             // 
             // timer1
             // 
-            this.timer1.Interval = 1000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timerExchangeImport.Interval = 1000;
+            this.timerExchangeImport.Tick += new System.EventHandler(this.timer1_Tick);
             //
             // timerExchangeGrabber
             //
-            this.timerExchangeGrabber.Interval = 1000;
-            this.timerExchangeGrabber.Tick += new System.EventHandler(this.timerExchangeGrabber_Tick);
+            this.timerExchangeScanner.Interval = 1000;
+            this.timerExchangeScanner.Tick += new System.EventHandler(this.timerExchangeGrabber_Tick);
             // 
             // folderBrowserDialog1
             // 
@@ -1367,8 +1367,8 @@
         }
         #endregion
 
-        private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.Timer timerExchangeGrabber;
+        private System.Windows.Forms.Timer timerExchangeImport;
+        private System.Windows.Forms.Timer timerExchangeScanner;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.ContextMenuStrip chequeContextMenu;
