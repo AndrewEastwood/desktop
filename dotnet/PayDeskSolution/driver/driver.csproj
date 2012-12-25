@@ -42,13 +42,14 @@
   <ItemGroup>
     <Compile Include="Common\CoreConst.cs" />
     <Compile Include="Common\Enums.cs" />
-    <Compile Include="Components\appProfile.cs" />
+    <Compile Include="Components\Profiles\AppProfile.cs" />
     <Compile Include="Components\Objects\FormEx.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Components\Objects\FormEx.Designer.cs">
       <DependentUpon>FormEx.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\Profiles\ProfilesContainer.cs" />
     <Compile Include="Components\UI\InventList.cs">
       <SubType>Form</SubType>
     </Compile>

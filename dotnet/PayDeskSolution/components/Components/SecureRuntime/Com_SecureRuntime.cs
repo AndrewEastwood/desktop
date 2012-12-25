@@ -85,7 +85,7 @@ namespace components.Components.SecureRuntime
 
         private string getSCompared(string clientCryptedPrivateNumber)
         {
-            return this.GetMD5Hash(this.compareClient(clientCryptedPrivateNumber));
+            return Com_SecureRuntime.GetMD5Hash(this.compareClient(clientCryptedPrivateNumber));
         }
 
         private string compareClient(string clientCryptedPrivateNumber)
@@ -127,7 +127,7 @@ namespace components.Components.SecureRuntime
 
         private string getSPrivateNumber()
         {
-            string sprv = this.GetMD5Hash(this.getPrivateNumber());
+            string sprv = Com_SecureRuntime.GetMD5Hash(this.getPrivateNumber());
             //addToFile("getSPrivateNumber: " + sprv);
             return sprv;
         }
@@ -145,23 +145,23 @@ namespace components.Components.SecureRuntime
 
         private string GetCleanMD5Hash(string input)
         {
-            return this.stringFiltering(this.GetMD5Hash(input));
+            return this.stringFiltering(Com_SecureRuntime.GetMD5Hash(input));
         }
 
         private string GetCleanDMD5Hash(string input)
         {
-            return this.stringFiltering(this.GetMD5Hash(input) + this.GetMD5Hash(input, 2));
+            return this.stringFiltering(Com_SecureRuntime.GetMD5Hash(input) + this.GetMD5OverHash(input, 2));
         }
 
-        private string GetMD5Hash(string input, byte cycle)
+        private string GetMD5OverHash(string input, byte cycle)
         {
             string sh = input;
             for (byte i = 0; i < cycle; i++)
-                sh = this.GetMD5Hash(sh);
+                sh = Com_SecureRuntime.GetMD5Hash(sh);
             return sh;
         }
 
-        private string GetMD5Hash(string input)
+        public static string GetMD5Hash(string input)
         {
             System.Security.Cryptography.MD5CryptoServiceProvider x = new System.Security.Cryptography.MD5CryptoServiceProvider();
             byte[] bs = System.Text.Encoding.UTF8.GetBytes(input);

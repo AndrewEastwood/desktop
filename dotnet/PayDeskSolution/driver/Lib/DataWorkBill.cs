@@ -80,7 +80,7 @@ namespace driver.Lib
 
         public static string BillNewUID(string newBillNumber)
         {
-            return driver.Lib.SecureLib.GetHashMD5(DateTime.Now.ToString() + "_" + newBillNumber);
+            return components.Components.SecureRuntime.Com_SecureRuntime.GetMD5Hash(DateTime.Now.ToString() + "_" + newBillNumber);
         }
 
         public static bool SaveBill(bool isNewBill, string nom, string comment, ref DataTable dTable/*, bool isLocked, string fixChequeNo*/)

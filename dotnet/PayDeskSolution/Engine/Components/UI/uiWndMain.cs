@@ -115,6 +115,8 @@ namespace PayDesk.Components.UI
         /* new data */
         components.Components.DataContainer.DataContainer dataContainer2;
 
+        private System.Windows.Forms.Timer timerDataImportSynchronizer;
+
         /// <summary>
         /// Application's Constructor
         /// </summary>
@@ -2890,9 +2892,6 @@ namespace PayDesk.Components.UI
         /// <param name="sender">Timer object</param>
         /// <param name="e">Timer event arguments</param>
 
-
-        private System.Windows.Forms.Timer timerDataImportSynchronizer;
-
         private void timerDataImportSynchronizer_Tick(object sender, EventArgs e)
         {
             Com_WinApi.OutputDebugString("timerDataImportSynchronizer: started");
@@ -5246,40 +5245,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
         #endregion
 
         #region Temp
-        private delegate void SetControlImageThreadSafeDelegate(Control control, string propertyName, Bitmap image);
-        private delegate void SetControlPropertyThreadSafeDelegate(Control control, string propertyName, object propertyValue);
-        public static void SetControlImageThreadSafe(Control control, string propertyName, Bitmap image)
-        {
-            if (control.InvokeRequired)
-            {
-                control.Invoke(new SetControlImageThreadSafeDelegate(SetControlPropertyThreadSafe), new object[] { control, propertyName, image });
-            }
-            else
-            {
-                control.GetType().InvokeMember(propertyName, System.Reflection.BindingFlags.SetProperty, null, control, new object[] { image });
-            }
-        }
-        public static void SetControlPropertyThreadSafe(Control control, string propertyName, object propertyValue)
-        {
-            if (control.InvokeRequired)
-            {
-                control.Invoke(new SetControlPropertyThreadSafeDelegate(SetControlPropertyThreadSafe), new object[] { control, propertyName, propertyValue });
-            }
-            else
-            {
-                control.GetType().InvokeMember(propertyName, System.Reflection.BindingFlags.SetProperty, null, control, new object[] { propertyValue });
-            }
-        }
-        private void innerActivateSearchBox()
-        {
-            if (SrchTbox.InvokeRequired)
-            {
-                this.Invoke(new MethodInvoker(innerActivateSearchBox));
-                return;
-            }
 
-            SrchTbox.Select();
-        }
         #endregion
 
     }
