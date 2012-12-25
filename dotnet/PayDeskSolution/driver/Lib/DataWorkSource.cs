@@ -24,7 +24,7 @@ namespace driver.Lib
         /* general */
         public static void CheckForUpdate(ref Hashtable data)
         {
-            data = new Hashtable();
+            data.Clear();
 
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
                 data = CheckForUpdate_profile();
@@ -164,7 +164,6 @@ namespace driver.Lib
             //Com_WinApi.OutputDebugString("--- LoadData_end");
             return rez;
         }//ok
-
 
         public static void CreateTables(ref DataTable chq, ref DataTable art, ref DataTable alt, ref DataTable cli, ref DataSet chqs)
         {
@@ -332,20 +331,20 @@ namespace driver.Lib
                 {
                     //Com_WinApi.OutputDebugString("check for index " + i);
                     // CHECK IF EXCHANGE FILE AVAILABLE
-                    Com_WinApi.OutputDebugString("MainThread: Looking for exchange file: " + exFiles[i]);
+                    Com_WinApi.OutputDebugString("DataWorkSource: Loop started >> Looking for exchange file: " + exFiles[i]);
                     if (AsyncFunc.FileExists(exFiles[i], ((i == 0) ? _runningTimeout + 500 : _runningTimeout)))
                     {
-                        Com_WinApi.OutputDebugString("MainThread: Exchange file OK: " + exFiles[i]);
-                        Com_WinApi.OutputDebugString("MainThread: Looking for local file: " + exFiles[i]);
+                        Com_WinApi.OutputDebugString("DataWorkSource: Exchange file OK: " + exFiles[i]);
+                        Com_WinApi.OutputDebugString("DataWorkSource: Looking for local file: " + exFiles[i]);
                         if (!AsyncFunc.FileExists(localFiles[i], _runningTimeout))
                         {
-                            Com_WinApi.OutputDebugString("MainThread: Local file is missed: " + exFiles[i]);
+                            Com_WinApi.OutputDebugString("DataWorkSource: Local file is missed: " + exFiles[i]);
                             load[i] = exFiles[i];
                             driver.Config.ConfigManager.Instance.CommonConfiguration.ADD_updateDateTime[i] = Microsoft.VisualBasic.FileSystem.FileDateTime(exFiles[i]);
                         }
                         else
                         {
-                            Com_WinApi.OutputDebugString("MainThread: Local file OK: " + exFiles[i]);
+                            Com_WinApi.OutputDebugString("DataWorkSource: Local file OK: " + exFiles[i]);
                             dTime = Microsoft.VisualBasic.FileSystem.FileDateTime(exFiles[i]);
 
                             //hExFile = winapi.Funcs.CreateFile(exFiles[i], winapi.Enums.dwDesiredAccess.NONE,
@@ -357,15 +356,18 @@ namespace driver.Lib
 
                             if (dTime > driver.Config.ConfigManager.Instance.CommonConfiguration.ADD_updateDateTime[i])
                             {
-                                Com_WinApi.OutputDebugString("MainThread: Exchange file is newer than local: " + exFiles[i]);
+                                Com_WinApi.OutputDebugString("DataWorkSource: Exchange file is newer than local (need to load): " + exFiles[i]);
                                 load[i] = exFiles[i];
                                 driver.Config.ConfigManager.Instance.CommonConfiguration.ADD_updateDateTime[i] = dTime;
                             }
+                            else
+                                Com_WinApi.OutputDebugString("DataWorkSource: will not be updated: " + exFiles[i]);
+
                         }
                     }
                     else
                     {
-                        Com_WinApi.OutputDebugString("MainThread: File does no exist: " + exFiles[i]);
+                        Com_WinApi.OutputDebugString("DataWorkSource: File does no exist: " + exFiles[i]);
                         if (i == 0)
                         {
                             // CHECK IF EXCHANGE FOLDER AVAILABLE

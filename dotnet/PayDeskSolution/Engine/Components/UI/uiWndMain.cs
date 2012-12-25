@@ -64,7 +64,7 @@ namespace PayDesk.Components.UI
         private DataTable Articles;
         private DataTable AltBC;
         private DataTable Cards;
-        private Hashtable exchangeActiveFiles = new Hashtable();
+        private DataSet ImportedData = new DataSet();
         // Scanner Data
         private string chararray;
         private DateTime lastInputChar;
@@ -110,18 +110,11 @@ namespace PayDesk.Components.UI
         private bool _fl_isOk = false;
         //private bool _fl_modeChanged = false;
         private bool _fl_importIsRunning = false;
-
+        // inner data
+        private string readedBuyerBarCode = string.Empty;
         /* new data */
         components.Components.DataContainer.DataContainer dataContainer2;
 
-        private Hashtable GetAppStatements()
-        {
-            Hashtable currentStates = new Hashtable();
-            currentStates[CoreConst.STATE_DATA_UPDATED] = false;
-
-            return currentStates;
-        }
-        
         /// <summary>
         /// Application's Constructor
         /// </summary>
@@ -223,6 +216,10 @@ namespace PayDesk.Components.UI
             sett.PRN_Templates.Add("test", new Dictionary<string, object>(2));
             string rez = cm.SerializeObject(sett, sett.GetType());
             cm.Save(rez);*/
+
+            timerDataImportSynchronizer = new System.Windows.Forms.Timer();
+            timerDataImportSynchronizer.Interval = 50000;
+            timerDataImportSynchronizer.Tick += new EventHandler(timerDataImportSynchronizer_Tick);
         }
 
         ~uiWndMain()
@@ -230,6 +227,7 @@ namespace PayDesk.Components.UI
             global::components.Components.SerialPort.Com_SerialPort.CloseAllPorts(true);
         }
 
+        #region General Event Handlers
         /// <summary>
         /// Перевизначений метод для виконання операцій відновлення
         /// інтерфейсу та інших параметрів програми під час її завантаження
@@ -240,20 +238,7 @@ namespace PayDesk.Components.UI
             base.OnLoad(e);
 
             /* initialise data values */
-
-            /* loop by all available profiles */
-            if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
-                foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
-                {
-                    this.Discount.Add(de.Key, DataWorkShared.GetStandartDiscountInfoStructure2());
-                    this.Summa.Add(de.Key, DataWorkShared.GetStandartCalculationInfoStructure2());
-                }
-            else
-            {
-                this.Discount.Add(CoreConst.KEY_DEFAULT_PROFILE_ID, this.PD_DiscountInfo);
-                this.Summa.Add(CoreConst.KEY_DEFAULT_PROFILE_ID, DataWorkShared.GetStandartCalculationInfoStructure2());
-            }
-
+            InitChequeInformationStructure();
             admin = new uiWndAdmin();
             admin.OwnerControlEx = this.chequeDGV;
 
@@ -267,7 +252,7 @@ namespace PayDesk.Components.UI
             this.Location = new Point(ConfigManager.Instance.CommonConfiguration.STYLE_MainWndPosition.X, ConfigManager.Instance.CommonConfiguration.STYLE_MainWndPosition.Y);
             this.Size = new Size(ConfigManager.Instance.CommonConfiguration.STYLE_MainWndSize.Width, ConfigManager.Instance.CommonConfiguration.STYLE_MainWndSize.Height);
             this.splitContainer1.Panel2Collapsed = ConfigManager.Instance.CommonConfiguration.STYLE_ArtSideCollapsed;
-            
+
             try
             {
                 this.splitContainer1.Orientation = ConfigManager.Instance.CommonConfiguration.STYLE_SplitOrient;
@@ -348,7 +333,7 @@ namespace PayDesk.Components.UI
                     driver.Lib.CoreLib.WriteLog(ex, "Неможливо налаштувати сом-порт зчитувача карток");
                     MMessageBox.Show("Неможливо налаштувати сом-порт зчитувача карток.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                
+
                 if (!error)
                     try
                     {
@@ -387,7 +372,8 @@ namespace PayDesk.Components.UI
                     MMessageBoxEx.Show(this.chequeDGV, ex.Message + "\r\nНемає зв'язку з фіскальним пристроєм.\r\nНеможливо зареєструвати касира в ЕККР",
                         Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            } else
+            }
+            else
                 DDM_FPStatus.Image = Properties.Resources.FpNotOk;
 
             this.label_uiWndmain_DemoShowArt.Visible = this.label_uiWndmain_DemoShowChq.Visible = !this._fl_isOk;
@@ -640,7 +626,7 @@ namespace PayDesk.Components.UI
         /// <param name="m">Повідомлення</param>
         protected override void WndProc(ref Message m)
         {
-                            
+
             base.WndProc(ref m);
 
             //winapi.WinAPI.OutputDebugString(m.ToString());
@@ -661,7 +647,7 @@ namespace PayDesk.Components.UI
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
-                            
+
                             if (Cheque.Rows.Count == 0)
                                 break;//r
 
@@ -721,8 +707,8 @@ namespace PayDesk.Components.UI
                             }
                             catch { }
                             break;
-                        } 
-                        #endregion 
+                        }
+                        #endregion
                     case 0x11:
                         #region CONTROL + SHIFT + DELETE
                         {
@@ -733,7 +719,7 @@ namespace PayDesk.Components.UI
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
-                            
+
                             if (Cheque.Rows.Count == 0)
                                 break;//r
 
@@ -747,13 +733,13 @@ namespace PayDesk.Components.UI
                                 {
                                     Dictionary<string, object[]> deletedRows = new Dictionary<string, object[]>();
                                     deletedRows = (Dictionary<string, object[]>)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.DELETED_ROWS, deletedRows);
-                                    for (int index = 0; index < this.Cheque.Rows.Count ; index++)
+                                    for (int index = 0; index < this.Cheque.Rows.Count; index++)
                                     {
                                         if (!deletedRows.ContainsKey(this.Cheque.Rows[index]["C"].ToString()))
                                             deletedRows.Add(this.Cheque.Rows[index]["C"].ToString(), this.Cheque.Rows[index].ItemArray);
                                     }
                                     DataWorkShared.SetBillProperty(this.Cheque, CoreConst.DELETED_ROWS, deletedRows);
-                                
+
                                 }
                                 catch { }
                             }
@@ -770,7 +756,7 @@ namespace PayDesk.Components.UI
                             else
                                 RowsRemoved_MyEvent(true, true, true);
                             break;
-                        } 
+                        }
                         #endregion
                     case 0x12:
                         #region CONTROL + PageDown
@@ -781,9 +767,9 @@ namespace PayDesk.Components.UI
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
-                            
-                            
-                            
+
+
+
                             if (_fl_isInvenCheque)
                                 return;
 
@@ -821,7 +807,7 @@ namespace PayDesk.Components.UI
 
                             UpdateSumInfo(true);
                             break;
-                        } 
+                        }
                         #endregion
                     case 0x13:
                         #region CONTROL + PageUp
@@ -832,7 +818,7 @@ namespace PayDesk.Components.UI
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
-                            
+
                             if (_fl_isInvenCheque)
                                 return;
 
@@ -870,7 +856,7 @@ namespace PayDesk.Components.UI
 
                             UpdateSumInfo(true);
                             break;
-                        } 
+                        }
                         #endregion
                     case 0x14:
                         #region SHIFT + DELETE
@@ -881,7 +867,7 @@ namespace PayDesk.Components.UI
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
-                            
+
                             if (_fl_isInvenCheque)
                                 return;
 
@@ -889,7 +875,7 @@ namespace PayDesk.Components.UI
                             UpdateSumInfo(true);
                             addChequeInfo.Text = string.Empty;
                             break;
-                        } 
+                        }
                         #endregion
                     case 0x15:
                         #region ENTER
@@ -901,7 +887,7 @@ namespace PayDesk.Components.UI
                                     System.Threading.Thread.Sleep(ConfigManager.Instance.CommonConfiguration.APP_ScannerCharReadFrequency + 1);
                                 global::components.Components.WinApi.Com_WinApi.ReplyMessage(new IntPtr(0x15));
                             }
-                            
+
                             //if (   this.Cheque.ExtendedProperties.ContainsKey("BILL") && this.Cheque.ExtendedProperties["BILL"] != null && bool.Parse(((Dictionary<string, object>)this.Cheque.ExtendedProperties["BILL"])["IS_LOCKED"].ToString()))
                             if ((bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false))
                             {
@@ -1156,14 +1142,14 @@ namespace PayDesk.Components.UI
                             }
 
                             break;
-                        } 
+                        }
                         #endregion
                     case 0x16:
                         #region CONTROL + ENTER
                         {
                             if (_fl_isInvenCheque || Cheque.Rows.Count == 0)
                                 break;//r
-                            
+
                             if (!(_fl_adminMode || UserConfig.Properties[23]))
                             {
                                 //if (admin.ShowDialog() != DialogResult.OK)
@@ -1191,7 +1177,7 @@ namespace PayDesk.Components.UI
                             }
 
                             break;
-                        } 
+                        }
                         #endregion
                     case 0x17:
                         #region CONTROL + SHIFT + ENTER
@@ -1209,7 +1195,7 @@ namespace PayDesk.Components.UI
                                     foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
                                     {
                                         localData = DataWorkCheque.NonFxChqsInfo(0, ref nextChqNom, int.Parse(de.Key.ToString()));
-                                        info += "| "+ string.Format("{3}: за {1} продано {0} чек(ів) на суму {2:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "} ", localData[0], localData[1], MathLib.GetDouble(localData[2].ToString()), ((Hashtable)de.Value)["NAME"]);
+                                        info += "| " + string.Format("{3}: за {1} продано {0} чек(ів) на суму {2:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "} ", localData[0], localData[1], MathLib.GetDouble(localData[2].ToString()), ((Hashtable)de.Value)["NAME"]);
                                     }
                                     DDM_Status.Text = info;
                                 }
@@ -1224,7 +1210,7 @@ namespace PayDesk.Components.UI
                             if (Cheque.Rows.Count == 0)// || !Program.Service.UseEKKR)
                                 break;//r
 
-                            if (!(_fl_adminMode || (UserConfig.Properties[23] && UserConfig.Properties[6]) ))
+                            if (!(_fl_adminMode || (UserConfig.Properties[23] && UserConfig.Properties[6])))
                             {
                                 MMessageBoxEx.Show(this.chequeDGV, "Закриття чеку заблоковано", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 break;
@@ -1264,7 +1250,7 @@ namespace PayDesk.Components.UI
                                 SrchTbox.Select(SrchTbox.Text.Length, 0);
                             }
                             break;
-                        } 
+                        }
                         #endregion
                     case 0x19:
                         #region F6
@@ -1284,7 +1270,7 @@ namespace PayDesk.Components.UI
                                 SrchTbox.Select(SrchTbox.Text.Length, 0);
                             }
                             break;
-                        } 
+                        }
                         #endregion
                     case 0x1A:
                         #region F7
@@ -1305,7 +1291,7 @@ namespace PayDesk.Components.UI
                                 SrchTbox.Select(0, SrchTbox.Text.Length);
                             }
                             break;
-                        } 
+                        }
                         #endregion
                     case 0x1B:
                         #region F8
@@ -1314,7 +1300,7 @@ namespace PayDesk.Components.UI
                                 MMessageBoxEx.Show(this.chequeDGV, "Відкритий рахунок №" + " " + Cheque.ExtendedProperties["NOM"], Application.ProductName,
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                             break;
-                        } 
+                        }
                         #endregion
                     case 0x1C:
                         #region F9
@@ -1327,7 +1313,7 @@ namespace PayDesk.Components.UI
                                 infoText += us.SchemaItems[i] + " : " + (UserConfig.Properties[i] ? "Так" : "Ні") + "\r\n";
                             MMessageBoxEx.Show(infoText, UserConfig.UserID);
                             break;
-                        } 
+                        }
                         #endregion
                     case 0x1D:
                         #region ESCAPE
@@ -1343,7 +1329,7 @@ namespace PayDesk.Components.UI
                             else
                                 this.Close();
                             break;
-                        } 
+                        }
                         #endregion
                     case 0x1E:
                         #region CONTROL + Q
@@ -1358,7 +1344,7 @@ namespace PayDesk.Components.UI
                             else
                                 CashLbl.Image = null;
                             break;
-                        } 
+                        }
                         #endregion
                     case 0x1F:
                         #region CONTROL
@@ -1366,7 +1352,7 @@ namespace PayDesk.Components.UI
                             if (chequeDGV.CurrentCell != null && chequeDGV.CurrentCell.IsInEditMode)
                                 chequeDGV.EndEdit();
                             break;
-                        } 
+                        }
                         #endregion
                 }
                 #endregion
@@ -1376,260 +1362,9 @@ namespace PayDesk.Components.UI
             if (m.Msg == (int)CoreLib.MyMsgs.WM_UPDATE)
             {
                 if (_fl_canUpdate)
-                    this.timer1_Tick(this.timerExchangeImport, EventArgs.Empty);
+                    this.timerExchangeImport_Tick(this.timerExchangeImport, EventArgs.Empty);
             }
         }
-        /// <summary>
-        /// Custom method. Used for updating data of elements.
-        /// </summary>
-        private void UpdateMyControls()
-        {
-            //winapi.Funcs.OutputDebugString("UpdateMyControls_begin");
-            RefreshAppInformer();
-            RefreshChequeInformer(true);
-            RefershStyles();
-            RefershMenus();
-            RefreshWindowMenu();
-
-            // update import timer
-            timerExchangeImport.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate;
-            // update exchange scanner timer
-            timerExchangeScanner.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate;
-
-            bool needUpdate = false;
-            if (_fl_singleMode != ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
-            {
-                _fl_singleMode = ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles;
-                _fl_onlyUpdate = false;
-                needUpdate = true;
-            }
-
-            if (currentSubUnit != ConfigManager.Instance.CommonConfiguration.APP_SubUnit)
-            {
-                _fl_onlyUpdate = false;
-                _fl_subUnitChanged = true;
-                needUpdate = true;
-                currentSubUnit = ConfigManager.Instance.CommonConfiguration.APP_SubUnit;
-            }
-
-            if (needUpdate)
-                FetchProductData(true, true);
-                //timer1_Tick(timer1, EventArgs.Empty);
-            //winapi.Funcs.OutputDebugString("UpdateMyControls_end");
-
-            if (!timerExchangeImport.Enabled && !timerExchangeScanner.Enabled)
-            {
-                timerExchangeScanner.Start();
-                // trigger import timer with delay of 2 sec.
-                Thread.Sleep(2000);
-                timerExchangeImport.Start();
-            }
-
-        }
-        #region InitCtrl SubMethods
-        private void RefreshAppInformer()
-        {
-            appInfoLabel.Text = string.Format("{0}: {1}     {2}: \"{3}\"     {4}: {5}     {6}: \"{7}\"",
-                "Підрозділ №",
-                ConfigManager.Instance.CommonConfiguration.APP_SubUnit,
-                "Назва підрозділу",
-                ConfigManager.Instance.CommonConfiguration.APP_SubUnitName == string.Empty ? "без назви" : ConfigManager.Instance.CommonConfiguration.APP_SubUnitName,
-                "Каса №",
-                ConfigManager.Instance.CommonConfiguration.APP_PayDesk,
-                "Касир",
-                UserConfig.UserID);
-        }//ok//label
-        private void RefreshChequeInformer(bool resetDigitalPanel)
-        {
-            if (_fl_isInvenCheque)
-            {
-                CashLbl.Text = string.Format("{0}", "ІНВЕНТАРИЗАЦІЯ"); ;
-                chequeInfoLabel.Text = string.Format("{0}", Cheque.ExtendedProperties["Date"]);
-            }
-            else
-            {
-                string ctrlWord = "чеку";
-                if (Cheque.ExtendedProperties["BILL"] != null)
-                    ctrlWord = "рахунку";
-                string totalWord = "позиці";
-                int numValue = Cheque.Rows.Count;
-
-                while (numValue > 20)
-                    numValue %= 10;
-
-                switch (numValue)
-                {
-                    case 1: totalWord += 'я'; break;
-                    case 2: totalWord += 'ї'; break;
-                    case 3: totalWord += 'ї'; break;
-                    case 4: totalWord += 'ї'; break;
-                    default: totalWord += 'й'; break;
-                }
-                
-                if (_fl_isReturnCheque)
-                    chequeInfoLabel.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, Cheque.Rows.Count, totalWord, "повертається на суму");
-                else
-                    chequeInfoLabel.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, Cheque.Rows.Count, totalWord, "продається на суму");
-                CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", realSUMA);
-                if (DataWorkShared.ExtractOrderProperty(this.Cheque, CoreConst.BILL, null, true) == null)
-                    this.addBillInfo.Text = string.Empty;
-            }
-
-            if(resetDigitalPanel)
-            {
-                CashLbl.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_SumFontColor;
-                CashLbl.Font = ConfigManager.Instance.CommonConfiguration.STYLE_SumFont;
-
-                CashLbl.Image = null;
-                digitalPanel.BackgroundImage = null;
-                _fl_taxDocRequired = false;
-            }
-        }
-        private void RefershStyles()
-        {
-            //Colors
-            infoPanel.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundInfPan;
-            addChequeInfo.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundAddPan;
-            digitalPanel.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundSumRest;
-            chequeDGV.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundNAChqTbl;
-            chequeDGV.DefaultCellStyle.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundNAChqTbl;
-            articleDGV.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundArtTbl;
-            articleDGV.DefaultCellStyle.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundArtTbl;
-            statusStrip1.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundStatPan;
-
-            //Fonts
-            CashLbl.Font = ConfigManager.Instance.CommonConfiguration.STYLE_SumFont;
-            CashLbl.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_SumFontColor;
-            articleDGV.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ArticlesFont;
-            articleDGV.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ArticlesFontColor;
-            chequeDGV.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ChequeFont;
-            chequeDGV.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ChequeFontColor;
-            statusStrip1.Font = ConfigManager.Instance.CommonConfiguration.STYLE_StatusFont;
-            statusStrip1.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_StatusFontColor;
-            addChequeInfo.Font = ConfigManager.Instance.CommonConfiguration.STYLE_AddInformerFont;
-            addChequeInfo.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_AddInformerFontColor;
-            chequeInfoLabel.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ChqInformerFont;
-            chequeInfoLabel.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ChqInformerFontColor;
-            appInfoLabel.Font = ConfigManager.Instance.CommonConfiguration.STYLE_AppInformerFont;
-            appInfoLabel.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_AppInformerFontColor;
-
-            // misc
-            this.articleDGV.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_ArticleRowHeight;
-            this.articleDGV.Invalidate();//
-            this.articleDGV.Refresh();
-            this.articleDGV.Update();
-            //this.articleDGV.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-            
-            this.chequeDGV.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_ChequeRowHeight;
-            this.chequeDGV.Invalidate();
-            this.chequeDGV.Refresh();
-            this.chequeDGV.Update();
-            //this.chequeDGV.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-
-        }//ok
-        private void RefershMenus()
-        {
-            if (Program.AppPlugins.IsActive(PluginType.FPDriver))
-                try
-                {
-                    fxFunc_toolStripMenuItem.Enabled = Program.AppPlugins.GetActive<IFPDriver>().AllowedMethods.Count != 0;
-                }
-                catch { }
-            else
-                fxFunc_toolStripMenuItem.Enabled = false;
-            адміністраторToolStripMenuItem.Checked = _fl_adminMode;
-            фільтрОдиницьToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0 && (_fl_adminMode || UserConfig.Properties[9]);
-            формуванняЧекуToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0 && _fl_adminMode;
-            інвентаризаціяToolStripMenuItem.Enabled = (_fl_isInvenCheque || Cheque.Rows.Count == 0) && _fl_adminMode ;
-            чекПоверненняToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0 && (_fl_adminMode || UserConfig.Properties[5]);
-            налаштуванняToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0 && _fl_adminMode;
-            параметриДрукуToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0 && _fl_adminMode;
-            змінитиКористувачаToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0;
-            вихідToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0;
-
-            //друкуватиРахунокToolStripMenuItem.Enabled = Cheque.ExtendedProperties.Contains("BILL");
-            bool isLocked = (bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false);
-            bool isBill = DataWorkShared.ExtractOrderProperty(this.Cheque, CoreConst.BILL, null, true) != null;
-            анулюватиРахунокToolStripMenuItem.Enabled = isBill && !isLocked;
-            зберегтиРахунокToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && !_fl_isInvenCheque && !isLocked;
-            всіРахункиToolStripMenuItem.Enabled = !_fl_isInvenCheque;
-            зберегтиІЗакритиToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && !_fl_isInvenCheque;
-            зберегтиІДрукуватиToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && !_fl_isInvenCheque;// && !isLocked;
-            ToolStripMenu_Bills_SavePrintAndClose.Enabled = Cheque.Rows.Count != 0 && !_fl_isInvenCheque;// && !isLocked;
-            закритиБезЗмінToolStripMenuItem.Enabled = isBill;
-            перезавантажитиРахунокToolStripMenuItem.Enabled = isBill;
-            змінитиКоментарToolStripMenuItem.Enabled = isBill;
-            
-            змінитиКстьТоваруToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
-            видалитиВибранийТоварToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
-            видалитиВсіТовариToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);                
-            здійснитиОплатуToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[23]);
-            задатиЗнижкаToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
-            задатиНадбавкуToolStripMenuItem1.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
-
-        }//ok
-        private void RefreshWindowMenu()
-        {
-            вертикальноToolStripMenuItem.Checked = (splitContainer1.Orientation == Orientation.Vertical);
-            вікноТоварівToolStripMenuItem.Checked = !splitContainer1.Panel2Collapsed;
-        }
-        private void RefreshComponents(bool force)
-        {
-            if (this.сенсорToolStripMenuItem.Checked || force)
-            {
-                //Com_WinApi.OutputDebugString("RefershStyles_Sensor_Activated");
-
-                this.sensorPanel1.SensorType = ConfigManager.Instance.CommonConfiguration.skin_sensor_com_size_cheque;
-
-
-                // cheque
-                переміщенняПоЧекуToolStripMenuItem1.Checked = this.sensorPanel1.ShowComponent(SensorUgcPanel.SensorComponents.Scrolling, ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqnav);
-                операціїЧекуToolStripMenuItem1.Checked = this.sensorPanel1.ShowComponent(SensorUgcPanel.SensorComponents.Operations, ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqopr);
-                режимиПошукуToolStripMenuItem1.Checked = this.sensorPanel1.ShowComponent(SensorUgcPanel.SensorComponents.Search, ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqsrch);
-                рахункиToolStripMenuItem1.Checked = this.sensorPanel1.ShowComponent(SensorUgcPanel.SensorComponents.Additional, ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqbills);
-                
-                // art
-                навігаціяТоварівToolStripMenuItem.Checked = ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artnav;
-                переміщенняПоТоварахToolStripMenuItem.Checked = this.sensorDataPanel1.Scroller.Visible = ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artscroll;
-
-                // splitters
-                this.sensorDataPanel1.Container.Panel1Collapsed = !ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artnav;
-                this.sensorDataPanel1.Container.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_artnav;
-                this.sensorDataPanel1.NavigatorFont = ConfigManager.Instance.CommonConfiguration.skin_sensor_fontsize;
-                this.chequeContainer.Orientation = (Orientation)ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_orient;
-                //this.splitContainer_chequeControlContainer.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chqcontrols;
-                try
-                {
-
-                    switch (this.sensorPanel1.SensorType)
-                    {
-                        case 50:
-                            {
-
-                                this.chequeContainer.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_50;
-                                this.sensorPanel1.SetSplitterDistance("h_50", ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_h_50);
-                                this.sensorPanel1.SetSplitterDistance("v_50", ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_v_50);
-                                break;
-                            }
-                        default:
-                        case 100:
-                            {
-                                this.chequeContainer.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_100;
-                                this.sensorPanel1.SetSplitterDistance("h_100", ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_h_100);
-                                this.sensorPanel1.SetSplitterDistance("v_100", ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_v_100);
-                                break;
-                            }
-                    }
-
-                    ;//this.splitContainer_chequeControls.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chqmain;
-                }
-                catch { }
-            }
-
-
-        }
-        #endregion
-
         /// <summary>
         /// Обробляє виконання операцій відповідно до того, який пункт меню був вибраний
         /// </summary>
@@ -1637,7 +1372,7 @@ namespace PayDesk.Components.UI
         /// <param name="e"></param>
         private void Menu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (_fl_menuIsActive || e.ClickedItem.Tag == null) 
+            if (_fl_menuIsActive || e.ClickedItem.Tag == null)
                 return;
 
             _fl_menuIsActive = true;
@@ -1661,7 +1396,7 @@ namespace PayDesk.Components.UI
                     }
                 case "LastDBChanges":
                     {
-                        this.timer1_Tick(this.timerExchangeImport, EventArgs.Empty);
+                        this.timerExchangeImport_Tick(this.timerExchangeImport, EventArgs.Empty);
                         /*uiWndBaseChanges DBChanges = new uiWndBaseChanges();
                         if (DBChanges.ShowDialog() == DialogResult.OK)
                             timer1_Tick(timer1, EventArgs.Empty);
@@ -1716,7 +1451,7 @@ namespace PayDesk.Components.UI
                         _fl_isInvenCheque = !_fl_isInvenCheque;
                         if (_fl_isInvenCheque)
                         {
-                            DataTable dTable=new DataTable();
+                            DataTable dTable = new DataTable();
                             DataSet dSet = new DataSet();
                             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
                             {
@@ -1874,7 +1609,7 @@ namespace PayDesk.Components.UI
                             //System.Diagnostics.Process.Start("vk.exe");
 
                             //enabling dependence menu
-                            управліннToolStripMenuItem.Enabled = true; 
+                            управліннToolStripMenuItem.Enabled = true;
                         }
                         else
                         {/*
@@ -1888,11 +1623,11 @@ namespace PayDesk.Components.UI
 
                             this.sensorDataPanel1.Visible = false;
                             this.chequeContainer.Panel2Collapsed = true;
-                            
+
                             this.articleDGV.Parent = this.splitContainer1.Panel2;
 
                             //this.TopMost = false;
-                            управліннToolStripMenuItem.Enabled = false; 
+                            управліннToolStripMenuItem.Enabled = false;
                         }
                         break;
                     }
@@ -1997,7 +1732,7 @@ namespace PayDesk.Components.UI
                             break;
                         //CoreLib.LockBill(Cheque, "null");
                         string billNo = DataWorkShared.ExtractBillProperty(this.PD_Order, CoreConst.BILL_NO, string.Empty, false).ToString();
-                       DataWorkBill.LockBill(this.PD_Order, "null");
+                        DataWorkBill.LockBill(this.PD_Order, "null");
                         RowsRemoved_MyEvent(true, true, true);
                         this.RefershMenus();
                         //this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", billNo);
@@ -2421,7 +2156,7 @@ namespace PayDesk.Components.UI
                         // Send F7 Key
                         Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_F7), new IntPtr(0));
                         break;
-                    } 
+                    }
                 #endregion
                 #region FieldContext
                 case "FieldEditor":
@@ -2432,7 +2167,7 @@ namespace PayDesk.Components.UI
                             colEd = new uiWndColumnsEditorBox(ref chequeDGV, 1);
                         if (articleDGV.NewRowIndex == -1 && articleDGV.Focused)
                             colEd = new uiWndColumnsEditorBox(ref articleDGV, 2);
-                        
+
                         colEd.ShowDialog();
                         colEd.Dispose();
 
@@ -2463,7 +2198,7 @@ namespace PayDesk.Components.UI
                         SaveGUI();
                         ViewLib.SaveGridsView(new DataGridView[] { chequeDGV, articleDGV }, splitContainer1.Orientation);
                         break;
-                    } 
+                    }
                 #endregion
             }
         }
@@ -2645,36 +2380,558 @@ namespace PayDesk.Components.UI
         }//ok
         #endregion
 
+        #endregion
+
+        #region Widget Event Handlers
+        private void Navigator_OnFilterChanged(string filter, EventArgs e)
+        {
+            if (filter.Length == 0)
+                this.articleDGV.DataSource = this.Articles;
+            else
+            {
+                DataRow[] dr = this.Articles.Select("ID Like '" + filter + "%'");
+                DataTable sTable = this.Articles.Clone();
+                sTable.Clear();
+                sTable.BeginLoadData();
+                for (int i = 0; i < dr.Length; i++)
+                    sTable.Rows.Add(dr[i].ItemArray);
+                sTable.EndLoadData();
+                this.articleDGV.DataSource = sTable;
+            }
+            this.articleDGV.Select();
+        }
+        private void sensorPanel1_OnSensorButtonClicked(string buttonName, EventArgs e)
+        {
+            switch (buttonName)
+            {
+                case "up":
+                    {
+                        this.chequeDGV.Select();
+                        SendKeys.SendWait("{UP}");
+                        break;
+                    }
+                case "dn":
+                    {
+                        this.chequeDGV.Select();
+                        SendKeys.SendWait("{DOWN}");
+                        break;
+                    }
+                case "s_name":
+                    {
+                        Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_F5), new IntPtr(0));
+                        break;
+                    }
+                case "s_code":
+                    {
+                        Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_F6), new IntPtr(0));
+                        break;
+                    }
+                case "s_bcode":
+                    {
+                        Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_F7), new IntPtr(0));
+                        break;
+                    }
+                case "sub":
+                    {
+                        if (this.articleDGV.RowCount == 0)
+                            break;
+                        this.chequeDGV.Select();
+                        if (chequeDGV.CurrentRow != null)
+                        {
+                            //DataRow[] article = Articles.Select("ID =" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString());
+                            DataRow[] article = Articles.Select("ID =\'" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString() + "\'");
+                            if (article != null && article.Length == 1)
+                            {
+                                CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article[0], -ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles);
+                                SearchFilter(true, this.currSrchType, false);
+                            }
+                        }
+                        break;
+                    }
+                case "add":
+                    {
+                        if (this.articleDGV.RowCount == 0)
+                            break;
+                        /*
+                        if (this.articleDGV.Visible)
+                        {
+                            Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
+                            break;
+                        }
+                        
+                        if (this.currSrchType == 2 && this.SrchTbox.Text != string.Empty)
+                        {
+                            Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_F7), new IntPtr(0));
+                            Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
+                            break;
+                        }
+
+                        if (this.chequeDGV.Visible)
+                        {
+                            this.chequeDGV.Select();
+                            Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
+                            break;
+                        }*/
+
+                        this.chequeDGV.Select();
+                        if (chequeDGV.CurrentRow != null)
+                        {
+                            DataRow[] article = Articles.Select("ID =\'" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString() + "\'");
+                            if (article != null && article.Length == 1)
+                            {
+                                CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article[0], ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles, false, false);
+                                SearchFilter(true, this.currSrchType, false);
+                            }
+                        }
+                        break;
+                    }
+                case "edit":
+                    {
+                        this.chequeDGV.Select();
+                        Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
+                        break;
+                    }
+                case "dell":
+                    {
+                        this.chequeDGV.Select();
+                        Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_CtrlDel), new IntPtr(0x100));
+                        break;
+                    }
+                case "dellall":
+                    {
+                        this.chequeDGV.Select();
+                        Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_CtrlShiftDel), new IntPtr(0x100));
+                        break;
+                    }
+
+                case "sale":
+                    {
+                        Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_CtrlEnter), new IntPtr(0));
+                        break;
+                    }
+                case "nsale":
+                    {
+                        Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_CtrlShiftEnter), new IntPtr(0));
+                        break;
+                    }
+
+                case "bills":
+                    {
+                        this.всіРахункиToolStripMenuItem.PerformClick();
+                        break;
+                    }
+                case "billsave":
+                    {
+                        this.зберегтиРахунокToolStripMenuItem.PerformClick();
+                        break;
+                    }
+                case "billsaveprint":
+                    {
+                        this.зберегтиІДрукуватиToolStripMenuItem.PerformClick();
+                        break;
+                    }
+                case "billsaveprintclose":
+                    {
+                        this.ToolStripMenu_Bills_SavePrintAndClose.PerformClick();
+                        break;
+                    }
+                case "billsaveclose":
+                    {
+                        this.зберегтиІЗакритиToolStripMenuItem.PerformClick();
+                        break;
+                    }
+                case "billchangecomment":
+                    {
+                        this.змінитиКоментарToolStripMenuItem.PerformClick();
+                        break;
+                    }
+            }
+        }
+        #endregion
+
+        #region Custom Event Handlers
+        private void splitContainer1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (this.splitContainer1.Orientation == Orientation.Vertical)
+                this.splitContainer1.SplitterDistance = this.splitContainer1.Width / 2;
+            else
+                this.splitContainer1.SplitterDistance = this.splitContainer1.Height / 2;
+        }
+
+        private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        {
+            if (serialPort1.BytesToRead >= ConfigManager.Instance.CommonConfiguration.APP_BuyerBarCodeMinLen)
+            {
+                readedBuyerBarCode = serialPort1.ReadExisting().Trim('%', '?', '\r', '\n');
+            }
+        }
+
+        #endregion
+
+        #region UI
+        public void SaveGUI()
+        {
+            ConfigManager.Instance.CommonConfiguration.STYLE_SplitterDistance = splitContainer1.SplitterDistance;
+            ConfigManager.Instance.CommonConfiguration.STYLE_MainWndState = this.WindowState;
+            ConfigManager.Instance.CommonConfiguration.STYLE_SplitOrient = this.splitContainer1.Orientation;
+            ConfigManager.Instance.CommonConfiguration.STYLE_MainWndSize = this.Size;
+            ConfigManager.Instance.CommonConfiguration.STYLE_MainWndPosition = this.Location;
+
+            // sensor style
+            ConfigManager.Instance.CommonConfiguration.skin_sensor_active = this.сенсорToolStripMenuItem.Checked;
+            if (ConfigManager.Instance.CommonConfiguration.skin_sensor_active)
+            {
+                ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqnav = this.sensorPanel1.GetComponentVisiblity(SensorUgcPanel.SensorComponents.Scrolling);
+                ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqopr = this.sensorPanel1.GetComponentVisiblity(SensorUgcPanel.SensorComponents.Operations);
+                ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqsrch = this.sensorPanel1.GetComponentVisiblity(SensorUgcPanel.SensorComponents.Search);
+                ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqbills = this.sensorPanel1.GetComponentVisiblity(SensorUgcPanel.SensorComponents.Additional);
+                /*
+                ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artnav = !this.sensorDataPanel1.Container.Panel1Collapsed;
+                ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artscroll = this.sensorDataPanel1.Scroller.Visible;
+                */
+
+                ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artnav = навігаціяТоварівToolStripMenuItem.Checked;
+                ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artscroll = переміщенняПоТоварахToolStripMenuItem.Checked;
+
+                //ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chqmain = this.splitContainer_chequeControls.SplitterDistance;
+                //ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chqcontrols = this.splitContainer_chequeControlContainer.SplitterDistance;
+
+                ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_orient = (int)this.chequeContainer.Orientation;
+                ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_artnav = (int)this.sensorDataPanel1.Container.SplitterDistance;
+
+                switch (this.sensorPanel1.SensorType)
+                {
+                    case 50:
+                        {
+                            ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_h_50 = this.sensorPanel1.GetSplitterControl("h_50").SplitterDistance;
+                            ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_v_50 = this.sensorPanel1.GetSplitterControl("v_50").SplitterDistance;
+                            ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_50 = this.chequeContainer.SplitterDistance;
+                            break;
+                        }
+                    default:
+                    case 100:
+                        {
+                            ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_h_100 = this.sensorPanel1.GetSplitterControl("h_100").SplitterDistance;
+                            ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_v_100 = this.sensorPanel1.GetSplitterControl("v_100").SplitterDistance;
+                            ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_100 = this.chequeContainer.SplitterDistance;
+                            break;
+                        }
+                }
+            }
+        }
+        /// <summary>
+        /// Custom method. Used for updating data of elements.
+        /// </summary>
+        private void UpdateMyControls()
+        {
+            //winapi.Funcs.OutputDebugString("UpdateMyControls_begin");
+            RefreshAppInformer();
+            RefreshChequeInformer(true);
+            RefershStyles();
+            RefershMenus();
+            RefreshWindowMenu();
+
+            bool needUpdate = false;
+            if (_fl_singleMode != ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
+            {
+                _fl_singleMode = ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles;
+                _fl_onlyUpdate = false;
+                needUpdate = true;
+            }
+
+            if (currentSubUnit != ConfigManager.Instance.CommonConfiguration.APP_SubUnit)
+            {
+                _fl_onlyUpdate = false;
+                _fl_subUnitChanged = true;
+                needUpdate = true;
+                currentSubUnit = ConfigManager.Instance.CommonConfiguration.APP_SubUnit;
+            }
+
+            // trigger update function
+            if (needUpdate)
+                FetchProductData(true, true, false);
+            //timer1_Tick(timer1, EventArgs.Empty);
+            //winapi.Funcs.OutputDebugString("UpdateMyControls_end");
+
+            //if (!timerExchangeImport.Enabled && !timerExchangeScanner.Enabled)
+
+            timerExchangeScanner.Stop();
+            timerExchangeImport.Stop();
+            timerDataImportSynchronizer.Stop();
+
+            // update import timer
+            timerExchangeImport.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate;
+            // update exchange scanner timer
+            timerExchangeScanner.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate;
+            // will setup exchnage scanner in 10 sec.
+            // will run only once and launch timerScanner
+            timerDataImportSynchronizer.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate / 2;
+
+
+            if (!timerDataImportSynchronizer.Enabled || !timerExchangeScanner.Enabled)
+            {
+                timerExchangeScanner.Start();
+                timerDataImportSynchronizer.Start();
+                //timerExchangeImport.Start();
+                // trigger import timer with delay of 2 sec.
+                //Thread.Sleep(2000);
+                //timerExchangeImport.Start();
+            }
+
+        }
+        private void RefreshAppInformer()
+        {
+            appInfoLabel.Text = string.Format("{0}: {1}     {2}: \"{3}\"     {4}: {5}     {6}: \"{7}\"",
+                "Підрозділ №",
+                ConfigManager.Instance.CommonConfiguration.APP_SubUnit,
+                "Назва підрозділу",
+                ConfigManager.Instance.CommonConfiguration.APP_SubUnitName == string.Empty ? "без назви" : ConfigManager.Instance.CommonConfiguration.APP_SubUnitName,
+                "Каса №",
+                ConfigManager.Instance.CommonConfiguration.APP_PayDesk,
+                "Касир",
+                UserConfig.UserID);
+        }//ok//label
+        private void RefreshChequeInformer(bool resetDigitalPanel)
+        {
+            if (_fl_isInvenCheque)
+            {
+                CashLbl.Text = string.Format("{0}", "ІНВЕНТАРИЗАЦІЯ"); ;
+                chequeInfoLabel.Text = string.Format("{0}", Cheque.ExtendedProperties["Date"]);
+            }
+            else
+            {
+                string ctrlWord = "чеку";
+                if (Cheque.ExtendedProperties["BILL"] != null)
+                    ctrlWord = "рахунку";
+                string totalWord = "позиці";
+                int numValue = Cheque.Rows.Count;
+
+                while (numValue > 20)
+                    numValue %= 10;
+
+                switch (numValue)
+                {
+                    case 1: totalWord += 'я'; break;
+                    case 2: totalWord += 'ї'; break;
+                    case 3: totalWord += 'ї'; break;
+                    case 4: totalWord += 'ї'; break;
+                    default: totalWord += 'й'; break;
+                }
+
+                if (_fl_isReturnCheque)
+                    chequeInfoLabel.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, Cheque.Rows.Count, totalWord, "повертається на суму");
+                else
+                    chequeInfoLabel.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, Cheque.Rows.Count, totalWord, "продається на суму");
+                CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", realSUMA);
+                if (DataWorkShared.ExtractOrderProperty(this.Cheque, CoreConst.BILL, null, true) == null)
+                    this.addBillInfo.Text = string.Empty;
+            }
+
+            if (resetDigitalPanel)
+            {
+                CashLbl.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_SumFontColor;
+                CashLbl.Font = ConfigManager.Instance.CommonConfiguration.STYLE_SumFont;
+
+                CashLbl.Image = null;
+                digitalPanel.BackgroundImage = null;
+                _fl_taxDocRequired = false;
+            }
+        }
+        private void RefershStyles()
+        {
+            //Colors
+            infoPanel.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundInfPan;
+            addChequeInfo.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundAddPan;
+            digitalPanel.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundSumRest;
+            chequeDGV.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundNAChqTbl;
+            chequeDGV.DefaultCellStyle.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundNAChqTbl;
+            articleDGV.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundArtTbl;
+            articleDGV.DefaultCellStyle.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundArtTbl;
+            statusStrip1.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundStatPan;
+
+            //Fonts
+            CashLbl.Font = ConfigManager.Instance.CommonConfiguration.STYLE_SumFont;
+            CashLbl.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_SumFontColor;
+            articleDGV.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ArticlesFont;
+            articleDGV.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ArticlesFontColor;
+            chequeDGV.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ChequeFont;
+            chequeDGV.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ChequeFontColor;
+            statusStrip1.Font = ConfigManager.Instance.CommonConfiguration.STYLE_StatusFont;
+            statusStrip1.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_StatusFontColor;
+            addChequeInfo.Font = ConfigManager.Instance.CommonConfiguration.STYLE_AddInformerFont;
+            addChequeInfo.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_AddInformerFontColor;
+            chequeInfoLabel.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ChqInformerFont;
+            chequeInfoLabel.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ChqInformerFontColor;
+            appInfoLabel.Font = ConfigManager.Instance.CommonConfiguration.STYLE_AppInformerFont;
+            appInfoLabel.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_AppInformerFontColor;
+
+            // misc
+            this.articleDGV.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_ArticleRowHeight;
+            this.articleDGV.Invalidate();//
+            this.articleDGV.Refresh();
+            this.articleDGV.Update();
+            //this.articleDGV.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+
+            this.chequeDGV.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_ChequeRowHeight;
+            this.chequeDGV.Invalidate();
+            this.chequeDGV.Refresh();
+            this.chequeDGV.Update();
+            //this.chequeDGV.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+
+        }//ok
+        private void RefershMenus()
+        {
+            if (Program.AppPlugins.IsActive(PluginType.FPDriver))
+                try
+                {
+                    fxFunc_toolStripMenuItem.Enabled = Program.AppPlugins.GetActive<IFPDriver>().AllowedMethods.Count != 0;
+                }
+                catch { }
+            else
+                fxFunc_toolStripMenuItem.Enabled = false;
+            адміністраторToolStripMenuItem.Checked = _fl_adminMode;
+            фільтрОдиницьToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0 && (_fl_adminMode || UserConfig.Properties[9]);
+            формуванняЧекуToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0 && _fl_adminMode;
+            інвентаризаціяToolStripMenuItem.Enabled = (_fl_isInvenCheque || Cheque.Rows.Count == 0) && _fl_adminMode;
+            чекПоверненняToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0 && (_fl_adminMode || UserConfig.Properties[5]);
+            налаштуванняToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0 && _fl_adminMode;
+            параметриДрукуToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0 && _fl_adminMode;
+            змінитиКористувачаToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0;
+            вихідToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0;
+
+            //друкуватиРахунокToolStripMenuItem.Enabled = Cheque.ExtendedProperties.Contains("BILL");
+            bool isLocked = (bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false);
+            bool isBill = DataWorkShared.ExtractOrderProperty(this.Cheque, CoreConst.BILL, null, true) != null;
+            анулюватиРахунокToolStripMenuItem.Enabled = isBill && !isLocked;
+            зберегтиРахунокToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && !_fl_isInvenCheque && !isLocked;
+            всіРахункиToolStripMenuItem.Enabled = !_fl_isInvenCheque;
+            зберегтиІЗакритиToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && !_fl_isInvenCheque;
+            зберегтиІДрукуватиToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && !_fl_isInvenCheque;// && !isLocked;
+            ToolStripMenu_Bills_SavePrintAndClose.Enabled = Cheque.Rows.Count != 0 && !_fl_isInvenCheque;// && !isLocked;
+            закритиБезЗмінToolStripMenuItem.Enabled = isBill;
+            перезавантажитиРахунокToolStripMenuItem.Enabled = isBill;
+            змінитиКоментарToolStripMenuItem.Enabled = isBill;
+
+            змінитиКстьТоваруToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
+            видалитиВибранийТоварToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
+            видалитиВсіТовариToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
+            здійснитиОплатуToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[23]);
+            задатиЗнижкаToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
+            задатиНадбавкуToolStripMenuItem1.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
+
+        }//ok
+        private void RefreshWindowMenu()
+        {
+            вертикальноToolStripMenuItem.Checked = (splitContainer1.Orientation == Orientation.Vertical);
+            вікноТоварівToolStripMenuItem.Checked = !splitContainer1.Panel2Collapsed;
+        }
+        private void RefreshComponents(bool force)
+        {
+            if (this.сенсорToolStripMenuItem.Checked || force)
+            {
+                //Com_WinApi.OutputDebugString("RefershStyles_Sensor_Activated");
+
+                this.sensorPanel1.SensorType = ConfigManager.Instance.CommonConfiguration.skin_sensor_com_size_cheque;
+
+
+                // cheque
+                переміщенняПоЧекуToolStripMenuItem1.Checked = this.sensorPanel1.ShowComponent(SensorUgcPanel.SensorComponents.Scrolling, ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqnav);
+                операціїЧекуToolStripMenuItem1.Checked = this.sensorPanel1.ShowComponent(SensorUgcPanel.SensorComponents.Operations, ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqopr);
+                режимиПошукуToolStripMenuItem1.Checked = this.sensorPanel1.ShowComponent(SensorUgcPanel.SensorComponents.Search, ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqsrch);
+                рахункиToolStripMenuItem1.Checked = this.sensorPanel1.ShowComponent(SensorUgcPanel.SensorComponents.Additional, ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqbills);
+
+                // art
+                навігаціяТоварівToolStripMenuItem.Checked = ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artnav;
+                переміщенняПоТоварахToolStripMenuItem.Checked = this.sensorDataPanel1.Scroller.Visible = ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artscroll;
+
+                // splitters
+                this.sensorDataPanel1.Container.Panel1Collapsed = !ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artnav;
+                this.sensorDataPanel1.Container.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_artnav;
+                this.sensorDataPanel1.NavigatorFont = ConfigManager.Instance.CommonConfiguration.skin_sensor_fontsize;
+                this.chequeContainer.Orientation = (Orientation)ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_orient;
+                //this.splitContainer_chequeControlContainer.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chqcontrols;
+                try
+                {
+
+                    switch (this.sensorPanel1.SensorType)
+                    {
+                        case 50:
+                            {
+
+                                this.chequeContainer.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_50;
+                                this.sensorPanel1.SetSplitterDistance("h_50", ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_h_50);
+                                this.sensorPanel1.SetSplitterDistance("v_50", ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_v_50);
+                                break;
+                            }
+                        default:
+                        case 100:
+                            {
+                                this.chequeContainer.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_100;
+                                this.sensorPanel1.SetSplitterDistance("h_100", ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_h_100);
+                                this.sensorPanel1.SetSplitterDistance("v_100", ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_v_100);
+                                break;
+                            }
+                    }
+
+                    ;//this.splitContainer_chequeControls.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chqmain;
+                }
+                catch { }
+            }
+
+
+        }
+        
+        #endregion
+
+        #region Application Timers
         /// <summary>
         /// Timer's event indicate when timer is up and perform application data updating
         /// </summary>
         /// <param name="sender">Timer object</param>
         /// <param name="e">Timer event arguments</param>
 
-        private void timerExchangeGrabber_Tick(object sender, EventArgs e)
-        {
-            Com_WinApi.OutputDebugString("Timer: exchange grabber fired");
-            FetchProductData(true, false);
-        }
-        private void timer1_Tick(object sender, EventArgs e)//lbl
-        {
 
-            Com_WinApi.OutputDebugString("Timer: import data fired");
+        private System.Windows.Forms.Timer timerDataImportSynchronizer;
+
+        private void timerDataImportSynchronizer_Tick(object sender, EventArgs e)
+        {
+            Com_WinApi.OutputDebugString("timerDataImportSynchronizer: started");
+            timerDataImportSynchronizer.Stop();
+            timerExchangeImport.Start();
+            Com_WinApi.OutputDebugString("timerDataImportSynchronizer: end");
+
+            //if (!timerExchangeImport.Enabled && !timerExchangeScanner.Enabled)
+            //    ;
+        }
+        private void timerExchangeScanner_Tick(object sender, EventArgs e)
+        {
+            Com_WinApi.OutputDebugString("TimerExchangeGrabbermer: started");
+            if (_fl_importIsRunning || ImportedData.Tables.Count != 0)
+            {
+                Com_WinApi.OutputDebugString("TimerExchangeGrabbermer: import is running");
+                return;
+            }
+            FetchProductData(true, false, true);
+            Com_WinApi.OutputDebugString("TimerExchangeGrabbermer: end");
+        }
+        private void timerExchangeImport_Tick(object sender, EventArgs e)//lbl
+        {
+            //timerExchangeImport.Start();
+            Com_WinApi.OutputDebugString("timerExchangeImport: started");
 
             if (_fl_importIsRunning)
             {
-                Com_WinApi.OutputDebugString("Main: timer is running");
+                Com_WinApi.OutputDebugString("timerExchangeImport: is running");
                 return;
             }
 
             if (Cheque.Rows.Count != 0)
             {
                 _fl_canUpdate = true;
-                Com_WinApi.OutputDebugString("Main: timer is waiting for empty things");
+                Com_WinApi.OutputDebugString("timerExchangeImport: waiting for empty checkque");
                 return;
             }
 
-            Com_WinApi.OutputDebugString("Main: timer start");
             _fl_canUpdate = false;
 
             if (_fl_subUnitChanged)
@@ -2699,619 +2956,324 @@ namespace PayDesk.Components.UI
                 th.Start();
             }*/
 
-            FetchProductData(false, true);
-            _fl_importIsRunning = false;
-
-            Com_WinApi.OutputDebugString("Main: timer end");
-        }
-
-        private void FetchProductData(bool doCheck, bool doImport)
-        {
-            if (doCheck)
-                DataWorkSource.CheckForUpdate(ref exchangeActiveFiles);
-            if (doImport)
-                BgWorker(false, exchangeActiveFiles);
-        }
-        
-        private void BgWorker(bool async, Hashtable data)
-        {
-            Com_WinApi.OutputDebugString("BgWorker: start");
-            lock (this)
-            {
-                //this.DDM_Scanner.Visible = true;
-                //Com_WinApi.OutputDebugString("MainWnd --- AddingData Begin");
-                if (async)
-                    PostActionOnCheckCompleteA(data);
-                else
-                    PostActionOnCheckComplete(data);
-                //this.DDM_Scanner.Visible = false;
-                /*
-                for (int i = 0; i < 2; i++)
-                {
-                    this.CashLbl.Text = i.ToString();
-                    this.SrchTbox.Text = i.ToString();
-                    Thread.Sleep(10000);
-                }
-                this.timer1.Start();*/
-            }
-            //timerIsRunning = false;
-            Com_WinApi.OutputDebugString("BgWorker: end");
-        }
-        
-        /* Checker callback */
-
-        private void PostActionOnCheckComplete(Hashtable hfiles)
-        {
-
-            /* notification */
-            /*
-            */
-            //this.DDM_Scanner.Value++;
-
-            int currentProfileIndex = 0;
-            int startupIndex = 0;
-            bool notificationIsActive = false;
-            uiWndUpdateWnd uw = new uiWndUpdateWnd(_fl_onlyUpdate);
-
-            //this.DDM_Scanner.Value++;
-
-            /* Data Loader v2.0 */
-            //Com_HashObject newFiles = DataWorkSource.CheckGetDataSource(dataContainer2.Structures[CoreConst.CONTAINER_STATE].GetTypedProperty<bool>(CoreConst.STATE_DATA_UPDATE_ONLY));
-            //DataWorkSource.UpdateSource(newFiles, ref this.dataContainer2);
-
-
-            if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles && this.Cheques.Tables.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
-            {
-                DataWorkSource.CreateTables(ref Cheque, ref Articles, ref AltBC, ref Cards, ref Cheques);
-                this.CreateOrderStructure(this.Cheque);
-                foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
-                {
-                    this.CreateOrderStructure(this.Cheques.Tables[de.Key.ToString()]);
-                    this.Discount.Add(de.Key, DataWorkShared.GetStandartDiscountInfoStructure2());
-                    this.Summa.Add(de.Key, DataWorkShared.GetStandartCalculationInfoStructure2());
-                }
-            }
-
-            //this.DDM_Scanner.Value++;
-
-            if (this.Summa.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
-            {
-                this.Discount.Clear();
-                this.Summa.Clear();
-                foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
-                {
-                    this.Discount.Add(de.Key, DataWorkShared.GetStandartDiscountInfoStructure2());
-                    this.Summa.Add(de.Key, DataWorkShared.GetStandartCalculationInfoStructure2());
-                }
-            }
-
-            //this.DDM_Scanner.Value++;
-
-
-            //MessageBox.Show("done 1");
-            
-            List<string> allProfiles = new List<string>();
-            //bool wasUpdatedAtLeastOneSource = false;
-            _fl_artUpdated = false;
-            foreach (DictionaryEntry de in hfiles)
-            {
-
-                //this.DDM_Scanner.Value++;
-
-                string[] files = (string[])de.Value;
-
-                allProfiles.Add(de.Key.ToString());
-
-                /* detectiong for updates */
-
-                //this.DDM_Scanner.Value++;
-
-                // server status
-                if (files[0] == CoreConst.STATE_LAN_ERROR && hfiles.Count == 1)
-                    DDM_UpdateStatus.Image = Properties.Resources.ExNotOk;
-                else
-                    DDM_UpdateStatus.Image = Properties.Resources.ok;
-
-                //this.DDM_Scanner.Value++;
-
-                if ((files[0] == CoreConst.STATE_LAN_ERROR || files[0] == "") && files[1] == "" && files[2] == "" && _fl_onlyUpdate)
-                {
-                    /* if only one profile */
-                    if (hfiles.Count == 1)
-                    //if (!_fl_artUpdated && (hfiles.Count == 1 || currentProfileIndex + 1 == hfiles.Count))
-                    {
-                        //timer1.Start();
-                        GC.Collect();
-                        /* close notification */
-                        if (notificationIsActive)
-                        {
-                            uw.Close();
-                            uw.Dispose();
-                        }
-                        return;
-                    }
-
-                    /* next turn */
-                    currentProfileIndex++;
-                    continue;
-                }
-                //MessageBox.Show("done 2");
-
-                //this.DDM_Scanner.Value++;
-
-                if (!notificationIsActive)
-                {
-                    uw.ShowUpdate(this);
-                    uw.Update();
-                    uw.Refresh();
-                    notificationIsActive = true;
-                }
-
-
-                //this.DDM_Scanner.Value++;
-
-                /* loading */
-
-                //MessageBox.Show("done 3");
-                string[] localFiles = DataWorkSource.LoadFilesOnLocalTempFolder(files, de.Key);
-
-
-                //this.DDM_Scanner.Value++;
-
-                if (currentProfileIndex == 0)
-                    startupIndex = 0;
-                else
-                    startupIndex = Articles.Rows.Count;
-                object[] loadResult = DataWorkSource.LoadData(localFiles, _fl_onlyUpdate, de.Key, startupIndex);
-
-
-                //this.DDM_Scanner.Value++;
-                
-                ConfigManager.SaveConfiguration();
-
-                /* adding data */
-
-
-                //this.DDM_Scanner.Value++;
-
-                //MessageBox.Show("done 4");
-
-                DataTable[] tables = (DataTable[])loadResult[0];
-                _fl_artUpdated = (bool)loadResult[1];
-
-                //this.DDM_Scanner.Value++;
-
-                if (tables[0] != null)
-                {
-                    //Articles = tables[0].Copy();
-                    DataRow[] dRows = Articles.Select("F = " + de.Key);
-                    foreach (DataRow dr in dRows)
-                        dr.Delete();
-                    Articles.Merge(tables[0]);
-                    //wasUpdatedAtLeastOneSource = true;
-                }
-                if (tables[1] != null)
-                {
-                    //AltBC = tables[1].Copy();
-                    DataRow[] dRows = AltBC.Select("F = " + de.Key);
-                    foreach (DataRow dr in dRows)
-                        dr.Delete();
-                    AltBC.Merge(tables[1]);
-                    //wasUpdatedAtLeastOneSource = true;
-                }
-                if (tables[2] != null)
-                {
-                    //Cards = tables[2].Copy();
-                    //if (currentProfileIndex == 0)
-                    Cards.Rows.Clear();
-                    Cards.Merge(tables[2]);
-                    //wasUpdatedAtLeastOneSource = true;
-                }
-
-
-                //this.DDM_Scanner.Value++;
-
-                //MessageBox.Show("done 5");
-                currentProfileIndex++;
-
-            }
-
-
-            //this.DDM_Scanner.Value++;
-
-            //MessageBox.Show("done 6");
-            /* Removing unused rows */
-            string cleanupQuery = string.Empty;
-            foreach (string existedProfiles in allProfiles)
-            {
-                cleanupQuery += " F <> " + existedProfiles + " AND ";
-            }
-            cleanupQuery = cleanupQuery.Trim(new char[] { ' ', 'A', 'N', 'D' });
-            DataRow[] unusedRowsArt = Articles.Select(cleanupQuery);
-            DataRow[] unusedRowsAlt = AltBC.Select(cleanupQuery);
-            foreach (DataRow dr in unusedRowsArt)
-                dr.Delete();
-            foreach (DataRow dr in unusedRowsAlt)
-                dr.Delete();
-
-
-            //this.DDM_Scanner.Value++;
-
-            //MessageBox.Show("done 7");
-            /* close notification */
-            if (notificationIsActive)
-            {
-                uw.Close();
-                uw.Dispose();
-            }
-
-
-            //this.DDM_Scanner.Value++;
-
-            //MessageBox.Show("done 8");
-            Com_WinApi.OutputDebugString("MainWnd --- AddingData End");
-
-            if (_fl_artUpdated)
-            {
-                if (this.WindowState == FormWindowState.Minimized)
-                    this.WindowState = FormWindowState.Normal;
-                //this.BringToFront();
-                MMessageBoxEx.Show(this.chequeDGV, "Були внесені зміни в базу товарів", Application.ProductName,
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-
-
-            //this.DDM_Scanner.Value++;
-
-            //MessageBox.Show("done 9");
-            _fl_onlyUpdate = true;
-            _fl_subUnitChanged = false;
-
-            _fl_isOk = new Com_SecureRuntime().FullLoader();
-            label_uiWndmain_DemoShowArt.Visible = label_uiWndmain_DemoShowChq.Visible = !_fl_isOk;
-            //MessageBox.Show("done 10");
-
-
-            //this.DDM_Scanner.Value++;
-
-            //timer1.Start();
-            SrchTbox.Select();
-            GC.Collect();
-
-            /* device status */
-            if (Program.AppPlugins.IsActive(PluginType.FPDriver))
-            {
-                try
-                {
-                    bool status = (bool)Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_SetCashier", ConfigManager.Instance.CommonConfiguration.APP_PayDesk, UserConfig.UserFpLogin, UserConfig.UserFpPassword, UserConfig.UserID);
-                    if (status)
-                        DDM_FPStatus.Image = Properties.Resources.ok;
-                    else
-                        DDM_FPStatus.Image = Properties.Resources.FpNotOk;
-                }
-                catch { DDM_FPStatus.Image = Properties.Resources.FpNotOk; }
-            }
-            else
-                DDM_FPStatus.Image = Properties.Resources.FpNotOk;
-
-
-            //this.DDM_Scanner.Value++;
-        }
-
-        private void PostActionOnCheckCompleteA(Hashtable hfiles)
-        {
-            /* notification */
-            int currentProfileIndex = 0;
-            int startupIndex = 0;
-            bool notificationIsActive = false;
-            uiWndUpdateWnd uw = new uiWndUpdateWnd(_fl_onlyUpdate);
-
-            /* Data Loader v2.0 */
-            if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles && this.Cheques.Tables.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
-            {
-                DataWorkSource.CreateTables(ref Cheque, ref Articles, ref AltBC, ref Cards, ref Cheques);
-                this.CreateOrderStructure(this.Cheque);
-                foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
-                {
-                    this.CreateOrderStructure(this.Cheques.Tables[de.Key.ToString()]);
-                    this.Discount.Add(de.Key, DataWorkShared.GetStandartDiscountInfoStructure2());
-                    this.Summa.Add(de.Key, DataWorkShared.GetStandartCalculationInfoStructure2());
-                }
-            }
-
-            if (this.Summa.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
-            {
-                this.Discount.Clear();
-                this.Summa.Clear();
-                foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
-                {
-                    this.Discount.Add(de.Key, DataWorkShared.GetStandartDiscountInfoStructure2());
-                    this.Summa.Add(de.Key, DataWorkShared.GetStandartCalculationInfoStructure2());
-                }
-            }
-
-            List<string> allProfiles = new List<string>();
-            _fl_artUpdated = false;
-            foreach (DictionaryEntry de in hfiles)
-            {
-                string[] files = (string[])de.Value;
-                allProfiles.Add(de.Key.ToString());
-
-                /* detectiong for updates */
-
-                // server status
-                if (files[0] == CoreConst.STATE_LAN_ERROR && hfiles.Count == 1)
-                    DDM_UpdateStatus.Image = Properties.Resources.ExNotOk;
-                else
-                    DDM_UpdateStatus.Image = Properties.Resources.ok;
-
-                //this.DDM_Scanner.Value++;
-
-                if ((files[0] == CoreConst.STATE_LAN_ERROR || files[0] == "") && files[1] == "" && files[2] == "" && _fl_onlyUpdate)
-                {
-                    /* if only one profile */
-                    if (hfiles.Count == 1)
-                    //if (!_fl_artUpdated && (hfiles.Count == 1 || currentProfileIndex + 1 == hfiles.Count))
-                    {
-                        //timer1.Start();
-                        GC.Collect();
-                        /* close notification */
-                        if (notificationIsActive)
-                        {
-                            uw.Close();
-                            uw.Dispose();
-                        }
-                        return;
-                    }
-
-                    /* next turn */
-                    currentProfileIndex++;
-                    continue;
-                }
-
-                if (!notificationIsActive)
-                {
-                    uw.ShowUpdate(this);
-                    uw.Update();
-                    uw.Refresh();
-                    notificationIsActive = true;
-                }
-
-                /* loading */
-                string[] localFiles = DataWorkSource.LoadFilesOnLocalTempFolder(files, de.Key);
-
-                if (currentProfileIndex == 0)
-                    startupIndex = 0;
-                else
-                    startupIndex = Articles.Rows.Count;
-                object[] loadResult = DataWorkSource.LoadData(localFiles, _fl_onlyUpdate, de.Key, startupIndex);
-
-                ConfigManager.SaveConfiguration();
-
-                /* adding data */
-                DataTable[] tables = (DataTable[])loadResult[0];
-                _fl_artUpdated = (bool)loadResult[1];
-
-                //this.DDM_Scanner.Value++;
-
-                if (tables[0] != null)
-                {
-                    //Articles = tables[0].Copy();
-                    DataRow[] dRows = Articles.Select("F = " + de.Key);
-                    foreach (DataRow dr in dRows)
-                        dr.Delete();
-                    Articles.Merge(tables[0]);
-                    //wasUpdatedAtLeastOneSource = true;
-                }
-                if (tables[1] != null)
-                {
-                    //AltBC = tables[1].Copy();
-                    DataRow[] dRows = AltBC.Select("F = " + de.Key);
-                    foreach (DataRow dr in dRows)
-                        dr.Delete();
-                    AltBC.Merge(tables[1]);
-                    //wasUpdatedAtLeastOneSource = true;
-                }
-                if (tables[2] != null)
-                {
-                    //Cards = tables[2].Copy();
-                    //if (currentProfileIndex == 0)
-                    Cards.Rows.Clear();
-                    Cards.Merge(tables[2]);
-                    //wasUpdatedAtLeastOneSource = true;
-                }
-
-                currentProfileIndex++;
-            }
-
-            /* Removing unused rows */
-            string cleanupQuery = string.Empty;
-            foreach (string existedProfiles in allProfiles)
-            {
-                cleanupQuery += " F <> " + existedProfiles + " AND ";
-            }
-            cleanupQuery = cleanupQuery.Trim(new char[] { ' ', 'A', 'N', 'D' });
-            DataRow[] unusedRowsArt = Articles.Select(cleanupQuery);
-            DataRow[] unusedRowsAlt = AltBC.Select(cleanupQuery);
-            foreach (DataRow dr in unusedRowsArt)
-                dr.Delete();
-            foreach (DataRow dr in unusedRowsAlt)
-                dr.Delete();
-
-            /* close notification */
-            if (notificationIsActive)
-            {
-                uw.Close();
-                uw.Dispose();
-            }
-
-            Com_WinApi.OutputDebugString("MainWnd --- AddingData End");
-
-            if (_fl_artUpdated)
-            {
-                if (this.WindowState == FormWindowState.Minimized)
-                    SetControlPropertyThreadSafe(this, "WindowState", FormWindowState.Normal);//this.WindowState = FormWindowState.Normal;
-                //this.BringToFront();
-                MMessageBoxEx.Show(this.chequeDGV, "Були внесені зміни в базу товарів", Application.ProductName,
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-
-
-            _fl_onlyUpdate = true;
-            _fl_subUnitChanged = false;
-
-            _fl_isOk = new Com_SecureRuntime().FullLoader();
-
-            SetControlPropertyThreadSafe(label_uiWndmain_DemoShowArt, "Visible", !_fl_isOk);
-            SetControlPropertyThreadSafe(label_uiWndmain_DemoShowChq, "Visible", !_fl_isOk);
-            //label_uiWndmain_DemoShowArt.Visible = label_uiWndmain_DemoShowChq.Visible = !_fl_isOk;
-
-            
-            innerActivateSearchBox();
-            GC.Collect();
-
-            /* device status */
+            _fl_importIsRunning = true;
             try
             {
-                if (Program.AppPlugins.IsActive(PluginType.FPDriver))
-                {
-                    try
-                    {
-                        bool status = (bool)Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_SetCashier", ConfigManager.Instance.CommonConfiguration.APP_PayDesk, UserConfig.UserFpLogin, UserConfig.UserFpPassword, UserConfig.UserID);
-                        if (status)
-                            DDM_FPStatus.Image = Properties.Resources.ok;
-                        else
-                            DDM_FPStatus.Image = Properties.Resources.FpNotOk;
-
-                    }
-                    catch { DDM_FPStatus.Image = Properties.Resources.FpNotOk; }
-                }
-                else
-                    DDM_FPStatus.Image = Properties.Resources.FpNotOk;
+                FetchProductData(false, true, false);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                CoreLib.WriteLog(ex, "PayDesk.Components.UI.uiWndMain@timerDataLoader_Tick");
+            }
+            _fl_importIsRunning = false;
 
+            Com_WinApi.OutputDebugString("timerExchangeImport: end");
         }
-
-        private delegate void SetControlImageThreadSafeDelegate(Control control, string propertyName, Bitmap image);
-        private delegate void SetControlPropertyThreadSafeDelegate(Control control, string propertyName, object propertyValue);
-        public static void SetControlImageThreadSafe(Control control, string propertyName, Bitmap image)
+        private void timerBuyerReady_Tick(object sender, EventArgs e)
         {
-            if (control.InvokeRequired)
+            if (readedBuyerBarCode.Length != 0)
             {
-                control.Invoke(new SetControlImageThreadSafeDelegate(SetControlPropertyThreadSafe), new object[] { control, propertyName, image });
-            }
-            else
-            {
-                control.GetType().InvokeMember(propertyName, System.Reflection.BindingFlags.SetProperty, null, control, new object[] { image });
-            }
-        }
-        public static void SetControlPropertyThreadSafe(Control control, string propertyName, object propertyValue)
-        {
-            if (control.InvokeRequired)
-            {
-                control.Invoke(new SetControlPropertyThreadSafeDelegate(SetControlPropertyThreadSafe), new object[] { control, propertyName, propertyValue });
-            }
-            else
-            {
-                control.GetType().InvokeMember(propertyName, System.Reflection.BindingFlags.SetProperty, null, control, new object[] { propertyValue });
-            }
-        }
-
-        private void innerActivateSearchBox()
-        {
-            if (SrchTbox.InvokeRequired)
-            {
-                this.Invoke(new MethodInvoker(innerActivateSearchBox));
-                return;
-            }
-            
-            SrchTbox.Select();
-        }
-
-        /// <summary>
-        /// Обробляє чек після видалення одного або всіх товару(ів).
-        /// (обраховує суму, відновлує фільтрацію таблиці товарів, оновлює повідомлення на панелях)
-        /// </summary>
-        /// <param name="updateCustomer">Якщо true то результати обчислення будуть ще виведені на дисплей ФП</param>
-        private void RowsRemoved_MyEvent(bool updateCustomer)
-        {
-            this.RowsRemoved_MyEvent(updateCustomer, true, false);
-        }
-        private void RowsRemoved_MyEvent(bool updateCustomer, bool resetSrchFilter)
-        {
-            this.RowsRemoved_MyEvent(updateCustomer, resetSrchFilter, false);
-        }
-        private void RowsRemoved_MyEvent(bool updateCustomer, bool resetSrchFilter, bool clearData)
-        {
-            if (clearData)
-            {
-                this.Cheque.Rows.Clear();
-                this.CreateOrderStructure(this.Cheque);
-                //this.Cheque.ExtendedProperties.Clear();
-
-                if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
-                    foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
-                        RowsRemoved_MyEvent_profile(de.Key);
-            }
-
-            //winapi.Funcs.OutputDebugString("t");
-            if (Cheque.Rows.Count == 0)
-            {
-                RefershMenus();
-                if (_fl_isReturnCheque)
-                    чекПоверненняToolStripMenuItem.PerformClick();
-                //winapi.Funcs.OutputDebugString("3");
-                if (resetSrchFilter)
-                    SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
-                else
-                    SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, false);
-                //winapi.Funcs.OutputDebugString("4");
-                clientID = string.Empty;
-                chqSUMA = 0.0;
-                realSUMA = 0.0;
-                ResetDiscount();
-            }
-            //winapi.Funcs.OutputDebugString("l");
-            UpdateSumInfo(updateCustomer);
-            RefreshChequeInformer(false);
-            //winapi.Funcs.OutputDebugString("e");
-            //winapi.Funcs.OutputDebugString("r");
-
-            this.Update();
-            Com_WinApi.PostMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_UPDATE, IntPtr.Zero, IntPtr.Zero);
-        }
-        private void RowsRemoved_MyEvent_profile(object profileKey)
-        {
-            this.Summa[profileKey] = DataWorkShared.GetStandartCalculationInfoStructure2();
-            this.Discount[profileKey] = DataWorkShared.GetStandartDiscountInfoStructure2();
-            
-            // clear rows from common cheque
-
-            foreach (DataRow dRow in this.Cheques.Tables[profileKey.ToString()].Rows)
-            {
+                string dd = "C" + readedBuyerBarCode;
+                readedBuyerBarCode = "";
+                global::components.Components.WinApi.Com_WinApi.OutputDebugString("Received data = " + dd);
+                BCSearcher(dd, true);
                 try
                 {
-                    this.Cheque.Rows.Find(dRow["C"]).Delete();
+                    відмінитиЗнижкунадбавкуToolStripMenuItem.Enabled = true;
+                    відмінитиЗнижкунадбавкуToolStripMenuItem.Text = "Скасувати знижку";
                 }
                 catch { }
             }
-            
-            // clear profile cheque
-            this.Cheques.Tables[profileKey.ToString()].Rows.Clear();
-
-            
-
         }
+        #endregion
+
+        #region Application Properties
+
+
+        // shold be removed after dataContainer2
+
+        public Hashtable PD_DiscountInfo
+        {
+            set { }
+            get
+            {
+                Hashtable chqInfo = DataWorkShared.GetStandartDiscountInfoStructure2();
+                //Якщо true то знижка чи надбавка діє на всі позиції(товари) чеку
+                chqInfo["DISC_ALL_ITEMS"] = this._fl_useTotDisc;
+                //Масив з значеннями знижки та надбавки в процентних значеннях
+                chqInfo["DISC_ARRAY_PERCENT"] = new double[2] { discArrPercent[0], discArrPercent[1] };
+                //Масив з значеннями знижки та надбавки в грошових значеннях
+                chqInfo["DISC_ARRAY_CASH"] = new double[2] { discArrCash[0], discArrCash[1] };
+                //Значення постійної знижки в процентному значенні
+                chqInfo["DISC_CONST_PERCENT"] = this.discConstPercent;
+                //Сума знижки і надбавки з процентними значеннями
+                chqInfo["DISC_ONLY_PERCENT"] = this.discOnlyPercent;
+                //Сума знижки і надбавки з грошовими значеннями
+                chqInfo["DISC_ONLY_CASH"] = this.discOnlyCash;
+                //Загальний коефіціент знижки в процентному значенні
+                chqInfo["DISC_FINAL_PERCENT"] = this.discCommonPercent;
+                //Загальний коефіціент знижки в грошовому значенні
+                chqInfo["DISC_FINAL_CASH"] = this.discCommonCash;
+                //Загальний коефіціент знижки в грошовому значенні
+                chqInfo["DISC_APPLIED"] = this.discApplied;
+                return chqInfo;
+            }
+        }
+
+        public bool[] PD_Statements
+        {
+            set { }
+            get { return new bool[3]; }
+        }
+
+        public DataTable PD_DEMO_Order
+        {
+            get
+            {
+                Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure();
+                // fill cheque structure
+                //chqInfo["DATA"] = this.Cheque.Copy();
+                chqInfo["STORE_NO"] = this.currentSubUnit;
+                chqInfo["CLIENT_ID"] = this.clientID;
+                chqInfo["IS_RET"] = this._fl_isReturnCheque;
+                chqInfo["IS_LEGAL"] = false;
+                chqInfo["ORDER_NO"] = string.Empty;
+                chqInfo["ORDER_SUMA"] = this.chqSUMA;
+                chqInfo["ORDER_REAL_SUMA"] = this.realSUMA;
+                chqInfo["TAX_SUMA"] = this.realSUMA;
+                chqInfo["TAX_BILL"] = this._fl_taxDocRequired;
+                chqInfo["DISCOUNT"] = this.PD_DiscountInfo;
+
+                object bill = this.Cheque.ExtendedProperties["BILL"];
+                DataWorkShared.UpdateExtendedProperties(this.Cheque, chqInfo);
+                this.Cheque.ExtendedProperties["BILL"] = bill;
+                /*
+                chqInfo["BILL_NO"] = string.Empty;
+                chqInfo["BILL_COMMENT"] = string.Empty;
+                if (this.Cheque.ExtendedProperties.Contains("BILL")) {
+                    //Номер рахунку
+                    chqInfo["BILL_NO"] = Cheque.ExtendedProperties["NOM"];
+                    //Коментр рахунку
+                    chqInfo["BILL_COMMENT"] = Cheque.ExtendedProperties["CMT"];
+                }*/
+                return this.Cheque;
+            }
+        }
+
+        public DataTable PD_Order
+        {
+            get
+            {
+                Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure(this.Cheque);
+                // fill cheque structure
+                //chqInfo["DATA"] = this.Cheque.Copy();
+                chqInfo["STORE_NO"] = this.currentSubUnit;
+                chqInfo["CLIENT_ID"] = this.clientID;
+                chqInfo["IS_RET"] = this._fl_isReturnCheque;
+                chqInfo["IS_LEGAL"] = false;
+                //chqInfo["ORDER_NO"] = string.Empty;
+                chqInfo["ORDER_SUMA"] = this.chqSUMA;
+                chqInfo["ORDER_REAL_SUMA"] = this.realSUMA;
+                chqInfo["TAX_SUMA"] = this.realSUMA;
+                chqInfo["TAX_BILL"] = this._fl_taxDocRequired;
+                chqInfo["DISCOUNT"] = this.PD_DiscountInfo;
+
+                DataWorkShared.UpdateExtendedProperties(this.Cheque, chqInfo);
+                /*
+                chqInfo["BILL_NO"] = string.Empty;
+                chqInfo["BILL_COMMENT"] = string.Empty;
+                if (this.Cheque.ExtendedProperties.Contains("BILL")) {
+                    //Номер рахунку
+                    chqInfo["BILL_NO"] = Cheque.ExtendedProperties["NOM"];
+                    //Коментр рахунку
+                    chqInfo["BILL_COMMENT"] = Cheque.ExtendedProperties["CMT"];
+                }*/
+                return this.Cheque;
+            }
+        }
+
+        #endregion
+
+        #region Helpful Methods
+        private Hashtable GetAppStatements()
+        {
+            Hashtable currentStates = new Hashtable();
+            currentStates[CoreConst.STATE_DATA_UPDATED] = false;
+
+            return currentStates;
+        }
+        private void SearchFilter(bool saveSearchText, int SrchType, bool close)
+        {
+            if (close)
+            {
+                Com_WinApi.OutputDebugString("MainWnd --- SearchFilter - reseting data begin");
+                articleDGV.DataSource = Articles;
+                Com_WinApi.OutputDebugString("MainWnd --- SearchFilter - reseting data end");
+            }
+
+            if (!saveSearchText)
+                SrchTbox.Text = string.Empty;
+
+            // hide product panel when it was displayed automatically
+            if (splitContainer1.Panel2.Tag != null)
+            {
+                вікноТоварівToolStripMenuItem.PerformClick();
+                splitContainer1.Panel2.Tag = null;
+                // skin sensor integration (show panel when some arts are hidden)
+                if (this.сенсорToolStripMenuItem.Checked)
+                    this.chequeContainer.Panel2Collapsed = false;
+            }
+
+            switch (SrchType)
+            {
+                case 0:
+                    {
+                        SrchTbox.BackColor = Color.FromArgb(255, 255, 192);
+                        searchImage.BackColor = Color.FromArgb(255, 255, 192);
+                        searchImage.BackgroundImage = Properties.Resources.by_name;
+                        break;
+                    }
+                case 1:
+                    {
+                        SrchTbox.BackColor = Color.FromArgb(192, 255, 192);
+                        searchImage.BackColor = Color.FromArgb(192, 255, 192);
+                        searchImage.BackgroundImage = Properties.Resources.by_c;
+                        break;
+                    }
+                case 2:
+                    {
+                        SrchTbox.BackColor = Color.FromArgb(255, 192, 192);
+                        searchImage.BackColor = Color.FromArgb(255, 192, 192);
+                        searchImage.BackgroundImage = Properties.Resources.by_bc;
+                        break;
+                    }
+            }
+
+            SrchTbox.Focus();
+            SrchTbox.Select();
+            SrchTbox.SelectAll();
+
+            currSrchType = SrchType;
+        }
+        public void UpdateDiscountValues(DataTable order)
+        {
+            this.currentSubUnit = (byte)order.ExtendedProperties[CoreConst.STORE_NO];
+            try
+            {
+                this.clientID = order.ExtendedProperties[CoreConst.CLIENT_ID].ToString();
+            }
+            catch { }
+            this._fl_isReturnCheque = (bool)order.ExtendedProperties[CoreConst.IS_RET];
+
+            if (order.ExtendedProperties.ContainsKey(CoreConst.DISCOUNT))
+            {
+
+                Hashtable discount = (Hashtable)order.ExtendedProperties[CoreConst.DISCOUNT];
+
+                try
+                {
+                    this._fl_useTotDisc = (bool)discount[CoreConst.DISC_ALL_ITEMS];
+                    this.discArrPercent = (double[])discount[CoreConst.DISC_ARRAY_PERCENT];
+                    this.discArrCash = (double[])discount[CoreConst.DISC_ARRAY_CASH];
+                    this.discConstPercent = (double)discount[CoreConst.DISC_CONST_PERCENT];
+                    this.discOnlyCash = (double)discount[CoreConst.DISC_ONLY_CASH];
+                    this.discOnlyPercent = (double)discount[CoreConst.DISC_ONLY_PERCENT];
+                    this.discCommonPercent = (double)discount[CoreConst.DISC_FINAL_PERCENT];
+                    this.discCommonCash = (double)discount[CoreConst.DISC_FINAL_CASH];
+                    this.discApplied = (bool)discount[CoreConst.DISC_APPLIED];
+                }
+                catch { }
+                /*
+                chqInfo["DISC_ALL_ITEMS"] = this._fl_useTotDisc;
+                //Масив з значеннями знижки та надбавки в процентних значеннях
+                chqInfo["DISC_ARRAY_PERCENT"] = new double[2] { discArrPercent[0], discArrPercent[1] };
+                //Масив з значеннями знижки та надбавки в грошових значеннях
+                chqInfo["DISC_ARRAY_CASH"] = new double[2] { discArrCash[0], discArrCash[1] };
+                //Значення постійної знижки в процентному значенні
+                chqInfo["DISC_CONST_PERCENT"] = this.discConstPercent;
+                //Сума знижки і надбавки з процентними значеннями
+                chqInfo["DISC_ONLY_PERCENT"] = this.discOnlyPercent;
+                //Сума знижки і надбавки з грошовими значеннями
+                chqInfo["DISC_ONLY_CASH"] = this.discOnlyCash;
+                //Загальний коефіціент знижки в процентному значенні
+                chqInfo["DISC_FINAL_PERCENT"] = this.discCommonPercent;
+                //Загальний коефіціент знижки в грошовому значенні
+                chqInfo["DISC_FINAL_CASH"] = this.discCommonCash;
+                 */
+            }
+        }
+        public DataTable GetProfileOrder(object profileKey)
+        {
+            Hashtable _suma = (Hashtable)this.Summa[profileKey];
+            Hashtable _discount = (Hashtable)this.Discount[profileKey];
+            DataTable _cheque = this.Cheques.Tables[profileKey.ToString()];
+
+
+            Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure(_cheque);
+            Hashtable discInfo = DataWorkShared.GetStandartDiscountInfoStructure2();
+
+
+            /* initializing discount values */
+            bool _discApplied = CoreLib.GetValue<bool>(_discount, CoreConst.DISC_APPLIED);
+            double[] _discArrPercent = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_PERCENT);
+            double[] _discArrCash = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_CASH);
+            double _discConstPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_CONST_PERCENT);
+            double _discOnlyPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_ONLY_PERCENT);
+            double _discOnlyCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_ONLY_CASH);
+            double _discCommonPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_PERCENT);
+            double _discCommonCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_CASH);
+            /* calculation items */
+            double _realSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_REAL_SUMA);
+            double _chqSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_CHEQUE_SUMA);
+            double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_TAX_SUMA);
+
+            discInfo["DISC_ALL_ITEMS"] = this._fl_useTotDisc;
+            //Масив з значеннями знижки та надбавки в процентних значеннях
+            discInfo["DISC_ARRAY_PERCENT"] = new double[2] { _discArrPercent[0], _discArrPercent[1] };
+            //Масив з значеннями знижки та надбавки в грошових значеннях
+            discInfo["DISC_ARRAY_CASH"] = new double[2] { _discArrCash[0], _discArrCash[1] };
+            //Значення постійної знижки в процентному значенні
+            discInfo["DISC_CONST_PERCENT"] = _discConstPercent;
+            //Сума знижки і надбавки з процентними значеннями
+            discInfo["DISC_ONLY_PERCENT"] = _discOnlyPercent;
+            //Сума знижки і надбавки з грошовими значеннями
+            discInfo["DISC_ONLY_CASH"] = _discOnlyCash;
+            //Загальний коефіціент знижки в процентному значенні
+            discInfo["DISC_FINAL_PERCENT"] = _discCommonPercent;
+            //Загальний коефіціент знижки в грошовому значенні
+            discInfo["DISC_FINAL_CASH"] = _discCommonCash;
+            discInfo["DISC_APPLIED"] = _discApplied;
+
+
+
+            chqInfo["STORE_NO"] = this.currentSubUnit;
+            chqInfo["CLIENT_ID"] = this.clientID;
+            chqInfo["IS_RET"] = this._fl_isReturnCheque;
+            chqInfo["IS_LEGAL"] = false;
+            chqInfo["ORDER_SUMA"] = _chqSUMA;
+            chqInfo["ORDER_REAL_SUMA"] = _realSUMA;
+            chqInfo["TAX_SUMA"] = _realSUMA;
+            chqInfo["TAX_BILL"] = this._fl_taxDocRequired;
+            chqInfo["DISCOUNT"] = discInfo;
+
+            DataWorkShared.UpdateExtendedProperties(_cheque, chqInfo);
+
+            return _cheque;
+        }
+        private void CreateOrderStructure(DataTable dtOrder)
+        {
+            Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure();
+            DataWorkShared.AppendExtendedProperties(dtOrder, chqInfo, true);
+        }
+
+        
+        // discount
         /// <summary>
         /// Виконує обрахунок суми товарів, які знаходяться в таблиці чеку
         /// а також вираховує коефіціенти знижок чи надбавок
         /// </summary>
         /// <param name="updateCustomer">Якщо true то результати обчислення будуть ще виведені на дисплей ФП</param>
         /// 
-
-        // discount
-
         private void UpdateSumInfo(bool updateCustomer)
         {
             UpdateSumInfo_single(updateCustomer);
@@ -3338,7 +3300,7 @@ namespace PayDesk.Components.UI
                     {
                         filterProductIDs = new string[0];
                     }
-                    
+
                     if (filterProductIDs.Length != 0)
                     {
                         foreach (string lss in filterProductIDs)
@@ -3430,7 +3392,7 @@ namespace PayDesk.Components.UI
             //DataRow[] artRecord = null;
             double newPrice = 0.0;
             double newTmpPrice = 0.0; //bool isSet = false;
-            
+
             /*  */
             bool useConstDisc = _discArrPercent[0] == 0.0 && _discArrPercent[1] == 0.0 &&
                 _discArrCash[0] == 0.0 && _discArrCash[1] == 0.0;
@@ -3640,7 +3602,7 @@ namespace PayDesk.Components.UI
 
             this.Discount[profileKey] = _discount;
             this.Summa[profileKey] = _suma;
-            
+
             /*
             double[] _discArrPercent = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_PERCENT);
             double[] _discArrCash = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_CASH);
@@ -3649,10 +3611,11 @@ namespace PayDesk.Components.UI
             double _discOnlyCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_ONLY_CASH);
             double _discCommonPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_PERCENT);
             double _discCommonCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_CASH);*/
-            /* calculation items *//*
-            double _realSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);
-            double _chqSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);
-            double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
+            /* calculation items */
+            /*
+double _realSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);
+double _chqSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);
+double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
 
 
             if (!_fl_isInvenCheque)
@@ -3777,7 +3740,8 @@ namespace PayDesk.Components.UI
                         }
                         else newPrice = _newPrice;
                         //}
-                    } else newPrice = _newPrice;
+                    }
+                    else newPrice = _newPrice;
                 }
                 else if (UserConfig.Properties[1] || UserConfig.Properties[2])
                 {
@@ -3815,7 +3779,7 @@ namespace PayDesk.Components.UI
                     }
                 }
             }*/
-           
+
             //select rows with discount mode
             try
             {
@@ -3907,13 +3871,13 @@ namespace PayDesk.Components.UI
                 */
                 // new tax operation
                 //Cheque.Rows[i]["VG"].ToString()[0]
-               // if ( true)
-               // {
-                    // defined data structure
-                    // 0 - tax rate
-                    // 1- use discount
-                    
-                    //definedTaxData = profileDefinedTaxGrid[profileCompatibleTaxGrid[Cheque.Rows[i]["VG"].ToString()[0]]].ToString().Split(';');
+                // if ( true)
+                // {
+                // defined data structure
+                // 0 - tax rate
+                // 1- use discount
+
+                //definedTaxData = profileDefinedTaxGrid[profileCompatibleTaxGrid[Cheque.Rows[i]["VG"].ToString()[0]]].ToString().Split(';');
                 //taxValue = MathLib.GetDouble(definedTaxData[0]);
                 try
                 {
@@ -3932,9 +3896,9 @@ namespace PayDesk.Components.UI
                 {
                     taxValue = 0;
                 }
-               /* }
-                else
-                    taxValue = 0;*/
+                /* }
+                 else
+                     taxValue = 0;*/
 
                 /* // old tax operation
                 index = Array.IndexOf<char>(ConfigManager.Instance.CommonConfiguration.TAX_AppTaxChar, Cheque.Rows[i]["VG"].ToString()[0]);
@@ -3993,7 +3957,7 @@ namespace PayDesk.Components.UI
                 if (Cheque.Rows.Count != 0)
                     if (_fl_useTotDisc)
                         discInfo[0] = " загальна";
-                    else 
+                    else
                         discInfo[0] = " позиційна";
 
                 if (useConstDisc)
@@ -4375,7 +4339,7 @@ namespace PayDesk.Components.UI
 
                 //File.Delete(Cheque.ExtendedProperties["PATH"].ToString());
             }
-            
+
             string closedInfo = string.Empty;
             if (chqNumbers.Count > 1)
                 closedInfo = string.Format("{0} {1} ", "Закриті чеки №", string.Join(",", chqNumbers.ToArray()));
@@ -4391,7 +4355,7 @@ namespace PayDesk.Components.UI
             chequeInfoLabel.Text = string.Format("{0} {1:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", "залишок з суми", pMethod.CashSum);
             this.addBillInfo.Text = string.Empty;
             addChequeInfo.Text = closedInfo;
-            
+
             if (isLegalMode && ConfigManager.Instance.CommonConfiguration.APP_ShowInfoOnIndicator)
                 try
                 {
@@ -4569,7 +4533,7 @@ namespace PayDesk.Components.UI
                 if (ConfigManager.Instance.CommonConfiguration.Content_Bills_KeepAliveAfterCheque)
                     DataWorkBill.LockBill(this.PD_Order.Copy(), isLegalMode ? chqNom : 'N' + chqNom);
                 else
-                   DataWorkBill.BillDelete(this.PD_Order);
+                    DataWorkBill.BillDelete(this.PD_Order);
 
                 //Cheque.ExtendedProperties["FXNO"] = chqNom;
 
@@ -4687,17 +4651,17 @@ namespace PayDesk.Components.UI
             discCommonCash = 0.0;
             clientPriceNo = 0;
             //discApplied = false;
-            
+
             //відмінитиЗнижкунадбавкуToolStripMenuItem.Enabled = false;
             відмінитиЗнижкунадбавкуToolStripMenuItem.Text = "Без знижки/надбавки";
-            
+
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
                 foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
                 {
                     this.Discount[de.Key] = DataWorkShared.GetStandartDiscountInfoStructure2();
                     this.Summa[de.Key] = DataWorkShared.GetStandartCalculationInfoStructure2();
                 }
-            
+
             //addChequeInfo.Text = string.Empty;
             //UpdateSumDisplay(true, true);
         }//ok
@@ -4882,546 +4846,440 @@ namespace PayDesk.Components.UI
         /// <param name="SrchType">Type of search: 0- by name; 1- by code; 2- by barcode; Others type are not premitted.</param>
         /// <param name="close">Approve to close filetred data after searching. If false then filtered data will showing again</param>
 
-        private delegate void CreateFunc();
-
-        private void SearchFilter(bool saveSearchText, int SrchType, bool close)
+        /// <summary>
+        /// Обробляє чек після видалення одного або всіх товару(ів).
+        /// (обраховує суму, відновлує фільтрацію таблиці товарів, оновлює повідомлення на панелях)
+        /// </summary>
+        /// <param name="updateCustomer">Якщо true то результати обчислення будуть ще виведені на дисплей ФП</param>
+        private void RowsRemoved_MyEvent(bool updateCustomer)
         {
-            if (close)
+            this.RowsRemoved_MyEvent(updateCustomer, true, false);
+        }
+        private void RowsRemoved_MyEvent(bool updateCustomer, bool resetSrchFilter)
+        {
+            this.RowsRemoved_MyEvent(updateCustomer, resetSrchFilter, false);
+        }
+        private void RowsRemoved_MyEvent(bool updateCustomer, bool resetSrchFilter, bool clearData)
+        {
+            if (clearData)
             {
-                Com_WinApi.OutputDebugString("MainWnd --- SearchFilter - reseting data begin");
-                articleDGV.DataSource = Articles;
-                Com_WinApi.OutputDebugString("MainWnd --- SearchFilter - reseting data end");
+                this.Cheque.Rows.Clear();
+                this.CreateOrderStructure(this.Cheque);
+                //this.Cheque.ExtendedProperties.Clear();
+
+                if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
+                    foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
+                        RowsRemoved_MyEvent_profile(de.Key);
             }
 
-            if (!saveSearchText)
-                SrchTbox.Text = string.Empty;
-
-            // hide product panel when it was displayed automatically
-            if (splitContainer1.Panel2.Tag != null)
+            //winapi.Funcs.OutputDebugString("t");
+            if (Cheque.Rows.Count == 0)
             {
-                вікноТоварівToolStripMenuItem.PerformClick();
-                splitContainer1.Panel2.Tag = null;
-                // skin sensor integration (show panel when some arts are hidden)
-                if (this.сенсорToolStripMenuItem.Checked)
-                    this.chequeContainer.Panel2Collapsed = false;
+                RefershMenus();
+                if (_fl_isReturnCheque)
+                    чекПоверненняToolStripMenuItem.PerformClick();
+                //winapi.Funcs.OutputDebugString("3");
+                if (resetSrchFilter)
+                    SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
+                else
+                    SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, false);
+                //winapi.Funcs.OutputDebugString("4");
+                clientID = string.Empty;
+                chqSUMA = 0.0;
+                realSUMA = 0.0;
+                ResetDiscount();
+            }
+            //winapi.Funcs.OutputDebugString("l");
+            UpdateSumInfo(updateCustomer);
+            RefreshChequeInformer(false);
+            //winapi.Funcs.OutputDebugString("e");
+            //winapi.Funcs.OutputDebugString("r");
+
+            this.Update();
+            Com_WinApi.PostMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_UPDATE, IntPtr.Zero, IntPtr.Zero);
+        }
+        private void RowsRemoved_MyEvent_profile(object profileKey)
+        {
+            this.Summa[profileKey] = DataWorkShared.GetStandartCalculationInfoStructure2();
+            this.Discount[profileKey] = DataWorkShared.GetStandartDiscountInfoStructure2();
+
+            // clear rows from common cheque
+
+            foreach (DataRow dRow in this.Cheques.Tables[profileKey.ToString()].Rows)
+            {
+                try
+                {
+                    this.Cheque.Rows.Find(dRow["C"]).Delete();
+                }
+                catch { }
             }
 
-            switch (SrchType)
-            {
-                case 0:
-                    {
-                        SrchTbox.BackColor = Color.FromArgb(255, 255, 192);
-                        searchImage.BackColor = Color.FromArgb(255, 255, 192);
-                        searchImage.BackgroundImage = Properties.Resources.by_name;
-                        break;
-                    }
-                case 1:
-                    {
-                        SrchTbox.BackColor = Color.FromArgb(192, 255, 192);
-                        searchImage.BackColor = Color.FromArgb(192, 255, 192);
-                        searchImage.BackgroundImage = Properties.Resources.by_c;
-                        break;
-                    }
-                case 2:
-                    {
-                        SrchTbox.BackColor = Color.FromArgb(255, 192, 192);
-                        searchImage.BackColor = Color.FromArgb(255, 192, 192);
-                        searchImage.BackgroundImage = Properties.Resources.by_bc;
-                        break;
-                    }
-            }
+            // clear profile cheque
+            this.Cheques.Tables[profileKey.ToString()].Rows.Clear();
 
-            SrchTbox.Focus();
-            SrchTbox.Select();
-            SrchTbox.SelectAll();
 
-            currSrchType = SrchType;
+
         }
 
-
-        // shold be removed after dataContainer2
-
-        /* general properties */
-
-        public void SaveGUI()
+        private void InitChequeInformationStructure()
         {
-            ConfigManager.Instance.CommonConfiguration.STYLE_SplitterDistance = splitContainer1.SplitterDistance;
-            ConfigManager.Instance.CommonConfiguration.STYLE_MainWndState = this.WindowState;
-            ConfigManager.Instance.CommonConfiguration.STYLE_SplitOrient = this.splitContainer1.Orientation;
-            ConfigManager.Instance.CommonConfiguration.STYLE_MainWndSize = this.Size;
-            ConfigManager.Instance.CommonConfiguration.STYLE_MainWndPosition = this.Location;
-
-            // sensor style
-            ConfigManager.Instance.CommonConfiguration.skin_sensor_active = this.сенсорToolStripMenuItem.Checked;
-            if (ConfigManager.Instance.CommonConfiguration.skin_sensor_active)
+            /* loop by all available profiles */
+            this.Discount.Clear();
+            this.Summa.Clear();
+            if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
             {
-                ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqnav = this.sensorPanel1.GetComponentVisiblity(SensorUgcPanel.SensorComponents.Scrolling);
-                ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqopr = this.sensorPanel1.GetComponentVisiblity(SensorUgcPanel.SensorComponents.Operations);
-                ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqsrch = this.sensorPanel1.GetComponentVisiblity(SensorUgcPanel.SensorComponents.Search);
-                ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqbills = this.sensorPanel1.GetComponentVisiblity(SensorUgcPanel.SensorComponents.Additional);
-                /*
-                ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artnav = !this.sensorDataPanel1.Container.Panel1Collapsed;
-                ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artscroll = this.sensorDataPanel1.Scroller.Visible;
+                DataWorkSource.CreateTables(ref Cheque, ref Articles, ref AltBC, ref Cards, ref Cheques);
+                this.CreateOrderStructure(this.Cheque);
+                foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
+                {
+                    this.CreateOrderStructure(this.Cheques.Tables[de.Key.ToString()]);
+                    this.Discount.Add(de.Key, DataWorkShared.GetStandartDiscountInfoStructure2());
+                    this.Summa.Add(de.Key, DataWorkShared.GetStandartCalculationInfoStructure2());
+                }
+            }
+            else
+            {
+                this.Discount.Add(CoreConst.KEY_DEFAULT_PROFILE_ID, this.PD_DiscountInfo);
+                this.Summa.Add(CoreConst.KEY_DEFAULT_PROFILE_ID, DataWorkShared.GetStandartCalculationInfoStructure2());
+            }
+        }
+        #endregion
+
+        #region Data 
+        private void FetchProductData(bool doCheck, bool doImport, bool runCheckInSeparateThread)
+        {
+            // will download and transform new data
+            if (doCheck)
+            {
+                if (runCheckInSeparateThread)
+                {
+                    Thread scannerTh = new Thread(new ThreadStart(getNewDataAndDoLocalRawImport));
+                    scannerTh.Start();
+                }
+                else
+                    getNewDataAndDoLocalRawImport();
+            }
+            if (doImport)
+            {
+                try
+                {
+                    PostDataImportAction();
+                }
+                catch (Exception ex)
+                {
+                    CoreLib.WriteLog(ex, "PayDesk.Components.UI.uiWndMain@FetchProductData");
+                }
+                ImportedData.Tables.Clear();
+            }
+        }
+
+        private void getNewDataAndDoLocalRawImport()
+        {
+            Hashtable filesToImport = new Hashtable();
+            int currentProfileIndex = 0;
+            int startupIndex = 0;
+            string[] tableNames = { "PROD", "ALT", "CARD" };
+            // check new data existance
+            DataWorkSource.CheckForUpdate(ref filesToImport);
+
+            // clear temporaty exchange data
+
+            this.ImportedData.Tables.Clear();
+
+            //bool wasUpdatedAtLeastOneSource = false;
+            //_fl_artUpdated = false;
+            foreach (DictionaryEntry de in filesToImport)
+            {
+
+                //this.DDM_Scanner.Value++;
+
+                string[] files = (string[])de.Value;
+
+                /* detectiong for updates */
+
+                //this.DDM_Scanner.Value++;
+
+                // server status
+                /*if (files[0] == CoreConst.STATE_LAN_ERROR && filesToImport.Count == 1)
+                    DDM_UpdateStatus.Image = Properties.Resources.ExNotOk;
+                else
+                    DDM_UpdateStatus.Image = Properties.Resources.ok;
                 */
+                //this.DDM_Scanner.Value++;
 
-                ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artnav = навігаціяТоварівToolStripMenuItem.Checked;
-                ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artscroll = переміщенняПоТоварахToolStripMenuItem.Checked;
-
-                //ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chqmain = this.splitContainer_chequeControls.SplitterDistance;
-                //ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chqcontrols = this.splitContainer_chequeControlContainer.SplitterDistance;
-
-                ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_orient = (int)this.chequeContainer.Orientation;
-                ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_artnav = (int)this.sensorDataPanel1.Container.SplitterDistance;
-
-                switch (this.sensorPanel1.SensorType)
+                if ((files[0] == CoreConst.STATE_LAN_ERROR || files[0] == "") && files[1] == "" && files[2] == "" && _fl_onlyUpdate)
                 {
-                    case 50:
+                    /* if only one profile */
+                    if (filesToImport.Count == 1)
+                    //if (!_fl_artUpdated && (hfiles.Count == 1 || currentProfileIndex + 1 == hfiles.Count))
+                    {
+                        //timer1.Start();
+                        GC.Collect();
+                        /* close notification */
+                        /*if (notificationIsActive)
                         {
-                            ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_h_50 = this.sensorPanel1.GetSplitterControl("h_50").SplitterDistance;
-                            ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_v_50 = this.sensorPanel1.GetSplitterControl("v_50").SplitterDistance;
-                            ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_50 = this.chequeContainer.SplitterDistance;
-                            break;
-                        }
-                    default:
-                    case 100:
-                        {
-                            ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_h_100 = this.sensorPanel1.GetSplitterControl("h_100").SplitterDistance;
-                            ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_v_100 = this.sensorPanel1.GetSplitterControl("v_100").SplitterDistance;
-                            ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_100 = this.chequeContainer.SplitterDistance;
-                            break;
-                        }
-                }
-            }
-        }
-
-        public void UpdateDiscountValues(DataTable order)
-        {
-            this.currentSubUnit = (byte)order.ExtendedProperties[CoreConst.STORE_NO];
-            try
-            {
-                this.clientID = order.ExtendedProperties[CoreConst.CLIENT_ID].ToString();
-            }
-            catch { }
-            this._fl_isReturnCheque = (bool)order.ExtendedProperties[CoreConst.IS_RET];
-
-            if (order.ExtendedProperties.ContainsKey(CoreConst.DISCOUNT))
-            {
-
-                Hashtable discount = (Hashtable)order.ExtendedProperties[CoreConst.DISCOUNT];
-
-                try
-                {
-                    this._fl_useTotDisc = (bool)discount[CoreConst.DISC_ALL_ITEMS];
-                    this.discArrPercent = (double[])discount[CoreConst.DISC_ARRAY_PERCENT];
-                    this.discArrCash = (double[])discount[CoreConst.DISC_ARRAY_CASH];
-                    this.discConstPercent = (double)discount[CoreConst.DISC_CONST_PERCENT];
-                    this.discOnlyCash = (double)discount[CoreConst.DISC_ONLY_CASH];
-                    this.discOnlyPercent = (double)discount[CoreConst.DISC_ONLY_PERCENT];
-                    this.discCommonPercent = (double)discount[CoreConst.DISC_FINAL_PERCENT];
-                    this.discCommonCash = (double)discount[CoreConst.DISC_FINAL_CASH];
-                    this.discApplied = (bool)discount[CoreConst.DISC_APPLIED];
-                }
-                catch { }
-                /*
-                chqInfo["DISC_ALL_ITEMS"] = this._fl_useTotDisc;
-                //Масив з значеннями знижки та надбавки в процентних значеннях
-                chqInfo["DISC_ARRAY_PERCENT"] = new double[2] { discArrPercent[0], discArrPercent[1] };
-                //Масив з значеннями знижки та надбавки в грошових значеннях
-                chqInfo["DISC_ARRAY_CASH"] = new double[2] { discArrCash[0], discArrCash[1] };
-                //Значення постійної знижки в процентному значенні
-                chqInfo["DISC_CONST_PERCENT"] = this.discConstPercent;
-                //Сума знижки і надбавки з процентними значеннями
-                chqInfo["DISC_ONLY_PERCENT"] = this.discOnlyPercent;
-                //Сума знижки і надбавки з грошовими значеннями
-                chqInfo["DISC_ONLY_CASH"] = this.discOnlyCash;
-                //Загальний коефіціент знижки в процентному значенні
-                chqInfo["DISC_FINAL_PERCENT"] = this.discCommonPercent;
-                //Загальний коефіціент знижки в грошовому значенні
-                chqInfo["DISC_FINAL_CASH"] = this.discCommonCash;
-                 */
-            }
-        }
-
-        public Hashtable PD_DiscountInfo
-        {
-            set { }
-            get
-            {
-                Hashtable chqInfo = DataWorkShared.GetStandartDiscountInfoStructure2();
-                //Якщо true то знижка чи надбавка діє на всі позиції(товари) чеку
-                chqInfo["DISC_ALL_ITEMS"] = this._fl_useTotDisc;
-                //Масив з значеннями знижки та надбавки в процентних значеннях
-                chqInfo["DISC_ARRAY_PERCENT"] = new double[2] { discArrPercent[0], discArrPercent[1] };
-                //Масив з значеннями знижки та надбавки в грошових значеннях
-                chqInfo["DISC_ARRAY_CASH"] = new double[2] { discArrCash[0], discArrCash[1] };
-                //Значення постійної знижки в процентному значенні
-                chqInfo["DISC_CONST_PERCENT"] = this.discConstPercent;
-                //Сума знижки і надбавки з процентними значеннями
-                chqInfo["DISC_ONLY_PERCENT"] = this.discOnlyPercent;
-                //Сума знижки і надбавки з грошовими значеннями
-                chqInfo["DISC_ONLY_CASH"] = this.discOnlyCash;
-                //Загальний коефіціент знижки в процентному значенні
-                chqInfo["DISC_FINAL_PERCENT"] = this.discCommonPercent;
-                //Загальний коефіціент знижки в грошовому значенні
-                chqInfo["DISC_FINAL_CASH"] = this.discCommonCash;
-                //Загальний коефіціент знижки в грошовому значенні
-                chqInfo["DISC_APPLIED"] = this.discApplied;
-                return chqInfo;
-            }
-        }
-
-        public bool[] PD_Statements
-        {
-            set { }
-            get { return new bool[3]; }
-        }
-
-        public DataTable PD_DEMO_Order
-        {
-            get
-            {
-                Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure();
-                // fill cheque structure
-                //chqInfo["DATA"] = this.Cheque.Copy();
-                chqInfo["STORE_NO"] = this.currentSubUnit;
-                chqInfo["CLIENT_ID"] = this.clientID;
-                chqInfo["IS_RET"] = this._fl_isReturnCheque;
-                chqInfo["IS_LEGAL"] = false;
-                chqInfo["ORDER_NO"] = string.Empty;
-                chqInfo["ORDER_SUMA"] = this.chqSUMA;
-                chqInfo["ORDER_REAL_SUMA"] = this.realSUMA;
-                chqInfo["TAX_SUMA"] = this.realSUMA;
-                chqInfo["TAX_BILL"] = this._fl_taxDocRequired;
-                chqInfo["DISCOUNT"] = this.PD_DiscountInfo;
-
-                object bill = this.Cheque.ExtendedProperties["BILL"];
-                DataWorkShared.UpdateExtendedProperties(this.Cheque, chqInfo);
-                this.Cheque.ExtendedProperties["BILL"] = bill;
-                /*
-                chqInfo["BILL_NO"] = string.Empty;
-                chqInfo["BILL_COMMENT"] = string.Empty;
-                if (this.Cheque.ExtendedProperties.Contains("BILL")) {
-                    //Номер рахунку
-                    chqInfo["BILL_NO"] = Cheque.ExtendedProperties["NOM"];
-                    //Коментр рахунку
-                    chqInfo["BILL_COMMENT"] = Cheque.ExtendedProperties["CMT"];
-                }*/
-                return this.Cheque;
-            }
-        }
-
-        public DataTable PD_Order
-        {
-            get
-            {
-                Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure(this.Cheque);
-                // fill cheque structure
-                //chqInfo["DATA"] = this.Cheque.Copy();
-                chqInfo["STORE_NO"] = this.currentSubUnit;
-                chqInfo["CLIENT_ID"] = this.clientID;
-                chqInfo["IS_RET"] = this._fl_isReturnCheque;
-                chqInfo["IS_LEGAL"] = false;
-                //chqInfo["ORDER_NO"] = string.Empty;
-                chqInfo["ORDER_SUMA"] = this.chqSUMA;
-                chqInfo["ORDER_REAL_SUMA"] = this.realSUMA;
-                chqInfo["TAX_SUMA"] = this.realSUMA;
-                chqInfo["TAX_BILL"] = this._fl_taxDocRequired;
-                chqInfo["DISCOUNT"] = this.PD_DiscountInfo;
-
-                DataWorkShared.UpdateExtendedProperties(this.Cheque, chqInfo);
-                /*
-                chqInfo["BILL_NO"] = string.Empty;
-                chqInfo["BILL_COMMENT"] = string.Empty;
-                if (this.Cheque.ExtendedProperties.Contains("BILL")) {
-                    //Номер рахунку
-                    chqInfo["BILL_NO"] = Cheque.ExtendedProperties["NOM"];
-                    //Коментр рахунку
-                    chqInfo["BILL_COMMENT"] = Cheque.ExtendedProperties["CMT"];
-                }*/
-                return this.Cheque;
-            }
-        }
-
-        public DataTable GetProfileOrder(object profileKey)
-        {
-            Hashtable _suma = (Hashtable)this.Summa[profileKey];
-            Hashtable _discount = (Hashtable)this.Discount[profileKey];
-            DataTable _cheque = this.Cheques.Tables[profileKey.ToString()];
-
-
-            Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure(_cheque);
-            Hashtable discInfo = DataWorkShared.GetStandartDiscountInfoStructure2();
-
-
-            /* initializing discount values */
-            bool _discApplied = CoreLib.GetValue<bool>(_discount, CoreConst.DISC_APPLIED);
-            double[] _discArrPercent = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_PERCENT);
-            double[] _discArrCash = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_CASH);
-            double _discConstPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_CONST_PERCENT);
-            double _discOnlyPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_ONLY_PERCENT);
-            double _discOnlyCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_ONLY_CASH);
-            double _discCommonPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_PERCENT);
-            double _discCommonCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_CASH);
-            /* calculation items */
-            double _realSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_REAL_SUMA);
-            double _chqSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_CHEQUE_SUMA);
-            double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_TAX_SUMA);
-
-            discInfo["DISC_ALL_ITEMS"] = this._fl_useTotDisc;
-            //Масив з значеннями знижки та надбавки в процентних значеннях
-            discInfo["DISC_ARRAY_PERCENT"] = new double[2] { _discArrPercent[0], _discArrPercent[1] };
-            //Масив з значеннями знижки та надбавки в грошових значеннях
-            discInfo["DISC_ARRAY_CASH"] = new double[2] { _discArrCash[0], _discArrCash[1] };
-            //Значення постійної знижки в процентному значенні
-            discInfo["DISC_CONST_PERCENT"] = _discConstPercent;
-            //Сума знижки і надбавки з процентними значеннями
-            discInfo["DISC_ONLY_PERCENT"] = _discOnlyPercent;
-            //Сума знижки і надбавки з грошовими значеннями
-            discInfo["DISC_ONLY_CASH"] = _discOnlyCash;
-            //Загальний коефіціент знижки в процентному значенні
-            discInfo["DISC_FINAL_PERCENT"] = _discCommonPercent;
-            //Загальний коефіціент знижки в грошовому значенні
-            discInfo["DISC_FINAL_CASH"] = _discCommonCash;
-            discInfo["DISC_APPLIED"] = _discApplied;
-
-            
-
-            chqInfo["STORE_NO"] = this.currentSubUnit;
-            chqInfo["CLIENT_ID"] = this.clientID;
-            chqInfo["IS_RET"] = this._fl_isReturnCheque;
-            chqInfo["IS_LEGAL"] = false;
-            chqInfo["ORDER_SUMA"] = _chqSUMA;
-            chqInfo["ORDER_REAL_SUMA"] = _realSUMA;
-            chqInfo["TAX_SUMA"] = _realSUMA;
-            chqInfo["TAX_BILL"] = this._fl_taxDocRequired;
-            chqInfo["DISCOUNT"] = discInfo;
-
-            DataWorkShared.UpdateExtendedProperties(_cheque, chqInfo);
-
-            return _cheque;
-        }
-
-        private void CreateOrderStructure(DataTable dtOrder)
-        {
-            Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure();
-            DataWorkShared.AppendExtendedProperties(dtOrder, chqInfo, true);
-        }
-
-        private void splitContainer1_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (this.splitContainer1.Orientation == Orientation.Vertical)
-                this.splitContainer1.SplitterDistance = this.splitContainer1.Width / 2;
-            else
-                this.splitContainer1.SplitterDistance = this.splitContainer1.Height / 2;
-        }
-
-        private void Navigator_OnFilterChanged(string filter, EventArgs e)
-        {
-            if (filter.Length == 0)
-                this.articleDGV.DataSource = this.Articles;
-            else
-            {
-                DataRow[] dr = this.Articles.Select("ID Like '" + filter + "%'");
-                DataTable sTable = this.Articles.Clone();
-                sTable.Clear();
-                sTable.BeginLoadData();
-                for (int i = 0; i < dr.Length; i++)
-                    sTable.Rows.Add(dr[i].ItemArray);
-                sTable.EndLoadData();
-                this.articleDGV.DataSource = sTable;
-            }
-            this.articleDGV.Select();
-        }
-
-        private void sensorPanel1_OnSensorButtonClicked(string buttonName, EventArgs e)
-        {
-            switch (buttonName)
-            {
-                case "up":
-                    {
-                        this.chequeDGV.Select();
-                        SendKeys.SendWait("{UP}");
-                        break;
-                    }
-                case "dn":
-                    {
-                        this.chequeDGV.Select();
-                        SendKeys.SendWait("{DOWN}");
-                        break;
-                    }
-                case "s_name":
-                    {
-                        Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_F5), new IntPtr(0));
-                        break;
-                    }
-                case "s_code":
-                    {
-                        Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_F6), new IntPtr(0));
-                        break;
-                    }
-                case "s_bcode":
-                    {
-                        Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_F7), new IntPtr(0));
-                        break;
-                    }
-                case "sub":
-                    {
-                        if (this.articleDGV.RowCount == 0)
-                            break;
-                        this.chequeDGV.Select();
-                        if (chequeDGV.CurrentRow != null)
-                        {
-                            //DataRow[] article = Articles.Select("ID =" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString());
-                            DataRow[] article = Articles.Select("ID =\'" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString() + "\'");
-                            if (article != null && article.Length == 1)
-                            {
-                                CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article[0], -ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles);
-                                SearchFilter(true, this.currSrchType, false);
-                            }
-                        }
-                        break;
-                    }
-                case "add":
-                    {
-                        if (this.articleDGV.RowCount == 0)
-                            break;
-                        /*
-                        if (this.articleDGV.Visible)
-                        {
-                            Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
-                            break;
-                        }
-                        
-                        if (this.currSrchType == 2 && this.SrchTbox.Text != string.Empty)
-                        {
-                            Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_F7), new IntPtr(0));
-                            Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
-                            break;
-                        }
-
-                        if (this.chequeDGV.Visible)
-                        {
-                            this.chequeDGV.Select();
-                            Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
-                            break;
+                            uw.Close();
+                            uw.Dispose();
                         }*/
+                        return;
+                    }
 
-                        this.chequeDGV.Select();
-                        if (chequeDGV.CurrentRow != null)
+                    /* next turn */
+                    currentProfileIndex++;
+                    continue;
+                }
+                //MessageBox.Show("done 2");
+
+                //this.DDM_Scanner.Value++;
+
+                /*if (!notificationIsActive)
+                {
+                    uw.ShowUpdate(this);
+                    uw.Update();
+                    uw.Refresh();
+                    notificationIsActive = true;
+                }*/
+
+
+                //this.DDM_Scanner.Value++;
+
+                /* loading */
+
+                //MessageBox.Show("done 3");
+                string[] localFiles = DataWorkSource.LoadFilesOnLocalTempFolder(files, de.Key);
+
+
+                //this.DDM_Scanner.Value++;
+
+                if (currentProfileIndex == 0)
+                    startupIndex = 0;
+                else
+                    startupIndex = Articles.Rows.Count;
+                object[] loadResult = DataWorkSource.LoadData(localFiles, _fl_onlyUpdate, de.Key, startupIndex);
+
+
+                //this.DDM_Scanner.Value++;
+
+                ConfigManager.SaveConfiguration();
+
+                /* adding data */
+
+
+                //this.DDM_Scanner.Value++;
+
+                //MessageBox.Show("done 4");
+
+                DataTable[] tables = (DataTable[])loadResult[0];
+                //_fl_artUpdated = (bool)loadResult[1];
+
+                //this.DDM_Scanner.Value++;
+
+                for (int i = 0; i < tables.Length; i++)
+                    if (tables[i] != null)
+                    {
+                        DataTable dt = new DataTable(tableNames[i] + "=" + de.Key);
+                        dt.Merge(tables[i]);
+                        this.ImportedData.Tables.Add(dt);
+                    }
+                
+                /*
+                if (tables[0] != null) {
+                    //Articles = tables[0].Copy();
+                    //DataRow[] dRows = Articles.Select("F = " + de.Key);
+                    //foreach (DataRow dr in dRows)
+                    //    dr.Delete();
+                    //Articles.Merge(tables[0]);
+                    //wasUpdatedAtLeastOneSource = true;
+                }
+                if (tables[1] != null)
+                {
+
+                    //AltBC = tables[1].Copy();
+                    //DataRow[] dRows = AltBC.Select("F = " + de.Key);
+                    //foreach (DataRow dr in dRows)
+                    //    dr.Delete();
+                    //AltBC.Merge(tables[1]);
+                    //wasUpdatedAtLeastOneSource = true;
+                }
+                if (tables[2] != null)
+                {
+                    //Cards = tables[2].Copy();
+                    //if (currentProfileIndex == 0)
+                    Cards.Rows.Clear();
+                    Cards.Merge(tables[2]);
+                    //wasUpdatedAtLeastOneSource = true;
+                }
+
+                */
+                //this.DDM_Scanner.Value++;
+
+                //MessageBox.Show("done 5");
+                currentProfileIndex++;
+
+            }
+            Com_WinApi.OutputDebugString("MainWnd --- AddingData End");
+        }
+
+        /* Checker callback */
+
+        // not ok
+        private void PostDataImportAction()
+        {
+            /*if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles && this.Cheques.Tables.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
+            {
+                DataWorkSource.CreateTables(ref Cheque, ref Articles, ref AltBC, ref Cards, ref Cheques);
+                this.CreateOrderStructure(this.Cheque);
+                foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
+                {
+                    this.CreateOrderStructure(this.Cheques.Tables[de.Key.ToString()]);
+                    this.Discount.Add(de.Key, DataWorkShared.GetStandartDiscountInfoStructure2());
+                    this.Summa.Add(de.Key, DataWorkShared.GetStandartCalculationInfoStructure2());
+                }
+            }
+            */
+            //if (this.Summa.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
+                this.InitChequeInformationStructure();
+
+
+            //bool notificationIsActive = false;
+            bool _fl_updated = false;
+            //uiWndUpdateWnd uw = new uiWndUpdateWnd(_fl_onlyUpdate);
+            List<string> allProfiles = new List<string>();
+            //foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
+            //    allProfiles.Add(de.Key.ToString());
+
+            foreach (DataTable dt in this.ImportedData.Tables)
+            {
+                // get profile name and data
+                // 0 - data name
+                // 1 - profile name
+                string[] prData = dt.TableName.Split(new[] { '=' });
+                string key = prData[1];
+
+                // add unique profile index
+                if (!allProfiles.Contains(key))
+                    allProfiles.Add(key);
+
+                switch (prData[0].ToUpper())
+                {
+                    case "PROD":
                         {
-                            DataRow[] article = Articles.Select("ID =\'" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString() + "\'");
-                            if (article != null && article.Length == 1)
-                            {
-                                CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article[0], ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles, false, false);
-                                SearchFilter(true, this.currSrchType, false);
-                            }
+                            //Articles = tables[0].Copy();
+                            DataRow[] dRows = Articles.Select("F = " + key);
+                            foreach (DataRow dr in dRows)
+                                dr.Delete();
+                            Articles.Merge(dt);
+                            //wasUpdatedAtLeastOneSource = true;
+                            _fl_updated = true;
+                            break;
                         }
-                        break;
-                    }
-                case "edit":
-                    {
-                        this.chequeDGV.Select();
-                        Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
-                        break;
-                    }
-                case "dell":
-                    {
-                        this.chequeDGV.Select();
-                        Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_CtrlDel), new IntPtr(0x100));
-                        break;
-                    }
-                case "dellall":
-                    {
-                        this.chequeDGV.Select();
-                        Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_CtrlShiftDel), new IntPtr(0x100));
-                        break;
-                    }
+                    case "ALT":
+                        {
+                            DataRow[] dRows = AltBC.Select("F = " + key);
+                            foreach (DataRow dr in dRows)
+                                dr.Delete();
+                            AltBC.Merge(dt);
+                            _fl_updated = true;
+                            break;
+                        }
+                    case "CARD":
+                        {
+                            Cards.Rows.Clear();
+                            Cards.Merge(dt);
+                            _fl_updated = true;
+                            break;
+                        }
+                }
 
-                case "sale":
-                    {
-                        Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_CtrlEnter), new IntPtr(0));
-                        break;
-                    }
-                case "nsale":
-                    {
-                        Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_CtrlShiftEnter), new IntPtr(0));
-                        break;
-                    }
-
-                case "bills":
-                    {
-                        this.всіРахункиToolStripMenuItem.PerformClick();
-                        break;
-                    }
-                case "billsave":
-                    {
-                        this.зберегтиРахунокToolStripMenuItem.PerformClick();
-                        break;
-                    }
-                case "billsaveprint":
-                    {
-                        this.зберегтиІДрукуватиToolStripMenuItem.PerformClick();
-                        break;
-                    }
-                case "billsaveprintclose":
-                    {
-                        this.ToolStripMenu_Bills_SavePrintAndClose.PerformClick();
-                        break;
-                    }
-                case "billsaveclose":
-                    {
-                        this.зберегтиІЗакритиToolStripMenuItem.PerformClick();
-                        break;
-                    }
-                case "billchangecomment":
-                    {
-                        this.змінитиКоментарToolStripMenuItem.PerformClick();
-                        break;
-                    }
             }
-        }
-        
-        private string readedBuyerBarCode = string.Empty;
-        private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
-        {
-            if (serialPort1.BytesToRead >= ConfigManager.Instance.CommonConfiguration.APP_BuyerBarCodeMinLen)
-            {
-                readedBuyerBarCode = serialPort1.ReadExisting().Trim('%', '?', '\r', '\n');
-            }
-        }
 
-        private void timer_buyer_ready_Tick(object sender, EventArgs e)
-        {
-            if (readedBuyerBarCode.Length != 0)
+            _fl_onlyUpdate = true;
+            _fl_subUnitChanged = false;
+            _fl_isOk = new Com_SecureRuntime().FullLoader();
+            label_uiWndmain_DemoShowArt.Visible = label_uiWndmain_DemoShowChq.Visible = !_fl_isOk;
+
+            if (_fl_updated)
             {
-                string dd = "C" + readedBuyerBarCode;
-                readedBuyerBarCode = "";
-                global::components.Components.WinApi.Com_WinApi.OutputDebugString("Received data = " + dd);
-                BCSearcher(dd, true);
+                /* Removing unused rows */
+                string cleanupQuery = string.Empty;
+                foreach (string existedProfiles in allProfiles)
+                {
+                    cleanupQuery += " F <> " + existedProfiles + " AND ";
+                }
+                cleanupQuery = cleanupQuery.Trim(new char[] { ' ', 'A', 'N', 'D' });
+                DataRow[] unusedRowsArt = Articles.Select(cleanupQuery);
+                DataRow[] unusedRowsAlt = AltBC.Select(cleanupQuery);
+                foreach (DataRow dr in unusedRowsArt)
+                    dr.Delete();
+                foreach (DataRow dr in unusedRowsAlt)
+                    dr.Delete();
+
+                if (this.WindowState == FormWindowState.Minimized)
+                    this.WindowState = FormWindowState.Normal;
+                //this.BringToFront();
+                MMessageBoxEx.Show(this.chequeDGV, "Були внесені зміни в базу товарів", Application.ProductName,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            SrchTbox.Select();
+            GC.Collect();
+
+            /* device status */
+            if (Program.AppPlugins.IsActive(PluginType.FPDriver))
+            {
                 try
                 {
-                    відмінитиЗнижкунадбавкуToolStripMenuItem.Enabled = true;
-                    відмінитиЗнижкунадбавкуToolStripMenuItem.Text = "Скасувати знижку";
+                    bool status = (bool)Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_SetCashier", ConfigManager.Instance.CommonConfiguration.APP_PayDesk, UserConfig.UserFpLogin, UserConfig.UserFpPassword, UserConfig.UserID);
+                    if (status)
+                        DDM_FPStatus.Image = Properties.Resources.ok;
+                    else
+                        DDM_FPStatus.Image = Properties.Resources.FpNotOk;
                 }
-                catch { }
+                catch { DDM_FPStatus.Image = Properties.Resources.FpNotOk; }
             }
+            else
+                DDM_FPStatus.Image = Properties.Resources.FpNotOk;
+            
         }
 
-
-
-        #region General Event Handlers
         #endregion
 
-        #region UI
+        #region Temp
+        private delegate void SetControlImageThreadSafeDelegate(Control control, string propertyName, Bitmap image);
+        private delegate void SetControlPropertyThreadSafeDelegate(Control control, string propertyName, object propertyValue);
+        public static void SetControlImageThreadSafe(Control control, string propertyName, Bitmap image)
+        {
+            if (control.InvokeRequired)
+            {
+                control.Invoke(new SetControlImageThreadSafeDelegate(SetControlPropertyThreadSafe), new object[] { control, propertyName, image });
+            }
+            else
+            {
+                control.GetType().InvokeMember(propertyName, System.Reflection.BindingFlags.SetProperty, null, control, new object[] { image });
+            }
+        }
+        public static void SetControlPropertyThreadSafe(Control control, string propertyName, object propertyValue)
+        {
+            if (control.InvokeRequired)
+            {
+                control.Invoke(new SetControlPropertyThreadSafeDelegate(SetControlPropertyThreadSafe), new object[] { control, propertyName, propertyValue });
+            }
+            else
+            {
+                control.GetType().InvokeMember(propertyName, System.Reflection.BindingFlags.SetProperty, null, control, new object[] { propertyValue });
+            }
+        }
+        private void innerActivateSearchBox()
+        {
+            if (SrchTbox.InvokeRequired)
+            {
+                this.Invoke(new MethodInvoker(innerActivateSearchBox));
+                return;
+            }
+
+            SrchTbox.Select();
+        }
         #endregion
 
-        #region Application Timers
-        #endregion
-
-        #region Application Properties
-        #endregion
-
-        #region Helpful Methods
-        #endregion
     }
 }

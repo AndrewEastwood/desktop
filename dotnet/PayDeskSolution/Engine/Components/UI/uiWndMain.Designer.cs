@@ -349,12 +349,12 @@
             // timer1
             // 
             this.timerExchangeImport.Interval = 1000;
-            this.timerExchangeImport.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timerExchangeImport.Tick += new System.EventHandler(this.timerExchangeImport_Tick);
             //
             // timerExchangeGrabber
             //
             this.timerExchangeScanner.Interval = 1000;
-            this.timerExchangeScanner.Tick += new System.EventHandler(this.timerExchangeGrabber_Tick);
+            this.timerExchangeScanner.Tick += new System.EventHandler(this.timerExchangeScanner_Tick);
             // 
             // folderBrowserDialog1
             // 
@@ -1297,7 +1297,7 @@
             // timer_buyer_ready
             // 
             this.timer_buyer_ready.Interval = 1000;
-            this.timer_buyer_ready.Tick += new System.EventHandler(this.timer_buyer_ready_Tick);
+            this.timer_buyer_ready.Tick += new System.EventHandler(this.timerBuyerReady_Tick);
             // 
             // serialPort1
             // 

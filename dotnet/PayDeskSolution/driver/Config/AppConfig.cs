@@ -78,7 +78,7 @@ namespace driver.Config
         public byte APP_PayDesk = 1;
         public string APP_ClientID = "";
         public string APP_SubUnitName = "";
-        public int APP_RefreshRate = 15000;
+        public int APP_RefreshRate = 60000;
         public double APP_StartTotal = 1;
         public string APP_Language = "";
         public int APP_Printer = 1;

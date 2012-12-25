@@ -613,7 +613,7 @@
             0,
             0});
             this.system_common_numericUpDown_refreshRate.Minimum = new decimal(new int[] {
-            15,
+            60,
             0,
             0,
             0});
@@ -621,7 +621,7 @@
             this.system_common_numericUpDown_refreshRate.Size = new System.Drawing.Size(120, 20);
             this.system_common_numericUpDown_refreshRate.TabIndex = 1034;
             this.system_common_numericUpDown_refreshRate.Value = new decimal(new int[] {
-            15,
+            60,
             0,
             0,
             0});
