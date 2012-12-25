@@ -5148,6 +5148,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
             //foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
             //    allProfiles.Add(de.Key.ToString());
 
+            // add all data
             foreach (DataTable dt in this.ImportedData.Tables)
             {
                 // get profile name and data
