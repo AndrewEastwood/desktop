@@ -222,6 +222,11 @@ namespace PayDesk.Components.UI
             timerDataImportSynchronizer = new System.Windows.Forms.Timer();
             timerDataImportSynchronizer.Interval = 50000;
             timerDataImportSynchronizer.Tick += new EventHandler(timerDataImportSynchronizer_Tick);
+
+
+            driver.Components.Profiles.ProfilesContainer profCont = new driver.Components.Profiles.ProfilesContainer();
+            profCont.initProfiles(ConfigManager.Instance.CommonConfiguration.PROFILES_Items);
+
         }
 
         ~uiWndMain()
@@ -3154,6 +3159,10 @@ namespace PayDesk.Components.UI
 
             currSrchType = SrchType;
         }
+
+        // will be removed after Profile2
+        // used in main menu bill section
+        // setup app values with loaded bill
         public void UpdateDiscountValues(DataTable order)
         {
             this.currentSubUnit = (byte)order.ExtendedProperties[CoreConst.STORE_NO];
@@ -3264,7 +3273,7 @@ namespace PayDesk.Components.UI
             Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure();
             DataWorkShared.AppendExtendedProperties(dtOrder, chqInfo, true);
         }
-
+        // ---
         
         // discount
         /// <summary>
@@ -3273,6 +3282,7 @@ namespace PayDesk.Components.UI
         /// </summary>
         /// <param name="updateCustomer">Якщо true то результати обчислення будуть ще виведені на дисплей ФП</param>
         /// 
+        // will be removed after Profile2
         private void UpdateSumInfo(bool updateCustomer)
         {
             UpdateSumInfo_single(updateCustomer);
@@ -3343,7 +3353,7 @@ namespace PayDesk.Components.UI
                 }
             }
         }
-
+        // will be removed after Profile2
         private void UpdateSumInfo_profile(object profileKey, bool updateCustomer)
         {
             //OnDeactivate(EventArgs.Empty);
@@ -3623,7 +3633,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
             return;
             //winapi.Funcs.OutputDebugString("Z");
         }//ok
-
+        // will be removed after Profile2
         private void UpdateSumInfo_single(bool updateCustomer)
         {
             //OnDeactivate(EventArgs.Empty);
