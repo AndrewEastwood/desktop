@@ -33,6 +33,15 @@ namespace driver.Components.Profiles
         {
             this.id = id;
             this.name = name;
+
+            saleItems = new DataTable();
+            products = new DataTable();
+            alternateBarcodes = new DataTable();
+            customerProgramCards = new DataTable();
+
+            cashInfo = new Hashtable();
+            props = new Hashtable();
+
             this.setup();
         }
 
@@ -49,7 +58,8 @@ namespace driver.Components.Profiles
         public string Name { get { return this.name; } }
         public string ID { get { return this.id; } }
         public ProfilesContainer Parent { set { parent = value; } get { return parent; } }
-        public DataTable Order { get { return saleItems; } set { saleItems = value; } }
+        public DataTable Order { get { return getOrder(); } }
+        public DataTable Products { get { return getProducts(); } }
         public Hashtable Cash { get { return this.cashInfo; } set { this.cashInfo = value; } }
 
         /*  */
@@ -325,7 +335,14 @@ namespace driver.Components.Profiles
         }
 
         /* data access and management */
-
+        public DataTable getProducts()
+        {
+            return new DataTable();
+        }
+        public DataTable getOrder()
+        {
+            return new DataTable();
+        }
         public DataTable getOrder(bool reinit)
         {
             // * Hashtable _suma = (Hashtable)this.Summa[profileKey];
@@ -411,78 +428,10 @@ namespace driver.Components.Profiles
 
             return default(T);
         }
-        public DataTable getOrderDocument () {
-            return null;
-        }
-
-
-        public DataTable GetProfileOrder(object profileKey)
-        {
-            Hashtable _suma = (Hashtable)this.Summa[profileKey];
-            Hashtable _discount = (Hashtable)this.Discount[profileKey];
-            DataTable _cheque = this.Cheques.Tables[profileKey.ToString()];
-
-
-            Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure(_cheque);
-            Hashtable discInfo = DataWorkShared.GetStandartDiscountInfoStructure2();
-
-
-            /* initializing discount values */
-            bool _discApplied = CoreLib.GetValue<bool>(_discount, CoreConst.DISC_APPLIED);
-            double[] _discArrPercent = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_PERCENT);
-            double[] _discArrCash = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_CASH);
-            double _discConstPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_CONST_PERCENT);
-            double _discOnlyPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_ONLY_PERCENT);
-            double _discOnlyCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_ONLY_CASH);
-            double _discCommonPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_PERCENT);
-            double _discCommonCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_CASH);
-            /* calculation items */
-            double _realSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_REAL_SUMA);
-            double _chqSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_CHEQUE_SUMA);
-            double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_TAX_SUMA);
-
-            discInfo["DISC_ALL_ITEMS"] = this._fl_useTotDisc;
-            //Масив з значеннями знижки та надбавки в процентних значеннях
-            discInfo["DISC_ARRAY_PERCENT"] = new double[2] { _discArrPercent[0], _discArrPercent[1] };
-            //Масив з значеннями знижки та надбавки в грошових значеннях
-            discInfo["DISC_ARRAY_CASH"] = new double[2] { _discArrCash[0], _discArrCash[1] };
-            //Значення постійної знижки в процентному значенні
-            discInfo["DISC_CONST_PERCENT"] = _discConstPercent;
-            //Сума знижки і надбавки з процентними значеннями
-            discInfo["DISC_ONLY_PERCENT"] = _discOnlyPercent;
-            //Сума знижки і надбавки з грошовими значеннями
-            discInfo["DISC_ONLY_CASH"] = _discOnlyCash;
-            //Загальний коефіціент знижки в процентному значенні
-            discInfo["DISC_FINAL_PERCENT"] = _discCommonPercent;
-            //Загальний коефіціент знижки в грошовому значенні
-            discInfo["DISC_FINAL_CASH"] = _discCommonCash;
-            discInfo["DISC_APPLIED"] = _discApplied;
-
-
-
-            chqInfo["STORE_NO"] = this.currentSubUnit;
-            chqInfo["CLIENT_ID"] = this.clientID;
-            chqInfo["IS_RET"] = this._fl_isReturnCheque;
-            chqInfo["IS_LEGAL"] = false;
-            chqInfo["ORDER_SUMA"] = _chqSUMA;
-            chqInfo["ORDER_REAL_SUMA"] = _realSUMA;
-            chqInfo["TAX_SUMA"] = _realSUMA;
-            chqInfo["TAX_BILL"] = this._fl_taxDocRequired;
-            chqInfo["DISCOUNT"] = discInfo;
-
-            DataWorkShared.UpdateExtendedProperties(_cheque, chqInfo);
-
-            return _cheque;
-        }
-        
-        
-
-
-
         // used
         // * public void UpdateDiscountValues(DataTable order)
         public void initProfileByOrder(DataTable order)
-        {
+        {/*
             this.currentSubUnit = (byte)order.ExtendedProperties[CoreConst.STORE_NO];
             try
             {
@@ -525,8 +474,8 @@ namespace driver.Components.Profiles
                 chqInfo["DISC_FINAL_PERCENT"] = this.discCommonPercent;
                 //Загальний коефіціент знижки в грошовому значенні
                 chqInfo["DISC_FINAL_CASH"] = this.discCommonCash;
-                 */
-            }
+                 * /
+            }*/
         }
         // * private void CreateOrderStructure(DataTable dtOrder)
         public void initOrderStructure(DataTable dtOrder)

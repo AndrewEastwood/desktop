@@ -38,6 +38,7 @@ using components.Components.HashObject;
 using components.Public;
 using components.UI.Controls;
 using System.Threading;
+using driver.Components.Profiles;
 //using comport;
 /*
  * Notes:
@@ -114,6 +115,9 @@ namespace PayDesk.Components.UI
         private string readedBuyerBarCode = string.Empty;
         /* new data */
         components.Components.DataContainer.DataContainer dataContainer2;
+
+        /* profiles 2.0  */
+        private ProfilesContainer profileCnt;
 
         private System.Windows.Forms.Timer timerDataImportSynchronizer;
 
@@ -223,9 +227,7 @@ namespace PayDesk.Components.UI
             timerDataImportSynchronizer.Interval = 50000;
             timerDataImportSynchronizer.Tick += new EventHandler(timerDataImportSynchronizer_Tick);
 
-
-            driver.Components.Profiles.ProfilesContainer profCont = new driver.Components.Profiles.ProfilesContainer();
-            profCont.initProfiles(ConfigManager.Instance.CommonConfiguration.PROFILES_Items);
+            profileCnt = new ProfilesContainer();
 
         }
 
@@ -4987,7 +4989,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
             Hashtable filesToImport = new Hashtable();
             int currentProfileIndex = 0;
             int startupIndex = 0;
-            string[] tableNames = { "PROD", "ALT", "CARD" };
+            string[] tableNames = { "PRODUCT", "ALTBC", "DCARD" };
             // check new data existance
             DataWorkSource.CheckForUpdate(ref filesToImport);
 
@@ -5157,6 +5159,8 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
             //foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
             //    allProfiles.Add(de.Key.ToString());
 
+            profileCnt.setupData(ImportedData);
+
             // add all data
             foreach (DataTable dt in this.ImportedData.Tables)
             {
@@ -5233,6 +5237,10 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
 
             SrchTbox.Select();
             GC.Collect();
+
+
+
+            DataTable ddt = profileCnt.dataGetProducts();
 
             /* device status */
             if (Program.AppPlugins.IsActive(PluginType.FPDriver))
