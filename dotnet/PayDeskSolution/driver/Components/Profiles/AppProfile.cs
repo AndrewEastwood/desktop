@@ -14,70 +14,178 @@ namespace driver.Components.Profiles
         // container link
         private ProfilesContainer parent;
 
+        /* data */
+        // data must be used in the default profile only
+        private Dictionary<DataType, DataTable> data = new Dictionary<DataType, DataTable>();
+        private Hashtable props = new Hashtable();
+
         // profile data
         private string id;
         private string name;
-        private DataTable saleItems;
-        private DataTable products;
-        private DataTable alternateBarcodes;
-        private DataTable customerProgramCards;
-
-        // Order Data
-        private Hashtable cashInfo;
-        private Hashtable props;
+        private string productFilter;
 
         // triggers
         private bool trExchangeAccessError;
 
         public AppProfile(string id, string name)
+            : this(id, name, "%")
+        {
+        }
+        public AppProfile(string id, string name, string filter)
         {
             this.id = id;
             this.name = name;
-
-            saleItems = new DataTable();
-            products = new DataTable();
-            alternateBarcodes = new DataTable();
-            customerProgramCards = new DataTable();
-
-            cashInfo = new Hashtable();
-            props = new Hashtable();
-
-            this.setup();
+            this.productFilter = filter;
+            this.props = getEmptyProperties();
         }
 
         /* setup */
-
-        private void setup()
+        public Hashtable getEmptyProperties()
         {
-            initCashStructure(Cash);
-            initOrderStructure(Order);
+            if (!this.isDefaultProfile())
+                return Container.Default.getEmptyProperties();
+            
+            Hashtable props = new Hashtable();
+
+            // Append Order General Info Block
+            // -----------
+            props.Add(CoreConst.STORE_NO, Container.Configuration.CommonConfiguration.APP_SubUnit);
+            // Default Client ID
+            props.Add(CoreConst.CLIENT_ID, string.Empty);
+            // Detect if cheque is retiermant
+            props.Add(CoreConst.IS_RET, false);
+            // Determinate that cheque is legal
+            props.Add(CoreConst.IS_LEGAL, false);
+            // Discount Structure
+            // ***** props.Add(CoreConst.DISCOUNT, null);
+            // Payment Structure
+            // ****** props.Add(CoreConst.PAYMENT, null);
+            // Payment Structure
+            // ****** props.Add(CoreConst.BILL, null);
+
+            // Cash Block
+            // ------------
+            // Cheque Number
+            props.Add(CoreConst.ORDER_NO, null);
+            // Cheque Suma with all discounts
+            // * props.Add(CoreConst.ORDER_SUMA, null);
+            // Cheque real suma (without discount)
+            // * props.Add(CoreConst.ORDER_REAL_SUMA, null);
+            // Cheque's tax suma
+            // * props.Add(CoreConst.TAX_SUMA, null);
+            // Determinate if this cheque need tax bill
+            props.Add(CoreConst.TAX_BILL, null);
+
+
+            // Discount block
+            // ------------
+            props.Add(CoreConst.CALC_CHEQUE_SUMA, 0.0);
+            // 
+            props.Add(CoreConst.CALC_REAL_SUMA, 0.0);
+            // 
+            props.Add(CoreConst.CALC_TAX_SUMA, 0.0);
+
+            // 
+            //Якщо true то знижка чи надбавка діє на всі позиції(товари) чеку
+            props.Add(CoreConst.DISC_ALL_ITEMS, false);
+            //Масив з значеннями знижки та надбавки в процентних значеннях
+            props.Add(CoreConst.DISC_ARRAY_PERCENT, new double[2]);
+            //Масив з значеннями знижки та надбавки в грошових значеннях
+            props.Add(CoreConst.DISC_ARRAY_CASH, new double[2]);
+            //Значення постійної знижки в процентному значенні
+            props.Add(CoreConst.DISC_CONST_PERCENT, 0.0);
+            //Сума знижки і надбавки з процентними значеннями
+            props.Add(CoreConst.DISC_ONLY_PERCENT, 0.0);
+            //Сума знижки і надбавки з грошовими значеннями
+            props.Add(CoreConst.DISC_ONLY_CASH, 0.0);
+            //Загальний коефіціент знижки в процентному значенні
+            props.Add(CoreConst.DISC_FINAL_PERCENT, 0.0);
+            //Загальний коефіціент знижки в грошовому значенні
+            props.Add(CoreConst.DISC_FINAL_CASH, 0.0);
+            //Загальний коефіціент знижки в грошовому значенні
+            props.Add(CoreConst.DISC_APPLIED, false);
+
+            return props;
         }
 
         /* properties */
 
+        // profile specific data
+        public ProfilesContainer Container { set { parent = value; } get { return parent; } }
         public string Name { get { return this.name; } }
         public string ID { get { return this.id; } }
-        public ProfilesContainer Parent { set { parent = value; } get { return parent; } }
+        public string ProductFilter { get { return this.productFilter; } set { productFilter = value; } }
+        
+        // profile dynamic data
         public DataTable Order { get { return getOrder(); } }
         public DataTable Products { get { return getProducts(); } }
-        public Hashtable Cash { get { return this.cashInfo; } set { this.cashInfo = value; } }
-
-        /*  */
-
-        public void calcCash()
+        public Hashtable Properties { get { return getProperties(); } }
+        public Dictionary<DataType, DataTable> Data
         {
-            //*bool useConstDisc = discArrPercent[0] == 0.0 && discArrPercent[1] == 0.0 &&
-            //*    discArrCash[0] == 0.0 && discArrCash[1] == 0.0;
-            double[] _discArrP = getCashValue<double[]>(CoreConst.DISC_ARRAY_PERCENT);
-            double[] _discArrC = getCashValue<double[]>(CoreConst.DISC_ARRAY_CASH);
-            bool useConstDisc = _discArrP[0] == 0 && _discArrP[1] == 0 && _discArrC[0] == 0 && _discArrC[1] == 0;
+            get
+            {
+                if (!this.isDefaultProfile())
+                    return Container.Default.Data;
+                return data;
+            }
+            set
+            {
+                if (this.isDefaultProfile())
+                    data = value;
+                else
+                    Container.Default.Data = value;
+            }
+        }
 
+        /* in progress */
+
+        public T getPropertyValue<T>(string key)
+        {
+            if (this.isDefaultProfile())
+            {
+                if (!Properties.ContainsKey(key))
+                    return default(T);
+
+                object val = Properties[key];
+
+                try
+                {
+                    return components.Lib.TypeConv.ConvertTo<T>(val);
+                }
+                catch (Exception ex) { CoreLib.WriteLog(ex, "driver.Components.Profiles.AppProfile@getdataPropsValue"); }
+
+                return default(T);
+            }
+            
+            return Container.Default.getPropertyValue<T>(key);
+        }
+
+        public void setProperties(string key, object value)
+        {
+            if (this.isDefaultProfile())
+            {
+                props[key] = value;
+            }
+            else
+                Container.Default.setProperties(key, value);
+        }
+
+        public Hashtable getProperties()
+        {
+            // Hashtable props = new Hashtable();
+            DataTable _local_order = this.Order;
+
+            //*bool useConstDisc = discArrPercent[0] == 0.0 && discArrPercent[1] == 0.0 &&
+            //*    discArrdataProps[0] == 0.0 && discArrdataProps[1] == 0.0;
+            double[] _discArrP = getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT);
+            double[] _discArrC = getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH);
+            bool useConstDisc = _discArrP[0] == 0 && _discArrP[1] == 0 && _discArrC[0] == 0 && _discArrC[1] == 0;
 
             // Get discount value
             if (useConstDisc)
             {
                 // * discConstPercent = 0.0;
-                Cash[CoreConst.DISC_CONST_PERCENT] = 0.0;
+                props[CoreConst.DISC_CONST_PERCENT] = 0.0;
 
                 //form "sum" by static discount
                 // **** if (ConfigManager.Instance.CommonConfiguration.APP_UseStaticDiscount)
@@ -89,26 +197,26 @@ namespace driver.Components.Profiles
             else
             {
                 // * discOnlyPercent = discArrPercent[0] + discArrPercent[1];
-                // * discOnlyCash = discArrCash[0] + discArrCash[1];
+                // * discOnlydataProps = discArrdataProps[0] + discArrdataProps[1];
                 // * discOnlyPercent = MathLib.GetRoundedMoney(discOnlyPercent);
-                // * discOnlyCash = MathLib.GetRoundedMoney(discOnlyCash);
+                // * discOnlydataProps = MathLib.GetRoundedMoney(discOnlydataProps);
 
-                Cash[CoreConst.DISC_ONLY_PERCENT] = MathLib.GetRoundedMoney(_discArrP[0] + _discArrP[1]);
-                Cash[CoreConst.DISC_ONLY_CASH] = MathLib.GetRoundedMoney(_discArrC[0] + _discArrC[1]);
+                props[CoreConst.DISC_ONLY_PERCENT] = MathLib.GetRoundedMoney(_discArrP[0] + _discArrP[1]);
+                props[CoreConst.DISC_ONLY_CASH] = MathLib.GetRoundedMoney(_discArrC[0] + _discArrC[1]);
             }
 
             //if (Cheque.Rows.Count == 0)
-            if (saleItems.Rows.Count == 0)
+            if (_local_order.Rows.Count == 0)
             {
                 //realSUMA = chqSUMA = taxSUMA = 0.0;
-                Cash[CoreConst.CALC_REAL_SUMA] = 0.0;
-                Cash[CoreConst.CALC_CHEQUE_SUMA] = 0.0;
-                Cash[CoreConst.CALC_TAX_SUMA] = 0.0;
+                props[CoreConst.CALC_REAL_SUMA] = 0.0;
+                props[CoreConst.CALC_CHEQUE_SUMA] = 0.0;
+                props[CoreConst.CALC_TAX_SUMA] = 0.0;
 
-                 
+
                 // ???? UpdateSumDisplay(false, updateCustomer);
-                // this.PD_EmptyOrder;
-                return;
+                // this.PD_Empty_local_order;
+                // *** return props;
             }
 
             int i = 0;
@@ -124,20 +232,20 @@ namespace driver.Components.Profiles
             if (useConstDisc)
             {
                 // * discCommonPercent = discConstPercent;
-                Cash[CoreConst.DISC_FINAL_PERCENT] = Cash[CoreConst.DISC_CONST_PERCENT];
+                props[CoreConst.DISC_FINAL_PERCENT] = props[CoreConst.DISC_CONST_PERCENT];
             }
             else
             {
                 //discCommonPercent = discOnlyPercent;
-                Cash[CoreConst.DISC_FINAL_PERCENT] = Cash[CoreConst.DISC_ONLY_PERCENT];
+                props[CoreConst.DISC_FINAL_PERCENT] = props[CoreConst.DISC_ONLY_PERCENT];
             }
             if (discSUMA != 0.0)
             {
-                // * discCommonPercent += (discOnlyCash * 100) / discSUMA;
-                Cash[CoreConst.DISC_FINAL_PERCENT] = getCashValue<double>(CoreConst.DISC_FINAL_PERCENT) + (getCashValue<double>(CoreConst.DISC_ONLY_CASH) * 100) / discSUMA;
+                // * discCommonPercent += (discOnlydataProps * 100) / discSUMA;
+                props[CoreConst.DISC_FINAL_PERCENT] = getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT) + (getPropertyValue<double>(CoreConst.DISC_ONLY_CASH) * 100) / discSUMA;
             }
             // * discCommonPercent = MathLib.GetRoundedMoney(discCommonPercent);
-            Cash[CoreConst.DISC_FINAL_PERCENT] = MathLib.GetRoundedMoney(getCashValue<double>(CoreConst.DISC_FINAL_PERCENT));
+            props[CoreConst.DISC_FINAL_PERCENT] = MathLib.GetRoundedMoney(getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT));
 
             // restore native cheque sum
             // and set price acording to client's discount card
@@ -146,24 +254,24 @@ namespace driver.Components.Profiles
             double newTmpPrice = 0.0; //bool isSet = false;
             Hashtable profileDefinedTaxGrid = new Hashtable();
             Hashtable profileCompatibleTaxGrid = new Hashtable();
-            for (i = 0; i < saleItems.Rows.Count; i++)
+            for (i = 0; i < _local_order.Rows.Count; i++)
             {
-                newPrice = MathLib.GetDouble(saleItems.Rows[i]["ORIGPRICE"]);
+                newPrice = MathLib.GetDouble(_local_order.Rows[i]["ORIGPRICE"]);
 
                 //isSet = false;
-                if (parent.valueOfClientPriceNo != 0)
+                if (Container.valueOfClientPriceNo != 0)
                 {
-                    newTmpPrice = MathLib.GetDouble(saleItems.Rows[i]["PR" + this.parent.valueOfClientPriceNo].ToString());
+                    newTmpPrice = MathLib.GetDouble(_local_order.Rows[i]["PR" + Container.valueOfClientPriceNo].ToString());
                     if (newTmpPrice != 0.0) newPrice = newTmpPrice;
                 }
                 else if (UserConfig.Properties[8])
                 {
                     //DataRow dRow = Cheque.Rows.Find(chequeDGV.CurrentRow.Cells["C"].Value);
                     //price = AppFunc.AutomaticPrice(thisTot, dRow);
-                    double _newPrice = CoreLib.AutomaticPrice(MathLib.GetDouble(saleItems.Rows[i]["TOT"].ToString()), saleItems.Rows[i]);
+                    double _newPrice = CoreLib.AutomaticPrice(MathLib.GetDouble(_local_order.Rows[i]["TOT"].ToString()), _local_order.Rows[i]);
                     try
                     {
-                        profileDefinedTaxGrid = (Hashtable)driver.Config.ConfigManager.Instance.CommonConfiguration.TAX_DefinedRates[saleItems.Rows[i]["F"]];
+                        profileDefinedTaxGrid = (Hashtable)driver.Config.ConfigManager.Instance.CommonConfiguration.TAX_DefinedRates[_local_order.Rows[i]["F"]];
                     }
                     catch { }
                     // new tax mode
@@ -171,7 +279,7 @@ namespace driver.Components.Profiles
                     try
                     {
                         // get application tax char with compatible tax grid
-                        string[] definedTaxData = profileDefinedTaxGrid[saleItems.Rows[i]["VG"].ToString()].ToString().Split(';');
+                        string[] definedTaxData = profileDefinedTaxGrid[_local_order.Rows[i]["VG"].ToString()].ToString().Split(';');
                         _thisRowCanUseDiscount = Boolean.Parse(definedTaxData[1]);
                     }
                     catch { }
@@ -182,19 +290,19 @@ namespace driver.Components.Profiles
                         double _discountPrices = 0.0;
                         //for (int ii = 0; ii < Cheque.Rows.Count; ii++)
                         //{
-                        if (_newPrice != (double)saleItems.Rows[i]["ORIGPRICE"])
+                        if (_newPrice != (double)_local_order.Rows[i]["ORIGPRICE"])
                         {
-                            _discountPrices = 100 - _newPrice * 100 / (double)saleItems.Rows[i]["ORIGPRICE"];
+                            _discountPrices = 100 - _newPrice * 100 / (double)_local_order.Rows[i]["ORIGPRICE"];
                             // * if (_discountPrices > discCommonPercent)
-                            if (_discountPrices > getCashValue<double>(CoreConst.DISC_FINAL_PERCENT))
+                            if (_discountPrices > getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT))
                             {
-                                saleItems.Rows[i]["USEDDISC"] = Boolean.FalseString;
+                                _local_order.Rows[i]["USEDDISC"] = Boolean.FalseString;
                                 newPrice = _newPrice;
                             }
                             else
                             {
-                                saleItems.Rows[i]["USEDDISC"] = Boolean.TrueString;
-                                newPrice = MathLib.GetDouble(saleItems.Rows[i]["ORIGPRICE"]);
+                                _local_order.Rows[i]["USEDDISC"] = Boolean.TrueString;
+                                newPrice = MathLib.GetDouble(_local_order.Rows[i]["ORIGPRICE"]);
                             }
                         }
                         else newPrice = _newPrice;
@@ -204,48 +312,48 @@ namespace driver.Components.Profiles
                 }
                 else if (UserConfig.Properties[1] || UserConfig.Properties[2])
                 {
-                    newPrice = MathLib.GetDouble(saleItems.Rows[i]["PRICE"]);
+                    newPrice = MathLib.GetDouble(_local_order.Rows[i]["PRICE"]);
                 }
-                saleItems.Rows[i]["PRICE"] = newPrice;
-                saleItems.Rows[i]["ASUM"] = saleItems.Rows[i]["SUM"] = MathLib.GetRoundedMoney(MathLib.GetDouble(saleItems.Rows[i]["TOT"].ToString()) * newPrice);
-                saleItems.Rows[i]["DISC"] = 0.0;
+                _local_order.Rows[i]["PRICE"] = newPrice;
+                _local_order.Rows[i]["ASUM"] = _local_order.Rows[i]["SUM"] = MathLib.GetRoundedMoney(MathLib.GetDouble(_local_order.Rows[i]["TOT"].ToString()) * newPrice);
+                _local_order.Rows[i]["DISC"] = 0.0;
             }
-            // * chqSUMA = (double)saleItems.Compute("sum(SUM)", "");
+            // * chqSUMA = (double)_local_order.Compute("sum(SUM)", "");
             // * chqSUMA = MathLib.GetRoundedMoney(chqSUMA);
             // * realSUMA = chqSUMA;
-            Cash[CoreConst.CALC_CHEQUE_SUMA] = MathLib.GetRoundedMoney((double)saleItems.Compute("sum(SUM)", ""));
-            Cash[CoreConst.CALC_REAL_SUMA] = Cash[CoreConst.CALC_CHEQUE_SUMA];
+            props[CoreConst.CALC_CHEQUE_SUMA] = MathLib.GetRoundedMoney((double)_local_order.Compute("sum(SUM)", ""));
+            props[CoreConst.CALC_REAL_SUMA] = props[CoreConst.CALC_CHEQUE_SUMA];
 
             //select rows with discount mode
             try
             {
-                dRows = saleItems.Select("USEDDISC = " + Boolean.TrueString);
-                // * _fl_useTotDisc = (dRows.Length == saleItems.Rows.Count);
-                parent.triggerUseTotDisc = (dRows.Length == saleItems.Rows.Count);
-                
+                dRows = _local_order.Select("USEDDISC = " + Boolean.TrueString);
+                // * _fl_useTotDisc = (dRows.Length == _local_order.Rows.Count);
+                Container.triggerUseTotDisc = (dRows.Length == _local_order.Rows.Count);
+
                 //discSUMA = (double)Cheque.Compute("Sum(SUM)", "USEDDISC = " + Boolean.TrueString);
-                object d = saleItems.Compute("Sum(SUM)", "USEDDISC = " + Boolean.TrueString);
+                object d = _local_order.Compute("Sum(SUM)", "USEDDISC = " + Boolean.TrueString);
                 if (d != DBNull.Value)
                     double.TryParse(d.ToString(), out discSUMA);
                 if (dRows.Length == 0)
                 {
                     // * this.discApplied = false;
-                    Cash[CoreConst.DISC_APPLIED] = false;
+                    props[CoreConst.DISC_APPLIED] = false;
                 }
                 else
-                    Cash[CoreConst.DISC_APPLIED] = true; // * this.discApplied = true;
+                    props[CoreConst.DISC_APPLIED] = true; // * this.discApplied = true;
             }
             catch { };
 
 
             DataRow[] prRows = null;
             // * if (this.clientPriceNo != 0)
-            if (parent.valueOfClientPriceNo!= 0)
-                prRows = saleItems.Select("PR" + parent.valueOfClientPriceNo + " <> 0");
+            if (Container.valueOfClientPriceNo != 0)
+                prRows = _local_order.Select("PR" + Container.valueOfClientPriceNo + " <> 0");
 
 
             // * if (_fl_useTotDisc && prRows == null)
-            if (Parent.triggerUseTotDisc && prRows == null)
+            if (Container.triggerUseTotDisc && prRows == null)
             {
                 //obrahunok realnoi sumu cheku zi znugkojy
                 if (useConstDisc)
@@ -253,286 +361,150 @@ namespace driver.Components.Profiles
                     // * dValue = (discConstPercent * discSUMA) / 100;
                     // * dValue = MathLib.GetRoundedMoney(dValue);
                     // * realSUMA -= dValue;
-                    dValue = MathLib.GetRoundedMoney((getCashValue<double>(CoreConst.DISC_CONST_PERCENT) * discSUMA) / 100);
+                    dValue = MathLib.GetRoundedMoney((getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT) * discSUMA) / 100);
                 }
                 else
                 {
                     // * dValue = (discOnlyPercent * discSUMA) / 100;
                     // * dValue = MathLib.GetRoundedMoney(dValue);
                     // * realSUMA -= dValue;
-                    // * realSUMA -= discOnlyCash;
+                    // * realSUMA -= discOnlydataProps;
 
-                    dValue = MathLib.GetRoundedMoney((getCashValue<double>(CoreConst.DISC_CONST_PERCENT) * discSUMA) / 100);
-                    Cash[CoreConst.CALC_REAL_SUMA] = getCashValue<double>(CoreConst.CALC_REAL_SUMA) - dValue - getCashValue<double>(CoreConst.DISC_ONLY_CASH);
+                    dValue = MathLib.GetRoundedMoney((getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT) * discSUMA) / 100);
+                    props[CoreConst.CALC_REAL_SUMA] = getPropertyValue<double>(CoreConst.CALC_REAL_SUMA) - dValue - getPropertyValue<double>(CoreConst.DISC_ONLY_CASH);
                 }
             }
             else
             {
                 // * _fl_useTotDisc = false;
-                Parent.triggerUseTotDisc = false;
+                Container.triggerUseTotDisc = false;
                 for (i = 0; i < dRows.Length; i++)
                 {
                     // don't use discount when client want to has another price for current article
                     // * if (this.clientPriceNo != 0 && MathLib.GetDouble(dRows[i]["PR" + this.clientPriceNo].ToString()) > 0.0)
-                    if (Parent.valueOfClientPriceNo != 0 && MathLib.GetDouble(dRows[i]["PR" + Parent.valueOfClientPriceNo].ToString()) > 0.0)
+                    if (Container.valueOfClientPriceNo != 0 && MathLib.GetDouble(dRows[i]["PR" + Container.valueOfClientPriceNo].ToString()) > 0.0)
                     {
                         dRows[i]["DISC"] = 0.0;
                         continue;
                     }
-                    dRows[i]["DISC"] = getCashValue<double>(CoreConst.DISC_FINAL_PERCENT);
-                    dValue = (getCashValue<double>(CoreConst.DISC_FINAL_PERCENT) * (double)dRows[i]["SUM"]) / 100;
+                    dRows[i]["DISC"] = getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT);
+                    dValue = (getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT) * (double)dRows[i]["SUM"]) / 100;
                     dValue = (double)dRows[i]["SUM"] - dValue;
                     dRows[i]["ASUM"] = MathLib.GetRoundedMoney(dValue);
                 }
-                // * realSUMA = (double)saleItems.Compute("Sum(ASUM)", "");
-                Cash[CoreConst.CALC_REAL_SUMA] = (double)saleItems.Compute("Sum(ASUM)", "");
+                // * realSUMA = (double)_local_order.Compute("Sum(ASUM)", "");
+                props[CoreConst.CALC_REAL_SUMA] = (double)_local_order.Compute("Sum(ASUM)", "");
             }
-            Cash[CoreConst.CALC_REAL_SUMA] = MathLib.GetRoundedMoney(getCashValue<double>(CoreConst.CALC_REAL_SUMA));
+            props[CoreConst.CALC_REAL_SUMA] = MathLib.GetRoundedMoney(getPropertyValue<double>(CoreConst.CALC_REAL_SUMA));
 
             //vuvedennja zagalnogo koeficientu znugku v 2oh tupah
             //groshovuj koeficient
-            // * discCommonCash = chqSUMA - realSUMA;
-            // * discCommonCash = MathLib.GetRoundedMoney(discCommonCash);
-            Cash[CoreConst.DISC_ONLY_CASH] = MathLib.GetRoundedMoney(getCashValue<double>(CoreConst.CALC_CHEQUE_SUMA) - getCashValue<double>(CoreConst.DISC_FINAL_CASH));
+            // * discCommondataProps = chqSUMA - realSUMA;
+            // * discCommondataProps = MathLib.GetRoundedMoney(discCommondataProps);
+            props[CoreConst.DISC_ONLY_CASH] = MathLib.GetRoundedMoney(getPropertyValue<double>(CoreConst.CALC_CHEQUE_SUMA) - getPropertyValue<double>(CoreConst.DISC_FINAL_CASH));
 
             // calculating tax sum
             // * taxSUMA = 0.0;
-            Cash[CoreConst.CALC_TAX_SUMA] = 0.0;
+            props[CoreConst.CALC_TAX_SUMA] = 0.0;
 
-            for (i = 0; i < saleItems.Rows.Count; i++)
+            for (i = 0; i < _local_order.Rows.Count; i++)
             {
                 try
                 {
-                    taxValue = MathLib.GetDouble(saleItems.Rows[i]["TAX_VAL"]);
-                    if (Boolean.Parse(saleItems.Rows[i]["USEDDISC"].ToString()))
+                    taxValue = MathLib.GetDouble(_local_order.Rows[i]["TAX_VAL"]);
+                    if (Boolean.Parse(_local_order.Rows[i]["USEDDISC"].ToString()))
                     {
-                        // * artSum = (discCommonPercent * (double)saleItems.Rows[i]["SUM"]) / 100;
-                        artSum = (getCashValue<double>(CoreConst.DISC_FINAL_PERCENT) * (double)saleItems.Rows[i]["SUM"]) / 100;
-                        artSum = (double)saleItems.Rows[i]["SUM"] - artSum;
+                        // * artSum = (discCommonPercent * (double)_local_order.Rows[i]["SUM"]) / 100;
+                        artSum = (getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT) * (double)_local_order.Rows[i]["SUM"]) / 100;
+                        artSum = (double)_local_order.Rows[i]["SUM"] - artSum;
                         artSum = MathLib.GetRoundedMoney(artSum);
                         taxValue = (artSum * taxValue) / (taxValue + 100);
                     }
                     else
-                        taxValue = (((double)saleItems.Rows[i]["ASUM"]) * taxValue) / (taxValue + 100);
+                        taxValue = (((double)_local_order.Rows[i]["ASUM"]) * taxValue) / (taxValue + 100);
                 }
                 catch
                 {
                     taxValue = 0;
                 }
 
-                saleItems.Rows[i]["TAX_MONEY"] = taxValue;
+                _local_order.Rows[i]["TAX_MONEY"] = taxValue;
                 // * taxSUMA += taxValue;
-                Cash[CoreConst.CALC_TAX_SUMA] = getCashValue<double>(CoreConst.CALC_TAX_SUMA) + taxValue;
+                props[CoreConst.CALC_TAX_SUMA] = getPropertyValue<double>(CoreConst.CALC_TAX_SUMA) + taxValue;
             }
 
             // * taxSUMA = MathLib.GetRoundedMoney(taxSUMA);
-            Cash[CoreConst.CALC_TAX_SUMA] = MathLib.GetRoundedMoney(getCashValue<double>(CoreConst.CALC_TAX_SUMA));
+            props[CoreConst.CALC_TAX_SUMA] = MathLib.GetRoundedMoney(getPropertyValue<double>(CoreConst.CALC_TAX_SUMA));
 
             // * if (!_fl_isInvenCheque)
             // *     UpdateSumDisplay(true, updateCustomer);
             // (i) called within parent event
 
+
+            //if (!Container.triggerInventCheque)
+            //    Container.OnPropertiesChanged(EventArgs.Empty);
+
+            //return props;
+            return props;
         }
 
         /* data access and management */
+        public string getProductFilterQuery()
+        {
+            if (ProductFilter.Length == 0)
+                return string.Format("F='{0}'", ID);
+
+            List<string> profileFilteredProducts = new List<string>();
+            string[] filterProductIDs = ProductFilter.Split(' ', ',', ';');
+            foreach (string lss in filterProductIDs)
+                if (lss != string.Empty)
+                    profileFilteredProducts.Add(string.Format("ID LIKE '{0}%'", lss));
+
+            if (profileFilteredProducts.Capacity > 0)
+                return String.Join(" OR ", profileFilteredProducts.ToArray());
+
+            return string.Format("F='{0}'", ID);
+        }
         public DataTable getProducts()
         {
-            return new DataTable();
+            return getData(DataType.PRODUCT);
         }
         public DataTable getOrder()
         {
-            return new DataTable();
+            return getData(DataType.ORDER);
         }
-        public DataTable getOrder(bool reinit)
+        public DataTable getData(DataType dType)
         {
-            // * Hashtable _suma = (Hashtable)this.Summa[profileKey];
-            // * Hashtable _discount = (Hashtable)this.Discount[profileKey];
-            // * DataTable _cheque = this.Cheques.Tables[profileKey.ToString()];
-
-            if (reinit)
-                initOrderStructure(saleItems);
-
-            /* initializing discount values * /
-            bool _discApplied = CoreLib.GetValue<bool>(_discount, CoreConst.DISC_APPLIED);
-            double[] _discArrPercent = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_PERCENT);
-            double[] _discArrCash = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_CASH);
-            double _discConstPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_CONST_PERCENT);
-            double _discOnlyPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_ONLY_PERCENT);
-            double _discOnlyCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_ONLY_CASH);
-            double _discCommonPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_PERCENT);
-            double _discCommonCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_CASH);
-            / * calculation items * /
-            double _realSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_REAL_SUMA);
-            double _chqSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_CHEQUE_SUMA);
-            double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_TAX_SUMA);
-            */
-            /*discInfo["DISC_ALL_ITEMS"] = this._fl_useTotDisc;
-            //Масив з значеннями знижки та надбавки в процентних значеннях
-            discInfo["DISC_ARRAY_PERCENT"] = new double[2] { _discArrPercent[0], _discArrPercent[1] };
-            //Масив з значеннями знижки та надбавки в грошових значеннях
-            discInfo["DISC_ARRAY_CASH"] = new double[2] { _discArrCash[0], _discArrCash[1] };
-            //Значення постійної знижки в процентному значенні
-            discInfo["DISC_CONST_PERCENT"] = _discConstPercent;
-            //Сума знижки і надбавки з процентними значеннями
-            discInfo["DISC_ONLY_PERCENT"] = _discOnlyPercent;
-            //Сума знижки і надбавки з грошовими значеннями
-            discInfo["DISC_ONLY_CASH"] = _discOnlyCash;
-            //Загальний коефіціент знижки в процентному значенні
-            discInfo["DISC_FINAL_PERCENT"] = _discCommonPercent;
-            //Загальний коефіціент знижки в грошовому значенні
-            discInfo["DISC_FINAL_CASH"] = _discCommonCash;
-            discInfo["DISC_APPLIED"] = _discApplied;
-
-            chqInfo["STORE_NO"] = this.currentSubUnit;
-            chqInfo["CLIENT_ID"] = this.clientID;
-            chqInfo["IS_RET"] = this._fl_isReturnCheque;
-            chqInfo["IS_LEGAL"] = false;
-            chqInfo["ORDER_SUMA"] = _chqSUMA;
-            chqInfo["ORDER_REAL_SUMA"] = _realSUMA;
-            chqInfo["TAX_SUMA"] = _realSUMA;
-            chqInfo["TAX_BILL"] = this._fl_taxDocRequired;
-            chqInfo["DISCOUNT"] = discInfo;
-            */
-
-            // * DataWorkShared.UpdateExtendedProperties(Order, chqInfo);
-
-            saleItems.ExtendedProperties[CoreConst.STORE_NO] = Parent.valueOfCurrentSubUnit;
-            saleItems.ExtendedProperties[CoreConst.CLIENT_ID] = Parent.valueOfClientID;
-            saleItems.ExtendedProperties[CoreConst.IS_RET] = Parent.triggerReturnCheque;
-            saleItems.ExtendedProperties[CoreConst.IS_LEGAL] = false;
-            saleItems.ExtendedProperties[CoreConst.ORDER_SUMA] = Parent;
-            saleItems.ExtendedProperties[CoreConst.ORDER_REAL_SUMA] = Parent;
-            saleItems.ExtendedProperties[CoreConst.TAX_SUMA] = Parent;
-            saleItems.ExtendedProperties[CoreConst.TAX_BILL] = Parent.triggerTaxDocRequired;
-            saleItems.ExtendedProperties[CoreConst.DISCOUNT] = (Hashtable)Cash.Clone();
-
-            return saleItems;
+            List<DataRow> dRows = new List<DataRow>();
+            dRows.AddRange(data[dType].Select(getProductFilterQuery()));
+            DataTable dT = Container.setupEmptyDataTable(DataType.PRODUCT);
+            foreach (DataRow dr in dRows)
+                dT.Rows.Add(dr.ItemArray);
+            return dT;
         }
 
-        public void resetCash() { }
-        public void resetDisc() { }
-        public void resetAll() { }
-
-        public T getCashValue<T>(string key)
+        // these methods must use default profile 
+        public void orderProductAdd(object[] arrayData)
         {
-            if (!Cash.ContainsKey(key))
-                return default(T);
-
-            object val = Cash[key];
-
-            try
+            if (isDefaultProfile())
             {
-                return components.Lib.TypeConv.ConvertTo<T>(val);
+                this.data[DataType.ORDER].Rows.Add(arrayData);
             }
-            catch (Exception ex) { CoreLib.WriteLog(ex, "driver.Components.Profiles.AppProfile@getCashValue"); }
-
-            return default(T);
+            else
+                Container.Default.orderProductAdd(arrayData);
         }
-        // used
-        // * public void UpdateDiscountValues(DataTable order)
-        public void initProfileByOrder(DataTable order)
-        {/*
-            this.currentSubUnit = (byte)order.ExtendedProperties[CoreConst.STORE_NO];
-            try
-            {
-                this.clientID = order.ExtendedProperties[CoreConst.CLIENT_ID].ToString();
-            }
-            catch { }
-            this._fl_isReturnCheque = (bool)order.ExtendedProperties[CoreConst.IS_RET];
-
-            if (order.ExtendedProperties.ContainsKey(CoreConst.DISCOUNT))
-            {
-
-                Hashtable discount = (Hashtable)order.ExtendedProperties[CoreConst.DISCOUNT];
-
-                try
-                {
-                    this._fl_useTotDisc = (bool)discount[CoreConst.DISC_ALL_ITEMS];
-                    this.discArrPercent = (double[])discount[CoreConst.DISC_ARRAY_PERCENT];
-                    this.discArrCash = (double[])discount[CoreConst.DISC_ARRAY_CASH];
-                    this.discConstPercent = (double)discount[CoreConst.DISC_CONST_PERCENT];
-                    this.discOnlyCash = (double)discount[CoreConst.DISC_ONLY_CASH];
-                    this.discOnlyPercent = (double)discount[CoreConst.DISC_ONLY_PERCENT];
-                    this.discCommonPercent = (double)discount[CoreConst.DISC_FINAL_PERCENT];
-                    this.discCommonCash = (double)discount[CoreConst.DISC_FINAL_CASH];
-                    this.discApplied = (bool)discount[CoreConst.DISC_APPLIED];
-                }
-                catch { }
-                /*
-                chqInfo["DISC_ALL_ITEMS"] = this._fl_useTotDisc;
-                //Масив з значеннями знижки та надбавки в процентних значеннях
-                chqInfo["DISC_ARRAY_PERCENT"] = new double[2] { discArrPercent[0], discArrPercent[1] };
-                //Масив з значеннями знижки та надбавки в грошових значеннях
-                chqInfo["DISC_ARRAY_CASH"] = new double[2] { discArrCash[0], discArrCash[1] };
-                //Значення постійної знижки в процентному значенні
-                chqInfo["DISC_CONST_PERCENT"] = this.discConstPercent;
-                //Сума знижки і надбавки з процентними значеннями
-                chqInfo["DISC_ONLY_PERCENT"] = this.discOnlyPercent;
-                //Сума знижки і надбавки з грошовими значеннями
-                chqInfo["DISC_ONLY_CASH"] = this.discOnlyCash;
-                //Загальний коефіціент знижки в процентному значенні
-                chqInfo["DISC_FINAL_PERCENT"] = this.discCommonPercent;
-                //Загальний коефіціент знижки в грошовому значенні
-                chqInfo["DISC_FINAL_CASH"] = this.discCommonCash;
-                 * /
-            }*/
-        }
-        // * private void CreateOrderStructure(DataTable dtOrder)
-        public void initOrderStructure(DataTable dtOrder)
+        public void orderProductUpdate(string recordID, object[] arrayData)
         {
-            // * Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure();
-            // * DataWorkShared.AppendExtendedProperties(dtOrder, chqInfo, true);
-
-            dtOrder.ExtendedProperties.Clear();
-
-            dtOrder.ExtendedProperties.Add(CoreConst.STORE_NO, null);
-            // Default Client ID
-            dtOrder.ExtendedProperties.Add(CoreConst.CLIENT_ID, null);
-            // Detect if cheque is retiermant
-            dtOrder.ExtendedProperties.Add(CoreConst.IS_RET, null);
-            // Determinate that cheque is legal
-            dtOrder.ExtendedProperties.Add(CoreConst.IS_LEGAL, null);
-            // Cheque Number
-            dtOrder.ExtendedProperties.Add(CoreConst.ORDER_NO, null);
-            // Cheque Suma with all discounts
-            dtOrder.ExtendedProperties.Add(CoreConst.ORDER_SUMA, null);
-            // Cheque real suma (without discount)
-            dtOrder.ExtendedProperties.Add(CoreConst.ORDER_REAL_SUMA, null);
-            // Cheque's tax suma
-            dtOrder.ExtendedProperties.Add(CoreConst.TAX_SUMA, null);
-            // Determinate if this cheque need tax bill
-            dtOrder.ExtendedProperties.Add(CoreConst.TAX_BILL, null);
-            // Discount Structure
-            dtOrder.ExtendedProperties.Add(CoreConst.DISCOUNT, null);
-            // Payment Structure
-            dtOrder.ExtendedProperties.Add(CoreConst.PAYMENT, null);
-            // Payment Structure
-            dtOrder.ExtendedProperties.Add(CoreConst.BILL, null);
-
         }
-        public void initCashStructure(Hashtable cashStructure)
+        public void orderProductRemove(string recordID)
         {
-            cashStructure.Add(CoreConst.CALC_CHEQUE_SUMA, 0.0);
-            cashStructure.Add(CoreConst.CALC_REAL_SUMA, 0.0);
-            cashStructure.Add(CoreConst.CALC_TAX_SUMA, 0.0);
-            //Якщо true то знижка чи надбавка діє на всі позиції(товари) чеку
-            cashStructure.Add(CoreConst.DISC_ALL_ITEMS, false);
-            //Масив з значеннями знижки та надбавки в процентних значеннях
-            cashStructure.Add(CoreConst.DISC_ARRAY_PERCENT, new double[2]);
-            //Масив з значеннями знижки та надбавки в грошових значеннях
-            cashStructure.Add(CoreConst.DISC_ARRAY_CASH, new double[2]);
-            //Значення постійної знижки в процентному значенні
-            cashStructure.Add(CoreConst.DISC_CONST_PERCENT, 0.0);
-            //Сума знижки і надбавки з процентними значеннями
-            cashStructure.Add(CoreConst.DISC_ONLY_PERCENT, 0.0);
-            //Сума знижки і надбавки з грошовими значеннями
-            cashStructure.Add(CoreConst.DISC_ONLY_CASH, 0.0);
-            //Загальний коефіціент знижки в процентному значенні
-            cashStructure.Add(CoreConst.DISC_FINAL_PERCENT, 0.0);
-            //Загальний коефіціент знижки в грошовому значенні
-            cashStructure.Add(CoreConst.DISC_FINAL_CASH, 0.0);
-            //Загальний коефіціент знижки в грошовому значенні
-            cashStructure.Add(CoreConst.DISC_APPLIED, false);
         }
+
+        // triggers
+        public bool isDefaultProfile()
+        {
+            return this.ID.Equals(CoreConst.KEY_DEFAULT_PROFILE_ID);
+        }
+
     }
 }

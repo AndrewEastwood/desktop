@@ -45,6 +45,11 @@ namespace components.UI.Controls
             set { this.categoryNavBar1.Font = value; }
         }
 
+        public void setupDataContainer(DataGridView dataObject)
+        {
+            dataObject.Parent = this.Placeholder;
+        }
+
         private void button_sensor_productTop_Click(object sender, EventArgs e)
         {
             if (dataPlaceholder.Controls.Count != 0 && dataPlaceholder.Controls[0] != null)
