@@ -38,7 +38,7 @@ namespace PayDesk.Components.UI.wndBills
                 ConfigManager.Instance.CommonConfiguration.WP_ALL["BILL_PRN"] = this.Location;
             }
 
-            bool billIsLocked = (bool)DataWorkShared.ExtractBillProperty(this.billEntry, CoreConst.IS_LOCKED, false);
+            bool billIsLocked = (bool)DataWorkShared.ExtractBillProperty(this.billEntry, CoreConst.BILL_IS_LOCKED, false);
             button1.Enabled = !billIsLocked;
         }
         /// <summary>
@@ -56,7 +56,7 @@ namespace PayDesk.Components.UI.wndBills
            DataWorkBill.BillUpdatePrintedCount(this.billEntry);
 
             // reset deleted rows
-            DataWorkShared.ResetBillProperty(this.billEntry, CoreConst.DELETED_ROWS);
+            DataWorkShared.ResetBillProperty(this.billEntry, CoreConst.BILL_DELETED_ROWS);
 
 
             //.CoreLib.SaveBill(false, 0, "", this.billEntry);
@@ -77,7 +77,7 @@ namespace PayDesk.Components.UI.wndBills
             DataWorkBill.BillUpdatePrintedCount(this.billEntry);
 
             // reset deleted rows
-            DataWorkShared.ResetBillProperty(this.billEntry, CoreConst.DELETED_ROWS);
+            DataWorkShared.ResetBillProperty(this.billEntry, CoreConst.BILL_DELETED_ROWS);
 
             //.CoreLib.SaveBill(false, "", "", this.billEntry, "");
             DataWorkBill.LockBill(this.billEntry);

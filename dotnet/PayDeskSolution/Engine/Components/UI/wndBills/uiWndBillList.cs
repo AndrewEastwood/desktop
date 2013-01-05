@@ -165,7 +165,7 @@ namespace PayDesk.Components.UI.wndBills
                 {
                     dTBill = LoadActiveBill();
                     billGrid.DataSource = dTBill;
-                    this.currentActiveBillOID = DataWorkShared.ExtractBillProperty(this.dTBill, CoreConst.OID).ToString();
+                    this.currentActiveBillOID = DataWorkShared.ExtractBillProperty(this.dTBill, CoreConst.BILL_OID).ToString();
                     Dictionary<string, object> billInfo = DataWorkShared.GetBillInfo(this.dTBill);
                     Dictionary<string, object> orderInfo = DataWorkShared.GetOrderInfo(this.dTBill);
 
@@ -200,7 +200,7 @@ namespace PayDesk.Components.UI.wndBills
 
                     bool billIsLoaded = DataWorkShared.ExtractBillProperty(dTBill, CoreConst.BILL_NO, string.Empty).ToString() == this.loadedBillNo;
                     bool billIsClosed = DataWorkShared.ExtractOrderProperty(dTBill, CoreConst.ORDER_NO, string.Empty, false).ToString() != string.Empty;
-                    bool billIsLocked =(bool)DataWorkShared.ExtractBillProperty(dTBill, CoreConst.IS_LOCKED, false);
+                    bool billIsLocked =(bool)DataWorkShared.ExtractBillProperty(dTBill, CoreConst.BILL_IS_LOCKED, false);
 
                     button_billsList_Open.Enabled = !billIsClosed && !billIsLoaded;
                     button_billsList_Print.Enabled = !billIsClosed;// && !billIsLocked;
@@ -476,11 +476,11 @@ namespace PayDesk.Components.UI.wndBills
             */
             DataTable dTable = this.LoadActiveBill();
             DataTable dNewTable = this.LoadActiveBill();
-            DataWorkShared.SetBillProperty(dNewTable, CoreConst.IS_LOCKED, false);
+            DataWorkShared.SetBillProperty(dNewTable, CoreConst.BILL_IS_LOCKED, false);
             //DataTable dTableCopy = dTable.Copy();
             DataWorkBill.MadeBillCopy(dNewTable);
             DataWorkBill.LockBill(dTable, "copy");
-            this.currentActiveBillOID = DataWorkShared.ExtractBillProperty(dNewTable, CoreConst.OID, string.Empty).ToString();
+            this.currentActiveBillOID = DataWorkShared.ExtractBillProperty(dNewTable, CoreConst.BILL_OID, string.Empty).ToString();
             //CoreLib.MadeBillCopy(dTableCopy);
             //CoreLib.LockBill(dTable, "-1");
             //this.currentActiveBillOID = dTableCopy.ExtendedProperties["NOM"].ToString();
@@ -560,19 +560,19 @@ namespace PayDesk.Components.UI.wndBills
                 {
                     currentBill = (DataTable)((object[])billEntry.Value)[0];
                     props = (PropertyCollection)((object[])billEntry.Value)[1];
-                    billInfo = ((Dictionary<string, object>)props[CoreConst.BILL]);
-                    this.billFileList.Add(billInfo[CoreConst.OID].ToString(), billEntry.Key);
+                    billInfo = ((Dictionary<string, object>)props[CoreConst.ORDER_BILL]);
+                    this.billFileList.Add(billInfo[CoreConst.BILL_OID].ToString(), billEntry.Key);
 
                     listGrid.Rows.Add(
                         new object[] {
-                            billInfo[CoreConst.OID], 
+                            billInfo[CoreConst.BILL_OID], 
                             billInfo[CoreConst.BILL_NO],
-                            billInfo[CoreConst.DATETIME],
-                            (billInfo[CoreConst.COMMENT] != null)?billInfo[CoreConst.COMMENT].ToString().Replace("%20", " "):"", 
+                            billInfo[CoreConst.BILL_DATETIME],
+                            (billInfo[CoreConst.BILL_COMMENT] != null)?billInfo[CoreConst.BILL_COMMENT].ToString().Replace("%20", " "):"", 
                             (double)props[CoreConst.ORDER_REAL_SUMA], 
-                            bool.Parse(billInfo[CoreConst.IS_LOCKED].ToString()), 
+                            bool.Parse(billInfo[CoreConst.BILL_IS_LOCKED].ToString()), 
                             props[CoreConst.ORDER_NO],
-                            (billInfo.ContainsKey(CoreConst.DATETIME_LOCK)?billInfo[CoreConst.DATETIME_LOCK]:"-")
+                            (billInfo.ContainsKey(CoreConst.BILL_DATETIME_LOCK)?billInfo[CoreConst.BILL_DATETIME_LOCK]:"-")
                         }
                     );
 

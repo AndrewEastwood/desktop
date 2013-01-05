@@ -8,39 +8,40 @@ namespace driver.Common
     {
         // order structure
         public const string CONTAINER_ORDER = "CN_ORDER";
-        public const string STORE_NO = "STORE_NO";
-        public const string CLIENT_ID = "CLIENT_ID";
-        public const string IS_RET = "IS_RET";
-        public const string IS_LEGAL = "IS_LEGAL";
+        public const string ORDER_STORE_NO = "STORE_NO";
+        public const string ORDER_CLIENT_ID = "CLIENT_ID";
+        public const string ORDER_IS_RET = "IS_RET";
+        public const string ORDER_IS_LEGAL = "IS_LEGAL";
         public const string ORDER_NO = "ORDER_NO";
         public const string ORDER_SUMA = "ORDER_SUMA";
         public const string ORDER_REAL_SUMA = "ORDER_REAL_SUMA";
-        public const string TAX_SUMA = "TAX_SUMA";
-        public const string TAX_BILL = "TAX_BILL";
-        public const string DISCOUNT = "DISCOUNT";
-        public const string PAYMENT = "PAYMENT";
-        public const string BILL = "BILL";
-
+        public const string ORDER_TAX_SUMA = "TAX_SUMA";
+        public const string ORDER_TAX_BILL = "TAX_BILL";
+        public const string ORDER_DISCOUNT = "DISCOUNT";
+        public const string ORDER_PAYMENT = "PAYMENT";
+        public const string ORDER_BILL = "BILL";
 
         // bill structure
         public const string CONTAINER_BILL = "CN_BILL";
-        public const string OID = "OID";
+        public const string BILL_OID = "OID";
         public const string BILL_NO = "BILL_NO";
-        public const string OWNER_NO = "OWNER_NO";
-        public const string DATETIME = "DATETIME";
-        public const string DATETIMEEDIT = "DATETIMEEDIT";
-        public const string COMMENT = "COMMENT";
-        public const string IS_LOCKED = "IS_LOCKED";
-        public const string PATH = "PATH";
-        public const string DELETED_ROWS = "DELETED_ROWS";
-        public const string DATETIME_LOCK = "DATETIME_LOCK";
+        public const string BILL_OWNER_NO = "OWNER_NO";
+        public const string BILL_DATETIME = "DATETIME";
+        public const string BILL_DATETIMEEDIT = "DATETIMEEDIT";
+        public const string BILL_COMMENT = "COMMENT";
+        public const string BILL_IS_LOCKED = "IS_LOCKED";
+        public const string BILL_PATH = "PATH";
+        public const string BILL_DELETED_ROWS = "DELETED_ROWS";
+        public const string BILL_DATETIME_LOCK = "DATETIME_LOCK";
 
         // discount structure
         public const string CONTAINER_DISC = "CN_DISC";
         public const string DISC_APPLIED = "DISC_APPLIED";
         public const string DISC_ALL_ITEMS = "DISC_ALL_ITEMS";
-        public const string DISC_ARRAY_PERCENT = "DISC_ARRAY_PERCENT";
-        public const string DISC_ARRAY_CASH = "DISC_ARRAY_CASH";
+        public const string DISC_ARRAY_PERCENT_SUB = "DISC_ARRAY_PERCENT_SUB";
+        public const string DISC_ARRAY_PERCENT_ADD = "DISC_ARRAY_PERCENT_ADD";
+        public const string DISC_ARRAY_CASH_SUB = "DISC_ARRAY_CASH_SUB";
+        public const string DISC_ARRAY_CASH_ADD = "DISC_ARRAY_CASH_ADD";
         public const string DISC_CONST_PERCENT = "DISC_CONST_PERCENT";
         public const string DISC_ONLY_PERCENT = "DISC_ONLY_PERCENT";
         public const string DISC_ONLY_CASH = "DISC_ONLY_CASH";
@@ -49,9 +50,9 @@ namespace driver.Common
 
         // calculations
         public const string CONTAINER_CALC = "CN_CALC";
-        public const string CALC_CHEQUE_SUMA = "CALC_CHEQUE_SUMA";
-        public const string CALC_REAL_SUMA = "CALC_REAL_SUMA";
-        public const string CALC_TAX_SUMA = "CALC_TAX_SUMA";
+        public const string CASH_CHEQUE_SUMA = "CASH_CHEQUE_SUMA";
+        public const string CASH_REAL_SUMA = "CASH_REAL_SUMA";
+        public const string CASH_TAX_SUMA = "CASH_TAX_SUMA";
 
         // statements
         public const string CONTAINER_STATE = "CN_STATE";
@@ -72,7 +73,6 @@ namespace driver.Common
         public const string SOURCE_TEMP = "SRC_TEMP";
 
         /**************************************************************/
-
 
         // data
         public const string DATA_CONTAINER_PRODUCT = "DC_ART";

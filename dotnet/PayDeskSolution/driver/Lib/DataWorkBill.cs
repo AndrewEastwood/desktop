@@ -116,7 +116,7 @@ namespace driver.Lib
                         billInfo["PATH"] = path;
                         billInfo["OID"] = BillNewUID(nom);
                         billInfo["BILL_NO"] = nom;
-                        billInfo[driver.Common.CoreConst.OWNER_NO] = string.Empty;
+                        billInfo[driver.Common.CoreConst.BILL_OWNER_NO] = string.Empty;
                         billInfo["IS_LOCKED"] = false;
 
                         if (dTable.ExtendedProperties.ContainsKey("BILL"))
@@ -140,7 +140,7 @@ namespace driver.Lib
                         billInfo = DataWorkShared.GetBillInfo(dTable);// (Dictionary<string, object>)dTable.ExtendedProperties["BILL"];
                         if (comment != null && comment.Length != 0)
                         {
-                            DataWorkShared.SetBillProperty(dTable, driver.Common.CoreConst.COMMENT, comment);
+                            DataWorkShared.SetBillProperty(dTable, driver.Common.CoreConst.BILL_COMMENT, comment);
                             //billInfo["COMMENT"] = comment;
                         }
                     }
@@ -193,12 +193,12 @@ namespace driver.Lib
         */
         public static void LockBill(DataTable dtBill, string fxNo)
         {
-            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.IS_LOCKED, true);
+            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_IS_LOCKED, true);
             //dtBill.ExtendedProperties["LOCK"] = true;
             if (fxNo != string.Empty)
             {
                 DataWorkShared.SetOrderProperty(dtBill, driver.Common.CoreConst.ORDER_NO, fxNo);
-                DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.DATETIME_LOCK, DateTime.Now.ToString("MM-dd-yy H:mm:ss"));
+                DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_DATETIME_LOCK, DateTime.Now.ToString("MM-dd-yy H:mm:ss"));
             }
             SaveBillToFile(dtBill);
         }
@@ -209,7 +209,7 @@ namespace driver.Lib
         public static void UnlockBill(DataTable dtBill)
         {
             //dtBill.ExtendedProperties["LOCK"] = false;
-            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.IS_LOCKED, false);
+            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_IS_LOCKED, false);
             SaveBillToFile(dtBill);
         }
 
@@ -218,10 +218,10 @@ namespace driver.Lib
         {
             //saving bill to binary file
             //FileStream stream = new FileStream(AppConfig.Path_Bills + "\\" + dtBill.ExtendedProperties["PATH"].ToString(), FileMode.OpenOrCreate);
-            string savedBillFilePath = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Bills + "\\" + DataWorkShared.ExtractBillProperty(dtBill, driver.Common.CoreConst.PATH);
-            FileStream stream = new FileStream(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Bills + "\\" + DataWorkShared.ExtractBillProperty(dtBill, driver.Common.CoreConst.PATH), FileMode.OpenOrCreate);
+            string savedBillFilePath = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Bills + "\\" + DataWorkShared.ExtractBillProperty(dtBill, driver.Common.CoreConst.BILL_PATH);
+            FileStream stream = new FileStream(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Bills + "\\" + DataWorkShared.ExtractBillProperty(dtBill, driver.Common.CoreConst.BILL_PATH), FileMode.OpenOrCreate);
             BinaryFormatter binF = new BinaryFormatter();
-            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.DATETIMEEDIT, DateTime.Now);
+            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_DATETIMEEDIT, DateTime.Now);
             binF.Serialize(stream, DataWorkShared.GetDataObject(dtBill));
             stream.Close();
             stream.Dispose();
@@ -259,11 +259,11 @@ namespace driver.Lib
             // 0 byte[] oid = System.Text.Encoding.Default.GetBytes(DateTime.Now.ToString() + "_" + newNom);
             // 1 byte[] secureOid = System.Security.Cryptography.HashAlgorithm.Create().ComputeHash(oid);
             // 0 string strOID = (System.Math.Abs(oid.GetHashCode().ToString().GetHashCode())).ToString();
-            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.OID, BillNewUID(newNom));
+            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_OID, BillNewUID(newNom));
             DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_NO, newNom);
-            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.OWNER_NO, nomOrig);
-            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.DATETIME, DateTime.Now.ToShortDateString());
-            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.PATH, path);
+            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_OWNER_NO, nomOrig);
+            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_DATETIME, DateTime.Now.ToShortDateString());
+            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_PATH, path);
             //dtBill.ExtendedProperties["OID"] = strOID;
             //dtBill.ExtendedProperties["NOM"] = newNom;
             //dtBill.ExtendedProperties["DT"] = DateTime.Now.ToShortDateString();
@@ -308,7 +308,7 @@ namespace driver.Lib
 
             try
             {
-                Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Bills + "\\" + DataWorkShared.ExtractBillProperty(dtBill, driver.Common.CoreConst.PATH), UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Bills + "\\" + DataWorkShared.ExtractBillProperty(dtBill, driver.Common.CoreConst.BILL_PATH), UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                 dtBill.Clear();
                 dtBill.ExtendedProperties.Clear();
                 return true;
@@ -332,7 +332,7 @@ namespace driver.Lib
         {
             DataTable currentBill = (DataTable)((object[])billEntry)[0];
             PropertyCollection props = (PropertyCollection)((object[])billEntry)[1];
-            Dictionary<string, object> billInfo = ((Dictionary<string, object>)props[CoreConst.BILL]);
+            Dictionary<string, object> billInfo = ((Dictionary<string, object>)props[CoreConst.ORDER_BILL]);
             Hashtable output = new Hashtable();
             output.Add("E_BILL", currentBill);
             output.Add("E_PROPS", props);
@@ -355,7 +355,7 @@ namespace driver.Lib
         public static int BillWasChanged(string pathToBillFolder, DataTable dtBill)
         {
             bool isNewBill = !dtBill.ExtendedProperties.Contains("BILL") || dtBill.ExtendedProperties["BILL"] == null;
-            object billName = DataWorkShared.ExtractBillProperty(dtBill, CoreConst.PATH);
+            object billName = DataWorkShared.ExtractBillProperty(dtBill, CoreConst.BILL_PATH);
 
             if (isNewBill)
                 return 0;
@@ -366,12 +366,12 @@ namespace driver.Lib
             DataTable loadedBill = LoadCombinedBill(pathToBillFolder + "\\" + billName.ToString());
             try
             {
-                DateTime deEdit = (DateTime)DataWorkShared.ExtractBillProperty(loadedBill, CoreConst.DATETIMEEDIT);
+                DateTime deEdit = (DateTime)DataWorkShared.ExtractBillProperty(loadedBill, CoreConst.BILL_DATETIMEEDIT);
                 object deOrderNo = DataWorkShared.ExtractOrderProperty(loadedBill, CoreConst.ORDER_NO, null);
                 if (deOrderNo != null && deOrderNo.ToString() != string.Empty)
                     return 2;
 
-                DateTime deCurrentEdit = (DateTime)DataWorkShared.ExtractBillProperty(dtBill, CoreConst.DATETIMEEDIT);
+                DateTime deCurrentEdit = (DateTime)DataWorkShared.ExtractBillProperty(dtBill, CoreConst.BILL_DATETIMEEDIT);
                 if (deEdit.CompareTo(deCurrentEdit) != 0)
                     return 1;
 

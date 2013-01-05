@@ -23,7 +23,7 @@ namespace driver.Components.Profiles
         public ConfigManager Configuration { get { return ConfigManager.Instance; } }
         /* data */
         // * private Dictionary<DataType, DataTable> data = new Dictionary<DataType,DataTable>();
-        private Hashtable props = new Hashtable();
+        //private Hashtable props = new Hashtable();
         /* cash values */
         // * private Hashtable commondataPropsInfo;
         /* runtime values */
@@ -57,18 +57,12 @@ namespace driver.Components.Profiles
         /* data access */
 
         public AppProfile Default { get { return this[CoreConst.KEY_DEFAULT_PROFILE_ID]; } set { this[CoreConst.KEY_DEFAULT_PROFILE_ID] = value; } }
-        public AppProfile this[string profileID] { get { return getProfile(CoreConst.KEY_DEFAULT_PROFILE_ID); } set { profiles[CoreConst.KEY_DEFAULT_PROFILE_ID] = value; } }
+        public AppProfile this[object profileID] { get { return getProfile(profileID.ToString()); } set { profiles[profileID.ToString()] = value; } }
 
 
         public ProfilesContainer()
         {
-            // init data containers
-            string[] dataKeys = Enum.GetNames(typeof(DataType));
-            for (int i = 0; i < dataKeys.Length; i++)
-            {
-                data.Add((DataType)i, setupEmptyDataTable((DataType)i));
-                data[(DataType)i].TableName = dataKeys[i];
-            }
+
             // init startup values
             triggerSingleMode = Configuration.CommonConfiguration.PROFILES_UseProfiles;
             valueOfCurrentSubUnit = Configuration.CommonConfiguration.APP_SubUnit;
@@ -79,7 +73,13 @@ namespace driver.Components.Profiles
 
         /* general methods */
 
-        public void refresh()
+
+        public T getDefaultProfileValue<T>(string key)
+        {
+            return Default.getPropertyValue<T>(key);
+        }
+
+        public void refresh(bool includeProfiles)
         {
             bool _local_needUpdate = false;
             if (triggerSingleMode != Configuration.CommonConfiguration.PROFILES_UseProfiles)
@@ -101,8 +101,18 @@ namespace driver.Components.Profiles
                 _local_needUpdate = true;
             }
 
+            if (includeProfiles)
+                foreach (KeyValuePair<string, AppProfile> ap in profiles)
+                    ap.Value.refresh();
+
             if (_local_needUpdate)
                 OnUpdateRequired(EventArgs.Empty);
+        }
+
+        public void reset(bool includeProfiles)
+        {
+            foreach (KeyValuePair<string, AppProfile> ap in profiles)
+                ap.Value.reset();
         }
 
         public void initContainerProfiles(bool clearAll)
@@ -151,7 +161,8 @@ namespace driver.Components.Profiles
 
         public void profileAdd(string profileID, string name)
         {
-            profiles.Add(profileID, new AppProfile(profileID, name));
+            profiles.Add(profileID, new AppProfile(profileID, name, this));
+            profiles[profileID].onPropertiesUpdated += new PropertiesUpdatedEventHandler(ProfilesContainer_onPropertiesUpdated);
         }
 
         public bool profileRemove(string profileID)
@@ -166,7 +177,7 @@ namespace driver.Components.Profiles
 
         public void profileReset(string profileID)
         {
-            profiles[profileID].resetAll();
+            //profiles[profileID].resetAll();
         }
 
         /* = data management */
@@ -225,18 +236,19 @@ namespace driver.Components.Profiles
 
 
         /* events */
-        public event CashChangedEventHandler onCashChanged;
+        // * public event CashChangedEventHandler onCashChanged;
         public event DataUpdatedEventHandler onDataUpdated;
         public event DataUnchangedEventHandler onDataUnchanged;
         public event SuibUnitChangedEventHandler onSubUnitChanged;
         public event UpdateRequiredEventHandler onUpdateRequired;
+        public event ProfileCommandReceivedEventHandler onProfileCommandReceived;
 
         // Invoke the Changed event; called whenever cash value changes
-        protected virtual void OnPropertiesChanged(EventArgs e)
+        /*protected virtual void OnPropertiesChanged(EventArgs e)
         {
             if (onCashChanged != null)
                 onCashChanged(this, e);
-        }
+        }*/
 
         protected virtual void OnDataUpdated(EventArgs e)
         {
@@ -262,159 +274,26 @@ namespace driver.Components.Profiles
                 onUpdateRequired(this, e);
         }
 
-        public DataTable setupEmptyDataTable(DataType dType)
+        protected virtual void OnProfileCommandReceived(AppProfile sender, string command, EventArgs e)
         {
-            DataTable dTable = new DataTable();
-            switch (dType)
-            {
-                case DataType.ALTERNATEBC:
-                    {
-                        Type[] cTypes = {
-                            typeof(string),
-                            typeof(string)};
+            if (onProfileCommandReceived != null)
+                onProfileCommandReceived(sender, command, e);
+        }
 
-                        dTable.Columns.Add("C", typeof(long));
-
-                        dTable.Columns.Add("F", typeof(string));
-
-                        for (byte i = 0; i < driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_ALTColumnName.Length; i++)
-                            dTable.Columns.Add(driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_ALTColumnName[i], cTypes[i]);
-
-                        dTable.PrimaryKey = new DataColumn[] { dTable.Columns["C"] };
-                        dTable.Columns["C"].AutoIncrement = true;
-                        dTable.Columns["C"].Unique = true;
-                        break;
-                    }
-                case DataType.PRODUCT:
-                    {
-                        Type[] cTypes = {
-                            typeof(string),
-                            typeof(string),
-                            typeof(string),
-                            typeof(string),
-                            typeof(string),
-                            typeof(string),
-                            typeof(string),
-                            typeof(double),
-                            typeof(double),
-                            typeof(double),
-                            typeof(double),
-                            typeof(double),
-                            typeof(double),
-                            typeof(double),
-                            typeof(double),
-                            typeof(double)};
-
-                        dTable.Columns.Add("C", typeof(long));
-
-                        dTable.Columns.Add("F", typeof(string));
-
-                        for (byte i = 0; i < driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_ARTColumnName.Length; i++)
-                            dTable.Columns.Add(driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_ARTColumnName[i], cTypes[i]);
-
-                        dTable.PrimaryKey = new DataColumn[] { dTable.Columns["C"] };
-                        dTable.Columns["C"].AutoIncrement = true;
-                        dTable.Columns["C"].Unique = true;
-                        break;
-                    }
-                case DataType.DCARDS:
-                    {
-                        Type[] cTypes = {
-                            typeof(string),
-                            typeof(string),
-                            typeof(double),
-                            typeof(int)};
-
-                        if (driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_CARDColumnName.Length != cTypes.Length)
-                            driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_CARDColumnName = new string[] { "CBC", "CID", "CDISC", "CPRICENO" };
-
-                        dTable.Columns.Add("C", typeof(long));
-                        for (byte i = 0; i < driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_CARDColumnName.Length; i++)
-                            dTable.Columns.Add(driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_CARDColumnName[i], cTypes[i]);
-
-                        dTable.Columns.Add("F", typeof(string));
-
-                        //dTable.TableName = "DCards";
-
-                        dTable.PrimaryKey = new DataColumn[] { dTable.Columns["C"] };
-                        dTable.Columns["C"].AutoIncrement = true;
-                        dTable.Columns["C"].Unique = true;
-                        break;
-                    }
-                case DataType.ORDER:
-                    {
-                        dTable = setupEmptyDataTable(DataType.PRODUCT);
-
-                        DataColumn dCol = new DataColumn("TOT");
-                        dCol.DataType = typeof(string);
-                        dCol.DefaultValue = "0";
-                        dTable.Columns.Add(dCol);
-
-                        dCol = new DataColumn("TAX_VAL");
-                        dCol.DataType = typeof(double);
-                        dCol.DefaultValue = (double)0.0;
-                        dTable.Columns.Add(dCol);
-
-                        dCol = new DataColumn("USEDDISC");
-                        dCol.DataType = typeof(bool);
-                        dCol.DefaultValue = (bool)true;
-                        dTable.Columns.Add(dCol);
-
-                        dCol = new DataColumn("DISC");
-                        dCol.DataType = typeof(double);
-                        dCol.DefaultValue = (double)0.0;
-                        dTable.Columns.Add(dCol);
-
-                        dCol = new DataColumn("SUM");
-                        dCol.AllowDBNull = false;
-                        dCol.DataType = typeof(double);
-                        dCol.DefaultValue = (double)0.0;
-                        dTable.Columns.Add(dCol);
-
-                        dCol = new DataColumn("ASUM");
-                        dCol.AllowDBNull = false;
-                        dCol.DataType = typeof(double);
-                        dCol.DefaultValue = (double)0.0;
-                        dTable.Columns.Add(dCol);
-
-                        dCol = new DataColumn("TAX_MONEY");
-                        dCol.DataType = typeof(double);
-                        //dCol.Expression = "(ASUM*TAX_VAL)/(TAX_VAL+100)";
-                        dCol.DefaultValue = (double)0.0;
-                        dTable.Columns.Add(dCol);
-
-                        dCol = new DataColumn("TMPTOT");
-                        dCol.DataType = typeof(string);
-                        dCol.DefaultValue = "0";
-                        dTable.Columns.Add(dCol);
-
-                        dCol = new DataColumn("ORIGPRICE");
-                        dCol.DataType = typeof(double);
-                        dCol.DefaultValue = (double)0.0;
-                        dTable.Columns.Add(dCol);
-
-                        dCol = new DataColumn("PRINTCOUNT");
-                        dCol.DataType = typeof(double);
-                        dCol.DefaultValue = (double)0.0;
-                        dTable.Columns.Add(dCol);
-
-                        dTable.PrimaryKey = new DataColumn[] { dTable.Columns["C"] };
-                        dTable.Columns["C"].AutoIncrement = true;
-                        dTable.Columns["C"].Unique = true;
-                        break;
-                    }
-            }
-
-            return dTable;
+        // profile event handlers
+        void ProfilesContainer_onPropertiesUpdated(AppProfile sender, Hashtable props, EventArgs e)
+        {
+            OnProfileCommandReceived(sender, "properties_updated", e);
         }
 
     }
 
-    public delegate void CashChangedEventHandler(object sender, EventArgs e);
+    // * public delegate void CashChangedEventHandler(object sender, EventArgs e);
     public delegate void DataUpdatedEventHandler(object sender, EventArgs e);
     public delegate void DataUnchangedEventHandler(object sender, EventArgs e);
     public delegate void SuibUnitChangedEventHandler(object sender, EventArgs e);
     public delegate void UpdateRequiredEventHandler(object sender, EventArgs e);
+    public delegate void ProfileCommandReceivedEventHandler(AppProfile sender, string command, EventArgs e);
 
     public enum DataType : int
     {

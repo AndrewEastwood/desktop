@@ -27,16 +27,32 @@ namespace driver.Components.Profiles
         // triggers
         private bool trExchangeAccessError;
 
-        public AppProfile(string id, string name)
-            : this(id, name, "%")
+        public AppProfile(string id, string name, ProfilesContainer parent)
+            : this(id, name, "%", parent)
         {
         }
-        public AppProfile(string id, string name, string filter)
+        public AppProfile(string id, string name, string filter, ProfilesContainer parent)
         {
             this.id = id;
             this.name = name;
             this.productFilter = filter;
-            this.props = getEmptyProperties();
+            this.parent = parent;
+
+            if (this.isDefaultProfile())
+            {
+                this.props = getEmptyProperties();
+                // init data containers
+                string[] dataKeys = Enum.GetNames(typeof(DataType));
+                for (int i = 0; i < dataKeys.Length; i++)
+                {
+                    data.Add((DataType)i, setupEmptyDataTable((DataType)i));
+                    data[(DataType)i].TableName = string.Format("{0}_{1}", dataKeys[i], id);
+                }
+
+                // init order event handlers
+                Order.RowDeleted += new DataRowChangeEventHandler(Order_RowDeleted);
+                Order.RowChanged += new DataRowChangeEventHandler(Order_RowChanged);
+            }
         }
 
         /* setup */
@@ -47,45 +63,50 @@ namespace driver.Components.Profiles
             
             Hashtable props = new Hashtable();
 
-            // Append Order General Info Block
+            // Order Block
             // -----------
-            props.Add(CoreConst.STORE_NO, Container.Configuration.CommonConfiguration.APP_SubUnit);
+            props.Add(CoreConst.ORDER_STORE_NO, Container.Configuration.CommonConfiguration.APP_SubUnit);
             // Default Client ID
-            props.Add(CoreConst.CLIENT_ID, string.Empty);
+            props.Add(CoreConst.ORDER_CLIENT_ID, string.Empty);
             // Detect if cheque is retiermant
-            props.Add(CoreConst.IS_RET, false);
+            props.Add(CoreConst.ORDER_IS_RET, false);
             // Determinate that cheque is legal
-            props.Add(CoreConst.IS_LEGAL, false);
-            // Discount Structure
-            // ***** props.Add(CoreConst.DISCOUNT, null);
-            // Payment Structure
-            // ****** props.Add(CoreConst.PAYMENT, null);
-            // Payment Structure
-            // ****** props.Add(CoreConst.BILL, null);
+            props.Add(CoreConst.ORDER_IS_LEGAL, false);
+            // Cheque Number
+            props.Add(CoreConst.ORDER_NO, null);
+            // Determinate if this cheque need tax bill
+            props.Add(CoreConst.ORDER_TAX_BILL, null);
+
+            // Bill block
+            // ------------
+            props.Add(CoreConst.BILL_OID, string.Empty);
+            // DataTable source
+            props.Add(CoreConst.BILL_NO, string.Empty);
+            // String - owner number (for clonned bill)
+            props.Add(CoreConst.BILL_OWNER_NO, string.Empty);
+            // Storu Number
+            props.Add(CoreConst.BILL_DATETIME, DateTime.Now);
+            // Storu Number
+            props.Add(CoreConst.BILL_DATETIMEEDIT, DateTime.Now);
+            // Default Client ID
+            props.Add(CoreConst.BILL_COMMENT, string.Empty);
+            // Detect if cheque is retiermant
+            props.Add(CoreConst.BILL_IS_LOCKED, false);
+            // Determinate that cheque is legal
+            props.Add(CoreConst.BILL_PATH, string.Empty);
+            // Determinate that cheque is legal
+            props.Add(CoreConst.BILL_DELETED_ROWS, new Dictionary<string, object[]>());
 
             // Cash Block
             // ------------
-            // Cheque Number
-            props.Add(CoreConst.ORDER_NO, null);
-            // Cheque Suma with all discounts
-            // * props.Add(CoreConst.ORDER_SUMA, null);
-            // Cheque real suma (without discount)
-            // * props.Add(CoreConst.ORDER_REAL_SUMA, null);
-            // Cheque's tax suma
-            // * props.Add(CoreConst.TAX_SUMA, null);
-            // Determinate if this cheque need tax bill
-            props.Add(CoreConst.TAX_BILL, null);
-
+            props.Add(CoreConst.CASH_CHEQUE_SUMA, 0.0);
+            // 
+            props.Add(CoreConst.CASH_REAL_SUMA, 0.0);
+            // 
+            props.Add(CoreConst.CASH_TAX_SUMA, 0.0);
 
             // Discount block
             // ------------
-            props.Add(CoreConst.CALC_CHEQUE_SUMA, 0.0);
-            // 
-            props.Add(CoreConst.CALC_REAL_SUMA, 0.0);
-            // 
-            props.Add(CoreConst.CALC_TAX_SUMA, 0.0);
-
-            // 
             //Якщо true то знижка чи надбавка діє на всі позиції(товари) чеку
             props.Add(CoreConst.DISC_ALL_ITEMS, false);
             //Масив з значеннями знижки та надбавки в процентних значеннях
@@ -119,7 +140,9 @@ namespace driver.Components.Profiles
         // profile dynamic data
         public DataTable Order { get { return getOrder(); } }
         public DataTable Products { get { return getProducts(); } }
-        public Hashtable Properties { get { return getProperties(); } }
+        public DataTable Alternative { get { return getAlternative(); } }
+        public DataTable DiscountCards { get { return getDiscountCards(); } }
+        public Hashtable Properties { get { return props; } set { props = value; } }
         public Dictionary<DataType, DataTable> Data
         {
             get
@@ -170,9 +193,9 @@ namespace driver.Components.Profiles
                 Container.Default.setProperties(key, value);
         }
 
-        public Hashtable getProperties()
+        public Hashtable getUpdatedProperties()
         {
-            // Hashtable props = new Hashtable();
+            // Hashtable Properties = new Hashtable();
             DataTable _local_order = this.Order;
 
             //*bool useConstDisc = discArrPercent[0] == 0.0 && discArrPercent[1] == 0.0 &&
@@ -185,7 +208,7 @@ namespace driver.Components.Profiles
             if (useConstDisc)
             {
                 // * discConstPercent = 0.0;
-                props[CoreConst.DISC_CONST_PERCENT] = 0.0;
+                Properties[CoreConst.DISC_CONST_PERCENT] = 0.0;
 
                 //form "sum" by static discount
                 // **** if (ConfigManager.Instance.CommonConfiguration.APP_UseStaticDiscount)
@@ -201,22 +224,22 @@ namespace driver.Components.Profiles
                 // * discOnlyPercent = MathLib.GetRoundedMoney(discOnlyPercent);
                 // * discOnlydataProps = MathLib.GetRoundedMoney(discOnlydataProps);
 
-                props[CoreConst.DISC_ONLY_PERCENT] = MathLib.GetRoundedMoney(_discArrP[0] + _discArrP[1]);
-                props[CoreConst.DISC_ONLY_CASH] = MathLib.GetRoundedMoney(_discArrC[0] + _discArrC[1]);
+                Properties[CoreConst.DISC_ONLY_PERCENT] = MathLib.GetRoundedMoney(_discArrP[0] + _discArrP[1]);
+                Properties[CoreConst.DISC_ONLY_CASH] = MathLib.GetRoundedMoney(_discArrC[0] + _discArrC[1]);
             }
 
             //if (Cheque.Rows.Count == 0)
             if (_local_order.Rows.Count == 0)
             {
                 //realSUMA = chqSUMA = taxSUMA = 0.0;
-                props[CoreConst.CALC_REAL_SUMA] = 0.0;
-                props[CoreConst.CALC_CHEQUE_SUMA] = 0.0;
-                props[CoreConst.CALC_TAX_SUMA] = 0.0;
+                Properties[CoreConst.CASH_REAL_SUMA] = 0.0;
+                Properties[CoreConst.CASH_CHEQUE_SUMA] = 0.0;
+                Properties[CoreConst.CASH_TAX_SUMA] = 0.0;
 
 
                 // ???? UpdateSumDisplay(false, updateCustomer);
                 // this.PD_Empty_local_order;
-                // *** return props;
+                // *** return Properties;
             }
 
             int i = 0;
@@ -232,20 +255,20 @@ namespace driver.Components.Profiles
             if (useConstDisc)
             {
                 // * discCommonPercent = discConstPercent;
-                props[CoreConst.DISC_FINAL_PERCENT] = props[CoreConst.DISC_CONST_PERCENT];
+                Properties[CoreConst.DISC_FINAL_PERCENT] = Properties[CoreConst.DISC_CONST_PERCENT];
             }
             else
             {
                 //discCommonPercent = discOnlyPercent;
-                props[CoreConst.DISC_FINAL_PERCENT] = props[CoreConst.DISC_ONLY_PERCENT];
+                Properties[CoreConst.DISC_FINAL_PERCENT] = Properties[CoreConst.DISC_ONLY_PERCENT];
             }
             if (discSUMA != 0.0)
             {
                 // * discCommonPercent += (discOnlydataProps * 100) / discSUMA;
-                props[CoreConst.DISC_FINAL_PERCENT] = getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT) + (getPropertyValue<double>(CoreConst.DISC_ONLY_CASH) * 100) / discSUMA;
+                Properties[CoreConst.DISC_FINAL_PERCENT] = getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT) + (getPropertyValue<double>(CoreConst.DISC_ONLY_CASH) * 100) / discSUMA;
             }
             // * discCommonPercent = MathLib.GetRoundedMoney(discCommonPercent);
-            props[CoreConst.DISC_FINAL_PERCENT] = MathLib.GetRoundedMoney(getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT));
+            Properties[CoreConst.DISC_FINAL_PERCENT] = MathLib.GetRoundedMoney(getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT));
 
             // restore native cheque sum
             // and set price acording to client's discount card
@@ -321,8 +344,8 @@ namespace driver.Components.Profiles
             // * chqSUMA = (double)_local_order.Compute("sum(SUM)", "");
             // * chqSUMA = MathLib.GetRoundedMoney(chqSUMA);
             // * realSUMA = chqSUMA;
-            props[CoreConst.CALC_CHEQUE_SUMA] = MathLib.GetRoundedMoney((double)_local_order.Compute("sum(SUM)", ""));
-            props[CoreConst.CALC_REAL_SUMA] = props[CoreConst.CALC_CHEQUE_SUMA];
+            Properties[CoreConst.CASH_CHEQUE_SUMA] = MathLib.GetRoundedMoney((double)_local_order.Compute("sum(SUM)", ""));
+            Properties[CoreConst.CASH_REAL_SUMA] = Properties[CoreConst.CASH_CHEQUE_SUMA];
 
             //select rows with discount mode
             try
@@ -338,10 +361,10 @@ namespace driver.Components.Profiles
                 if (dRows.Length == 0)
                 {
                     // * this.discApplied = false;
-                    props[CoreConst.DISC_APPLIED] = false;
+                    Properties[CoreConst.DISC_APPLIED] = false;
                 }
                 else
-                    props[CoreConst.DISC_APPLIED] = true; // * this.discApplied = true;
+                    Properties[CoreConst.DISC_APPLIED] = true; // * this.discApplied = true;
             }
             catch { };
 
@@ -371,7 +394,7 @@ namespace driver.Components.Profiles
                     // * realSUMA -= discOnlydataProps;
 
                     dValue = MathLib.GetRoundedMoney((getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT) * discSUMA) / 100);
-                    props[CoreConst.CALC_REAL_SUMA] = getPropertyValue<double>(CoreConst.CALC_REAL_SUMA) - dValue - getPropertyValue<double>(CoreConst.DISC_ONLY_CASH);
+                    Properties[CoreConst.CASH_REAL_SUMA] = getPropertyValue<double>(CoreConst.CASH_REAL_SUMA) - dValue - getPropertyValue<double>(CoreConst.DISC_ONLY_CASH);
                 }
             }
             else
@@ -393,19 +416,19 @@ namespace driver.Components.Profiles
                     dRows[i]["ASUM"] = MathLib.GetRoundedMoney(dValue);
                 }
                 // * realSUMA = (double)_local_order.Compute("Sum(ASUM)", "");
-                props[CoreConst.CALC_REAL_SUMA] = (double)_local_order.Compute("Sum(ASUM)", "");
+                Properties[CoreConst.CASH_REAL_SUMA] = (double)_local_order.Compute("Sum(ASUM)", "");
             }
-            props[CoreConst.CALC_REAL_SUMA] = MathLib.GetRoundedMoney(getPropertyValue<double>(CoreConst.CALC_REAL_SUMA));
+            Properties[CoreConst.CASH_REAL_SUMA] = MathLib.GetRoundedMoney(getPropertyValue<double>(CoreConst.CASH_REAL_SUMA));
 
             //vuvedennja zagalnogo koeficientu znugku v 2oh tupah
             //groshovuj koeficient
             // * discCommondataProps = chqSUMA - realSUMA;
             // * discCommondataProps = MathLib.GetRoundedMoney(discCommondataProps);
-            props[CoreConst.DISC_ONLY_CASH] = MathLib.GetRoundedMoney(getPropertyValue<double>(CoreConst.CALC_CHEQUE_SUMA) - getPropertyValue<double>(CoreConst.DISC_FINAL_CASH));
+            Properties[CoreConst.DISC_ONLY_CASH] = MathLib.GetRoundedMoney(getPropertyValue<double>(CoreConst.CASH_CHEQUE_SUMA) - getPropertyValue<double>(CoreConst.DISC_FINAL_CASH));
 
             // calculating tax sum
             // * taxSUMA = 0.0;
-            props[CoreConst.CALC_TAX_SUMA] = 0.0;
+            Properties[CoreConst.CASH_TAX_SUMA] = 0.0;
 
             for (i = 0; i < _local_order.Rows.Count; i++)
             {
@@ -430,11 +453,11 @@ namespace driver.Components.Profiles
 
                 _local_order.Rows[i]["TAX_MONEY"] = taxValue;
                 // * taxSUMA += taxValue;
-                props[CoreConst.CALC_TAX_SUMA] = getPropertyValue<double>(CoreConst.CALC_TAX_SUMA) + taxValue;
+                Properties[CoreConst.CASH_TAX_SUMA] = getPropertyValue<double>(CoreConst.CASH_TAX_SUMA) + taxValue;
             }
 
             // * taxSUMA = MathLib.GetRoundedMoney(taxSUMA);
-            props[CoreConst.CALC_TAX_SUMA] = MathLib.GetRoundedMoney(getPropertyValue<double>(CoreConst.CALC_TAX_SUMA));
+            Properties[CoreConst.CASH_TAX_SUMA] = MathLib.GetRoundedMoney(getPropertyValue<double>(CoreConst.CASH_TAX_SUMA));
 
             // * if (!_fl_isInvenCheque)
             // *     UpdateSumDisplay(true, updateCustomer);
@@ -444,14 +467,17 @@ namespace driver.Components.Profiles
             //if (!Container.triggerInventCheque)
             //    Container.OnPropertiesChanged(EventArgs.Empty);
 
-            //return props;
-            return props;
+            if (!Container.triggerInventCheque)
+                OnPropertiesUpdated(this, Properties, EventArgs.Empty);
+
+            //return Properties;
+            return Properties;
         }
 
         /* data access and management */
         public string getProductFilterQuery()
         {
-            if (ProductFilter.Length == 0)
+            if (ProductFilter.Length == 0 || ProductFilter.Equals("%"))
                 return string.Format("F='{0}'", ID);
 
             List<string> profileFilteredProducts = new List<string>();
@@ -473,15 +499,174 @@ namespace driver.Components.Profiles
         {
             return getData(DataType.ORDER);
         }
+        public DataTable getAlternative()
+        {
+            return getData(DataType.ALTERNATEBC);
+        }
+        public DataTable getDiscountCards()
+        {
+            return getData(DataType.DCARDS);
+        }
         public DataTable getData(DataType dType)
         {
+
+            if (this.isDefaultProfile())
+                return data[dType];
+            
             List<DataRow> dRows = new List<DataRow>();
             dRows.AddRange(data[dType].Select(getProductFilterQuery()));
-            DataTable dT = Container.setupEmptyDataTable(DataType.PRODUCT);
+            DataTable dT = setupEmptyDataTable(DataType.PRODUCT);
             foreach (DataRow dr in dRows)
                 dT.Rows.Add(dr.ItemArray);
             return dT;
         }
+
+        public DataTable setupEmptyDataTable(DataType dType)
+        {
+            DataTable dTable = new DataTable();
+            switch (dType)
+            {
+                case DataType.ALTERNATEBC:
+                    {
+                        Type[] cTypes = {
+                            typeof(string),
+                            typeof(string)};
+
+                        dTable.Columns.Add("C", typeof(long));
+
+                        dTable.Columns.Add("F", typeof(string));
+
+                        for (byte i = 0; i < driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_ALTColumnName.Length; i++)
+                            dTable.Columns.Add(driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_ALTColumnName[i], cTypes[i]);
+
+                        dTable.PrimaryKey = new DataColumn[] { dTable.Columns["C"] };
+                        dTable.Columns["C"].AutoIncrement = true;
+                        dTable.Columns["C"].Unique = true;
+                        break;
+                    }
+                case DataType.PRODUCT:
+                    {
+                        Type[] cTypes = {
+                            typeof(string),
+                            typeof(string),
+                            typeof(string),
+                            typeof(string),
+                            typeof(string),
+                            typeof(string),
+                            typeof(string),
+                            typeof(double),
+                            typeof(double),
+                            typeof(double),
+                            typeof(double),
+                            typeof(double),
+                            typeof(double),
+                            typeof(double),
+                            typeof(double),
+                            typeof(double)};
+
+                        dTable.Columns.Add("C", typeof(long));
+
+                        dTable.Columns.Add("F", typeof(string));
+
+                        for (byte i = 0; i < driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_ARTColumnName.Length; i++)
+                            dTable.Columns.Add(driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_ARTColumnName[i], cTypes[i]);
+
+                        dTable.PrimaryKey = new DataColumn[] { dTable.Columns["C"] };
+                        dTable.Columns["C"].AutoIncrement = true;
+                        dTable.Columns["C"].Unique = true;
+                        break;
+                    }
+                case DataType.DCARDS:
+                    {
+                        Type[] cTypes = {
+                            typeof(string),
+                            typeof(string),
+                            typeof(double),
+                            typeof(int)};
+
+                        if (driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_CARDColumnName.Length != cTypes.Length)
+                            driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_CARDColumnName = new string[] { "CBC", "CID", "CDISC", "CPRICENO" };
+
+                        dTable.Columns.Add("C", typeof(long));
+                        for (byte i = 0; i < driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_CARDColumnName.Length; i++)
+                            dTable.Columns.Add(driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_CARDColumnName[i], cTypes[i]);
+
+                        dTable.Columns.Add("F", typeof(string));
+
+                        //dTable.TableName = "DCards";
+
+                        dTable.PrimaryKey = new DataColumn[] { dTable.Columns["C"] };
+                        dTable.Columns["C"].AutoIncrement = true;
+                        dTable.Columns["C"].Unique = true;
+                        break;
+                    }
+                case DataType.ORDER:
+                    {
+                        dTable = setupEmptyDataTable(DataType.PRODUCT);
+
+                        DataColumn dCol = new DataColumn("TOT");
+                        dCol.DataType = typeof(string);
+                        dCol.DefaultValue = "0";
+                        dTable.Columns.Add(dCol);
+
+                        dCol = new DataColumn("TAX_VAL");
+                        dCol.DataType = typeof(double);
+                        dCol.DefaultValue = (double)0.0;
+                        dTable.Columns.Add(dCol);
+
+                        dCol = new DataColumn("USEDDISC");
+                        dCol.DataType = typeof(bool);
+                        dCol.DefaultValue = (bool)true;
+                        dTable.Columns.Add(dCol);
+
+                        dCol = new DataColumn("DISC");
+                        dCol.DataType = typeof(double);
+                        dCol.DefaultValue = (double)0.0;
+                        dTable.Columns.Add(dCol);
+
+                        dCol = new DataColumn("SUM");
+                        dCol.AllowDBNull = false;
+                        dCol.DataType = typeof(double);
+                        dCol.DefaultValue = (double)0.0;
+                        dTable.Columns.Add(dCol);
+
+                        dCol = new DataColumn("ASUM");
+                        dCol.AllowDBNull = false;
+                        dCol.DataType = typeof(double);
+                        dCol.DefaultValue = (double)0.0;
+                        dTable.Columns.Add(dCol);
+
+                        dCol = new DataColumn("TAX_MONEY");
+                        dCol.DataType = typeof(double);
+                        //dCol.Expression = "(ASUM*TAX_VAL)/(TAX_VAL+100)";
+                        dCol.DefaultValue = (double)0.0;
+                        dTable.Columns.Add(dCol);
+
+                        dCol = new DataColumn("TMPTOT");
+                        dCol.DataType = typeof(string);
+                        dCol.DefaultValue = "0";
+                        dTable.Columns.Add(dCol);
+
+                        dCol = new DataColumn("ORIGPRICE");
+                        dCol.DataType = typeof(double);
+                        dCol.DefaultValue = (double)0.0;
+                        dTable.Columns.Add(dCol);
+
+                        dCol = new DataColumn("PRINTCOUNT");
+                        dCol.DataType = typeof(double);
+                        dCol.DefaultValue = (double)0.0;
+                        dTable.Columns.Add(dCol);
+
+                        dTable.PrimaryKey = new DataColumn[] { dTable.Columns["C"] };
+                        dTable.Columns["C"].AutoIncrement = true;
+                        dTable.Columns["C"].Unique = true;
+                        break;
+                    }
+            }
+
+            return dTable;
+        }
+
 
         // these methods must use default profile 
         public void orderProductAdd(object[] arrayData)
@@ -498,6 +683,16 @@ namespace driver.Components.Profiles
         }
         public void orderProductRemove(string recordID)
         {
+            
+        }
+
+        //
+        public void refresh()
+        {
+        }
+
+        public void reset()
+        {
         }
 
         // triggers
@@ -506,5 +701,127 @@ namespace driver.Components.Profiles
             return this.ID.Equals(CoreConst.KEY_DEFAULT_PROFILE_ID);
         }
 
+        // = custom propperties
+        public bool customCashDiscountManualSavingsOnlyEnabled
+        {
+            get
+            {
+                return ((getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_SUB) != 0.0 &&
+                    getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_ADD) == 0.0) ||
+                    (getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_SUB) != 0.0 &&
+                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_ADD) == 0.0));
+            }
+        }
+
+        public bool customCashDiscountManualExtraOnlyEnabled
+        {
+            get
+            {
+                return ((getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_SUB) == 0.0 &&
+                    getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_ADD) != 0.0) ||
+                    (getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_SUB) == 0.0 &&
+                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_ADD) != 0.0));
+            }
+        }
+
+        public bool customCashDiscountManualOnlyEnabled
+        {
+            get
+            {
+                return (getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_SUB) != 0.0 ||
+                    getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_ADD) != 0.0 ||
+                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_SUB) != 0.0 ||
+                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_ADD) != 0.0) &&
+                    // propgram discount must be empty
+                    getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT) == 0.0;
+            }
+        }
+
+        public bool customCashDiscountPropgramOnlyEnable
+        {
+            get
+            {
+                return !customCashDiscountManualOnlyEnabled && getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT) != 0.0;
+            }
+        }
+
+        public bool customCashDiscountSomeEnabled
+        {
+            get
+            {
+                return customCashDiscountManualOnlyEnabled || customCashDiscountPropgramOnlyEnable;
+            }
+        }
+
+        public bool customCashDiscountAllEnabled
+        {
+            get
+            {
+                return customCashDiscountManualOnlyEnabled && customCashDiscountPropgramOnlyEnable;
+            }
+        }
+
+        public Dictionary<string, double> customCashDiscountItems
+        {
+            set {
+                if (!this.isDefaultProfile())
+                    Container.Default.customCashDiscountItems[""] = 0.0;
+                else
+                    Properties[""] = value;
+            }
+            get {
+                Dictionary<string, double> _discount = new Dictionary<string, double>();
+                _discount[CoreConst.DISC_ARRAY_CASH_ADD] = Container.Default.getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_ADD);
+                _discount[CoreConst.DISC_ARRAY_CASH_SUB] = Container.Default.getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_SUB);
+                _discount[CoreConst.DISC_ARRAY_PERCENT_ADD] = Container.Default.getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_ADD);
+                _discount[CoreConst.DISC_ARRAY_PERCENT_SUB] = Container.Default.getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_SUB);
+                _discount[CoreConst.DISC_CONST_PERCENT] = Container.Default.getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT);
+                _discount[CoreConst.DISC_FINAL_CASH] = Container.Default.getPropertyValue<double>(CoreConst.DISC_FINAL_CASH);
+                _discount[CoreConst.DISC_FINAL_PERCENT] = Container.Default.getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT);
+                _discount[CoreConst.DISC_ONLY_CASH] = Container.Default.getPropertyValue<double>(CoreConst.DISC_ONLY_CASH);
+                _discount[CoreConst.DISC_ONLY_PERCENT] = Container.Default.getPropertyValue<double>(CoreConst.DISC_ONLY_PERCENT);
+                return _discount;
+            }
+        }
+
+        // = custom methods
+        public void customResetBlockDiscount()
+        {
+            // reset all values
+            foreach (KeyValuePair<string, double> de in customCashDiscountItems)
+                customCashDiscountItems[de.Key.ToString()] = 0.0;
+
+            // setup default values
+            Properties[CoreConst.DISC_APPLIED] = false;
+            Properties[CoreConst.DISC_ALL_ITEMS] = false;
+
+        }
+
+
+        // = events
+
+        public event PropertiesUpdatedEventHandler onPropertiesUpdated;
+
+        protected virtual void OnPropertiesUpdated(AppProfile sender, Hashtable props, EventArgs e)
+        {
+            if (onPropertiesUpdated != null)
+                onPropertiesUpdated(sender, props, e);
+        }
+
+
+        protected void Order_RowChanged(object sender, DataRowChangeEventArgs e)
+        {
+
+        }
+
+        protected void Order_RowDeleted(object sender, DataRowChangeEventArgs e)
+        {
+
+        }
+
+
     }
+
+    public delegate void PropertiesUpdatedEventHandler(AppProfile sender, Hashtable props, EventArgs e);
+
 }

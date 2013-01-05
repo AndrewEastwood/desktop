@@ -98,7 +98,7 @@ namespace PayDesk.Components.UI.wndBills
                     //label2.Text = string.Format("{0} {1} {2} {3:0.00}{4}", "Перегляд рахунку №", billInfo[.CoreConst.BILL_NO], "на суму:", chqSUMA, "грн.");
                     this.billGrid.CurrentCell = null;
                     bool billIsClosed = DataWorkShared.ExtractOrderProperty(dTBill, CoreConst.ORDER_NO, string.Empty, false).ToString() != string.Empty;
-                    bool billIsLocked = (bool)DataWorkShared.ExtractBillProperty(dTBill, CoreConst.IS_LOCKED, false);
+                    bool billIsLocked = (bool)DataWorkShared.ExtractBillProperty(dTBill, CoreConst.BILL_IS_LOCKED, false);
                     string orderNo = DataWorkShared.ExtractOrderProperty(dTBill, CoreConst.ORDER_NO, string.Empty).ToString();
                     string billState = string.Empty;
                     switch (orderNo)
@@ -239,7 +239,7 @@ namespace PayDesk.Components.UI.wndBills
             {
                 currentBill = (DataTable)((object[])billEntry.Value)[0];
                 props = (PropertyCollection)((object[])billEntry.Value)[1];
-                billInfo = ((Dictionary<string, object>)props[CoreConst.BILL]);
+                billInfo = ((Dictionary<string, object>)props[CoreConst.ORDER_BILL]);
                 //this.billFileList.Add(billInfo[CoreConst.OID].ToString(), billEntry.Key);
 
                 if (props[CoreConst.ORDER_NO] == null)
@@ -247,14 +247,14 @@ namespace PayDesk.Components.UI.wndBills
 
                 listGrid.Rows.Add(
                     new object[] {
-                            billInfo[CoreConst.OID],
+                            billInfo[CoreConst.BILL_OID],
                             billEntry.Key,
                             false, 
                             billInfo[CoreConst.BILL_NO],
-                            billInfo[CoreConst.DATETIME],
-                            (billInfo[CoreConst.COMMENT] != null)?billInfo[CoreConst.COMMENT].ToString().Replace("%20", " "):"", 
+                            billInfo[CoreConst.BILL_DATETIME],
+                            (billInfo[CoreConst.BILL_COMMENT] != null)?billInfo[CoreConst.BILL_COMMENT].ToString().Replace("%20", " "):"", 
                             (double)props[CoreConst.ORDER_SUMA], 
-                            bool.Parse(billInfo[CoreConst.IS_LOCKED].ToString()), 
+                            bool.Parse(billInfo[CoreConst.BILL_IS_LOCKED].ToString()), 
                             props[CoreConst.ORDER_NO]
                         }
                 );
