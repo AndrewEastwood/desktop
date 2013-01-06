@@ -50,8 +50,8 @@ namespace driver.Components.Profiles
                 }
 
                 // init order event handlers
-                Order.RowDeleted += new DataRowChangeEventHandler(Order_RowDeleted);
-                Order.RowChanged += new DataRowChangeEventHandler(Order_RowChanged);
+                DataOrder.RowDeleted += new DataRowChangeEventHandler(Order_RowDeleted);
+                DataOrder.RowChanged += new DataRowChangeEventHandler(Order_RowChanged);
             }
         }
 
@@ -138,11 +138,18 @@ namespace driver.Components.Profiles
         public string ProductFilter { get { return this.productFilter; } set { productFilter = value; } }
         
         // profile dynamic data
-        public DataTable Order { get { return getOrder(); } }
-        public DataTable Products { get { return getProducts(); } }
-        public DataTable Alternative { get { return getAlternative(); } }
-        public DataTable DiscountCards { get { return getDiscountCards(); } }
-        public Hashtable Properties { get { return props; } set { props = value; } }
+        public DataTable DataOrder { get { return getOrder(); } }
+        public DataTable DataProducts { get { return getProducts(); } }
+        public DataTable DataAlternative { get { return getAlternative(); } }
+        public DataTable DataDiscountCards { get { return getDiscountCards(); } }
+        public Hashtable Properties
+        {
+            get { return props; }
+            set
+            {
+                props = value;
+            }
+        }
         public Dictionary<DataType, DataTable> Data
         {
             get
@@ -196,12 +203,12 @@ namespace driver.Components.Profiles
         public Hashtable getUpdatedProperties()
         {
             // Hashtable Properties = new Hashtable();
-            DataTable _local_order = this.Order;
+            DataTable _local_order = this.DataOrder;
 
             //*bool useConstDisc = discArrPercent[0] == 0.0 && discArrPercent[1] == 0.0 &&
             //*    discArrdataProps[0] == 0.0 && discArrdataProps[1] == 0.0;
-            double[] _discArrP = getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT);
-            double[] _discArrC = getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH);
+            double[] _discArrP = { customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB], customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD] };
+            double[] _discArrC = { customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_SUB], customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_ADD] };
             bool useConstDisc = _discArrP[0] == 0 && _discArrP[1] == 0 && _discArrC[0] == 0 && _discArrC[1] == 0;
 
             // Get discount value
@@ -467,8 +474,9 @@ namespace driver.Components.Profiles
             //if (!Container.triggerInventCheque)
             //    Container.OnPropertiesChanged(EventArgs.Empty);
 
+
             if (!Container.triggerInventCheque)
-                OnPropertiesUpdated(this, Properties, EventArgs.Empty);
+                OnPropertiesUpdated(this, Properties, "refresh_cash", EventArgs.Empty);
 
             //return Properties;
             return Properties;
@@ -689,10 +697,12 @@ namespace driver.Components.Profiles
         //
         public void refresh()
         {
+            getUpdatedProperties();
         }
 
-        public void reset()
+        public void resetOrder()
         {
+            DataOrder.Rows.Clear();
         }
 
         // triggers
@@ -702,6 +712,24 @@ namespace driver.Components.Profiles
         }
 
         // = custom propperties
+        public bool customCashDiscountManualSavingsEnabled
+        {
+            get
+            {
+                return (getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_SUB) != 0.0 ||
+                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_SUB) != 0.0);
+            }
+        }
+
+        public bool customCashDiscountManualExtraEnabled
+        {
+            get
+            {
+                return (getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_ADD) != 0.0 ||
+                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_ADD) != 0.0);
+            }
+        }
+
         public bool customCashDiscountManualSavingsOnlyEnabled
         {
             get
@@ -761,6 +789,18 @@ namespace driver.Components.Profiles
             }
         }
 
+        public bool customCashDiscountManualIsEmpty
+        {
+            get
+            {
+                return (getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_SUB) == 0.0 &&
+                    getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_ADD) == 0.0 &&
+                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_SUB) == 0.0 &&
+                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_ADD) == 0.0)
+            }
+        }
+
+
         public Dictionary<string, double> customCashDiscountItems
         {
             set {
@@ -795,33 +835,42 @@ namespace driver.Components.Profiles
             Properties[CoreConst.DISC_APPLIED] = false;
             Properties[CoreConst.DISC_ALL_ITEMS] = false;
 
+            // recalculate cash and trigger event
+            getUpdatedProperties();
+
         }
 
+        
 
         // = events
 
         public event PropertiesUpdatedEventHandler onPropertiesUpdated;
 
-        protected virtual void OnPropertiesUpdated(AppProfile sender, Hashtable props, EventArgs e)
+        protected virtual void OnPropertiesUpdated(AppProfile sender, Hashtable props, string actionKey, EventArgs e)
         {
             if (onPropertiesUpdated != null)
-                onPropertiesUpdated(sender, props, e);
+                onPropertiesUpdated(sender, props, actionKey, e);
         }
 
 
         protected void Order_RowChanged(object sender, DataRowChangeEventArgs e)
         {
-
+            refresh();
+            OnPropertiesUpdated(this, Properties, "order_item_changed", EventArgs.Empty);
         }
 
         protected void Order_RowDeleted(object sender, DataRowChangeEventArgs e)
         {
-
+            refresh();
+            if (DataOrder.Rows.Count > 0)
+                OnPropertiesUpdated(this, Properties, "order_item_removed", EventArgs.Empty);
+            else
+                OnPropertiesUpdated(this, Properties, "order_cleared", EventArgs.Empty);
         }
 
 
     }
 
-    public delegate void PropertiesUpdatedEventHandler(AppProfile sender, Hashtable props, EventArgs e);
+    public delegate void PropertiesUpdatedEventHandler(AppProfile sender, Hashtable props, string actionKey, EventArgs e);
 
 }

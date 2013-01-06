@@ -183,6 +183,14 @@ namespace driver.Components.Profiles
         /* = data management */
 
 
+        public DataSet getDataAllProfiles(DataType dType)
+        {
+            DataSet ds = new DataSet();
+            foreach (KeyValuePair<string, AppProfile> ap in profiles)
+                ds.Tables.Add(ap.Value.Data[dType]);
+            return ds;
+        }
+
         /* in progress */
 
         public void setupData(DataSet data)
@@ -281,9 +289,9 @@ namespace driver.Components.Profiles
         }
 
         // profile event handlers
-        void ProfilesContainer_onPropertiesUpdated(AppProfile sender, Hashtable props, EventArgs e)
+        void ProfilesContainer_onPropertiesUpdated(AppProfile sender, Hashtable props, string actionKey, EventArgs e)
         {
-            OnProfileCommandReceived(sender, "properties_updated", e);
+            OnProfileCommandReceived(sender, "pu_" + actionKey, e);
         }
 
     }
