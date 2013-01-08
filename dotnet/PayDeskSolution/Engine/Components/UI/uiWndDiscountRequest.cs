@@ -11,6 +11,7 @@ using components.Shared.Attributes;
 using driver.Components.UI;
 using components.Components.MMessageBox;
 using driver.Components.Profiles;
+using driver.Common;
 //using ;
 //using mdcore.Config;
 //using mdcore.Components.UI;
@@ -195,25 +196,30 @@ namespace PayDesk.Components.UI
 
         public void SetupDiscount(AppProfile profile)
         {
-            int idx = type ? 0 : 1;
+            // ** string[] idx = (type ? {"SUB"} : {"ADD"});
             //if (type)
             //{
 
-            
+            List<string> items = new List<string>(2);
+
+            if (type)
+                items.AddRange(new string[] { CoreConst.DISC_ARRAY_PERCENT_SUB, CoreConst.DISC_ARRAY_CASH_SUB });
+            else
+                items.AddRange(new string[] { CoreConst.DISC_ARRAY_PERCENT_ADD, CoreConst.DISC_ARRAY_CASH_ADD });
 
             textBox1.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UsePercentTypeDisc;
             radioButton1.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UsePercentTypeDisc;
             textBox2.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UseAbsoluteTypeDisc && !Program.AppPlugins.IsActive(PluginType.FPDriver);
             radioButton2.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UseAbsoluteTypeDisc && !Program.AppPlugins.IsActive(PluginType.FPDriver);
 
-            textBox1.Text = Math.Round(Math.Abs(dm[idx]), ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, MidpointRounding.AwayFromZero).ToString();
-            textBox2.Text = Math.Round(Math.Abs(cdm[idx]), ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, MidpointRounding.AwayFromZero).ToString();
+            textBox1.Text = Math.Round(Math.Abs(profile.customCashDiscountItems[items[0]]), ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, MidpointRounding.AwayFromZero).ToString();
+            textBox2.Text = Math.Round(Math.Abs(profile.customCashDiscountItems[items[1]]), ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, MidpointRounding.AwayFromZero).ToString();
 
             if (textBox1.Enabled && textBox2.Enabled)
                 if (ConfigManager.Instance.CommonConfiguration.APP_DefaultTypeDisc == 0)//if percent variant is dafault
-                    SetVariant((dm[idx] != 0.0 || (dm[idx] == 0.0 && cdm[idx] == 0.0)) ? 1 : 2);
+                    SetVariant((profile.customCashDiscountItems[items[1]] != 0.0 || (profile.customCashDiscountItems[items[0]] == 0.0 && profile.customCashDiscountItems[items[1]] == 0.0)) ? 1 : 2);
                 else
-                    SetVariant((cdm[idx] != 0.0 || (dm[idx] == 0.0 && cdm[idx] == 0.0)) ? 2 : 1);
+                    SetVariant((profile.customCashDiscountItems[items[1]] != 0.0 || (profile.customCashDiscountItems[items[0]] == 0.0 && profile.customCashDiscountItems[items[1]] == 0.0)) ? 2 : 1);
             else
             {
                 if (textBox1.Enabled)
@@ -229,21 +235,27 @@ namespace PayDesk.Components.UI
 
             if (ConfigManager.Instance.CommonConfiguration.APP_OnlyDiscount)
             {
-                dm[0] = dm[1] = 0.0;
-                cdm[0] = cdm[1] = 0.0;
+                // *** dm[0] = dm[1] = 0.0;
+                // *** cdm[0] = cdm[1] = 0.0;
+                profile.customResetBlockDiscountManual();
             }
 
             if (type)
             {
                 // znugka
-                dm[0] = dsc;
-                cdm[0] = cdisc;
+                // *** dm[0] = dsc;
+                // *** cdm[0] = cdisc;
+
+                profile.customCashDiscountItems[items[0]] = dsc;
+                profile.customCashDiscountItems[items[1]] = cdisc;
             }
             else
             {
                 // nadbavka
-                dm[1] = -dsc;
-                cdm[1] = -cdisc;
+                // *** dm[1] = -dsc;
+                // *** cdm[1] = -cdisc;
+                profile.customCashDiscountItems[items[0]] = -dsc;
+                profile.customCashDiscountItems[items[1]] = -cdisc;
             }
         }
     }

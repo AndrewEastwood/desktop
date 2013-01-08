@@ -9,7 +9,7 @@ using driver.Config;
 
 namespace driver.Components.Profiles
 {
-    public class AppProfile
+    public class AppProfile : ICloneable
     {
         // container link
         private ProfilesContainer parent;
@@ -110,9 +110,11 @@ namespace driver.Components.Profiles
             //Якщо true то знижка чи надбавка діє на всі позиції(товари) чеку
             props.Add(CoreConst.DISC_ALL_ITEMS, false);
             //Масив з значеннями знижки та надбавки в процентних значеннях
-            props.Add(CoreConst.DISC_ARRAY_PERCENT, new double[2]);
+            props.Add(CoreConst.DISC_ARRAY_PERCENT_SUB, 0.0);
+            props.Add(CoreConst.DISC_ARRAY_PERCENT_ADD, 0.0);
             //Масив з значеннями знижки та надбавки в грошових значеннях
-            props.Add(CoreConst.DISC_ARRAY_CASH, new double[2]);
+            props.Add(CoreConst.DISC_ARRAY_CASH_SUB, 0.0);
+            props.Add(CoreConst.DISC_ARRAY_CASH_ADD, 0.0);
             //Значення постійної знижки в процентному значенні
             props.Add(CoreConst.DISC_CONST_PERCENT, 0.0);
             //Сума знижки і надбавки з процентними значеннями
@@ -700,6 +702,12 @@ namespace driver.Components.Profiles
             getUpdatedProperties();
         }
 
+
+        public void reset()
+        {
+            getUpdatedProperties();
+        }
+
         public void resetOrder()
         {
             DataOrder.Rows.Clear();
@@ -796,10 +804,9 @@ namespace driver.Components.Profiles
                 return (getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_SUB) == 0.0 &&
                     getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_ADD) == 0.0 &&
                     getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_SUB) == 0.0 &&
-                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_ADD) == 0.0)
+                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_ADD) == 0.0);
             }
         }
-
 
         public Dictionary<string, double> customCashDiscountItems
         {
@@ -825,7 +832,17 @@ namespace driver.Components.Profiles
         }
 
         // = custom methods
-        public void customResetBlockDiscount()
+        public void customResetBlockDiscountManual()
+        {
+            customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_ADD] = 0.0;
+            customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_SUB] = 0.0;
+            customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD] = 0.0;
+            customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] = 0.0;
+
+            // recalculate cash and trigger event
+            getUpdatedProperties();
+        }
+        public void customResetBlockDiscountAll()
         {
             // reset all values
             foreach (KeyValuePair<string, double> de in customCashDiscountItems)
@@ -837,7 +854,6 @@ namespace driver.Components.Profiles
 
             // recalculate cash and trigger event
             getUpdatedProperties();
-
         }
 
         
@@ -869,6 +885,15 @@ namespace driver.Components.Profiles
         }
 
 
+
+        public object Clone()
+        {
+            AppProfile p = new AppProfile(ID, Name, ProductFilter, Container);
+            p.Properties = this.Properties;
+            p.Data = Data;
+
+            return p;
+        }
     }
 
     public delegate void PropertiesUpdatedEventHandler(AppProfile sender, Hashtable props, string actionKey, EventArgs e);

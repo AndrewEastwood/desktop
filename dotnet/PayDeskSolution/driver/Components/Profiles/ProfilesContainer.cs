@@ -55,7 +55,7 @@ namespace driver.Components.Profiles
         public bool triggerUseTotDisc { get { return _fl_useTotDisc; } set { _fl_useTotDisc = value; } }
 
         /* data access */
-
+        public Dictionary<string, AppProfile> Profiles { get { return profiles; } set { profiles = value; } }
         public AppProfile Default { get { return this[CoreConst.KEY_DEFAULT_PROFILE_ID]; } set { this[CoreConst.KEY_DEFAULT_PROFILE_ID] = value; } }
         public AppProfile this[object profileID] { get { return getProfile(profileID.ToString()); } set { profiles[profileID.ToString()] = value; } }
 
@@ -189,6 +189,21 @@ namespace driver.Components.Profiles
             foreach (KeyValuePair<string, AppProfile> ap in profiles)
                 ds.Tables.Add(ap.Value.Data[dType]);
             return ds;
+        }
+
+        public List<string> getProfileList()
+        {
+            List<string> _allProfiles = new List<string>();
+            bool hasLegalProfile = Configuration.CommonConfiguration.PROFILES_Items.ContainsKey(Configuration.CommonConfiguration.PROFILES_LegalProgileID);
+            foreach (DictionaryEntry de in Configuration.CommonConfiguration.PROFILES_Items)
+                _allProfiles.Add(de.Key.ToString());
+            if (hasLegalProfile)
+            {
+                _allProfiles.Remove(Configuration.CommonConfiguration.PROFILES_LegalProgileID.ToString());
+                _allProfiles.Insert(0, Configuration.CommonConfiguration.PROFILES_LegalProgileID.ToString());
+            }
+
+            return _allProfiles;
         }
 
         /* in progress */

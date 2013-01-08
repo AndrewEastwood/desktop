@@ -607,9 +607,9 @@ namespace driver.Lib
             //Якщо true то знижка чи надбавка діє на всі позиції(товари) чеку
             discountInfoStructure.Add(CoreConst.DISC_ALL_ITEMS, false);
             //Масив з значеннями знижки та надбавки в процентних значеннях
-            discountInfoStructure.Add(CoreConst.DISC_ARRAY_PERCENT, new double[2]);
+            // **** discountInfoStructure.Add(CoreConst.DISC_ARRAY_PERCENT, new double[2]);
             //Масив з значеннями знижки та надбавки в грошових значеннях
-            discountInfoStructure.Add(CoreConst.DISC_ARRAY_CASH, new double[2]);
+            // **** discountInfoStructure.Add(CoreConst.DISC_ARRAY_CASH, new double[2]);
             //Значення постійної знижки в процентному значенні
             discountInfoStructure.Add(CoreConst.DISC_CONST_PERCENT, 0.0);
             //Сума знижки і надбавки з процентними значеннями

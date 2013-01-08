@@ -217,3 +217,4 @@ D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Plugin_IKC_E260T\obj\Deb
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Plugin_IKC_E260T\obj\Debug\IKC_E260T.Components.UI.DriverUI.TransPrint.resources
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Plugin_IKC_E260T\obj\Debug\IKC_E260T.dll
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Plugin_IKC_E260T\obj\Debug\IKC_E260T.pdb
+D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Plugin_IKC_E260T\obj\Debug\GenerateResource-ResGen.read.4.tlog
