@@ -80,6 +80,7 @@
     <Compile Include="Components\SecureRuntime\Com_SecureRuntime.cs" />
     <Compile Include="Components\szStorage\szStorage.cs" />
     <Compile Include="Components\WinApi\WinApi_Delegates.cs" />
+    <Compile Include="Shared\Enums\Enu_UI.cs" />
     <Compile Include="UI\Controls\SensorDataPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -249,6 +249,9 @@ namespace driver.Components.Profiles
                 // ???? UpdateSumDisplay(false, updateCustomer);
                 // this.PD_Empty_local_order;
                 // *** return Properties;
+                if (!Container.triggerInventCheque)
+                    OnPropertiesUpdated(this, Properties, "refresh_cash", EventArgs.Empty);
+                return Properties;
             }
 
             int i = 0;
@@ -353,7 +356,8 @@ namespace driver.Components.Profiles
             // * chqSUMA = (double)_local_order.Compute("sum(SUM)", "");
             // * chqSUMA = MathLib.GetRoundedMoney(chqSUMA);
             // * realSUMA = chqSUMA;
-            Properties[CoreConst.CASH_CHEQUE_SUMA] = MathLib.GetRoundedMoney((double)_local_order.Compute("sum(SUM)", ""));
+            object dSummaW = _local_order.Compute("sum(SUM)", "");
+            Properties[CoreConst.CASH_CHEQUE_SUMA] = MathLib.GetRoundedMoney((double)(_local_order.Compute("sum(SUM)", "")));
             Properties[CoreConst.CASH_REAL_SUMA] = Properties[CoreConst.CASH_CHEQUE_SUMA];
 
             //select rows with discount mode

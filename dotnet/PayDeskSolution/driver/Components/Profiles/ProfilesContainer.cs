@@ -40,6 +40,7 @@ namespace driver.Components.Profiles
         private bool _fl_isInvenCheque = false;
         private bool _fl_subUnitChanged = false;
         private bool _fl_useTotDisc = true;
+        private bool _fl_runUpdateOnly = true;
 
         /* properties */
         public string valueOfClientID { get { return rtvClientID; } set { rtvClientID = value; } }
@@ -53,6 +54,7 @@ namespace driver.Components.Profiles
         public bool triggerReturnCheque { get { return _fl_isReturnCheque; } set { _fl_isReturnCheque = value; } }
         public bool triggerInventCheque { get { return _fl_isInvenCheque; } set { _fl_isInvenCheque = value; } }
         public bool triggerUseTotDisc { get { return _fl_useTotDisc; } set { _fl_useTotDisc = value; } }
+        public bool triggerRunUpdateOnly { get { return _fl_runUpdateOnly; } set { _fl_runUpdateOnly = value; } }
 
         /* data access */
         public Dictionary<string, AppProfile> Profiles { get { return profiles; } set { profiles = value; } }
@@ -62,7 +64,6 @@ namespace driver.Components.Profiles
 
         public ProfilesContainer()
         {
-
             // init startup values
             triggerSingleMode = Configuration.CommonConfiguration.PROFILES_UseProfiles;
             valueOfCurrentSubUnit = Configuration.CommonConfiguration.APP_SubUnit;
@@ -255,6 +256,8 @@ namespace driver.Components.Profiles
                 OnDataUpdated(EventArgs.Empty);
             }
             else OnDataUchanged(EventArgs.Empty);
+
+            this.triggerRunUpdateOnly = true;
         }
 
 

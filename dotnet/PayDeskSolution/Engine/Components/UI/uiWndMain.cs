@@ -37,6 +37,7 @@ using components.Components.MMessageBox;
 using components.Components.HashObject;
 using components.Public;
 using components.UI.Controls;
+using components.Shared.Enums;
 using System.Threading;
 using driver.Components.Profiles;
 //using comport;
@@ -59,7 +60,7 @@ namespace PayDesk.Components.UI
     {
         
         // Administrator access defender
-        private uiWndAdmin admin;
+        private uiWndAdmin admin = new uiWndAdmin();
         // Main Data
         // *** private DataTable this.profileCnt.Default.Order;
         // *** private DataTable this.profileCnt.Default.Products;
@@ -133,7 +134,7 @@ namespace PayDesk.Components.UI
             timerDataImportSynchronizer = new System.Windows.Forms.Timer();
             timerDataImportSynchronizer.Interval = 50000;
             timerDataImportSynchronizer.Tick += new EventHandler(timerDataImportSynchronizer_Tick);
-
+            
             profileCnt = new ProfilesContainer();
             profileCnt.onSubUnitChanged += new SuibUnitChangedEventHandler(profileCnt_onSubUnitChanged);
             profileCnt.onUpdateRequired += new UpdateRequiredEventHandler(profileCnt_onUpdateRequired);
@@ -206,8 +207,12 @@ namespace PayDesk.Components.UI
         private void profileCnt_onDataUpdated(object sender, EventArgs e)
         {
             // *** articleDGV.DataSource = profileCnt.Default.DataProducts;
-            MMessageBoxEx.Show(this.chequeDGV, "Були внесені зміни в базу товарів", Application.ProductName,
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (this.profileCnt.triggerRunUpdateOnly)
+            {
+                MMessageBoxEx.Show(this.chequeDGV, "Були внесені зміни в базу товарів", Application.ProductName,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
             /* device status */
             if (Program.AppPlugins.IsActive(PluginType.FPDriver))
             {
@@ -252,53 +257,22 @@ namespace PayDesk.Components.UI
         {
             base.OnLoad(e);
 
-            /* initialise data values */
-            // *** InitChequeInformationStructure();
-            admin = new uiWndAdmin();
+            // set parent
             admin.OwnerControlEx = this.chequeDGV;
 
-            //winapi.Funcs.OutputDebugString("load_begin");
+            // set triggers
             this._fl_isOk = new Com_SecureRuntime().FullLoader();
+            this._fl_adminMode = UserConfig.AdminState;
 
-
-            //Restore position
-            this.Text = string.Format("{2}{1}{0}", Application.ProductName, " - ", ConfigManager.Instance.CommonConfiguration.APP_SubUnitName);
-            this.WindowState = ConfigManager.Instance.CommonConfiguration.STYLE_MainWndState;
-            this.Location = new Point(ConfigManager.Instance.CommonConfiguration.STYLE_MainWndPosition.X, ConfigManager.Instance.CommonConfiguration.STYLE_MainWndPosition.Y);
-            this.Size = new Size(ConfigManager.Instance.CommonConfiguration.STYLE_MainWndSize.Width, ConfigManager.Instance.CommonConfiguration.STYLE_MainWndSize.Height);
-            this.splitContainer1.Panel2Collapsed = ConfigManager.Instance.CommonConfiguration.STYLE_ArtSideCollapsed;
-
-            try
-            {
-                this.splitContainer1.Orientation = ConfigManager.Instance.CommonConfiguration.STYLE_SplitOrient;
-                this.splitContainer1.SplitterDistance = ConfigManager.Instance.CommonConfiguration.STYLE_SplitterDistance;
-            }
-            catch { }
-            //updateThread = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(CheckForUpdate));
-
-            _fl_adminMode = UserConfig.AdminState;
-
-            //create tables
-
-            /******
-            DataWorkSource.CreateTables(ref this.profileCnt.Default.Order, ref this.profileCnt.Default.Products, ref this.profileCnt.Default.Alternative, ref this.profileCnt.Default.DiscountCards, ref Cheques);
-            this.CreateOrderStructure(this.profileCnt.Default.Order);
-            if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
-                foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
-                    this.CreateOrderStructure(this.profileCnt.Default.Orders.Tables[de.Key.ToString()]);
-            */
-            // new feature: this.bdo
-
-            // * chequeDGV.DataSource = this.profileCnt.Default.Order;
-            // * articleDGV.DataSource = this.profileCnt.Default.Products;
-
+            // link data
             articleDGV.DataSource = profileCnt.Default.DataProducts;
             chequeDGV.DataSource = profileCnt.Default.DataOrder;
 
-
+            // configure grids
             DataGridView[] grids = new DataGridView[] { chequeDGV, articleDGV };
             ViewLib.LoadGridsView(ref grids, splitContainer1.Orientation);
 
+            // setup exchange folder
             if (ConfigManager.Instance.CommonConfiguration.Path_Exchnage == string.Empty)
             {
                 MMessageBoxEx.Show("Вкажіть шлях до папки обміну", Application.ProductName,
@@ -306,15 +280,21 @@ namespace PayDesk.Components.UI
                 folderBrowserDialog1.RootFolder = Environment.SpecialFolder.Desktop;
                 folderBrowserDialog1.ShowDialog();
                 ConfigManager.Instance.CommonConfiguration.Path_Exchnage = folderBrowserDialog1.SelectedPath;
-                /*
-                if (Program.MainArgs.ContainsKey("-c") && Program.MainArgs["-c"] != null)
-                    ConfigManager.Instance.CommonConfiguration.SaveData(Program.MainArgs["-c"].ToString());
-                else*/
                 ConfigManager.SaveConfiguration();
             }
 
-            UpdateMyControls();
+            //Set default type of search
+            SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, false);
+            
+            // * UpdateSumInfo(true);
+            profileCnt.Default.refresh();
 
+            // setup additional devices
+            configureAdditionalDevices();
+
+            // UpdateMyControls();
+            UpdateGUI(uiComponents.All);
+            
             // temporary refresh skins
             Com_WinApi.OutputDebugString("RefershStyles_Start");
             if (ConfigManager.Instance.CommonConfiguration.skin_sensor_active)
@@ -322,27 +302,6 @@ namespace PayDesk.Components.UI
                 this.сенсорToolStripMenuItem.PerformClick();
             }
 
-            Com_WinApi.OutputDebugString("RefershStyles_End");
-
-            //Set default type of search
-            SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
-            // * UpdateSumInfo(true);
-            profileCnt.Default.refresh();
-            this.Activate();
-            this.BringToFront();
-            this.UpdateZOrder();
-
-
-
-            configureAdditionalDevices();
-
-            this.label_uiWndmain_DemoShowArt.Visible = this.label_uiWndmain_DemoShowChq.Visible = !this._fl_isOk;
-
-            // set additional devices
-            //components.Components.SerialPort.
-
-            //global::components.Components.SerialPort.Com_SerialPort.GetAndConfigurePort("scales", (Hashtable)ApplicationConfiguration.Instance["serialPortConnect.additionalDevices.scale"]);
-            //WinAPI.OutputDebugString("load_end");
         }
         /// <summary>
         /// Event checking for window resize
@@ -374,7 +333,8 @@ namespace PayDesk.Components.UI
         /// <param name="e"></param>
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (_fl_isInvenCheque)
+            // if (_fl_isInvenCheque)
+            if (this.profileCnt.triggerInventCheque)
             {
                 MMessageBoxEx.Show(this.chequeDGV, "Відкритий чек інвентаризації!", Application.ProductName,
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1413,7 +1373,9 @@ namespace PayDesk.Components.UI
                                 break;
                         }
 
-                        RefershMenus();
+                        UpdateGUI(uiComponents.Menus);
+
+                        // **** RefershMenus();
                         break;
                     }
                 case "UnitFilter":
@@ -1486,8 +1448,10 @@ namespace PayDesk.Components.UI
                             this.profileCnt.Default.resetOrder();
                         }
 
-                        RefershMenus();
-                        RefreshChequeInformer(true);
+                        // *** RefershMenus();
+                        // *** RefreshChequeInformer(true);
+
+                        UpdateGUI(uiComponents.Menus | uiComponents.InformersType2 | uiComponents.InformersType3);
                         інвентаризаціяToolStripMenuItem.Checked = _fl_isInvenCheque;
                         break;
                     }
@@ -1495,7 +1459,8 @@ namespace PayDesk.Components.UI
                     {
                         _fl_isReturnCheque = !_fl_isReturnCheque;
                         чекПоверненняToolStripMenuItem.Checked = _fl_isReturnCheque;
-                        RefreshChequeInformer(true);
+                        // *** RefreshChequeInformer(true);
+                        UpdateGUI(uiComponents.InformersType2 | uiComponents.InformersType3);
                         break;
                     }
                 case "Settings":
@@ -1503,13 +1468,13 @@ namespace PayDesk.Components.UI
                         uiWndSettings set = new uiWndSettings();
                         if (set.ShowDialog() == DialogResult.OK)
                         {
-                            RefreshComponents(false);
-                            UpdateMyControls();
+                            // *** RefreshComponents(false);
+                            // *** UpdateMyControls();
+                            UpdateGUI(uiComponents.All);
                             // profile 2.0
                             this.profileCnt.refresh(true);
 
                             SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
-                            this.Text = string.Format("{2}{1}{0}", Application.ProductName, " - ", ConfigManager.Instance.CommonConfiguration.APP_SubUnitName);
                         }
                         set.Dispose();
                         break;
@@ -1564,14 +1529,16 @@ namespace PayDesk.Components.UI
                             ConfigManager.Instance.CommonConfiguration.STYLE_SplitOrient = Orientation.Horizontal;
                             splitContainer1.SplitterDistance = splitContainer1.Height / 2;
                         }
-                        RefreshWindowMenu();
+                        // **** RefreshWindowMenu();
+                        UpdateGUI(uiComponents.Menus);
                         break;
                     }
                 case "ArticleWindow":
                     {
                         splitContainer1.Panel2Collapsed = !splitContainer1.Panel2Collapsed;
                         ConfigManager.Instance.CommonConfiguration.STYLE_ArtSideCollapsed = !ConfigManager.Instance.CommonConfiguration.STYLE_ArtSideCollapsed;
-                        RefreshWindowMenu();
+                        // **** RefreshWindowMenu();
+                        UpdateGUI(uiComponents.Menus);
                         break;
                     }
                 case "SensorType":
@@ -1605,8 +1572,8 @@ namespace PayDesk.Components.UI
                             this.sensorDataPanel1.setupDataContainer(this.articleDGV);
                             //this.articleDGV.BringToFront();
 
-                            RefreshComponents(true);
-
+                            // RefreshComponents(true);
+                            UpdateGUI(uiComponents.Widgets);
                             //-Sensor_EventHandler(null);
 
                             //this.TopMost = true;
@@ -1738,10 +1705,10 @@ namespace PayDesk.Components.UI
                         string billNo = DataWorkShared.ExtractBillProperty(this.PD_Order, CoreConst.BILL_NO, string.Empty, false).ToString();
                         DataWorkBill.LockBill(this.PD_Order, "null");
                         // *** RowsRemoved_MyEvent(true, true, true);
-                        this.RefershMenus();
+                        // *** this.RefershMenus();
                         
                         this.profileCnt.Default.resetOrder();
-                        this.UpdateGUI();
+                        this.UpdateGUI(uiComponents.Menus);
 
                         //this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", billNo);
                         break;
@@ -2640,206 +2607,260 @@ namespace PayDesk.Components.UI
             }
         }
 
-        public void UpdateGUI()
+        public void UpdateGUI(components.Shared.Enums.uiComponents blockToUpdate)
         {
-            // ---- moved to profile container
-            bool needUpdate = false;
-            if (_fl_singleMode != ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
+            // *** components
+            if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.Components) != 0)
             {
-                _fl_singleMode = ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles;
-                _fl_onlyUpdate = false;
-                needUpdate = true;
+                // ---- moved to profile container
+                bool needUpdate = false;
+                if (_fl_singleMode != ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
+                {
+                    _fl_singleMode = ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles;
+                    _fl_onlyUpdate = false;
+                    needUpdate = true;
+                }
+
+                if (currentSubUnit != ConfigManager.Instance.CommonConfiguration.APP_SubUnit)
+                {
+                    _fl_onlyUpdate = false;
+                    _fl_subUnitChanged = true;
+                    needUpdate = true;
+                    currentSubUnit = ConfigManager.Instance.CommonConfiguration.APP_SubUnit;
+                }
+
+                // trigger update function
+                if (needUpdate)
+                    FetchProductData(true, true, false);
+                //timer1_Tick(timer1, EventArgs.Empty);
+                //winapi.Funcs.OutputDebugString("UpdateMyControls_end");
+
+                //if (!timerExchangeImport.Enabled && !timerExchangeScanner.Enabled)
+
+                timerExchangeScanner.Stop();
+                timerExchangeImport.Stop();
+                timerDataImportSynchronizer.Stop();
+
+                // update import timer
+                timerExchangeImport.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate;
+                // update exchange scanner timer
+                timerExchangeScanner.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate;
+                // will setup exchnage scanner in 10 sec.
+                // will run only once and launch timerScanner
+                timerDataImportSynchronizer.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate / 2;
+
+                if (!timerDataImportSynchronizer.Enabled || !timerExchangeScanner.Enabled)
+                {
+                    timerExchangeScanner.Start();
+                    timerDataImportSynchronizer.Start();
+                    //timerExchangeImport.Start();
+                    // trigger import timer with delay of 2 sec.
+                    //Thread.Sleep(2000);
+                    //timerExchangeImport.Start();
+                }
             }
 
-            if (currentSubUnit != ConfigManager.Instance.CommonConfiguration.APP_SubUnit)
+            // *** Labels
+            if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.Labels) != 0)
             {
-                _fl_onlyUpdate = false;
-                _fl_subUnitChanged = true;
-                needUpdate = true;
-                currentSubUnit = ConfigManager.Instance.CommonConfiguration.APP_SubUnit;
+                this.label_uiWndmain_DemoShowArt.Visible = this.label_uiWndmain_DemoShowChq.Visible = !this._fl_isOk;
+                this.Text = string.Format("{2}{1}{0}", Application.ProductName, " - ", ConfigManager.Instance.CommonConfiguration.APP_SubUnitName);
             }
 
-            // trigger update function
-            if (needUpdate)
-                FetchProductData(true, true, false);
-            //timer1_Tick(timer1, EventArgs.Empty);
-            //winapi.Funcs.OutputDebugString("UpdateMyControls_end");
-
-            //if (!timerExchangeImport.Enabled && !timerExchangeScanner.Enabled)
-
-            timerExchangeScanner.Stop();
-            timerExchangeImport.Stop();
-            timerDataImportSynchronizer.Stop();
-
-            // update import timer
-            timerExchangeImport.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate;
-            // update exchange scanner timer
-            timerExchangeScanner.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate;
-            // will setup exchnage scanner in 10 sec.
-            // will run only once and launch timerScanner
-            timerDataImportSynchronizer.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate / 2;
-
-            if (!timerDataImportSynchronizer.Enabled || !timerExchangeScanner.Enabled)
+            // *** App Window
+            if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.AppWindow) != 0)
             {
-                timerExchangeScanner.Start();
-                timerDataImportSynchronizer.Start();
-                //timerExchangeImport.Start();
-                // trigger import timer with delay of 2 sec.
-                //Thread.Sleep(2000);
-                //timerExchangeImport.Start();
+                //Restore position
+                this.Text = string.Format("{2}{1}{0}", Application.ProductName, " - ", ConfigManager.Instance.CommonConfiguration.APP_SubUnitName);
+                this.WindowState = ConfigManager.Instance.CommonConfiguration.STYLE_MainWndState;
+                this.Location = new Point(ConfigManager.Instance.CommonConfiguration.STYLE_MainWndPosition.X, ConfigManager.Instance.CommonConfiguration.STYLE_MainWndPosition.Y);
+                this.Size = new Size(ConfigManager.Instance.CommonConfiguration.STYLE_MainWndSize.Width, ConfigManager.Instance.CommonConfiguration.STYLE_MainWndSize.Height);
+                this.splitContainer1.Panel2Collapsed = ConfigManager.Instance.CommonConfiguration.STYLE_ArtSideCollapsed;
+
+                try
+                {
+                    this.splitContainer1.Orientation = ConfigManager.Instance.CommonConfiguration.STYLE_SplitOrient;
+                    this.splitContainer1.SplitterDistance = ConfigManager.Instance.CommonConfiguration.STYLE_SplitterDistance;
+                }
+                catch { }
+
+                this.Activate();
+                this.BringToFront();
+                this.UpdateZOrder();
             }
 
             // *** APP Informer
-
-            appInfoLabel.Text = string.Format("{0}: {1}     {2}: \"{3}\"     {4}: {5}     {6}: \"{7}\"",
-                "Підрозділ №",
-                ConfigManager.Instance.CommonConfiguration.APP_SubUnit,
-                "Назва підрозділу",
-                ConfigManager.Instance.CommonConfiguration.APP_SubUnitName == string.Empty ? "без назви" : ConfigManager.Instance.CommonConfiguration.APP_SubUnitName,
-                "Каса №",
-                ConfigManager.Instance.CommonConfiguration.APP_PayDesk,
-                "Касир",
-                UserConfig.UserID);
+            // informer type 1
+            if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.InformersType1) != 0)
+            {
+                appInfoLabel.Text = string.Format("{0}: {1}     {2}: \"{3}\"     {4}: {5}     {6}: \"{7}\"",
+                    "Підрозділ №",
+                    ConfigManager.Instance.CommonConfiguration.APP_SubUnit,
+                    "Назва підрозділу",
+                    ConfigManager.Instance.CommonConfiguration.APP_SubUnitName == string.Empty ? "без назви" : ConfigManager.Instance.CommonConfiguration.APP_SubUnitName,
+                    "Каса №",
+                    ConfigManager.Instance.CommonConfiguration.APP_PayDesk,
+                    "Касир",
+                    UserConfig.UserID);
+            }
 
             // *** Order Informer
-            if (_fl_isInvenCheque)
+            // if (_fl_isInvenCheque)
+            // informer type 2
+            if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.InformersType2) != 0)
             {
-                CashLbl.Text = string.Format("{0}", "ІНВЕНТАРИЗАЦІЯ"); ;
-                chequeInfoLabel.Text = string.Format("{0}", profileCnt.Default.Properties["Date"]);
-            }
-            else
-            {
-                string ctrlWord = "чеку";
-                // *** if (this.profileCnt.Default.Order.ExtendedProperties["BILL"] != null)
-                if (profileCnt.Default.Properties["BILL"] != null)
-                    ctrlWord = "рахунку";
-                string totalWord = "позиці";
-                int numValue = profileCnt.Default.DataOrder.Rows.Count;
-
-                while (numValue > 20)
-                    numValue %= 10;
-
-                switch (numValue)
+                if (this.profileCnt.triggerInventCheque)
                 {
-                    case 1: totalWord += 'я'; break;
-                    case 2: totalWord += 'ї'; break;
-                    case 3: totalWord += 'ї'; break;
-                    case 4: totalWord += 'ї'; break;
-                    default: totalWord += 'й'; break;
+                    CashLbl.Text = string.Format("{0}", "ІНВЕНТАРИЗАЦІЯ"); ;
+                    chequeInfoLabel.Text = string.Format("{0}", this.profileCnt.Default.Properties["Date"]);
                 }
-
-                if (_fl_isReturnCheque)
-                    chequeInfoLabel.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, profileCnt.Default.DataOrder.Rows.Count, totalWord, "повертається на суму");
                 else
-                    chequeInfoLabel.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, profileCnt.Default.DataOrder.Rows.Count, totalWord, "продається на суму");
-                CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", profileCnt.Default.Properties[CoreConst.CASH_REAL_SUMA]);
-                //if (DataWorkShared.ExtractOrderProperty(this.profileCnt.Default.Order, CoreConst.BILL, null, true) == null)
-                if (profileCnt.Default.Properties["BILL"] == null)
-                    this.addBillInfo.Text = string.Empty;
+                {
+                    string ctrlWord = "чеку";
+                    // *** if (this.profileCnt.Default.Order.ExtendedProperties["BILL"] != null)
+                    if (this.profileCnt.Default.Properties["BILL"] != null)
+                        ctrlWord = "рахунку";
+                    string totalWord = "позиці";
+                    int numValue = this.profileCnt.Default.DataOrder.Rows.Count;
+
+                    while (numValue > 20)
+                        numValue %= 10;
+
+                    switch (numValue)
+                    {
+                        case 1: totalWord += 'я'; break;
+                        case 2: totalWord += 'ї'; break;
+                        case 3: totalWord += 'ї'; break;
+                        case 4: totalWord += 'ї'; break;
+                        default: totalWord += 'й'; break;
+                    }
+
+                    if (_fl_isReturnCheque)
+                        chequeInfoLabel.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, this.profileCnt.Default.DataOrder.Rows.Count, totalWord, "повертається на суму");
+                    else
+                        chequeInfoLabel.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, this.profileCnt.Default.DataOrder.Rows.Count, totalWord, "продається на суму");
+                    CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", this.profileCnt.Default.Properties[CoreConst.CASH_REAL_SUMA]);
+                    //if (DataWorkShared.ExtractOrderProperty(this.profileCnt.Default.Order, CoreConst.BILL, null, true) == null)
+                    if (this.profileCnt.Default.Properties["BILL"] == null)
+                        this.addBillInfo.Text = string.Empty;
+                }
             }
 
-            if (true) // ??? resetDigitalPanel
+
+            // Digital Block
+            // informer type 3
+            if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.InformersType3) != 0) // ??? resetDigitalPanel
             {
                 CashLbl.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_SumFontColor;
                 CashLbl.Font = ConfigManager.Instance.CommonConfiguration.STYLE_SumFont;
 
                 CashLbl.Image = null;
                 digitalPanel.BackgroundImage = null;
-                _fl_taxDocRequired = false;
+
+                this.profileCnt.triggerTaxDocRequired = false;
+
+                // _fl_taxDocRequired = false;
             }
 
             // *** Styling
-            //Colors
-            infoPanel.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundInfPan;
-            addChequeInfo.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundAddPan;
-            digitalPanel.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundSumRest;
-            chequeDGV.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundNAChqTbl;
-            chequeDGV.DefaultCellStyle.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundNAChqTbl;
-            articleDGV.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundArtTbl;
-            articleDGV.DefaultCellStyle.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundArtTbl;
-            statusStrip1.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundStatPan;
+            if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.Colors) != 0)
+            {
+                //Colors
+                infoPanel.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundInfPan;
+                addChequeInfo.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundAddPan;
+                digitalPanel.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundSumRest;
+                chequeDGV.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundNAChqTbl;
+                chequeDGV.DefaultCellStyle.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundNAChqTbl;
+                articleDGV.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundArtTbl;
+                articleDGV.DefaultCellStyle.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundArtTbl;
+                statusStrip1.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundStatPan;
 
-            //Fonts
-            CashLbl.Font = ConfigManager.Instance.CommonConfiguration.STYLE_SumFont;
-            CashLbl.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_SumFontColor;
-            articleDGV.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ArticlesFont;
-            articleDGV.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ArticlesFontColor;
-            chequeDGV.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ChequeFont;
-            chequeDGV.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ChequeFontColor;
-            statusStrip1.Font = ConfigManager.Instance.CommonConfiguration.STYLE_StatusFont;
-            statusStrip1.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_StatusFontColor;
-            addChequeInfo.Font = ConfigManager.Instance.CommonConfiguration.STYLE_AddInformerFont;
-            addChequeInfo.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_AddInformerFontColor;
-            chequeInfoLabel.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ChqInformerFont;
-            chequeInfoLabel.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ChqInformerFontColor;
-            appInfoLabel.Font = ConfigManager.Instance.CommonConfiguration.STYLE_AppInformerFont;
-            appInfoLabel.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_AppInformerFontColor;
+                //Fonts
+                CashLbl.Font = ConfigManager.Instance.CommonConfiguration.STYLE_SumFont;
+                CashLbl.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_SumFontColor;
+                articleDGV.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ArticlesFont;
+                articleDGV.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ArticlesFontColor;
+                chequeDGV.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ChequeFont;
+                chequeDGV.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ChequeFontColor;
+                statusStrip1.Font = ConfigManager.Instance.CommonConfiguration.STYLE_StatusFont;
+                statusStrip1.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_StatusFontColor;
+                addChequeInfo.Font = ConfigManager.Instance.CommonConfiguration.STYLE_AddInformerFont;
+                addChequeInfo.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_AddInformerFontColor;
+                chequeInfoLabel.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ChqInformerFont;
+                chequeInfoLabel.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ChqInformerFontColor;
+                appInfoLabel.Font = ConfigManager.Instance.CommonConfiguration.STYLE_AppInformerFont;
+                appInfoLabel.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_AppInformerFontColor;
 
-            // misc
-            this.articleDGV.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_ArticleRowHeight;
-            this.articleDGV.Invalidate();//
-            this.articleDGV.Refresh();
-            this.articleDGV.Update();
-            //this.articleDGV.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+                // misc
+                this.articleDGV.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_ArticleRowHeight;
+                this.articleDGV.Invalidate();//
+                this.articleDGV.Refresh();
+                this.articleDGV.Update();
+                //this.articleDGV.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
 
-            this.chequeDGV.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_ChequeRowHeight;
-            this.chequeDGV.Invalidate();
-            this.chequeDGV.Refresh();
-            this.chequeDGV.Update();
-            //this.chequeDGV.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-
+                this.chequeDGV.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_ChequeRowHeight;
+                this.chequeDGV.Invalidate();
+                this.chequeDGV.Refresh();
+                this.chequeDGV.Update();
+                //this.chequeDGV.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+            }
 
             // *** Menu Items
 
-            if (Program.AppPlugins.IsActive(PluginType.FPDriver))
-                try
-                {
-                    fxFunc_toolStripMenuItem.Enabled = Program.AppPlugins.GetActive<IFPDriver>().AllowedMethods.Count != 0;
-                }
-                catch { }
-            else
-                fxFunc_toolStripMenuItem.Enabled = false;
-            адміністраторToolStripMenuItem.Checked = _fl_adminMode;
-            фільтрОдиницьToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && (_fl_adminMode || UserConfig.Properties[9]);
-            формуванняЧекуToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && _fl_adminMode;
-            інвентаризаціяToolStripMenuItem.Enabled = (_fl_isInvenCheque || profileCnt.Default.DataOrder.Rows.Count == 0) && _fl_adminMode;
-            чекПоверненняToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && (_fl_adminMode || UserConfig.Properties[5]);
-            налаштуванняToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && _fl_adminMode;
-            параметриДрукуToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && _fl_adminMode;
-            змінитиКористувачаToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0;
-            вихідToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0;
+            if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.Menus) != 0)
+            {
+                if (Program.AppPlugins.IsActive(PluginType.FPDriver))
+                    try
+                    {
+                        fxFunc_toolStripMenuItem.Enabled = Program.AppPlugins.GetActive<IFPDriver>().AllowedMethods.Count != 0;
+                    }
+                    catch { }
+                else
+                    fxFunc_toolStripMenuItem.Enabled = false;
+                адміністраторToolStripMenuItem.Checked = _fl_adminMode;
+                фільтрОдиницьToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && (_fl_adminMode || UserConfig.Properties[9]);
+                формуванняЧекуToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && _fl_adminMode;
+                інвентаризаціяToolStripMenuItem.Enabled = (_fl_isInvenCheque || profileCnt.Default.DataOrder.Rows.Count == 0) && _fl_adminMode;
+                чекПоверненняToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && (_fl_adminMode || UserConfig.Properties[5]);
+                налаштуванняToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && _fl_adminMode;
+                параметриДрукуToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && _fl_adminMode;
+                змінитиКористувачаToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0;
+                вихідToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0;
 
-            //друкуватиРахунокToolStripMenuItem.Enabled = this.profileCnt.Default.Order.ExtendedProperties.Contains("BILL");
-            /*bool isLocked = (bool)DataWorkShared.ExtractBillProperty(this.profileCnt.Default.Order, CoreConst.IS_LOCKED, false);
-            bool isBill = DataWorkShared.ExtractOrderProperty(this.profileCnt.Default.Order, CoreConst.BILL, null, true) != null;
-            */
-            bool isLocked = profileCnt.Default.Properties[CoreConst.BILL_IS_LOCKED] != null && (bool)profileCnt.Default.Properties[CoreConst.BILL_IS_LOCKED] == false;
-            bool isBill = profileCnt.Default.Properties[CoreConst.ORDER_BILL] != null;
+                //друкуватиРахунокToolStripMenuItem.Enabled = this.profileCnt.Default.Order.ExtendedProperties.Contains("BILL");
+                /*bool isLocked = (bool)DataWorkShared.ExtractBillProperty(this.profileCnt.Default.Order, CoreConst.IS_LOCKED, false);
+                bool isBill = DataWorkShared.ExtractOrderProperty(this.profileCnt.Default.Order, CoreConst.BILL, null, true) != null;
+                */
+                bool isLocked = profileCnt.Default.Properties[CoreConst.BILL_IS_LOCKED] != null && (bool)profileCnt.Default.Properties[CoreConst.BILL_IS_LOCKED] == false;
+                bool isBill = profileCnt.Default.Properties[CoreConst.ORDER_BILL] != null;
 
-            анулюватиРахунокToolStripMenuItem.Enabled = isBill && !isLocked;
-            зберегтиРахунокToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && !_fl_isInvenCheque && !isLocked;
-            всіРахункиToolStripMenuItem.Enabled = !_fl_isInvenCheque;
-            зберегтиІЗакритиToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && !_fl_isInvenCheque;
-            зберегтиІДрукуватиToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && !_fl_isInvenCheque;// && !isLocked;
-            ToolStripMenu_Bills_SavePrintAndClose.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && !_fl_isInvenCheque;// && !isLocked;
-            закритиБезЗмінToolStripMenuItem.Enabled = isBill;
-            перезавантажитиРахунокToolStripMenuItem.Enabled = isBill;
-            змінитиКоментарToolStripMenuItem.Enabled = isBill;
+                анулюватиРахунокToolStripMenuItem.Enabled = isBill && !isLocked;
+                зберегтиРахунокToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && !_fl_isInvenCheque && !isLocked;
+                всіРахункиToolStripMenuItem.Enabled = !_fl_isInvenCheque;
+                зберегтиІЗакритиToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && !_fl_isInvenCheque;
+                зберегтиІДрукуватиToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && !_fl_isInvenCheque;// && !isLocked;
+                ToolStripMenu_Bills_SavePrintAndClose.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && !_fl_isInvenCheque;// && !isLocked;
+                закритиБезЗмінToolStripMenuItem.Enabled = isBill;
+                перезавантажитиРахунокToolStripMenuItem.Enabled = isBill;
+                змінитиКоментарToolStripMenuItem.Enabled = isBill;
 
-            змінитиКстьТоваруToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
-            видалитиВибранийТоварToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
-            видалитиВсіТовариToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
-            здійснитиОплатуToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[23]);
-            задатиЗнижкаToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
-            задатиНадбавкуToolStripMenuItem1.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
+                змінитиКстьТоваруToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
+                видалитиВибранийТоварToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
+                видалитиВсіТовариToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
+                здійснитиОплатуToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[23]);
+                задатиЗнижкаToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
+                задатиНадбавкуToolStripMenuItem1.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
 
 
-            вертикальноToolStripMenuItem.Checked = (splitContainer1.Orientation == Orientation.Vertical);
-            вікноТоварівToolStripMenuItem.Checked = !splitContainer1.Panel2Collapsed;
+                вертикальноToolStripMenuItem.Checked = (splitContainer1.Orientation == Orientation.Vertical);
+                вікноТоварівToolStripMenuItem.Checked = !splitContainer1.Panel2Collapsed;
+
+            }
+
 
             // *** Sensor Mode
-
-            if (this.сенсорToolStripMenuItem.Checked/* ???? || force*/)
+            // widgets
+            if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.Widgets) != 0 && this.сенсорToolStripMenuItem.Checked/* ???? || force*/)
             {
                 //Com_WinApi.OutputDebugString("RefershStyles_Sensor_Activated");
 
@@ -5062,7 +5083,7 @@ namespace PayDesk.Components.UI
                 */
                 //this.DDM_Scanner.Value++;
 
-                if ((files[0] == CoreConst.STATE_LAN_ERROR || files[0] == "") && files[1] == "" && files[2] == "" && _fl_onlyUpdate)
+                if ((files[0] == CoreConst.STATE_LAN_ERROR || files[0] == "") && files[1] == "" && files[2] == "" && this.profileCnt.triggerRunUpdateOnly)
                 {
                     /* if only one profile */
                     if (filesToImport.Count == 1)
@@ -5110,7 +5131,7 @@ namespace PayDesk.Components.UI
                     startupIndex = 0;
                 else
                     startupIndex = profileCnt.Default.DataProducts.Rows.Count;// this.profileCnt.Default.Products.Rows.Count;
-                object[] loadResult = DataWorkSource.LoadData(localFiles, _fl_onlyUpdate, de.Key, startupIndex);
+                object[] loadResult = DataWorkSource.LoadData(localFiles, this.profileCnt.triggerRunUpdateOnly, de.Key, startupIndex);
 
 
                 //this.DDM_Scanner.Value++;
