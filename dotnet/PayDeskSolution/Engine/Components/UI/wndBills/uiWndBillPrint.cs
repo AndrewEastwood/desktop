@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using driver.Lib;
 using driver.Common;
 using driver.Config;
+using driver.Components.Profiles;
 //0using ;
 //0using ;
 
@@ -15,10 +16,10 @@ namespace PayDesk.Components.UI.wndBills
 {
     public partial class uiWndBillPrint : Form
     {
-        private DataTable billEntry;
+        private AppProfile billEntry;
         private object[] pData;
 
-        public uiWndBillPrint(DataTable bill)
+        public uiWndBillPrint(AppProfile bill)
         {
             this.billEntry = bill;
 
@@ -38,7 +39,7 @@ namespace PayDesk.Components.UI.wndBills
                 ConfigManager.Instance.CommonConfiguration.WP_ALL["BILL_PRN"] = this.Location;
             }
 
-            bool billIsLocked = (bool)DataWorkShared.ExtractBillProperty(this.billEntry, CoreConst.BILL_IS_LOCKED, false);
+            bool billIsLocked = (bool)this.billEntry.Properties[CoreConst.BILL_IS_LOCKED];
             button1.Enabled = !billIsLocked;
         }
         /// <summary>
@@ -52,12 +53,15 @@ namespace PayDesk.Components.UI.wndBills
         {
             //Dictionary<string, object> billInfo = DataWorkShared.GetBillStructure(this.billEntry);
             DataWorkOutput.Print(Enums.PrinterType.BillKitchen, this.billEntry);
+
             //.CoreLib.Print(new object[] { this.billEntry }, "kitchen", 1);
-           DataWorkBill.BillUpdatePrintedCount(this.billEntry);
+            DataWorkBill.BillUpdatePrintedCount(this.billEntry);
 
             // reset deleted rows
-            DataWorkShared.ResetBillProperty(this.billEntry, CoreConst.BILL_DELETED_ROWS);
 
+            this.billEntry.Properties[CoreConst.BILL_DELETED_ROWS] = new Dictionary<string, object[]>();
+
+            // *** DataWorkShared.ResetBillProperty(this.billEntry, CoreConst.BILL_DELETED_ROWS);
 
             //.CoreLib.SaveBill(false, 0, "", this.billEntry);
            DataWorkBill.SaveBillToFile(this.billEntry);
@@ -77,7 +81,8 @@ namespace PayDesk.Components.UI.wndBills
             DataWorkBill.BillUpdatePrintedCount(this.billEntry);
 
             // reset deleted rows
-            DataWorkShared.ResetBillProperty(this.billEntry, CoreConst.BILL_DELETED_ROWS);
+            // *** DataWorkShared.ResetBillProperty(this.billEntry, CoreConst.BILL_DELETED_ROWS);
+            this.billEntry.Properties[CoreConst.BILL_DELETED_ROWS] = new Dictionary<string, object[]>();
 
             //.CoreLib.SaveBill(false, "", "", this.billEntry, "");
             DataWorkBill.LockBill(this.billEntry);

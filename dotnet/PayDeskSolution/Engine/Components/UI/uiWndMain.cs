@@ -1661,7 +1661,7 @@ namespace PayDesk.Components.UI
                     }
                 case "ResetBill": // lock bill forever
                     {
-                        int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.PD_Order);
+                        int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.profileCnt.Default);
                         switch (changeState)
                         {
                             case 1:
@@ -1687,9 +1687,9 @@ namespace PayDesk.Components.UI
                         if (changeState != 0)
                             break;
 
-                        if ((bool)DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_IS_LOCKED, false))
+                        if (this.profileCnt.getDefaultProfileValue<bool>(CoreConst.BILL_IS_LOCKED))
                         {
-                            MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
+                            MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + this.profileCnt.Default.Properties[CoreConst.BILL_NO] + " надрукований клієнту.\r\nЗробіть з нього чек.",
                                 Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             break;//r
                         }
@@ -1702,8 +1702,8 @@ namespace PayDesk.Components.UI
                             Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                             break;
                         //CoreLib.LockBill(this.profileCnt.Default.Order, "null");
-                        string billNo = DataWorkShared.ExtractBillProperty(this.PD_Order, CoreConst.BILL_NO, string.Empty, false).ToString();
-                        DataWorkBill.LockBill(this.PD_Order, "null");
+                        string billNo = this.profileCnt.Default.Properties[CoreConst.BILL_NO].ToString();
+                        DataWorkBill.LockBill(this.profileCnt.Default, "null");
                         // *** RowsRemoved_MyEvent(true, true, true);
                         // *** this.RefershMenus();
                         
@@ -1719,7 +1719,7 @@ namespace PayDesk.Components.UI
                             break;
 
                         // *** int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.PD_Order);
-                        int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.profileCnt.Default.DataOrder);
+                        int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.profileCnt.Default);
                         switch (changeState)
                         {
                             case 1:
@@ -1745,7 +1745,7 @@ namespace PayDesk.Components.UI
                         if (changeState != 0)
                             break;
 
-                        uiWndBillSave bs = new uiWndBillSave(this.PD_Order);
+                        uiWndBillSave bs = new uiWndBillSave(this.profileCnt.Default);
                         bs.ShowDialog();
 
                         if (bs.DialogResult == DialogResult.OK)
@@ -1773,7 +1773,7 @@ namespace PayDesk.Components.UI
                         if (_fl_isInvenCheque)
                             break;
 
-                        int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.PD_Order);
+                        int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.profileCnt.Default);
                         switch (changeState)
                         {
                             case 1:
@@ -1799,7 +1799,7 @@ namespace PayDesk.Components.UI
                         if (changeState != 0)
                             break;
 
-                        uiWndBillSave bs = new uiWndBillSave(this.PD_Order);
+                        uiWndBillSave bs = new uiWndBillSave(this.profileCnt.Default);
                         if (bs.ShowDialog() == DialogResult.OK)
                         {
                             this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", bs.GetNewBillNo);
@@ -1810,7 +1810,7 @@ namespace PayDesk.Components.UI
                             }
                             bPrn.Dispose();
                             //DataWorkShared.MergeDataTableProperties(ref this.profileCnt.Default.Order, bs.SavedBill);
-                            this.profileCnt.Default.DataOrder.Merge(bs.SavedBill);
+                            // this.profileCnt.Default.DataOrder.Merge(bs.SavedBill);
                             this.RefershMenus();
                         }
                         bs.Dispose();
@@ -1821,7 +1821,7 @@ namespace PayDesk.Components.UI
                         if (_fl_isInvenCheque)
                             break;
 
-                        int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.PD_Order);
+                        int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.profileCnt.Default);
                         switch (changeState)
                         {
                             case 1:
@@ -1853,7 +1853,7 @@ namespace PayDesk.Components.UI
                             DataTable _testDT = this.PD_Order.Copy();
                             DataWorkBill.SaveBill(true, i.ToString().PadLeft(4, '0'), "DEMO TEST", ref _testDT);
                         }*/
-                        uiWndBillSave bs = new uiWndBillSave(this.PD_Order);
+                        uiWndBillSave bs = new uiWndBillSave(this.profileCnt.Default);
                         if (bs.ShowDialog() == DialogResult.OK)
                         {
                             // *** addChequeInfo.Text = string.Empty;
@@ -1894,7 +1894,7 @@ namespace PayDesk.Components.UI
                     }
                 case "PrintBill": // removed
                     {
-                        int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.PD_Order);
+                        int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.profileCnt.Default);
                         switch (changeState)
                         {
                             case 1:
@@ -1920,7 +1920,7 @@ namespace PayDesk.Components.UI
                         if (changeState != 0)
                             break;
 
-                        uiWndBillPrint bPrn = new uiWndBillPrint(this.PD_Order);
+                        uiWndBillPrint bPrn = new uiWndBillPrint(this.profileCnt.Default);
                         bPrn.ShowDialog(this);
                         bPrn.Dispose();
                         break;
@@ -1930,7 +1930,7 @@ namespace PayDesk.Components.UI
                         if (_fl_isInvenCheque)
                             break;
 
-                        int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.PD_Order);
+                        int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.profileCnt.Default);
                         switch (changeState)
                         {
                             case 1:
@@ -1957,7 +1957,7 @@ namespace PayDesk.Components.UI
                             break;
 
 
-                        uiWndBillSave bs = new uiWndBillSave(this.PD_Order);
+                        uiWndBillSave bs = new uiWndBillSave(this.profileCnt.Default);
                         bs.UpdateComment = true;
                         if (bs.ShowDialog() == DialogResult.OK)
                         {
@@ -1982,7 +1982,7 @@ namespace PayDesk.Components.UI
                         if (_fl_isInvenCheque)
                             break;
 
-                        int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.PD_Order);
+                        int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.profileCnt.Default);
                         switch (changeState)
                         {
                             case 1:
@@ -2008,8 +2008,7 @@ namespace PayDesk.Components.UI
                         if (changeState != 0)
                             break;
 
-
-                        uiWndBillSave bs = new uiWndBillSave(this.PD_Order);
+                        uiWndBillSave bs = new uiWndBillSave(this.profileCnt.Default);
                         if (bs.ShowDialog() == DialogResult.OK)
                         {
                             //if (bs.IsNewBill)
@@ -2028,11 +2027,11 @@ namespace PayDesk.Components.UI
                     }
                 case "ReloadBill": // ReloadBill
                     {
-                        object billName = DataWorkShared.ExtractBillProperty(this.PD_Order, CoreConst.BILL_PATH);
-                        DataTable LoadedBill = DataWorkBill.LoadCombinedBill(ConfigManager.Instance.CommonConfiguration.Path_Bills + "\\" + billName.ToString());
+                        object billName = this.profileCnt.Default.Properties[CoreConst.BILL_PATH];
+                        AppProfile LoadedBill = DataWorkBill.LoadCombinedBill(ConfigManager.Instance.CommonConfiguration.Path_Bills + "\\" + billName.ToString());
                         // **** RowsRemoved_MyEvent(true, true, true);
                         // ****** ADD/REPLACE DATA MEREGE FUNCTION INTO PROFILE
-                        this.profileCnt.Default.DataOrder.Merge(LoadedBill);
+                        this.profileCnt.Default.Merge(LoadedBill);
                         this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_NO));
                         // * UpdateSumInfo(true);
                         profileCnt.Default.refresh();
@@ -3292,7 +3291,7 @@ namespace PayDesk.Components.UI
 
         // shold be removed after dataContainer2
         // **************************************************************************
-        public Hashtable PD_DiscountInfo
+        public Hashtable _PD_DiscountInfo
         {
             set { }
             get
@@ -3322,13 +3321,13 @@ namespace PayDesk.Components.UI
             }
         }
 
-        public bool[] PD_Statements
+        public bool[] _PD_Statements
         {
             set { }
             get { return new bool[3]; }
         }
 
-        public DataTable PD_DEMO_Order
+        public DataTable _PD_DEMO_Order
         {
             get
             {
@@ -3362,7 +3361,7 @@ namespace PayDesk.Components.UI
             }
         }
 
-        public DataTable PD_Order
+        public DataTable _PD_Order
         {
             get
             {
@@ -3580,7 +3579,7 @@ namespace PayDesk.Components.UI
         /// <param name="updateCustomer">Якщо true то результати обчислення будуть ще виведені на дисплей ФП</param>
         /// 
         // will be removed after Profile2
-        private void UpdateSumInfo(bool updateCustomer)
+        private void _UpdateSumInfo(bool updateCustomer)
         {
             /*UpdateSumInfo_single(updateCustomer);
 
@@ -4991,7 +4990,7 @@ namespace PayDesk.Components.UI
         }
         */
 
-        private void InitChequeInformationStructure()
+        private void _InitChequeInformationStructure()
         {
             /* loop by all available profiles * -------- /
             this.Discount.Clear();

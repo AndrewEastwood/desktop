@@ -8,6 +8,7 @@ using driver.Lib;
 using driver.Common;
 using components.Components.MMessageBox;
 using System.Collections;
+using driver.Components.Profiles;
 
 
 namespace driver.Lib
@@ -23,7 +24,7 @@ namespace driver.Lib
         /// </summary>
         /// <param name="type"></param>
         /// <param name="printerData"></param>
-        public static void Print(Enums.PrinterType type, DataTable order)
+        public static void Print(Enums.PrinterType type, AppProfile order)
         {
             // sort printers by name
             List<string> prnNames = new List<string>();
@@ -53,7 +54,7 @@ namespace driver.Lib
         }
 
         // only one
-        public static void Print(string name, DataTable order)
+        public static void Print(string name, AppProfile order)
         {
             foreach (KeyValuePair<string, Dictionary<string, string>> printer in driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Printers)
             {
@@ -70,7 +71,7 @@ namespace driver.Lib
 
         // perform configuring printer
         // migrate to new method using dictionary of data instead
-        private static bool PrintThrowPrinter(object printerConfig, DataTable order)
+        private static bool PrintThrowPrinter(object printerConfig, AppProfile order)
         {
             bool fRez = false;
 
@@ -158,7 +159,7 @@ namespace driver.Lib
             return fRez;
         }
 
-        public static string FeetchTemplate(string tplFile, DataTable order)
+        public static string FeetchTemplate(string tplFile, AppProfile order)
         {   //input data
             //0 - chqTable (DataTable)
             //1 - chqNumber (string)
@@ -182,7 +183,7 @@ namespace driver.Lib
             //19 - billNumber (string)
             //20 - billComment (string)
             object[] simpleData = new object[23];
-            PropertyCollection data = order.ExtendedProperties;
+            Hashtable data = order.Properties;
             
             try
             {
@@ -243,7 +244,10 @@ namespace driver.Lib
                 //18 - discCommonCash (double)
                 try
                 {
-                    Hashtable discountInfo = (Hashtable)data["DISCOUNT"];
+                    // *** Hashtable discountInfo = (Hashtable)data["DISCOUNT"];
+
+                    Hashtable discountInfo = data;
+
                     if (discountInfo.ContainsKey("DISC_ALL_ITEMS"))
                         simpleData[10] = discountInfo["DISC_ALL_ITEMS"];
                     if (discountInfo.ContainsKey("DISC_ARRAY_PERCENT"))
@@ -270,7 +274,8 @@ namespace driver.Lib
             {
                 try
                 {
-                    Dictionary<string, object> billInfo = (Dictionary<string, object>)data["BILL"];
+                    Hashtable billInfo = data;
+                    // *** Dictionary<string, object> billInfo = (Dictionary<string, object>)data["BILL"];
                     if (billInfo.ContainsKey("BILL_NO"))
                         simpleData[19] = billInfo["BILL_NO"];
                     if (billInfo.ContainsKey("COMMENT"))

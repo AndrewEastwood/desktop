@@ -11,6 +11,7 @@ using driver.Components.UI;
 using Microsoft.VisualBasic.FileIO;
 using driver.Common;
 using System.Collections;
+using driver.Components.Profiles;
 
 namespace driver.Lib
 {
@@ -47,13 +48,13 @@ namespace driver.Lib
             return regID.ToString();
         }//ok
 
-        public static bool BillUpdatePrintedCount(DataTable dtBill)
+        public static bool BillUpdatePrintedCount(AppProfile dtBill)
         {
             bool success = true;
-            for (int i = 0; i < dtBill.Rows.Count; i++)
+            for (int i = 0; i < dtBill.DataOrder.Rows.Count; i++)
                 try
                 {
-                    dtBill.Rows[i]["PRINTCOUNT"] = Convert.ToDouble(dtBill.Rows[i]["TOT"]);
+                    dtBill.DataOrder.Rows[i]["PRINTCOUNT"] = Convert.ToDouble(dtBill.DataOrder[i]["TOT"]);
                 }
                 catch(Exception e) {
                     CoreLib.WriteLog(e, "driver.Lib.BillUpdatePrintedCount(DataTable dtBill); can't update PRINTCOUNT field at row ["+i+"]\r\n" + DataWorkShared.DumpDataTableRow(dtBill.Rows[i]));
@@ -61,7 +62,7 @@ namespace driver.Lib
                 }
             return success;
         }
-        public static bool BillUpdatePrintedCount(DataTable dtBill, bool saveResult)
+        public static bool BillUpdatePrintedCount(AppProfile dtBill, bool saveResult)
         {
             bool success = true;
             try
@@ -83,7 +84,7 @@ namespace driver.Lib
             return components.Components.SecureRuntime.Com_SecureRuntime.GetMD5Hash(DateTime.Now.ToString() + "_" + newBillNumber);
         }
 
-        public static bool SaveBill(bool isNewBill, string nom, string comment, ref DataTable dTable/*, bool isLocked, string fixChequeNo*/)
+        public static bool SaveBill(bool isNewBill, string nom, string comment, ref AppProfile dTable/*, bool isLocked, string fixChequeNo*/)
         {
             Dictionary<string, object> billInfo = DataWorkShared.GetStandartBillInfoStructure();
             bool fRez = false;
@@ -111,19 +112,20 @@ namespace driver.Lib
 
                         //dTable.ExtendedProperties.Clear();
 
-                        billInfo["DATETIME"] = DateTime.Now.ToShortDateString();
-                        billInfo["COMMENT"] = comment;
-                        billInfo["PATH"] = path;
-                        billInfo["OID"] = BillNewUID(nom);
-                        billInfo["BILL_NO"] = nom;
-                        billInfo[driver.Common.CoreConst.BILL_OWNER_NO] = string.Empty;
-                        billInfo["IS_LOCKED"] = false;
+                        dTable.Properties[CoreConst.BILL_DATETIME] = DateTime.Now.ToShortDateString();
+                        dTable.Properties[CoreConst.BILL_COMMENT] = comment;
+                        dTable.Properties[CoreConst.BILL_PATH] = path;
+                        dTable.Properties[CoreConst.BILL_OID] = BillNewUID(nom);
+                        dTable.Properties[CoreConst.BILL_NO] = nom;
+                        dTable.Properties[CoreConst.BILL_OWNER_NO] = string.Empty;
+                        dTable.Properties[CoreConst.BILL_IS_LOCKED] = false;
 
-                        if (dTable.ExtendedProperties.ContainsKey("BILL"))
-                            dTable.ExtendedProperties["BILL"] = billInfo;
+                        /*
+                        if (dTable.Properties.ContainsKey("BILL"))
+                            dTable.Properties["BILL"] = billInfo;
                         else
-                            dTable.ExtendedProperties.Add("BILL", billInfo);
-
+                            dTable.Properties.Add("BILL", billInfo);
+                        */
                         /*
                         dTable.ExtendedProperties.Add("OID", BillNewUID(nom));
                         dTable.ExtendedProperties.Add("NOM", nom);
@@ -137,10 +139,11 @@ namespace driver.Lib
                     }
                     else
                     {
-                        billInfo = DataWorkShared.GetBillInfo(dTable);// (Dictionary<string, object>)dTable.ExtendedProperties["BILL"];
+                        // *** billInfo = DataWorkShared.GetBillInfo(dTable);// (Dictionary<string, object>)dTable.ExtendedProperties["BILL"];
                         if (comment != null && comment.Length != 0)
                         {
-                            DataWorkShared.SetBillProperty(dTable, driver.Common.CoreConst.BILL_COMMENT, comment);
+                            // *** DataWorkShared.SetBillProperty(dTable, driver.Common.CoreConst.BILL_COMMENT, comment);
+                            dTable.Properties[CoreConst.BILL_COMMENT] = comment;
                             //billInfo["COMMENT"] = comment;
                         }
                     }
@@ -191,48 +194,54 @@ namespace driver.Lib
             return SaveBill(isNewBill, nom, comment, dTable, false, string.Empty);
         }
         */
-        public static void LockBill(DataTable dtBill, string fxNo)
+        public static void LockBill(AppProfile dtBill, string fxNo)
         {
-            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_IS_LOCKED, true);
+            // *** DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_IS_LOCKED, true);
+            dtBill.Properties[driver.Common.CoreConst.BILL_IS_LOCKED] = true;
             //dtBill.ExtendedProperties["LOCK"] = true;
             if (fxNo != string.Empty)
             {
+                dtBill.Properties[driver.Common.CoreConst.ORDER_NO] = fxNo;
+                dtBill.Properties[driver.Common.CoreConst.BILL_DATETIME_LOCK] = DateTime.Now.ToString("MM-dd-yy H:mm:ss");
+                /*
                 DataWorkShared.SetOrderProperty(dtBill, driver.Common.CoreConst.ORDER_NO, fxNo);
                 DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_DATETIME_LOCK, DateTime.Now.ToString("MM-dd-yy H:mm:ss"));
+                */
             }
             SaveBillToFile(dtBill);
         }
-        public static void LockBill(DataTable dtBill)
+        public static void LockBill(AppProfile dtBill)
         {
             LockBill(dtBill, string.Empty);
         }
-        public static void UnlockBill(DataTable dtBill)
+        public static void UnlockBill(AppProfile dtBill)
         {
             //dtBill.ExtendedProperties["LOCK"] = false;
-            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_IS_LOCKED, false);
+            // *** DataWorkShared.SetBillProperty(dtBill, , false);
+            dtBill.Properties[driver.Common.CoreConst.BILL_IS_LOCKED] = false;
             SaveBillToFile(dtBill);
         }
 
 
-        public static void SaveBillToFile(DataTable dtBill)
+        public static void SaveBillToFile(AppProfile dtBill)
         {
             //saving bill to binary file
             //FileStream stream = new FileStream(AppConfig.Path_Bills + "\\" + dtBill.ExtendedProperties["PATH"].ToString(), FileMode.OpenOrCreate);
-            string savedBillFilePath = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Bills + "\\" + DataWorkShared.ExtractBillProperty(dtBill, driver.Common.CoreConst.BILL_PATH);
-            FileStream stream = new FileStream(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Bills + "\\" + DataWorkShared.ExtractBillProperty(dtBill, driver.Common.CoreConst.BILL_PATH), FileMode.OpenOrCreate);
+            string savedBillFilePath = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Bills + "\\" + dtBill.Properties[driver.Common.CoreConst.BILL_PATH];
+            FileStream stream = new FileStream(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Bills + "\\" + dtBill.Properties[driver.Common.CoreConst.BILL_PATH], FileMode.OpenOrCreate);
             BinaryFormatter binF = new BinaryFormatter();
-            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_DATETIMEEDIT, DateTime.Now);
-            binF.Serialize(stream, DataWorkShared.GetDataObject(dtBill));
+            dtBill.Properties[driver.Common.CoreConst.BILL_DATETIMEEDIT] = DateTime.Now;
+            binF.Serialize(stream, dtBill);
             stream.Close();
             stream.Dispose();
             if (driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Bills_AddCopyToArchive)
                 new components.Components.szStorage.szStorage().CompressFiles(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Bills, "#Bills", driver.Config.ConfigManager.Instance.CommonConfiguration.APP_Admin, savedBillFilePath);
         }
 
-        public static void MadeBillCopy(DataTable dtBill)
+        public static void MadeBillCopy(AppProfile dtBill)
         {
             //string nom = dtBill.ExtendedProperties["NOM"].ToString();
-            string nomOrig = DataWorkShared.ExtractBillProperty(dtBill, driver.Common.CoreConst.BILL_NO, string.Empty).ToString();
+            string nomOrig = dtBill.Properties[CoreConst.BILL_NO].ToString();
             string nom = nomOrig;
             string newNom = string.Empty;
             //int realNo = 0;
@@ -259,11 +268,21 @@ namespace driver.Lib
             // 0 byte[] oid = System.Text.Encoding.Default.GetBytes(DateTime.Now.ToString() + "_" + newNom);
             // 1 byte[] secureOid = System.Security.Cryptography.HashAlgorithm.Create().ComputeHash(oid);
             // 0 string strOID = (System.Math.Abs(oid.GetHashCode().ToString().GetHashCode())).ToString();
+            
+            /*
             DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_OID, BillNewUID(newNom));
             DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_NO, newNom);
             DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_OWNER_NO, nomOrig);
             DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_DATETIME, DateTime.Now.ToShortDateString());
             DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_PATH, path);
+            */
+
+            dtBill.Properties[CoreConst.BILL_OID] = BillNewUID(newNom);
+            dtBill.Properties[CoreConst.BILL_OID] = newNom;
+            dtBill.Properties[CoreConst.BILL_OID] = nomOrig;
+            dtBill.Properties[CoreConst.BILL_OID] = DateTime.Now.ToShortDateString();
+            dtBill.Properties[CoreConst.BILL_OID] = path;
+
             //dtBill.ExtendedProperties["OID"] = strOID;
             //dtBill.ExtendedProperties["NOM"] = newNom;
             //dtBill.ExtendedProperties["DT"] = DateTime.Now.ToShortDateString();
@@ -318,11 +337,11 @@ namespace driver.Lib
             return false;
         }
 
-        public static object[] LoadBillByPath(string path)
+        public static AppProfile LoadBillByPath(string path)
         {
             FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             BinaryFormatter binF = new BinaryFormatter();
-            object[] dTable = (object[])binF.Deserialize(stream);
+            AppProfile dTable = (AppProfile)binF.Deserialize(stream);
             stream.Close();
             stream.Dispose();
             return dTable;
@@ -341,9 +360,10 @@ namespace driver.Lib
             return output;
         }
 
-        public static DataTable LoadCombinedBill(string path)
+        public static AppProfile LoadCombinedBill(string path)
         {
-            return DataWorkShared.CombineDataObject(DataWorkBill.LoadBillByPath(path));
+            return DataWorkBill.LoadBillByPath(path);
+            /*return DataWorkShared.CombineDataObject(DataWorkBill.LoadBillByPath(path));*/
         }
 
         /// <summary>
@@ -352,10 +372,11 @@ namespace driver.Lib
         /// <param name="pathToBillFolder">Path to folder with bills</param>
         /// <param name="dtBill">Bill Object</param>
         /// <returns>0 = without changes; 1 = with changes; 2 = bill is closed; -1 = bill doesn't exist;</returns>
-        public static int BillWasChanged(string pathToBillFolder, DataTable dtBill)
+        public static int BillWasChanged(string pathToBillFolder, AppProfile dtBill)
         {
-            bool isNewBill = !dtBill.ExtendedProperties.Contains("BILL") || dtBill.ExtendedProperties["BILL"] == null;
-            object billName = DataWorkShared.ExtractBillProperty(dtBill, CoreConst.BILL_PATH);
+            bool isNewBill = /*!dtBill.Properties.Contains("BILL") || */dtBill.Properties[CoreConst.BILL_PATH] == null;
+            // ** object billName = DataWorkShared.ExtractBillProperty(dtBill, CoreConst.BILL_PATH);
+            object billName = dtBill.Properties[CoreConst.BILL_PATH];
 
             if (isNewBill)
                 return 0;
@@ -363,15 +384,15 @@ namespace driver.Lib
             if (!System.IO.File.Exists(pathToBillFolder + "\\" + billName.ToString()))
                 return -1;
 
-            DataTable loadedBill = LoadCombinedBill(pathToBillFolder + "\\" + billName.ToString());
+            AppProfile loadedBill = LoadCombinedBill(pathToBillFolder + "\\" + billName.ToString());
             try
             {
-                DateTime deEdit = (DateTime)DataWorkShared.ExtractBillProperty(loadedBill, CoreConst.BILL_DATETIMEEDIT);
-                object deOrderNo = DataWorkShared.ExtractOrderProperty(loadedBill, CoreConst.ORDER_NO, null);
+                DateTime deEdit = (DateTime)loadedBill.Properties[CoreConst.BILL_DATETIMEEDIT];
+                object deOrderNo = loadedBill.Properties[CoreConst.ORDER_NO];
                 if (deOrderNo != null && deOrderNo.ToString() != string.Empty)
                     return 2;
 
-                DateTime deCurrentEdit = (DateTime)DataWorkShared.ExtractBillProperty(dtBill, CoreConst.BILL_DATETIMEEDIT);
+                DateTime deCurrentEdit = (DateTime)dtBill.Properties[CoreConst.BILL_DATETIMEEDIT];
                 if (deEdit.CompareTo(deCurrentEdit) != 0)
                     return 1;
 
@@ -381,14 +402,14 @@ namespace driver.Lib
             return 0;
         }
 
-        public static Dictionary<string, object> LoadDayBills(DateTime selectedDay, string path, byte subunit)
+        public static Dictionary<string, AppProfile> LoadDayBills(DateTime selectedDay, string path, byte subunit)
         {
             //string item = string.Empty;
             string[] bills = Directory.GetFiles(path, string.Format("{0:X2}_N*_{1}.bill", subunit, selectedDay.ToString("ddMMyy")));
             Array.Sort(bills);
             //double billListSuma = 0.0;
             //double billSuma = 0.0;
-            object[] billEntry = new object[2];
+            AppProfile billEntry = null;
             //PropertyCollection props = new PropertyCollection();
             //Dictionary<string, object> billInfo = new Dictionary<string, object>();
             //object orderNo = new object();
@@ -396,7 +417,7 @@ namespace driver.Lib
             DataTable dTBill = new DataTable();
             BinaryFormatter binF = new BinaryFormatter();
             //Dictionary<string, string> billFileList = new Dictionary<string, string>();
-            Dictionary<string, object> output = new Dictionary<string, object>();
+            Dictionary<string, AppProfile> output = new Dictionary<string, AppProfile>();
 
             for (int i = 0; i < bills.Length; i++/*, item = string.Empty*/)
             {
@@ -405,7 +426,7 @@ namespace driver.Lib
                     // load bill file
                     stream = new FileStream(bills[i], FileMode.Open, FileAccess.Read, FileShare.Read);
                     // parse bill entry
-                    billEntry = (object[])binF.Deserialize(stream);
+                    billEntry = (AppProfile)binF.Deserialize(stream);
                     // get bill content
                     //dTBill = (DataTable)billEntry[0];
                     // get bill properties
@@ -446,65 +467,67 @@ namespace driver.Lib
             //return billListSuma;
             return output;
         }
-        public static Dictionary<string, object> LoadDayBills(string path, byte subunit)
+        public static Dictionary<string, AppProfile> LoadDayBills(string path, byte subunit)
         {
             return LoadDayBills(DateTime.Now, path, subunit);
         }
-        public static Dictionary<string, object> LoadRangeBills(DateTime dateFrom, DateTime dateTo, string path, byte subunit)
+        public static Dictionary<string, AppProfile> LoadRangeBills(DateTime dateFrom, DateTime dateTo, string path, byte subunit)
         {
             if (dateFrom == dateTo)
                 return LoadDayBills(dateFrom, path, subunit);
 
-            Dictionary<string, object> rangeBills = new Dictionary<string, object>();
-            Dictionary<string, object> currentBills = new Dictionary<string, object>();
+            Dictionary<string, AppProfile> rangeBills = new Dictionary<string, AppProfile>();
+            Dictionary<string, AppProfile> currentBills = new Dictionary<string, AppProfile>();
             while (dateFrom < dateTo)
             {
                 currentBills = LoadDayBills(dateFrom, path, subunit);
-                foreach (KeyValuePair<string, object> bill in currentBills)
+                foreach (KeyValuePair<string, AppProfile> bill in currentBills)
                     rangeBills.Add(bill.Key, bill.Value);
                 dateFrom = dateFrom.AddDays(1.0);
             }
             return rangeBills;
         }
-        public static Dictionary<string, object> LoadRangeBills(DateTime dateFrom, string path, byte subunit)
+        public static Dictionary<string, AppProfile> LoadRangeBills(DateTime dateFrom, string path, byte subunit)
         {
             return LoadRangeBills(dateFrom, DateTime.Now, path, subunit);
         }
-        public static Dictionary<string, object> LoadRangeBills(string path, byte subunit)
+        public static Dictionary<string, AppProfile> LoadRangeBills(string path, byte subunit)
         {
             return LoadDayBills(DateTime.Now, path, subunit);
         }
 
-        public static DataSet LoadCombinedDayBills(DateTime selectedDay, string path, byte subunit)
+        public static List<AppProfile> LoadCombinedDayBills(DateTime selectedDay, string path, byte subunit)
         {
-            DataSet todayBillDataSet = new DataSet("BillDataSet_" + selectedDay.ToString("dd-MM-yyyy") + "_U" + subunit);
-            Dictionary<string, object> items = LoadDayBills(selectedDay, path, subunit);
-            foreach (KeyValuePair<string, object> billItem in items)
+            List<AppProfile> todayBillDataSet = new List<AppProfile>();
+            // *** DataSet todayBillDataSet = new DataSet("BillDataSet_" + selectedDay.ToString("dd-MM-yyyy") + "_U" + subunit);
+            Dictionary<string, AppProfile> items = LoadDayBills(selectedDay, path, subunit);
+            foreach (KeyValuePair<string, AppProfile> billItem in items)
             {
-                todayBillDataSet.Tables.Add(DataWorkShared.CombineDataObject((object[])billItem.Value));
+                todayBillDataSet.Add(billItem.Value);
             }
             
             return todayBillDataSet;
         }
-        public static DataSet LoadCombinedDayBills(string path, byte subunit)
+        public static List<AppProfile> LoadCombinedDayBills(string path, byte subunit)
         {
             return LoadCombinedDayBills(DateTime.Now, path, subunit);
         }
-        public static DataSet LoadCombinedRangeBills(DateTime dateFrom, DateTime dateTo, string path, byte subunit)
+        public static List<AppProfile> LoadCombinedRangeBills(DateTime dateFrom, DateTime dateTo, string path, byte subunit)
         {
-            DataSet rangeBills = new DataSet();
+            // *** DataSet rangeBills = new DataSet();
+            List<AppProfile> rangeBills = new List<AppProfile>();
             while (dateFrom < dateTo)
             {
-                rangeBills.Merge(LoadCombinedDayBills(dateFrom, path, subunit));
+                rangeBills.AddRange(LoadCombinedDayBills(dateFrom, path, subunit));
                 dateFrom = dateFrom.AddDays(1.0);
             }
             return rangeBills;
         }
-        public static DataSet LoadCombinedRangeBills(DateTime dateFrom, string path, byte subunit)
+        public static List<AppProfile> LoadCombinedRangeBills(DateTime dateFrom, string path, byte subunit)
         {
             return LoadCombinedRangeBills(dateFrom, DateTime.Now, path, subunit);
         }
-        public static DataSet LoadCombinedRangeBills(string path, byte subunit)
+        public static List<AppProfile> LoadCombinedRangeBills(string path, byte subunit)
         {
             return LoadCombinedDayBills(DateTime.Now, path, subunit);
         }

@@ -40,7 +40,7 @@ namespace driver.Components.Profiles
 
             if (this.isDefaultProfile())
             {
-                this.props = getEmptyProperties();
+                this.props = getEmptyProperties(DataSection.All);
                 // init data containers
                 string[] dataKeys = Enum.GetNames(typeof(DataType));
                 for (int i = 0; i < dataKeys.Length; i++)
@@ -56,77 +56,90 @@ namespace driver.Components.Profiles
         }
 
         /* setup */
-        public Hashtable getEmptyProperties()
+        public Hashtable getEmptyProperties(DataSection ds)
         {
             if (!this.isDefaultProfile())
-                return Container.Default.getEmptyProperties();
+                return Container.Default.getEmptyProperties(ds);
             
             Hashtable props = new Hashtable();
 
             // Order Block
             // -----------
-            props.Add(CoreConst.ORDER_STORE_NO, Container.Configuration.CommonConfiguration.APP_SubUnit);
-            // Default Client ID
-            props.Add(CoreConst.ORDER_CLIENT_ID, string.Empty);
-            // Detect if cheque is retiermant
-            props.Add(CoreConst.ORDER_IS_RET, false);
-            // Determinate that cheque is legal
-            props.Add(CoreConst.ORDER_IS_LEGAL, false);
-            // Cheque Number
-            props.Add(CoreConst.ORDER_NO, null);
-            // Determinate if this cheque need tax bill
-            props.Add(CoreConst.ORDER_TAX_BILL, null);
+            if (((int)ds & (int)DataSection.Order) != 0)
+            {
+                props.Add(CoreConst.ORDER_STORE_NO, Container.Configuration.CommonConfiguration.APP_SubUnit);
+                // Default Client ID
+                props.Add(CoreConst.ORDER_CLIENT_ID, string.Empty);
+                // Detect if cheque is retiermant
+                props.Add(CoreConst.ORDER_IS_RET, false);
+                // Determinate that cheque is legal
+                props.Add(CoreConst.ORDER_IS_LEGAL, false);
+                // Cheque Number
+                props.Add(CoreConst.ORDER_NO, null);
+                // Determinate if this cheque need tax bill
+                props.Add(CoreConst.ORDER_TAX_BILL, null);
+            }
 
             // Bill block
             // ------------
-            props.Add(CoreConst.BILL_OID, string.Empty);
-            // DataTable source
-            props.Add(CoreConst.BILL_NO, string.Empty);
-            // String - owner number (for clonned bill)
-            props.Add(CoreConst.BILL_OWNER_NO, string.Empty);
-            // Storu Number
-            props.Add(CoreConst.BILL_DATETIME, DateTime.Now);
-            // Storu Number
-            props.Add(CoreConst.BILL_DATETIMEEDIT, DateTime.Now);
-            // Default Client ID
-            props.Add(CoreConst.BILL_COMMENT, string.Empty);
-            // Detect if cheque is retiermant
-            props.Add(CoreConst.BILL_IS_LOCKED, false);
-            // Determinate that cheque is legal
-            props.Add(CoreConst.BILL_PATH, string.Empty);
-            // Determinate that cheque is legal
-            props.Add(CoreConst.BILL_DELETED_ROWS, new Dictionary<string, object[]>());
+            if (((int)ds & (int)DataSection.Bill) != 0)
+            {
+                props.Add(CoreConst.BILL_OID, string.Empty);
+                // DataTable source
+                props.Add(CoreConst.BILL_NO, string.Empty);
+                // String - owner number (for clonned bill)
+                props.Add(CoreConst.BILL_OWNER_NO, string.Empty);
+                // Storu Number
+                props.Add(CoreConst.BILL_DATETIME, DateTime.Now);
+                // Storu Number
+                props.Add(CoreConst.BILL_DATETIMEEDIT, DateTime.Now);
+                // Default Client ID
+                props.Add(CoreConst.BILL_COMMENT, string.Empty);
+                // Detect if cheque is retiermant
+                props.Add(CoreConst.BILL_IS_LOCKED, false);
+                // Determinate that cheque is legal
+                props.Add(CoreConst.BILL_PATH, string.Empty);
+                // Determinate that cheque is legal
+                props.Add(CoreConst.BILL_DELETED_ROWS, new Dictionary<string, object[]>());
+            }
 
             // Cash Block
             // ------------
-            props.Add(CoreConst.CASH_CHEQUE_SUMA, 0.0);
-            // 
-            props.Add(CoreConst.CASH_REAL_SUMA, 0.0);
-            // 
-            props.Add(CoreConst.CASH_TAX_SUMA, 0.0);
+            if (((int)ds & (int)DataSection.Cash) != 0)
+            {
+                props.Add(CoreConst.CASH_CHEQUE_SUMA, 0.0);
+                // 
+                props.Add(CoreConst.CASH_REAL_SUMA, 0.0);
+                // 
+                props.Add(CoreConst.CASH_TAX_SUMA, 0.0);
+            }
 
             // Discount block
             // ------------
-            //Якщо true то знижка чи надбавка діє на всі позиції(товари) чеку
-            props.Add(CoreConst.DISC_ALL_ITEMS, false);
-            //Масив з значеннями знижки та надбавки в процентних значеннях
-            props.Add(CoreConst.DISC_ARRAY_PERCENT_SUB, 0.0);
-            props.Add(CoreConst.DISC_ARRAY_PERCENT_ADD, 0.0);
-            //Масив з значеннями знижки та надбавки в грошових значеннях
-            props.Add(CoreConst.DISC_ARRAY_CASH_SUB, 0.0);
-            props.Add(CoreConst.DISC_ARRAY_CASH_ADD, 0.0);
-            //Значення постійної знижки в процентному значенні
-            props.Add(CoreConst.DISC_CONST_PERCENT, 0.0);
-            //Сума знижки і надбавки з процентними значеннями
-            props.Add(CoreConst.DISC_ONLY_PERCENT, 0.0);
-            //Сума знижки і надбавки з грошовими значеннями
-            props.Add(CoreConst.DISC_ONLY_CASH, 0.0);
-            //Загальний коефіціент знижки в процентному значенні
-            props.Add(CoreConst.DISC_FINAL_PERCENT, 0.0);
-            //Загальний коефіціент знижки в грошовому значенні
-            props.Add(CoreConst.DISC_FINAL_CASH, 0.0);
-            //Загальний коефіціент знижки в грошовому значенні
-            props.Add(CoreConst.DISC_APPLIED, false);
+
+            if (((int)ds & (int)DataSection.Discount) != 0)
+            {
+                //Якщо true то знижка чи надбавка діє на всі позиції(товари) чеку
+                props.Add(CoreConst.DISC_ALL_ITEMS, false);
+                //Масив з значеннями знижки та надбавки в процентних значеннях
+                props.Add(CoreConst.DISC_ARRAY_PERCENT_SUB, 0.0);
+                props.Add(CoreConst.DISC_ARRAY_PERCENT_ADD, 0.0);
+                //Масив з значеннями знижки та надбавки в грошових значеннях
+                props.Add(CoreConst.DISC_ARRAY_CASH_SUB, 0.0);
+                props.Add(CoreConst.DISC_ARRAY_CASH_ADD, 0.0);
+                //Значення постійної знижки в процентному значенні
+                props.Add(CoreConst.DISC_CONST_PERCENT, 0.0);
+                //Сума знижки і надбавки з процентними значеннями
+                props.Add(CoreConst.DISC_ONLY_PERCENT, 0.0);
+                //Сума знижки і надбавки з грошовими значеннями
+                props.Add(CoreConst.DISC_ONLY_CASH, 0.0);
+                //Загальний коефіціент знижки в процентному значенні
+                props.Add(CoreConst.DISC_FINAL_PERCENT, 0.0);
+                //Загальний коефіціент знижки в грошовому значенні
+                props.Add(CoreConst.DISC_FINAL_CASH, 0.0);
+                //Загальний коефіціент знижки в грошовому значенні
+                props.Add(CoreConst.DISC_APPLIED, false);
+            }
 
             return props;
         }
@@ -682,6 +695,15 @@ namespace driver.Components.Profiles
         }
 
 
+        public void Merge(AppProfile profile)
+        {
+            Properties.Clear();
+            Data.Clear();
+
+            Properties = (Hashtable)profile.Properties.Clone();
+            Data = profile.Data;
+        }
+
         // these methods must use default profile 
         public void orderProductAdd(object[] arrayData)
         {
@@ -814,12 +836,6 @@ namespace driver.Components.Profiles
 
         public Dictionary<string, double> customCashDiscountItems
         {
-            set {
-                if (!this.isDefaultProfile())
-                    Container.Default.customCashDiscountItems[""] = 0.0;
-                else
-                    Properties[""] = value;
-            }
             get {
                 Dictionary<string, double> _discount = new Dictionary<string, double>();
                 _discount[CoreConst.DISC_ARRAY_CASH_ADD] = Container.Default.getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_ADD);
@@ -860,8 +876,6 @@ namespace driver.Components.Profiles
             getUpdatedProperties();
         }
 
-        
-
         // = events
 
         public event PropertiesUpdatedEventHandler onPropertiesUpdated;
@@ -888,8 +902,6 @@ namespace driver.Components.Profiles
                 OnPropertiesUpdated(this, Properties, "order_cleared", EventArgs.Empty);
         }
 
-
-
         public object Clone()
         {
             AppProfile p = new AppProfile(ID, Name, ProductFilter, Container);
@@ -901,5 +913,14 @@ namespace driver.Components.Profiles
     }
 
     public delegate void PropertiesUpdatedEventHandler(AppProfile sender, Hashtable props, string actionKey, EventArgs e);
+
+    public enum DataSection : int
+    {
+        All = 0x00,
+        Order = 0x01,
+        Bill = 0x02,
+        Cash = 0x04,
+        Discount = 0x08
+    }
 
 }

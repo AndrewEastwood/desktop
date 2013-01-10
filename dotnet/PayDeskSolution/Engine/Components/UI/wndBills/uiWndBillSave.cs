@@ -15,13 +15,15 @@ using driver.Components.UI;
 using components.Components.MMessageBox;
 using driver.Config;
 using components.Public;
+using driver.Components.Profiles;
+using driver.Common;
 
 namespace PayDesk.Components.UI.wndBills
 {
     public partial class uiWndBillSave : Form
     {
         //таблиця рахунку  
-        private DataTable dtBill;
+        private AppProfile dtBill;
         private Dictionary<string, object> billInfoStructure;
         //номер рахунку
         private string billNo;
@@ -35,7 +37,7 @@ namespace PayDesk.Components.UI.wndBills
         /// </summary>
         /// <param name="dTable">Таблиця рахунку</param>
         /// 
-        public uiWndBillSave(DataTable dTable)
+        public uiWndBillSave(AppProfile dTable)
         {
             InitializeComponent();
 
@@ -53,15 +55,16 @@ namespace PayDesk.Components.UI.wndBills
                 ConfigManager.Instance.CommonConfiguration.WP_ALL["BILL_CMT"] = this.Location;
             }
 
-            isNewBill = !dTable.ExtendedProperties.Contains("BILL") || dTable.ExtendedProperties["BILL"] == null;
+            // ** isNewBill = !dTable.ExtendedProperties.Contains("BILL") || dTable.ExtendedProperties["BILL"] == null;
+            isNewBill = dTable.Properties[CoreConst.BILL_PATH] == null;
             if (isNewBill)
                 billNo = DataWorkBill.GetNextBillID();
             else
             {
-                billNo = ((Dictionary<string , object>)dTable.ExtendedProperties["BILL"])["BILL_NO"].ToString();
-                richTextBox1.Text = ((Dictionary<string, object>)dTable.ExtendedProperties["BILL"])["COMMENT"].ToString();
+                billNo = dTable.Properties[CoreConst.BILL_NO].ToString();
+                richTextBox1.Text = dTable.Properties[CoreConst.BILL_COMMENT].ToString();
             }
-            this.dtBill = dTable.Copy();
+            this.dtBill =  (AppProfile)dTable.Clone();
             this.needCleanup = false;
             Text += " " + billNo.ToString();
 
@@ -180,7 +183,7 @@ namespace PayDesk.Components.UI.wndBills
         /// </summary>
         /// <param name="dTable"></param>
         /// <param name="clearInfo"></param>
-        public uiWndBillSave(DataTable dTable, bool clearInfo)
+        public uiWndBillSave(AppProfile dTable, bool clearInfo)
             : this(dTable)
         {
             this.needCleanup = clearInfo;
@@ -190,7 +193,7 @@ namespace PayDesk.Components.UI.wndBills
         /// </summary>
         /// <param name="dTable"></param>
         /// <param name="billInfo"></param>
-        public uiWndBillSave(DataTable dTable, Dictionary<string, object> billInfo)
+        public uiWndBillSave(AppProfile dTable, Dictionary<string, object> billInfo)
             : this(dTable)
         {
             this.billInfoStructure = billInfo;
@@ -201,7 +204,7 @@ namespace PayDesk.Components.UI.wndBills
         /// <param name="dTable"></param>
         /// <param name="clearInfo"></param>
         /// <param name="billInfo"></param>
-        public uiWndBillSave(DataTable dTable, bool clearInfo, Dictionary<string ,object> billInfo)
+        public uiWndBillSave(AppProfile dTable, bool clearInfo, Dictionary<string ,object> billInfo)
             : this(dTable, clearInfo)
         {
             this.billInfoStructure = billInfo;
@@ -316,8 +319,8 @@ namespace PayDesk.Components.UI.wndBills
         /// <summary>
         /// Saved bill object
         /// </summary>
-        public DataTable SavedBill { get { return this.dtBill; } }
-        public object SavedBillInfoStructure { get { return this.dtBill.ExtendedProperties; } }
+        public AppProfile SavedBill { get { return this.dtBill; } }
+        // ** public object SavedBillInfoStructure { get { return this.dtBill.ExtendedProperties; } }
         public bool UpdateComment { get { return this.updateComment; } set { this.updateComment = value; } }
 
         private void uiWndBillSave_FormClosing(object sender, FormClosingEventArgs e)
