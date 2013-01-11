@@ -54,10 +54,10 @@ namespace driver.Lib
             for (int i = 0; i < dtBill.DataOrder.Rows.Count; i++)
                 try
                 {
-                    dtBill.DataOrder.Rows[i]["PRINTCOUNT"] = Convert.ToDouble(dtBill.DataOrder[i]["TOT"]);
+                    dtBill.DataOrder.Rows[i]["PRINTCOUNT"] = Convert.ToDouble(dtBill.DataOrder.Rows[i]["TOT"]);
                 }
                 catch(Exception e) {
-                    CoreLib.WriteLog(e, "driver.Lib.BillUpdatePrintedCount(DataTable dtBill); can't update PRINTCOUNT field at row ["+i+"]\r\n" + DataWorkShared.DumpDataTableRow(dtBill.Rows[i]));
+                    CoreLib.WriteLog(e, "driver.Lib.BillUpdatePrintedCount(DataTable dtBill); can't update PRINTCOUNT field at row ["+i+"]\r\n" + DataWorkShared.DumpDataTableRow(dtBill.DataOrder.Rows[i]));
                     success = false; 
                 }
             return success;

@@ -393,10 +393,13 @@ namespace driver.Lib
         public delegate void UpdatesAvailable();
 
         // get available data
+        /*
+         * 
+         * 
         public static Com_HashObject CheckGetDataSource(bool updateOnly)
         {
             
-            /* main variables */
+            /* main variables *-----/
             //SortedList remoteFiles = new SortedList();
             //SortedList localFiles = new SortedList();
             //string[] remoteFiles = new string[3];
@@ -429,7 +432,7 @@ namespace driver.Lib
             Dictionary<components.Shared.Enums.Enu_SourceEnums.pdDataItemType, string> remoteFiles = new Dictionary<components.Shared.Enums.Enu_SourceEnums.pdDataItemType, string>();
             Dictionary<components.Shared.Enums.Enu_SourceEnums.pdDataItemType, string> localFiles = new Dictionary<components.Shared.Enums.Enu_SourceEnums.pdDataItemType, string>();
             Dictionary<components.Shared.Enums.Enu_SourceEnums.pdDataItemType, string> tempFiles = new Dictionary<components.Shared.Enums.Enu_SourceEnums.pdDataItemType, string>();
-            */
+            *---/
 
             // patternt for remote files
             sourcePattern[CoreConst.SOURCE_REMOTE].SetValue(components.Shared.Enums.Enu_SourceEnums.pdDataItemType.Product, "{0}\\Art_{2:D2}{1:D2}.SDF");
@@ -459,7 +462,7 @@ namespace driver.Lib
                 driver.Config.ConfigManager.Instance.CommonConfiguration.PROFILES_updateDateTime = new Hashtable();
             //bool hasUpdates = false;
 
-            /* loop by all available profiles */
+            /* loop by all available profiles *---/
             // [foreach 1]
             int dateTimeIndex = 0;
             Hashtable profile = new Hashtable();
@@ -475,7 +478,7 @@ namespace driver.Lib
                 }
                 catch { }
 
-                /* checking for updates */
+                /* checking for updates *---/
                 Com_WinApi.OutputDebugString("CheckUpdate_begin");
 
                 // profile index (ID)
@@ -537,7 +540,7 @@ namespace driver.Lib
                  * if someone of them is newer than local's files
                  * we'll load all them directly.
                  * 
-                 */
+                 *---/
 
                 // [foreach 11] check all files related to running profile
                 // remoteFiles contains same keys as localFiles.
@@ -684,7 +687,7 @@ namespace driver.Lib
 
 
         }
-
+        */
 
         /* common */
         #region PrivateFunctions

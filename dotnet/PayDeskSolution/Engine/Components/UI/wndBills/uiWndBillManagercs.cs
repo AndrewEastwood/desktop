@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using driver.Lib;
 using driver.Common;
 using driver.Config;
+using driver.Components.Profiles;
+using System.Collections;
 //using ;
 //using mdcore.Config;
 //using ;
@@ -63,11 +65,11 @@ namespace PayDesk.Components.UI.wndBills
             {
                 try
                 {
-                    DataTable dTBill = DataWorkBill.LoadCombinedBill(listGrid.SelectedRows[0].Cells["ColumnPath"].Value.ToString());
+                    AppProfile dTBill = DataWorkBill.LoadCombinedBill(listGrid.SelectedRows[0].Cells["ColumnPath"].Value.ToString());
                     billGrid.DataSource = dTBill;
                     //string currentActiveBillOID = DataWorkShared.ExtractBillProperty(dTBill, CoreConst.OID).ToString();
-                    Dictionary<string, object> billInfo = DataWorkShared.GetBillInfo(dTBill);
-                    Dictionary<string, object> orderInfo = DataWorkShared.GetOrderInfo(dTBill);
+                    Dictionary<string, object> billInfo = dTBill.getPropertyBlock(DataSection.Bill);
+                    Dictionary<string, object> orderInfo = dTBill.getPropertyBlock(DataSection.Order);
                     
                     for (int i = 0; i < billGrid.ColumnCount; i++)
                         switch (billGrid.Columns[i].Name)
@@ -97,9 +99,9 @@ namespace PayDesk.Components.UI.wndBills
                     //double chqSUMA = (double)dTBill.ExtendedProperties[.CoreConst.ORDER_REAL_SUMA];
                     //label2.Text = string.Format("{0} {1} {2} {3:0.00}{4}", "Перегляд рахунку №", billInfo[.CoreConst.BILL_NO], "на суму:", chqSUMA, "грн.");
                     this.billGrid.CurrentCell = null;
-                    bool billIsClosed = DataWorkShared.ExtractOrderProperty(dTBill, CoreConst.ORDER_NO, string.Empty, false).ToString() != string.Empty;
-                    bool billIsLocked = (bool)DataWorkShared.ExtractBillProperty(dTBill, CoreConst.BILL_IS_LOCKED, false);
-                    string orderNo = DataWorkShared.ExtractOrderProperty(dTBill, CoreConst.ORDER_NO, string.Empty).ToString();
+                    bool billIsClosed = dTBill.Properties[CoreConst.ORDER_NO].ToString() != string.Empty;
+                    bool billIsLocked = (bool)dTBill.Properties[CoreConst.BILL_IS_LOCKED];
+                    string orderNo = dTBill.Properties[CoreConst.ORDER_NO].ToString();
                     string billState = string.Empty;
                     switch (orderNo)
                     {
@@ -119,8 +121,8 @@ namespace PayDesk.Components.UI.wndBills
                         billState += "   Рахунок закритий.";
 
                     label_billInfo_State.Text = billState.Trim();
-                    label_orderInfo_suma.Text = string.Format("{0}{1} {2}", "Сума без знижок", ":", DataWorkShared.ExtractOrderProperty(dTBill, CoreConst.ORDER_SUMA));
-                    label_orderInfo_realSuma.Text = string.Format("{0}{1} {2}", "СУМА", ":", DataWorkShared.ExtractOrderProperty(dTBill, CoreConst.ORDER_REAL_SUMA));
+                    label_orderInfo_suma.Text = string.Format("{0}{1} {2}", "Сума без знижок", ":", dTBill.Properties[CoreConst.ORDER_SUMA]);
+                    label_orderInfo_realSuma.Text = string.Format("{0}{1} {2}", "СУМА", ":", dTBill.Properties[CoreConst.ORDER_REAL_SUMA]);
                     label_orderInfo_orderNo.Text = string.Format("{0}{1} {2}", "Номер чеку", ":", orderNo);
                     label_orderInfo_discount.Text = string.Empty;
                 }
@@ -228,17 +230,17 @@ namespace PayDesk.Components.UI.wndBills
         /* METHODS */
         private double ShowBills(DateTime fromDay, DateTime toDay)
         {
-            Dictionary<string, object> items = DataWorkBill.LoadRangeBills(fromDay, toDay, ConfigManager.Instance.CommonConfiguration.Path_Bills, ConfigManager.Instance.CommonConfiguration.APP_SubUnit);
+            Dictionary<string, AppProfile> items = DataWorkBill.LoadRangeBills(fromDay, toDay, ConfigManager.Instance.CommonConfiguration.Path_Bills, ConfigManager.Instance.CommonConfiguration.APP_SubUnit);
             DataTable currentBill = new DataTable();
-            PropertyCollection props = new PropertyCollection();
+            Hashtable props = new Hashtable();
             Dictionary<string, object> billInfo = new Dictionary<string, object>();
             double generalSuma = 0.0;
             //this.billFileList.Clear();
             listGrid.Rows.Clear();
-            foreach (KeyValuePair<string, object> billEntry in items)
+            foreach (KeyValuePair<string, AppProfile> billEntry in items)
             {
-                currentBill = (DataTable)((object[])billEntry.Value)[0];
-                props = (PropertyCollection)((object[])billEntry.Value)[1];
+                currentBill = billEntry.Value.DataOrder;
+                props = billEntry.Value.Properties;
                 billInfo = ((Dictionary<string, object>)props[CoreConst.ORDER_BILL]);
                 //this.billFileList.Add(billInfo[CoreConst.OID].ToString(), billEntry.Key);
 

@@ -120,25 +120,25 @@ namespace driver.Components.Profiles
             if (((int)ds & (int)DataSection.Discount) != 0)
             {
                 //Якщо true то знижка чи надбавка діє на всі позиції(товари) чеку
-                props.Add(CoreConst.DISC_ALL_ITEMS, false);
+                props.Add(CoreConst.DISCOUNT_ALL_ITEMS, false);
                 //Масив з значеннями знижки та надбавки в процентних значеннях
-                props.Add(CoreConst.DISC_ARRAY_PERCENT_SUB, 0.0);
-                props.Add(CoreConst.DISC_ARRAY_PERCENT_ADD, 0.0);
+                props.Add(CoreConst.DISCOUNT_MANUAL_PERCENT_SUB, 0.0);
+                props.Add(CoreConst.DISCOUNT_MANUAL_PERCENT_ADD, 0.0);
                 //Масив з значеннями знижки та надбавки в грошових значеннях
-                props.Add(CoreConst.DISC_ARRAY_CASH_SUB, 0.0);
-                props.Add(CoreConst.DISC_ARRAY_CASH_ADD, 0.0);
+                props.Add(CoreConst.DISCOUNT_MANUAL_CASH_SUB, 0.0);
+                props.Add(CoreConst.DISCOUNT_MANUAL_CASH_ADD, 0.0);
                 //Значення постійної знижки в процентному значенні
-                props.Add(CoreConst.DISC_CONST_PERCENT, 0.0);
+                props.Add(CoreConst.DISCOUNT_CONST_PERCENT, 0.0);
                 //Сума знижки і надбавки з процентними значеннями
-                props.Add(CoreConst.DISC_ONLY_PERCENT, 0.0);
+                props.Add(CoreConst.DISCOUNT_ONLY_PERCENT, 0.0);
                 //Сума знижки і надбавки з грошовими значеннями
-                props.Add(CoreConst.DISC_ONLY_CASH, 0.0);
+                props.Add(CoreConst.DISCOUNT_ONLY_CASH, 0.0);
                 //Загальний коефіціент знижки в процентному значенні
-                props.Add(CoreConst.DISC_FINAL_PERCENT, 0.0);
+                props.Add(CoreConst.DISCOUNT_FINAL_PERCENT, 0.0);
                 //Загальний коефіціент знижки в грошовому значенні
-                props.Add(CoreConst.DISC_FINAL_CASH, 0.0);
+                props.Add(CoreConst.DISCOUNT_FINAL_CASH, 0.0);
                 //Загальний коефіціент знижки в грошовому значенні
-                props.Add(CoreConst.DISC_APPLIED, false);
+                props.Add(CoreConst.DISCOUNT_APPLIED, false);
             }
 
             return props;
@@ -222,15 +222,15 @@ namespace driver.Components.Profiles
 
             //*bool useConstDisc = discArrPercent[0] == 0.0 && discArrPercent[1] == 0.0 &&
             //*    discArrdataProps[0] == 0.0 && discArrdataProps[1] == 0.0;
-            double[] _discArrP = { customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB], customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD] };
-            double[] _discArrC = { customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_SUB], customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_ADD] };
+            double[] _discArrP = { customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB], customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_ADD] };
+            double[] _discArrC = { customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_SUB], customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_ADD] };
             bool useConstDisc = _discArrP[0] == 0 && _discArrP[1] == 0 && _discArrC[0] == 0 && _discArrC[1] == 0;
 
             // Get discount value
             if (useConstDisc)
             {
                 // * discConstPercent = 0.0;
-                Properties[CoreConst.DISC_CONST_PERCENT] = 0.0;
+                Properties[CoreConst.DISCOUNT_CONST_PERCENT] = 0.0;
 
                 //form "sum" by static discount
                 // **** if (ConfigManager.Instance.CommonConfiguration.APP_UseStaticDiscount)
@@ -246,8 +246,8 @@ namespace driver.Components.Profiles
                 // * discOnlyPercent = MathLib.GetRoundedMoney(discOnlyPercent);
                 // * discOnlydataProps = MathLib.GetRoundedMoney(discOnlydataProps);
 
-                Properties[CoreConst.DISC_ONLY_PERCENT] = MathLib.GetRoundedMoney(_discArrP[0] + _discArrP[1]);
-                Properties[CoreConst.DISC_ONLY_CASH] = MathLib.GetRoundedMoney(_discArrC[0] + _discArrC[1]);
+                Properties[CoreConst.DISCOUNT_ONLY_PERCENT] = MathLib.GetRoundedMoney(_discArrP[0] + _discArrP[1]);
+                Properties[CoreConst.DISCOUNT_ONLY_CASH] = MathLib.GetRoundedMoney(_discArrC[0] + _discArrC[1]);
             }
 
             //if (Cheque.Rows.Count == 0)
@@ -280,20 +280,20 @@ namespace driver.Components.Profiles
             if (useConstDisc)
             {
                 // * discCommonPercent = discConstPercent;
-                Properties[CoreConst.DISC_FINAL_PERCENT] = Properties[CoreConst.DISC_CONST_PERCENT];
+                Properties[CoreConst.DISCOUNT_FINAL_PERCENT] = Properties[CoreConst.DISCOUNT_CONST_PERCENT];
             }
             else
             {
                 //discCommonPercent = discOnlyPercent;
-                Properties[CoreConst.DISC_FINAL_PERCENT] = Properties[CoreConst.DISC_ONLY_PERCENT];
+                Properties[CoreConst.DISCOUNT_FINAL_PERCENT] = Properties[CoreConst.DISCOUNT_ONLY_PERCENT];
             }
             if (discSUMA != 0.0)
             {
                 // * discCommonPercent += (discOnlydataProps * 100) / discSUMA;
-                Properties[CoreConst.DISC_FINAL_PERCENT] = getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT) + (getPropertyValue<double>(CoreConst.DISC_ONLY_CASH) * 100) / discSUMA;
+                Properties[CoreConst.DISCOUNT_FINAL_PERCENT] = getPropertyValue<double>(CoreConst.DISCOUNT_FINAL_PERCENT) + (getPropertyValue<double>(CoreConst.DISCOUNT_ONLY_CASH) * 100) / discSUMA;
             }
             // * discCommonPercent = MathLib.GetRoundedMoney(discCommonPercent);
-            Properties[CoreConst.DISC_FINAL_PERCENT] = MathLib.GetRoundedMoney(getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT));
+            Properties[CoreConst.DISCOUNT_FINAL_PERCENT] = MathLib.GetRoundedMoney(getPropertyValue<double>(CoreConst.DISCOUNT_FINAL_PERCENT));
 
             // restore native cheque sum
             // and set price acording to client's discount card
@@ -342,7 +342,7 @@ namespace driver.Components.Profiles
                         {
                             _discountPrices = 100 - _newPrice * 100 / (double)_local_order.Rows[i]["ORIGPRICE"];
                             // * if (_discountPrices > discCommonPercent)
-                            if (_discountPrices > getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT))
+                            if (_discountPrices > getPropertyValue<double>(CoreConst.DISCOUNT_FINAL_PERCENT))
                             {
                                 _local_order.Rows[i]["USEDDISC"] = Boolean.FalseString;
                                 newPrice = _newPrice;
@@ -387,10 +387,10 @@ namespace driver.Components.Profiles
                 if (dRows.Length == 0)
                 {
                     // * this.discApplied = false;
-                    Properties[CoreConst.DISC_APPLIED] = false;
+                    Properties[CoreConst.DISCOUNT_APPLIED] = false;
                 }
                 else
-                    Properties[CoreConst.DISC_APPLIED] = true; // * this.discApplied = true;
+                    Properties[CoreConst.DISCOUNT_APPLIED] = true; // * this.discApplied = true;
             }
             catch { };
 
@@ -410,7 +410,7 @@ namespace driver.Components.Profiles
                     // * dValue = (discConstPercent * discSUMA) / 100;
                     // * dValue = MathLib.GetRoundedMoney(dValue);
                     // * realSUMA -= dValue;
-                    dValue = MathLib.GetRoundedMoney((getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT) * discSUMA) / 100);
+                    dValue = MathLib.GetRoundedMoney((getPropertyValue<double>(CoreConst.DISCOUNT_CONST_PERCENT) * discSUMA) / 100);
                 }
                 else
                 {
@@ -419,8 +419,8 @@ namespace driver.Components.Profiles
                     // * realSUMA -= dValue;
                     // * realSUMA -= discOnlydataProps;
 
-                    dValue = MathLib.GetRoundedMoney((getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT) * discSUMA) / 100);
-                    Properties[CoreConst.CASH_REAL_SUMA] = getPropertyValue<double>(CoreConst.CASH_REAL_SUMA) - dValue - getPropertyValue<double>(CoreConst.DISC_ONLY_CASH);
+                    dValue = MathLib.GetRoundedMoney((getPropertyValue<double>(CoreConst.DISCOUNT_CONST_PERCENT) * discSUMA) / 100);
+                    Properties[CoreConst.CASH_REAL_SUMA] = getPropertyValue<double>(CoreConst.CASH_REAL_SUMA) - dValue - getPropertyValue<double>(CoreConst.DISCOUNT_ONLY_CASH);
                 }
             }
             else
@@ -436,8 +436,8 @@ namespace driver.Components.Profiles
                         dRows[i]["DISC"] = 0.0;
                         continue;
                     }
-                    dRows[i]["DISC"] = getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT);
-                    dValue = (getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT) * (double)dRows[i]["SUM"]) / 100;
+                    dRows[i]["DISC"] = getPropertyValue<double>(CoreConst.DISCOUNT_FINAL_PERCENT);
+                    dValue = (getPropertyValue<double>(CoreConst.DISCOUNT_FINAL_PERCENT) * (double)dRows[i]["SUM"]) / 100;
                     dValue = (double)dRows[i]["SUM"] - dValue;
                     dRows[i]["ASUM"] = MathLib.GetRoundedMoney(dValue);
                 }
@@ -450,7 +450,7 @@ namespace driver.Components.Profiles
             //groshovuj koeficient
             // * discCommondataProps = chqSUMA - realSUMA;
             // * discCommondataProps = MathLib.GetRoundedMoney(discCommondataProps);
-            Properties[CoreConst.DISC_ONLY_CASH] = MathLib.GetRoundedMoney(getPropertyValue<double>(CoreConst.CASH_CHEQUE_SUMA) - getPropertyValue<double>(CoreConst.DISC_FINAL_CASH));
+            Properties[CoreConst.DISCOUNT_ONLY_CASH] = MathLib.GetRoundedMoney(getPropertyValue<double>(CoreConst.CASH_CHEQUE_SUMA) - getPropertyValue<double>(CoreConst.DISCOUNT_FINAL_CASH));
 
             // calculating tax sum
             // * taxSUMA = 0.0;
@@ -464,7 +464,7 @@ namespace driver.Components.Profiles
                     if (Boolean.Parse(_local_order.Rows[i]["USEDDISC"].ToString()))
                     {
                         // * artSum = (discCommonPercent * (double)_local_order.Rows[i]["SUM"]) / 100;
-                        artSum = (getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT) * (double)_local_order.Rows[i]["SUM"]) / 100;
+                        artSum = (getPropertyValue<double>(CoreConst.DISCOUNT_FINAL_PERCENT) * (double)_local_order.Rows[i]["SUM"]) / 100;
                         artSum = (double)_local_order.Rows[i]["SUM"] - artSum;
                         artSum = MathLib.GetRoundedMoney(artSum);
                         taxValue = (artSum * taxValue) / (taxValue + 100);
@@ -704,6 +704,25 @@ namespace driver.Components.Profiles
             Data = profile.Data;
         }
 
+        public Dictionary<string, object> getPropertyBlock(DataSection ds)
+        {
+            Dictionary<string, object> block = new Dictionary<string, object>();
+            switch (ds)
+            {
+                case DataSection.All:
+                    foreach (KeyValuePair<object, object> kv in Properties)
+                        block[kv.Key.ToString()] = kv.Value;
+                    break;
+                default:
+                    foreach (KeyValuePair<object, object> kv in Properties)
+                        if (kv.Key.ToString().ToUpper().StartsWith(ds.ToString().ToUpper()))
+                            block[kv.Key.ToString()] = kv.Value;
+                    break;
+            }
+
+            return block;
+        }
+
         // these methods must use default profile 
         public void orderProductAdd(object[] arrayData)
         {
@@ -750,8 +769,8 @@ namespace driver.Components.Profiles
         {
             get
             {
-                return (getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_SUB) != 0.0 ||
-                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_SUB) != 0.0);
+                return (getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_CASH_SUB) != 0.0 ||
+                    getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_PERCENT_SUB) != 0.0);
             }
         }
 
@@ -759,8 +778,8 @@ namespace driver.Components.Profiles
         {
             get
             {
-                return (getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_ADD) != 0.0 ||
-                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_ADD) != 0.0);
+                return (getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_CASH_ADD) != 0.0 ||
+                    getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_PERCENT_ADD) != 0.0);
             }
         }
 
@@ -768,10 +787,10 @@ namespace driver.Components.Profiles
         {
             get
             {
-                return ((getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_SUB) != 0.0 &&
-                    getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_ADD) == 0.0) ||
-                    (getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_SUB) != 0.0 &&
-                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_ADD) == 0.0));
+                return ((getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_CASH_SUB) != 0.0 &&
+                    getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_CASH_ADD) == 0.0) ||
+                    (getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_PERCENT_SUB) != 0.0 &&
+                    getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_PERCENT_ADD) == 0.0));
             }
         }
 
@@ -779,10 +798,10 @@ namespace driver.Components.Profiles
         {
             get
             {
-                return ((getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_SUB) == 0.0 &&
-                    getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_ADD) != 0.0) ||
-                    (getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_SUB) == 0.0 &&
-                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_ADD) != 0.0));
+                return ((getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_CASH_SUB) == 0.0 &&
+                    getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_CASH_ADD) != 0.0) ||
+                    (getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_PERCENT_SUB) == 0.0 &&
+                    getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_PERCENT_ADD) != 0.0));
             }
         }
 
@@ -790,12 +809,12 @@ namespace driver.Components.Profiles
         {
             get
             {
-                return (getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_SUB) != 0.0 ||
-                    getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_ADD) != 0.0 ||
-                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_SUB) != 0.0 ||
-                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_ADD) != 0.0) &&
+                return (getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_CASH_SUB) != 0.0 ||
+                    getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_CASH_ADD) != 0.0 ||
+                    getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_PERCENT_SUB) != 0.0 ||
+                    getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_PERCENT_ADD) != 0.0) &&
                     // propgram discount must be empty
-                    getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT) == 0.0;
+                    getPropertyValue<double>(CoreConst.DISCOUNT_CONST_PERCENT) == 0.0;
             }
         }
 
@@ -803,7 +822,7 @@ namespace driver.Components.Profiles
         {
             get
             {
-                return !customCashDiscountManualOnlyEnabled && getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT) != 0.0;
+                return !customCashDiscountManualOnlyEnabled && getPropertyValue<double>(CoreConst.DISCOUNT_CONST_PERCENT) != 0.0;
             }
         }
 
@@ -827,10 +846,10 @@ namespace driver.Components.Profiles
         {
             get
             {
-                return (getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_SUB) == 0.0 &&
-                    getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_ADD) == 0.0 &&
-                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_SUB) == 0.0 &&
-                    getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_ADD) == 0.0);
+                return (getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_CASH_SUB) == 0.0 &&
+                    getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_CASH_ADD) == 0.0 &&
+                    getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_PERCENT_SUB) == 0.0 &&
+                    getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_PERCENT_ADD) == 0.0);
             }
         }
 
@@ -838,15 +857,15 @@ namespace driver.Components.Profiles
         {
             get {
                 Dictionary<string, double> _discount = new Dictionary<string, double>();
-                _discount[CoreConst.DISC_ARRAY_CASH_ADD] = Container.Default.getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_ADD);
-                _discount[CoreConst.DISC_ARRAY_CASH_SUB] = Container.Default.getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_SUB);
-                _discount[CoreConst.DISC_ARRAY_PERCENT_ADD] = Container.Default.getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_ADD);
-                _discount[CoreConst.DISC_ARRAY_PERCENT_SUB] = Container.Default.getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_SUB);
-                _discount[CoreConst.DISC_CONST_PERCENT] = Container.Default.getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT);
-                _discount[CoreConst.DISC_FINAL_CASH] = Container.Default.getPropertyValue<double>(CoreConst.DISC_FINAL_CASH);
-                _discount[CoreConst.DISC_FINAL_PERCENT] = Container.Default.getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT);
-                _discount[CoreConst.DISC_ONLY_CASH] = Container.Default.getPropertyValue<double>(CoreConst.DISC_ONLY_CASH);
-                _discount[CoreConst.DISC_ONLY_PERCENT] = Container.Default.getPropertyValue<double>(CoreConst.DISC_ONLY_PERCENT);
+                _discount[CoreConst.DISCOUNT_MANUAL_CASH_ADD] = Container.Default.getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_CASH_ADD);
+                _discount[CoreConst.DISCOUNT_MANUAL_CASH_SUB] = Container.Default.getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_CASH_SUB);
+                _discount[CoreConst.DISCOUNT_MANUAL_PERCENT_ADD] = Container.Default.getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_PERCENT_ADD);
+                _discount[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB] = Container.Default.getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_PERCENT_SUB);
+                _discount[CoreConst.DISCOUNT_CONST_PERCENT] = Container.Default.getPropertyValue<double>(CoreConst.DISCOUNT_CONST_PERCENT);
+                _discount[CoreConst.DISCOUNT_FINAL_CASH] = Container.Default.getPropertyValue<double>(CoreConst.DISCOUNT_FINAL_CASH);
+                _discount[CoreConst.DISCOUNT_FINAL_PERCENT] = Container.Default.getPropertyValue<double>(CoreConst.DISCOUNT_FINAL_PERCENT);
+                _discount[CoreConst.DISCOUNT_ONLY_CASH] = Container.Default.getPropertyValue<double>(CoreConst.DISCOUNT_ONLY_CASH);
+                _discount[CoreConst.DISCOUNT_ONLY_PERCENT] = Container.Default.getPropertyValue<double>(CoreConst.DISCOUNT_ONLY_PERCENT);
                 return _discount;
             }
         }
@@ -854,10 +873,10 @@ namespace driver.Components.Profiles
         // = custom methods
         public void customResetBlockDiscountManual()
         {
-            customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_ADD] = 0.0;
-            customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_SUB] = 0.0;
-            customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD] = 0.0;
-            customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] = 0.0;
+            customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_ADD] = 0.0;
+            customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_SUB] = 0.0;
+            customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_ADD] = 0.0;
+            customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB] = 0.0;
 
             // recalculate cash and trigger event
             getUpdatedProperties();
@@ -869,8 +888,8 @@ namespace driver.Components.Profiles
                 customCashDiscountItems[de.Key.ToString()] = 0.0;
 
             // setup default values
-            Properties[CoreConst.DISC_APPLIED] = false;
-            Properties[CoreConst.DISC_ALL_ITEMS] = false;
+            Properties[CoreConst.DISCOUNT_APPLIED] = false;
+            Properties[CoreConst.DISCOUNT_ALL_ITEMS] = false;
 
             // recalculate cash and trigger event
             getUpdatedProperties();

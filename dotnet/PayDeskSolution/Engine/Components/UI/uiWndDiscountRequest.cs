@@ -203,9 +203,9 @@ namespace PayDesk.Components.UI
             List<string> items = new List<string>(2);
 
             if (type)
-                items.AddRange(new string[] { CoreConst.DISC_ARRAY_PERCENT_SUB, CoreConst.DISC_ARRAY_CASH_SUB });
+                items.AddRange(new string[] { CoreConst.DISCOUNT_MANUAL_PERCENT_SUB, CoreConst.DISCOUNT_MANUAL_CASH_SUB });
             else
-                items.AddRange(new string[] { CoreConst.DISC_ARRAY_PERCENT_ADD, CoreConst.DISC_ARRAY_CASH_ADD });
+                items.AddRange(new string[] { CoreConst.DISCOUNT_MANUAL_PERCENT_ADD, CoreConst.DISCOUNT_MANUAL_CASH_ADD });
 
             textBox1.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UsePercentTypeDisc;
             radioButton1.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UsePercentTypeDisc;

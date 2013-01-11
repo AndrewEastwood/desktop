@@ -492,7 +492,7 @@ namespace driver.Lib
         
 
 
-        /* Object Structure v2.0 */
+        /* Object Structure v2.0 *-/
         public static Hashtable GetStandartOrderInfoStructure2()
         {
             Hashtable chequeInfoStructure = new Hashtable();
@@ -548,7 +548,7 @@ namespace driver.Lib
             //dTable.ExtendedProperties.Add("DISC", new object[2][]);
             dTable.ExtendedProperties.Add("PATH", path);
             dTable.ExtendedProperties.Add(CoreConst.BILL, true);
-            dTable.ExtendedProperties.Add("CHEQUE", extendedProps);*/
+            dTable.ExtendedProperties.Add("CHEQUE", extendedProps);*--/
             Hashtable billInfoStructure = new Hashtable();
             // DataTable source
             billInfoStructure.Add(CoreConst.BILL_OID, string.Empty);
@@ -605,23 +605,23 @@ namespace driver.Lib
         {
             Hashtable discountInfoStructure = new Hashtable();
             //Якщо true то знижка чи надбавка діє на всі позиції(товари) чеку
-            discountInfoStructure.Add(CoreConst.DISC_ALL_ITEMS, false);
+            discountInfoStructure.Add(CoreConst.DISCOUNT_ALL_ITEMS, false);
             //Масив з значеннями знижки та надбавки в процентних значеннях
             // **** discountInfoStructure.Add(CoreConst.DISC_ARRAY_PERCENT, new double[2]);
             //Масив з значеннями знижки та надбавки в грошових значеннях
             // **** discountInfoStructure.Add(CoreConst.DISC_ARRAY_CASH, new double[2]);
             //Значення постійної знижки в процентному значенні
-            discountInfoStructure.Add(CoreConst.DISC_CONST_PERCENT, 0.0);
+            discountInfoStructure.Add(CoreConst.DISCOUNT_CONST_PERCENT, 0.0);
             //Сума знижки і надбавки з процентними значеннями
-            discountInfoStructure.Add(CoreConst.DISC_ONLY_PERCENT, 0.0);
+            discountInfoStructure.Add(CoreConst.DISCOUNT_ONLY_PERCENT, 0.0);
             //Сума знижки і надбавки з грошовими значеннями
-            discountInfoStructure.Add(CoreConst.DISC_ONLY_CASH, 0.0);
+            discountInfoStructure.Add(CoreConst.DISCOUNT_ONLY_CASH, 0.0);
             //Загальний коефіціент знижки в процентному значенні
-            discountInfoStructure.Add(CoreConst.DISC_FINAL_PERCENT, 0.0);
+            discountInfoStructure.Add(CoreConst.DISCOUNT_FINAL_PERCENT, 0.0);
             //Загальний коефіціент знижки в грошовому значенні
-            discountInfoStructure.Add(CoreConst.DISC_FINAL_CASH, 0.0);
+            discountInfoStructure.Add(CoreConst.DISCOUNT_FINAL_CASH, 0.0);
             //Загальний коефіціент знижки в грошовому значенні
-            discountInfoStructure.Add(CoreConst.DISC_APPLIED, false);
+            discountInfoStructure.Add(CoreConst.DISCOUNT_APPLIED, false);
             return discountInfoStructure;
         }
         public static Hashtable GetStandartStatementsInfoStructure2()
@@ -640,23 +640,24 @@ namespace driver.Lib
 
             return statementsStructure;
         }
-        public static components.Components.DataContainer.DataContainer GetDataContainer()
-        {
+        */
+        //public static components.Components.DataContainer.DataContainer GetDataContainer()
+        //{
             // general data container
-            components.Components.DataContainer.DataContainer dc = new components.Components.DataContainer.DataContainer();
+            // **** components.Components.DataContainer.DataContainer dc = new components.Components.DataContainer.DataContainer();
 
             // properties
             //  -- statements
             // sources
             //  -- 
-            dc.Structures.Add(new components.Components.DataContainer.DataStructureItem(CoreConst.CONTAINER_STATE, GetStandartStatementsInfoStructure2()));
+            // *** dc.Structures.Add(new components.Components.DataContainer.DataStructureItem(CoreConst.CONTAINER_STATE, GetStandartStatementsInfoStructure2()));
 
             //dc.Storages.Add(new components.Components.DataStorage.DataSourceItem());
 
 
 
-            return dc;
-        }
+        //    return dc;
+        //}
 
         /****************************************************************/
 

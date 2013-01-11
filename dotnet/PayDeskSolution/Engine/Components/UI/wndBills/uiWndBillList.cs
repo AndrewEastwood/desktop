@@ -20,6 +20,7 @@ using driver.Lib;
 using driver.Common;
 using driver.Components.UI;
 using components.Components.MMessageBox;
+using driver.Components.Profiles;
 
 namespace PayDesk.Components.UI.wndBills
 {
@@ -27,7 +28,7 @@ namespace PayDesk.Components.UI.wndBills
     {
         //private FileStream stream; .Components.UI.wndBills
         //private BinaryFormatter binF = new BinaryFormatter();
-        private DataTable dTBill = new DataTable();
+        private AppProfile dTBill;
         private DataTable dTList = new DataTable();
         private string loadedBillNo;
         //private double billListSuma;
@@ -165,9 +166,9 @@ namespace PayDesk.Components.UI.wndBills
                 {
                     dTBill = LoadActiveBill();
                     billGrid.DataSource = dTBill;
-                    this.currentActiveBillOID = DataWorkShared.ExtractBillProperty(this.dTBill, CoreConst.BILL_OID).ToString();
-                    Dictionary<string, object> billInfo = DataWorkShared.GetBillInfo(this.dTBill);
-                    Dictionary<string, object> orderInfo = DataWorkShared.GetOrderInfo(this.dTBill);
+                    this.currentActiveBillOID = this.dTBill.Properties[CoreConst.BILL_OID].ToString();
+                    Dictionary<string, object> billInfo = this.dTBill.getPropertyBlock(DataSection.Bill);
+                    Dictionary<string, object> orderInfo = this.dTBill.getPropertyBlock(DataSection.Order);
 
                     for (int i = 0; i < billGrid.ColumnCount; i++)
                         switch (billGrid.Columns[i].Name)
@@ -198,16 +199,16 @@ namespace PayDesk.Components.UI.wndBills
                     //double chqSUMA = (double)dTBill.ExtendedProperties[CoreConst.ORDER_REAL_SUMA];
                     //label2.Text = string.Format("{0} {1} {2} {3:0.00}{4}", "Перегляд рахунку №", billInfo[CoreConst.BILL_NO], "на суму:", chqSUMA, "грн.");
 
-                    bool billIsLoaded = DataWorkShared.ExtractBillProperty(dTBill, CoreConst.BILL_NO, string.Empty).ToString() == this.loadedBillNo;
-                    bool billIsClosed = DataWorkShared.ExtractOrderProperty(dTBill, CoreConst.ORDER_NO, string.Empty, false).ToString() != string.Empty;
-                    bool billIsLocked =(bool)DataWorkShared.ExtractBillProperty(dTBill, CoreConst.BILL_IS_LOCKED, false);
+                    bool billIsLoaded = dTBill.Properties[CoreConst.BILL_NO].ToString() == this.loadedBillNo;
+                    bool billIsClosed = dTBill.Properties[CoreConst.ORDER_NO].ToString() != string.Empty;
+                    bool billIsLocked =(bool)dTBill.Properties[CoreConst.BILL_IS_LOCKED];
 
                     button_billsList_Open.Enabled = !billIsClosed && !billIsLoaded;
                     button_billsList_Print.Enabled = !billIsClosed;// && !billIsLocked;
                     button_billsList_Delete.Enabled = !billIsClosed && !billIsLocked && !billIsLoaded;
                     button_billsList_madecopy.Enabled = !billIsClosed && billIsLocked && !billIsLoaded;
                     button_billsList_unlock.Visible = false;
-                    string orderNo = DataWorkShared.ExtractOrderProperty(dTBill, CoreConst.ORDER_NO, string.Empty).ToString();
+                    string orderNo = this.dTBill.Properties[CoreConst.ORDER_NO].ToString();
                     string billState = string.Empty;
                     switch (orderNo)
                     {
@@ -233,8 +234,8 @@ namespace PayDesk.Components.UI.wndBills
 
                     label2.Text = billState.Trim();
 
-                    label_orderInfo_suma.Text = string.Format("{0}{1} {2}", "Сума без знижок", ":", DataWorkShared.ExtractOrderProperty(dTBill, CoreConst.ORDER_SUMA));
-                    label_orderInfo_realSuma.Text = string.Format("{0}{1} {2}", "СУМА", ":", DataWorkShared.ExtractOrderProperty(dTBill, CoreConst.ORDER_REAL_SUMA));
+                    label_orderInfo_suma.Text = string.Format("{0}{1} {2}", "Сума без знижок", ":", this.dTBill.Properties[CoreConst.ORDER_SUMA]);
+                    label_orderInfo_realSuma.Text = string.Format("{0}{1} {2}", "СУМА", ":", this.dTBill.Properties[CoreConst.ORDER_REAL_SUMA]);
                     label_orderInfo_orderNo.Text = string.Format("{0}{1} {2}", "Номер чеку", ":", orderNo);
                     label_orderInfo_discount.Text = string.Empty; 
                     /*if (billIsClosed || billIsLocked)
@@ -349,7 +350,7 @@ namespace PayDesk.Components.UI.wndBills
         /// <param name="e"></param>
         private void button_billsList_Delete_Click(object sender, EventArgs e)
         {
-            if (this.loadedBillNo == DataWorkShared.ExtractBillProperty(this.dTBill, CoreConst.BILL_NO, string.Empty).ToString())
+            if (this.loadedBillNo == this.dTBill.Properties[CoreConst.BILL_NO].ToString())
                 MMessageBox.Show("Неможливо видалити рахунок № " + this.loadedBillNo + "\r\nВін є відкритий в основному вікні",
                       Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
@@ -386,7 +387,7 @@ namespace PayDesk.Components.UI.wndBills
         {
             if (this.loadedBillNo != string.Empty)
             {
-                MMessageBox.Show("Неможливо відкрити рахунок № " + DataWorkShared.ExtractBillProperty(this.dTBill, CoreConst.BILL_NO, string.Empty) + "\r\nВ основному вікні завантажений інший рахунок № " + this.loadedBillNo,
+                MMessageBox.Show("Неможливо відкрити рахунок № " + this.dTBill.Properties[CoreConst.BILL_NO] + "\r\nВ основному вікні завантажений інший рахунок № " + this.loadedBillNo,
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -463,7 +464,7 @@ namespace PayDesk.Components.UI.wndBills
         /// <param name="e"></param>
         private void button_billsList_madecopy_Click(object sender, EventArgs e)
         {
-            if (this.loadedBillNo == DataWorkShared.ExtractBillProperty(this.dTBill, CoreConst.BILL_NO, string.Empty).ToString())
+            if (this.loadedBillNo == this.dTBill.Properties[CoreConst.BILL_NO].ToString())
             {
                 MMessageBox.Show("Неможливо зробити копію рахунку № " + this.loadedBillNo + "\r\nВін є відкритий в основному вікні",
                       Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -474,13 +475,13 @@ namespace PayDesk.Components.UI.wndBills
                 if (new Admin().ShowDialog(this) != DialogResult.OK)
                     return;
             */
-            DataTable dTable = this.LoadActiveBill();
-            DataTable dNewTable = this.LoadActiveBill();
-            DataWorkShared.SetBillProperty(dNewTable, CoreConst.BILL_IS_LOCKED, false);
+            AppProfile dTable = this.LoadActiveBill();
+            AppProfile dNewTable = this.LoadActiveBill();
+            dNewTable.Properties[CoreConst.BILL_IS_LOCKED] = false;
             //DataTable dTableCopy = dTable.Copy();
             DataWorkBill.MadeBillCopy(dNewTable);
             DataWorkBill.LockBill(dTable, "copy");
-            this.currentActiveBillOID = DataWorkShared.ExtractBillProperty(dNewTable, CoreConst.BILL_OID, string.Empty).ToString();
+            this.currentActiveBillOID = dNewTable.Properties[CoreConst.BILL_OID].ToString();
             //CoreLib.MadeBillCopy(dTableCopy);
             //CoreLib.LockBill(dTable, "-1");
             //this.currentActiveBillOID = dTableCopy.ExtendedProperties["NOM"].ToString();
@@ -534,7 +535,7 @@ namespace PayDesk.Components.UI.wndBills
         /// Load active (selected) bill from bill's list
         /// </summary>
         /// <returns></returns>
-        private DataTable LoadActiveBill()
+        private AppProfile LoadActiveBill()
         {
             string index = listGrid.SelectedRows[0].Cells["oid"].Value.ToString();
             //return DataWorkShared.CombineDataObject(DataWorkBill.LoadBillByPath(this.billFileList[index]));
@@ -549,17 +550,17 @@ namespace PayDesk.Components.UI.wndBills
         }
         private double LoadDayBills(DateTime selectedDay)
         {
-            Dictionary<string, object> items = DataWorkBill.LoadDayBills(selectedDay, ConfigManager.Instance.CommonConfiguration.Path_Bills, ConfigManager.Instance.CommonConfiguration.APP_SubUnit);
+            Dictionary<string, AppProfile> items = DataWorkBill.LoadDayBills(selectedDay, ConfigManager.Instance.CommonConfiguration.Path_Bills, ConfigManager.Instance.CommonConfiguration.APP_SubUnit);
             DataTable currentBill = new DataTable();
-            PropertyCollection props = new PropertyCollection();
+            Hashtable props = new Hashtable();
             Dictionary<string, object> billInfo = new Dictionary<string, object>();
             double generalSuma = 0.0;
             try
             {
-                foreach (KeyValuePair<string, object> billEntry in items)
+                foreach (KeyValuePair<string, AppProfile> billEntry in items)
                 {
-                    currentBill = (DataTable)((object[])billEntry.Value)[0];
-                    props = (PropertyCollection)((object[])billEntry.Value)[1];
+                    currentBill = billEntry.Value.DataOrder;
+                    props = billEntry.Value.Properties;
                     billInfo = ((Dictionary<string, object>)props[CoreConst.ORDER_BILL]);
                     this.billFileList.Add(billInfo[CoreConst.BILL_OID].ToString(), billEntry.Key);
 
@@ -889,7 +890,7 @@ namespace PayDesk.Components.UI.wndBills
         /// <summary>
         /// Завантажений рахунок
         /// </summary>
-        public DataTable LoadedBill { get { return dTBill; } }
+        public AppProfile LoadedBill { get { return dTBill; } }
 
 
         private void fileSystemWatcher_billIFolder_Changed(object sender, FileSystemEventArgs e)

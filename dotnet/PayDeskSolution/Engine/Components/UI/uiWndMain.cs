@@ -1881,7 +1881,7 @@ namespace PayDesk.Components.UI
                         if (bl.ShowDialog() == DialogResult.OK)
                             if (this.profileCnt.Default.DataOrder.Rows.Count == 0)
                             {
-                                this.profileCnt.Default.DataOrder.Merge(bl.LoadedBill);
+                                this.profileCnt.Default.Merge(bl.LoadedBill);
                                 // **** this.UpdateDiscountValues(this.profileCnt.Default.Order);
                                 this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_NO));
                                 // * UpdateSumInfo(true);
@@ -3291,12 +3291,12 @@ namespace PayDesk.Components.UI
 
         // shold be removed after dataContainer2
         // **************************************************************************
-        public Hashtable _PD_DiscountInfo
-        {
-            set { }
-            get
-            {
-                Hashtable chqInfo = DataWorkShared.GetStandartDiscountInfoStructure2();
+        // public Hashtable _PD_DiscountInfo
+        // {
+            // set { }
+            // get
+            // {
+                // *** Hashtable chqInfo = DataWorkShared.GetStandartDiscountInfoStructure2();
                 /*
                 //Якщо true то знижка чи надбавка діє на всі позиції(товари) чеку
                 chqInfo["DISC_ALL_ITEMS"] = this._fl_useTotDisc;
@@ -3317,9 +3317,9 @@ namespace PayDesk.Components.UI
                 //Загальний коефіціент знижки в грошовому значенні
                 chqInfo["DISC_APPLIED"] = this.discApplied;
                 */
-                return chqInfo;
-            }
-        }
+                // return chqInfo;
+            // }
+        // }
 
         public bool[] _PD_Statements
         {
@@ -3681,8 +3681,8 @@ namespace PayDesk.Components.UI
                 if (this.profileCnt.Default.customCashDiscountPropgramOnlyEnable)
                 {
                     discInfo[0] = "постійна" + discInfo[0].ToString();
-                    discInfo[1] = this.profileCnt.Default.getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT) > 0 ? "знижка" : "націнка";
-                    discInfo[2] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT)), "%");
+                    discInfo[1] = this.profileCnt.Default.getPropertyValue<double>(CoreConst.DISCOUNT_CONST_PERCENT) > 0 ? "знижка" : "націнка";
+                    discInfo[2] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.getPropertyValue<double>(CoreConst.DISCOUNT_CONST_PERCENT)), "%");
                 }
                 else
                     if (ConfigManager.Instance.CommonConfiguration.APP_OnlyDiscount)
@@ -3693,29 +3693,29 @@ namespace PayDesk.Components.UI
                             // !!!! NEED TO BE REFACTORED
                             discInfo[1] = "знижка";
                             if (ConfigManager.Instance.CommonConfiguration.APP_DefaultTypeDisc == 0)
-                                if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_SUB] == 0.0)
-                                    discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB], "%");
+                                if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_SUB] == 0.0)
+                                    discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB], "%");
                                 else
-                                    discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_SUB], "грн.");
+                                    discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_SUB], "грн.");
                             else
-                                if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] == 0.0)
-                                    discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_SUB], "грн.");
+                                if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB] == 0.0)
+                                    discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_SUB], "грн.");
                                 else
-                                    discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB], "%");
+                                    discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB], "%");
                         }
                         if (this.profileCnt.Default.customCashDiscountManualExtraEnabled)
                         {
                             discInfo[1] = "націнка";
                             if (ConfigManager.Instance.CommonConfiguration.APP_DefaultTypeDisc == 0)
-                                if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_ADD] == 0.0)
-                                    discInfo[2] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD]), "%");
+                                if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_ADD] == 0.0)
+                                    discInfo[2] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_ADD]), "%");
                                 else
-                                    discInfo[2] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_ADD]), "грн.");
+                                    discInfo[2] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_ADD]), "грн.");
                             else
-                                if (this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT_ADD)[1] == 0.0)
-                                    discInfo[2] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_ADD]), "грн.");
+                                if (this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISCOUNT_MANUAL_PERCENT_ADD)[1] == 0.0)
+                                    discInfo[2] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_ADD]), "грн.");
                                 else
-                                    discInfo[2] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD]), "%");
+                                    discInfo[2] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_ADD]), "%");
                         }
                     }
                     else
@@ -3723,29 +3723,29 @@ namespace PayDesk.Components.UI
                         discInfo[1] = "знижка";
 
                         if (ConfigManager.Instance.CommonConfiguration.APP_DefaultTypeDisc == 0)
-                            if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_SUB] == 0.0)
-                                discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB], "%");
+                            if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_SUB] == 0.0)
+                                discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB], "%");
                             else
-                                discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_SUB], "грн.");
+                                discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_SUB], "грн.");
                         else
-                            if (this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT_SUB)[0] == 0.0)
-                                discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_SUB], "грн.");
+                            if (this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISCOUNT_MANUAL_PERCENT_SUB)[0] == 0.0)
+                                discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_SUB], "грн.");
                             else
-                                discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB], "%");
+                                discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB], "%");
 
                         discInfo[3] = "i";
                         discInfo[4] = "націнка";
 
                         if (ConfigManager.Instance.CommonConfiguration.APP_DefaultTypeDisc == 0)
-                            if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_ADD] == 0.0)
-                                discInfo[5] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD]), "%");
+                            if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_ADD] == 0.0)
+                                discInfo[5] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_ADD]), "%");
                             else
-                                discInfo[5] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_ADD]), "грн.");
+                                discInfo[5] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_ADD]), "грн.");
                         else
-                            if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD] == 0.0)
-                                discInfo[5] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_ADD]), "грн.");
+                            if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_ADD] == 0.0)
+                                discInfo[5] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_ADD]), "грн.");
                             else
-                                discInfo[5] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD]), "%");
+                                discInfo[5] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_ADD]), "%");
                     }
 
                 addChequeInfo.Text = valueMask = string.Empty;
@@ -3763,13 +3763,13 @@ namespace PayDesk.Components.UI
                 {
                     string _topLabel = "СУМА:" + CashLbl.Text;
                     // if (discCommonPercent != 0)
-                    if (profileCnt.getDefaultProfileValue<double>(CoreConst.DISC_FINAL_PERCENT) != 0.0)
+                    if (profileCnt.getDefaultProfileValue<double>(CoreConst.DISCOUNT_FINAL_PERCENT) != 0.0)
                     {
-                        if (profileCnt.getDefaultProfileValue<double>(CoreConst.DISC_FINAL_PERCENT) > 0)
+                        if (profileCnt.getDefaultProfileValue<double>(CoreConst.DISCOUNT_FINAL_PERCENT) > 0)
                             _topLabel += " Зн:";
                         else
                             _topLabel += " Нб:";
-                        _topLabel += Math.Abs(profileCnt.getDefaultProfileValue<double>(CoreConst.DISC_FINAL_PERCENT)) + "%";
+                        _topLabel += Math.Abs(profileCnt.getDefaultProfileValue<double>(CoreConst.DISCOUNT_FINAL_PERCENT)) + "%";
                     }
 
                     string[] lines = new string[] { string.Empty, string.Empty };
@@ -3866,15 +3866,15 @@ namespace PayDesk.Components.UI
                     }
 
                     /* initializing discount values */
-                    double[] _discArrPercent = {this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_SUB), 
-                                               this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_ADD)};
-                    double[] _discArrCash = { this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_SUB), 
-                                                this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_ADD) };
-                    double _discConstPercent = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT);
-                    double _discOnlyPercent = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_ONLY_PERCENT);
-                    double _discOnlyCash = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_ONLY_CASH);
-                    double _discCommonPercent = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT);
-                    double _discCommonCash = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_FINAL_CASH);
+                    double[] _discArrPercent = {this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_PERCENT_SUB), 
+                                               this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_PERCENT_ADD)};
+                    double[] _discArrCash = { this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_CASH_SUB), 
+                                                this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_CASH_ADD) };
+                    double _discConstPercent = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISCOUNT_CONST_PERCENT);
+                    double _discOnlyPercent = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISCOUNT_ONLY_PERCENT);
+                    double _discOnlyCash = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISCOUNT_ONLY_CASH);
+                    double _discCommonPercent = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISCOUNT_FINAL_PERCENT);
+                    double _discCommonCash = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISCOUNT_FINAL_CASH);
                     /* calculation items */
                     double _realSUMA = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.CASH_REAL_SUMA);
                     double _chqSUMA = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.CASH_CHEQUE_SUMA);
@@ -4784,11 +4784,11 @@ namespace PayDesk.Components.UI
 
                     if (dr.Length != 0 && dr[0] != null)
                     {
-                        if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] < (double)dr[0]["CDISC"] && this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_CONST_PERCENT] < (double)dr[0]["CDISC"])
+                        if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB] < (double)dr[0]["CDISC"] && this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_CONST_PERCENT] < (double)dr[0]["CDISC"])
                         {
                             if (ConfigManager.Instance.CommonConfiguration.APP_OnlyDiscount)
-                                this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] = this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD] = 0.0;
-                            this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] = (double)dr[0]["CDISC"];
+                                this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB] = this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_ADD] = 0.0;
+                            this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB] = (double)dr[0]["CDISC"];
                         }
                         this.clientPriceNo = (int)dr[0]["CPRICENO"];
                         // - UpdateSumInfo(true);
@@ -4813,22 +4813,22 @@ namespace PayDesk.Components.UI
                 dec = Math.Round(dec, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, MidpointRounding.AwayFromZero);
 
                 if (dec <= 100)
-                    if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] < dec && this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_CONST_PERCENT] < dec)
+                    if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB] < dec && this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_CONST_PERCENT] < dec)
                     {
                         if (ConfigManager.Instance.CommonConfiguration.APP_OnlyDiscount)
-                            this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] = this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD] = 0.0;
-                        this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] = dec;
+                            this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB] = this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_ADD] = 0.0;
+                        this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB] = dec;
                     }
 
-                if (dec > 100 && (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] == 0 || this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_CONST_PERCENT] >= 0))
+                if (dec > 100 && (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB] == 0 || this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_CONST_PERCENT] >= 0))
                 {
                     dec -= 100;
                     dec = -Math.Round(dec, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, MidpointRounding.AwayFromZero);
-                    if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD] < dec || this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_CONST_PERCENT] < dec)
+                    if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_ADD] < dec || this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_CONST_PERCENT] < dec)
                     {
                         if (ConfigManager.Instance.CommonConfiguration.APP_OnlyDiscount)
-                            this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] = this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD] = 0.0;
-                        this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD] = dec;
+                            this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB] = this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_ADD] = 0.0;
+                        this.profileCnt.Default.customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_ADD] = dec;
                     }
                 }
 
