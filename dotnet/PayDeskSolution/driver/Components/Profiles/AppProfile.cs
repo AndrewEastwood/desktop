@@ -747,7 +747,6 @@ namespace driver.Components.Profiles
             getUpdatedProperties();
         }
 
-
         public void reset()
         {
             getUpdatedProperties();
