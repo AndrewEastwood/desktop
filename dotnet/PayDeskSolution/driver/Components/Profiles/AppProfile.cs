@@ -215,7 +215,7 @@ namespace driver.Components.Profiles
                 Container.Default.setProperties(key, value);
         }
 
-        public Hashtable getUpdatedProperties()
+        public Hashtable refreshProperties()
         {
             // Hashtable Properties = new Hashtable();
             DataTable _local_order = this.DataOrder;
@@ -744,12 +744,12 @@ namespace driver.Components.Profiles
         //
         public void refresh()
         {
-            getUpdatedProperties();
+            refreshProperties();
         }
 
         public void reset()
         {
-            getUpdatedProperties();
+            refreshProperties();
         }
 
         public void resetOrder()
@@ -878,7 +878,7 @@ namespace driver.Components.Profiles
             customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB] = 0.0;
 
             // recalculate cash and trigger event
-            getUpdatedProperties();
+            refreshProperties();
         }
         public void customResetBlockDiscountAll()
         {
@@ -891,7 +891,7 @@ namespace driver.Components.Profiles
             Properties[CoreConst.DISCOUNT_ALL_ITEMS] = false;
 
             // recalculate cash and trigger event
-            getUpdatedProperties();
+            refreshProperties();
         }
 
         // = events

@@ -19,6 +19,7 @@ namespace components.Shared.Enums
         AppWindow = 0x0080, // 0000.0000|1000.0000
         ControlsType1 = 0x0100,
         ControlsType2 = 0x0200,
+        MenuTicks = 0x0400,
         InformersAll = (InformersType1 | InformersType2 | InformersType3)
     }
 }
