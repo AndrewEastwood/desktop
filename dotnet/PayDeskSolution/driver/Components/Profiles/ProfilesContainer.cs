@@ -54,7 +54,7 @@ namespace driver.Components.Profiles
         public bool triggerReturnCheque { get { return _fl_isReturnCheque; } set { _fl_isReturnCheque = value; } }
         public bool triggerInventCheque { get { return _fl_isInvenCheque; } set { _fl_isInvenCheque = value; } }
         public bool triggerUseTotDisc { get { return _fl_useTotDisc; } set { _fl_useTotDisc = value; } }
-        public bool triggerRunUpdateOnly { get { return _fl_runUpdateOnly; } set { _fl_runUpdateOnly = value; } }
+        //public bool triggerRunUpdateOnly { get { return _fl_runUpdateOnly; } set { _fl_runUpdateOnly = value; } }
 
         /* data access */
         public Dictionary<string, AppProfile> Profiles { get { return profiles; } set { profiles = value; } }
@@ -66,7 +66,8 @@ namespace driver.Components.Profiles
         {
             // init startup values
             triggerSingleMode = Configuration.CommonConfiguration.PROFILES_UseProfiles;
-            valueOfCurrentSubUnit = Configuration.CommonConfiguration.APP_SubUnit;
+            valueOfUpdateMode = UpdateMode.ALLSOURCES;
+            valueOfCurrentSubUnit = -1; // will cause force update at startup // Configuration.CommonConfiguration.APP_SubUnit;
             
             // init profiles
             initContainerProfiles(true);
@@ -257,7 +258,8 @@ namespace driver.Components.Profiles
             }
             else OnDataUchanged(EventArgs.Empty);
 
-            this.triggerRunUpdateOnly = true;
+            // this.triggerRunUpdateOnly = true;
+            this.valueOfUpdateMode = UpdateMode.SERVERDATAONLY;
         }
 
 
