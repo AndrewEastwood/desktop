@@ -144,16 +144,8 @@ namespace PayDesk.Components.UI
             profileCnt.onProfileCommandReceived += new ProfileCommandReceivedEventHandler(profileCnt_onProfileCommandReceived);
 
             // setup order data row handlers
-            profileCnt.Default.DataOrder.RowDeleted += new DataRowChangeEventHandler(Order_RowDeleted);
-            profileCnt.Default.DataOrder.RowChanged += new DataRowChangeEventHandler(Order_RowChanged);
-        }
-
-        private void Order_RowChanged(object sender, DataRowChangeEventArgs e)
-        {
-        }
-
-        private void Order_RowDeleted(object sender, DataRowChangeEventArgs e)
-        {
+            //profileCnt.Default.DataOrder.RowDeleted += new DataRowChangeEventHandler(Order_RowDeleted);
+            //profileCnt.Default.DataOrder.RowChanged += new DataRowChangeEventHandler(Order_RowChanged);
         }
 
         private void profileCnt_onProfileCommandReceived(AppProfile sender, string command, EventArgs e)
@@ -165,25 +157,33 @@ namespace PayDesk.Components.UI
                         // move it into UpdateGUI
                         відмінитиЗнижкунадбавкуToolStripMenuItem.Text = "Без знижки/надбавки";
                         // 
-                        UpdateGUI(uiComponents.ControlsType2);
+                        UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersAll);
+                        break;
+                    }
+                case "pu_reset_cash":
+                    {
+                        // *** UpdateSumDisplay();
+                        UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersAll, new Hashtable() {
+                            {"RESET_CASH_INDICATOR", true}
+                        });
                         break;
                     }
                 case "pu_refresh_cash":
                     {
                         // *** UpdateSumDisplay();
-                        UpdateGUI(uiComponents.ControlsType2);
+                        UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersAll);
                         break;
                     }
-                case "order_item_changed":
+                case "pu_order_item_changed":
                     {
                         // *** UpdateSumDisplay();
-                        UpdateGUI(uiComponents.ControlsType2);
+                        UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersAll);
                         break;
                     }
-                case "order_item_removed":
+                case "pu_order_item_removed":
                     {
                         // **** UpdateSumDisplay();
-                        UpdateGUI(uiComponents.ControlsType2);
+                        UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersAll);
                         break;
                     }
                 case "pu_order_cleared":
@@ -198,12 +198,13 @@ namespace PayDesk.Components.UI
                         else
                             SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, false);
                         */
-
+                        // --- this.profileCnt.refresh(true);
                         // handle reset search param
                         UpdateGUI(uiComponents.ControlsType1 | uiComponents.InformersType2 | uiComponents.MenuTicks, new Hashtable() {
                             {"CLOSE",true},
                             {"STYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
-                            {"SAVESRCH", false}
+                            {"SAVESRCH", false},
+                            {"RESET_CASH_INDICATOR", true}
                         });
 
                         // *** RefreshChequeInformer(false);
@@ -1472,7 +1473,7 @@ namespace PayDesk.Components.UI
                                 break;
                         }
 
-                        UpdateGUI(uiComponents.Menus);
+                        UpdateGUI(uiComponents.MenuEnable | uiComponents.MenuTicks);
 
                         // **** RefershMenus();
                         break;
@@ -1550,7 +1551,7 @@ namespace PayDesk.Components.UI
                         // *** RefershMenus();
                         // *** RefreshChequeInformer(true);
 
-                        UpdateGUI(uiComponents.Menus | uiComponents.InformersType2 | uiComponents.InformersType3 | uiComponents.MenuTicks);
+                        UpdateGUI(uiComponents.MenuEnable | uiComponents.InformersType2 | uiComponents.InformersType3 | uiComponents.MenuTicks);
                         // ***** інвентаризаціяToolStripMenuItem.Checked = _fl_isInvenCheque;
                         break;
                     }
@@ -1635,7 +1636,7 @@ namespace PayDesk.Components.UI
                             splitContainer1.SplitterDistance = splitContainer1.Height / 2;
                         }
                         // **** RefreshWindowMenu();
-                        UpdateGUI(uiComponents.Menus);
+                        UpdateGUI(uiComponents.MenuEnable);
                         break;
                     }
                 case "ArticleWindow":
@@ -1643,7 +1644,7 @@ namespace PayDesk.Components.UI
                         splitContainer1.Panel2Collapsed = !splitContainer1.Panel2Collapsed;
                         ConfigManager.Instance.CommonConfiguration.STYLE_ArtSideCollapsed = !ConfigManager.Instance.CommonConfiguration.STYLE_ArtSideCollapsed;
                         // **** RefreshWindowMenu();
-                        UpdateGUI(uiComponents.Menus);
+                        UpdateGUI(uiComponents.MenuEnable);
                         break;
                     }
                 case "SensorType":
@@ -1817,7 +1818,7 @@ namespace PayDesk.Components.UI
                         // *** this.RefershMenus();
                         
                         this.profileCnt.Default.resetOrder();
-                        this.UpdateGUI(uiComponents.Menus);
+                        this.UpdateGUI(uiComponents.MenuEnable);
 
                         //this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", billNo);
                         break;
@@ -1867,7 +1868,7 @@ namespace PayDesk.Components.UI
                             if (bPrn.ShowDialog(this) == DialogResult.OK)
                             {
                                 // *** this.RefershMenus();
-                                UpdateGUI(uiComponents.Menus);
+                                UpdateGUI(uiComponents.MenuEnable);
                             }
                             bPrn.Dispose();
                             // *** addChequeInfo.Text = string.Empty;
@@ -1922,7 +1923,7 @@ namespace PayDesk.Components.UI
                             //DataWorkShared.MergeDataTableProperties(ref this.profileCnt.Default.Order, bs.SavedBill);
                             // this.profileCnt.Default.DataOrder.Merge(bs.SavedBill);
                             // **** this.RefershMenus();
-                            UpdateGUI(uiComponents.Menus);
+                            UpdateGUI(uiComponents.MenuEnable);
                         }
                         bs.Dispose();
                         break;
@@ -2131,7 +2132,7 @@ namespace PayDesk.Components.UI
                             // *** DataWorkShared.MergeDataTableProperties(ref this.profileCnt.Default.DataOrder, bs.SavedBill);
 
                             // *** this.RefershMenus();
-                            UpdateGUI(uiComponents.Menus);
+                            UpdateGUI(uiComponents.MenuEnable);
 
                         }
                         bs.Dispose();
@@ -2316,7 +2317,7 @@ namespace PayDesk.Components.UI
                 DataWorkCheque.SaveInvent(this.profileCnt.Default.DataOrder, true, this.profileCnt.getDataAllProfiles(DataType.ORDER));
 
             if (chequeDGV.Rows.Count == 1)
-                UpdateGUI(uiComponents.Menus); // *** RefershMenus();
+                UpdateGUI(uiComponents.MenuEnable); // *** RefershMenus();
 
             if (!this.profileCnt.triggerInventCheque)
             {
@@ -2380,7 +2381,7 @@ namespace PayDesk.Components.UI
                 chequeDGV.Update();
 
                 // * UpdateSumInfo(true);
-                profileCnt.Default.refresh();
+                this.profileCnt.refresh(true);
                 SrchTbox.Select();
                 SrchTbox.SelectAll();
 
@@ -2427,24 +2428,7 @@ namespace PayDesk.Components.UI
         private void DGV_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             (sender as DataGridView).Select();
-            /*
-            if (e.Button == MouseButtons.Right)
-            {
-                if (e.RowIndex < 0)
-                {
-                    if ((sender as DataGridView).Name == "chequeDGV")
-                        закріпитиToolStripMenuItem.Checked = ConfigManager.Instance.CommonConfiguration.STYLE_ChqColumnLock;
-                    else
-                        закріпитиToolStripMenuItem.Checked = ConfigManager.Instance.CommonConfiguration.STYLE_ArtColumnLock;
-                    columnsEditor.Show(Control.MousePosition);
-                    return;
-                }
-                if ((sender as DataGridView).Name == "chequeDGV")
-                    chequeContextMenu.Show(Control.MousePosition);
-                else
-                    articleContextMenu.Show(Control.MousePosition);
-            }
-            */
+
             if (e.RowIndex < 0)
                 return;
 
@@ -2454,7 +2438,6 @@ namespace PayDesk.Components.UI
             // seonsor command
             if (this.сенсорToolStripMenuItem.Checked && (sender as DataGridView).Name == "articleDGV")
                 Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
-
         }
         private void DGV_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -2849,6 +2832,8 @@ namespace PayDesk.Components.UI
             // informer type 2
             if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.InformersType2) != 0)
             {
+
+                bool _local_resetDigitalPanel = (p != null && p.ContainsKey("RESET_CASH_INDICATOR") && (bool)p["RESET_CASH_INDICATOR"]);
                 if (this.profileCnt.triggerInventCheque)
                 {
                     CashLbl.Text = string.Format("{0}", "ІНВЕНТАРИЗАЦІЯ"); ;
@@ -2884,19 +2869,24 @@ namespace PayDesk.Components.UI
                     if (this.profileCnt.Default.Properties["BILL"] == null)
                         this.addBillInfo.Text = string.Empty;
                 }
+
+                if (_local_resetDigitalPanel)
+                {
+                    CashLbl.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_SumFontColor;
+                    CashLbl.Font = ConfigManager.Instance.CommonConfiguration.STYLE_SumFont;
+
+                    CashLbl.Image = null;
+                    digitalPanel.BackgroundImage = null;
+
+                    this.profileCnt.triggerTaxDocRequired = false;
+                }
             }
 
             // Digital Block
             // informer type 3
             if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.InformersType3) != 0) // ??? resetDigitalPanel
             {
-                CashLbl.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_SumFontColor;
-                CashLbl.Font = ConfigManager.Instance.CommonConfiguration.STYLE_SumFont;
 
-                CashLbl.Image = null;
-                digitalPanel.BackgroundImage = null;
-
-                this.profileCnt.triggerTaxDocRequired = false;
 
                 // _fl_taxDocRequired = false;
             }
@@ -2946,7 +2936,7 @@ namespace PayDesk.Components.UI
 
             // *** Menu Items
 
-            if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.Menus) != 0)
+            if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.MenuEnable) != 0)
             {
                 if (Program.AppPlugins.IsActive(PluginType.FPDriver))
                     try
@@ -2956,7 +2946,6 @@ namespace PayDesk.Components.UI
                     catch { }
                 else
                     fxFunc_toolStripMenuItem.Enabled = false;
-                адміністраторToolStripMenuItem.Checked = _fl_adminMode;
                 фільтрОдиницьToolStripMenuItem.Enabled = !this.profileCnt.triggerInventCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && (_fl_adminMode || UserConfig.Properties[9]);
                 формуванняЧекуToolStripMenuItem.Enabled = !this.profileCnt.triggerInventCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && _fl_adminMode;
                 інвентаризаціяToolStripMenuItem.Enabled = (this.profileCnt.triggerInventCheque || profileCnt.Default.DataOrder.Rows.Count == 0) && _fl_adminMode;
@@ -2989,17 +2978,15 @@ namespace PayDesk.Components.UI
                 здійснитиОплатуToolStripMenuItem.Enabled = !this.profileCnt.triggerInventCheque && profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[23]);
                 задатиЗнижкаToolStripMenuItem.Enabled = !this.profileCnt.triggerInventCheque && profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
                 задатиНадбавкуToolStripMenuItem1.Enabled = !this.profileCnt.triggerInventCheque && profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
-
-
-                вертикальноToolStripMenuItem.Checked = (splitContainer1.Orientation == Orientation.Vertical);
-                вікноТоварівToolStripMenuItem.Checked = !splitContainer1.Panel2Collapsed;
-
             }
 
             if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.MenuTicks) != 0)
             {
                 інвентаризаціяToolStripMenuItem.Checked = this.profileCnt.triggerInventCheque;
                 чекПоверненняToolStripMenuItem.Checked = this.profileCnt.triggerReturnCheque;
+                адміністраторToolStripMenuItem.Checked = _fl_adminMode;
+                вертикальноToolStripMenuItem.Checked = (splitContainer1.Orientation == Orientation.Vertical);
+                вікноТоварівToolStripMenuItem.Checked = !splitContainer1.Panel2Collapsed;
             }
 
             // *** Sensor Mode
@@ -5266,6 +5253,7 @@ namespace PayDesk.Components.UI
             int currentProfileIndex = 0;
             int startupIndex = 0;
             string[] tableNames = { "PRODUCT", "ALTERNATEBC", "DCARDS" };
+            bool _local_updateOnly = this.profileCnt.valueOfUpdateMode == UpdateMode.SERVERDATAONLY;
 
             // check new data existance
             DataWorkSource.CheckForUpdate(ref filesToImport);
@@ -5273,61 +5261,60 @@ namespace PayDesk.Components.UI
             // clear temporaty exchange data
             this.ImportedData.Tables.Clear();
 
-            // start import
-            if (this.profileCnt.valueOfUpdateMode == UpdateMode.ALLSOURCES)
+            // check exchange folders
+            // check local folder
+
+            int maxRowCount = 0;
+            int totalImportedRows = 0;
+            foreach (DictionaryEntry de in filesToImport)
             {
-                // check exchange folders
-                // check local folder
+                maxRowCount = 0;
+                string[] files = (string[])de.Value;
 
-                foreach (DictionaryEntry de in filesToImport)
+                string[] localFiles = DataWorkSource.LoadFilesOnLocalTempFolder(files, de.Key);
+
+
+                if ((files[0] == CoreConst.STATE_LAN_ERROR || files[0] == "") && files[1] == "" && files[2] == "" && _local_updateOnly)
                 {
-                    string[] files = (string[])de.Value;
-                    if ((files[0] == CoreConst.STATE_LAN_ERROR || files[0] == "") && files[1] == "" && files[2] == "")// && this.profileCnt.triggerRunUpdateOnly)
-                    {
-                        // if only one profile
-                        if (filesToImport.Count == 1)
-                        {
-                            GC.Collect();
-                            return;
-                        }
-
-                        // next turn
-                        currentProfileIndex++;
+                    // if only one profile
+                    if (filesToImport.Count == 1)
                         continue;
-                    }
 
-                    string[] localFiles = DataWorkSource.LoadFilesOnLocalTempFolder(files, de.Key);
-
-                    if (currentProfileIndex == 0)
-                        startupIndex = 0;
-                    else
-                        startupIndex = profileCnt.Default.DataProducts.Rows.Count;// this.profileCnt.Default.Products.Rows.Count;
-                    // object[] loadResult = DataWorkSource.LoadData(localFiles, this.profileCnt.triggerRunUpdateOnly, de.Key, startupIndex);
-                    object[] loadResult = DataWorkSource.LoadData(localFiles, false, de.Key, startupIndex);
-
-                    ConfigManager.SaveConfiguration();
-
-                    DataTable[] tables = (DataTable[])loadResult[0];
-
-                    for (int i = 0; i < tables.Length; i++)
-                        if (tables[i] != null)
-                        {
-                            DataTable dt = new DataTable(tableNames[i] + "=" + de.Key);
-                            dt.Merge(tables[i]);
-                            this.ImportedData.Tables.Add(dt);
-                        }
-
+                    // next turn
+                    currentProfileIndex++;
+                    continue;
                 }
 
+                if (currentProfileIndex == 0)
+                    startupIndex = 0;
+                else
+                    startupIndex = totalImportedRows + 1;// profileCnt.Default.DataProducts.Rows.Count;// this.profileCnt.Default.Products.Rows.Count;
+                // object[] loadResult = DataWorkSource.LoadData(localFiles, this.profileCnt.triggerRunUpdateOnly, de.Key, startupIndex);
+                object[] loadResult = DataWorkSource.LoadData(localFiles, false, de.Key, startupIndex);
+
+                DataTable[] tables = (DataTable[])loadResult[0];
+
+                for (int i = 0; i < tables.Length; i++)
+                    if (tables[i] != null)
+                    {
+                        DataTable dt = new DataTable(tableNames[i] + "=" + de.Key);
+                        dt.Merge(tables[i]);
+                        if (dt.Rows.Count > maxRowCount)
+                            maxRowCount = dt.Rows.Count;
+                        this.ImportedData.Tables.Add(dt);
+                    }
+                totalImportedRows += maxRowCount;
+                currentProfileIndex++;
             }
-            else if (this.profileCnt.valueOfUpdateMode == UpdateMode.SERVERDATAONLY)
-            {
-                // check exchange folder only
-            }
 
 
 
 
+            //{
+                GC.Collect();
+                //return;
+            //}
+            ConfigManager.SaveConfiguration();
 
 
 

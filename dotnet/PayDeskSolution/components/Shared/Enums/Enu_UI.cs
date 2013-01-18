@@ -7,8 +7,7 @@ namespace components.Shared.Enums
 
     public enum uiComponents : int
     {
-        All = 0x00FF,
-        Menus = 0x0000,
+        All = 0xFFFF,
         Labels = 0x0001,
         Widgets = 0x0002,
         Colors = 0x0004,
@@ -19,7 +18,9 @@ namespace components.Shared.Enums
         AppWindow = 0x0080, // 0000.0000|1000.0000
         ControlsType1 = 0x0100,
         ControlsType2 = 0x0200,
+        MenuEnable = 0x0800,
         MenuTicks = 0x0400,
+        MenuAll = (MenuEnable | MenuTicks),
         InformersAll = (InformersType1 | InformersType2 | InformersType3)
     }
 }

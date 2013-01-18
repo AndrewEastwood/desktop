@@ -263,7 +263,7 @@ namespace driver.Components.Profiles
                 // this.PD_Empty_local_order;
                 // *** return Properties;
                 if (!Container.triggerInventCheque)
-                    OnPropertiesUpdated(this, Properties, "refresh_cash", EventArgs.Empty);
+                    OnPropertiesUpdated(this, Properties, "reset_cash", EventArgs.Empty);
                 return Properties;
             }
 
@@ -907,13 +907,13 @@ namespace driver.Components.Profiles
 
         protected void Order_RowChanged(object sender, DataRowChangeEventArgs e)
         {
-            refresh();
+            // refresh();
             OnPropertiesUpdated(this, Properties, "order_item_changed", EventArgs.Empty);
         }
 
         protected void Order_RowDeleted(object sender, DataRowChangeEventArgs e)
         {
-            refresh();
+            // refresh();
             if (DataOrder.Rows.Count > 0)
                 OnPropertiesUpdated(this, Properties, "order_item_removed", EventArgs.Empty);
             else
