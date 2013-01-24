@@ -38,7 +38,7 @@ namespace driver.Components.Profiles
             this.productFilter = filter;
             this.parent = parent;
 
-            if (this.isDefaultProfile())
+            if (this.isDefaultProfile()/* || parent.Configuration.CommonConfiguration.PROFILES_UseProfiles*/)
             {
                 this.props = getEmptyProperties(DataSection.All);
                 // init data containers
@@ -257,7 +257,6 @@ namespace driver.Components.Profiles
                 Properties[CoreConst.CASH_REAL_SUMA] = 0.0;
                 Properties[CoreConst.CASH_CHEQUE_SUMA] = 0.0;
                 Properties[CoreConst.CASH_TAX_SUMA] = 0.0;
-
 
                 // ???? UpdateSumDisplay(false, updateCustomer);
                 // this.PD_Empty_local_order;
@@ -536,16 +535,18 @@ namespace driver.Components.Profiles
         }
         public DataTable getData(DataType dType)
         {
-
-            if (this.isDefaultProfile())
-                return data[dType];
-            
             List<DataRow> dRows = new List<DataRow>();
             dRows.AddRange(data[dType].Select(getProductFilterQuery()));
             DataTable dT = setupEmptyDataTable(DataType.PRODUCT);
             foreach (DataRow dr in dRows)
                 dT.Rows.Add(dr.ItemArray);
             return dT;
+        }
+        public DataTable getData(DataType dType, string profileID)
+        {
+            if (Container.Profiles.ContainsKey(profileID))
+                return Container[profileID].getData(dType);
+            throw new Exception("Wrong profile ID requested");
         }
 
         public DataTable setupEmptyDataTable(DataType dType)
@@ -694,7 +695,6 @@ namespace driver.Components.Profiles
             return dTable;
         }
 
-
         public void Merge(AppProfile profile)
         {
             Properties.Clear();
@@ -747,9 +747,17 @@ namespace driver.Components.Profiles
             refreshProperties();
         }
 
-        public void reset()
+        public bool reset(bool clearOrder)
         {
-            refreshProperties();
+            if (!isDefaultProfile())
+                return Container.Default.reset(clearOrder);
+
+            if (clearOrder)
+                resetOrder();
+
+
+
+            return true;
         }
 
         public void resetOrder()
@@ -872,10 +880,10 @@ namespace driver.Components.Profiles
         // = custom methods
         public void customResetBlockDiscountManual()
         {
-            customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_ADD] = 0.0;
-            customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_SUB] = 0.0;
-            customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_ADD] = 0.0;
-            customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB] = 0.0;
+            Properties[CoreConst.DISCOUNT_MANUAL_CASH_ADD] = 0.0;
+            Properties[CoreConst.DISCOUNT_MANUAL_CASH_SUB] = 0.0;
+            Properties[CoreConst.DISCOUNT_MANUAL_PERCENT_ADD] = 0.0;
+            Properties[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB] = 0.0;
 
             // recalculate cash and trigger event
             refreshProperties();
@@ -884,7 +892,7 @@ namespace driver.Components.Profiles
         {
             // reset all values
             foreach (KeyValuePair<string, double> de in customCashDiscountItems)
-                customCashDiscountItems[de.Key.ToString()] = 0.0;
+                Properties[de.Key.ToString()] = 0.0;
 
             // setup default values
             Properties[CoreConst.DISCOUNT_APPLIED] = false;

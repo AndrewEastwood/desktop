@@ -171,19 +171,19 @@ namespace PayDesk.Components.UI
                 case "pu_refresh_cash":
                     {
                         // *** UpdateSumDisplay();
-                        UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersAll);
+                        UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersType2);
                         break;
                     }
                 case "pu_order_item_changed":
                     {
                         // *** UpdateSumDisplay();
-                        UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersAll);
+                        UpdateGUI(uiComponents.ControlsType2);
                         break;
                     }
                 case "pu_order_item_removed":
                     {
                         // **** UpdateSumDisplay();
-                        UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersAll);
+                        UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersType2);
                         break;
                     }
                 case "pu_order_cleared":
@@ -200,7 +200,7 @@ namespace PayDesk.Components.UI
                         */
                         // --- this.profileCnt.refresh(true);
                         // handle reset search param
-                        UpdateGUI(uiComponents.ControlsType1 | uiComponents.InformersType2 | uiComponents.MenuTicks, new Hashtable() {
+                        UpdateGUI(uiComponents.ControlsType1 | uiComponents.InformersType2 | uiComponents.MenuAll, new Hashtable() {
                             {"CLOSE",true},
                             {"STYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
                             {"SAVESRCH", false},
@@ -645,6 +645,21 @@ namespace PayDesk.Components.UI
                                     RowsRemoved_MyEvent(true);
 
                                 */
+
+                                if (m.LParam.ToInt32() == 0x100)
+                                {
+                                    UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersType2, new Hashtable() { 
+                                        {"UPDATE_CUSTOMER", true}
+                                    });
+                                }
+                                else
+                                {
+                                    UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersType2, new Hashtable() { 
+                                        {"UPDATE_CUSTOMER", true},
+                                        {"CLOSE", true}
+                                    });
+                                }
+
 
                                 index--;
                                 if (index < 0)
@@ -2321,11 +2336,11 @@ namespace PayDesk.Components.UI
 
             if (!this.profileCnt.triggerInventCheque)
             {
-
-                UpdateGUI(uiComponents.InformersType2);
+                Hashtable guiParams = new Hashtable();
                 // *** RefreshChequeInformer(this.profileCnt.Default.DataOrder.Rows.Count == 1);
                 if (this.profileCnt.Default.DataOrder.Rows.Count == 1)
-                    UpdateGUI(uiComponents.InformersType3);
+                    guiParams.Add("RESET_CASH_INDICATOR", true);
+                UpdateGUI(uiComponents.InformersType2, guiParams);
             }
         }//ok
         /// <summary>
@@ -2381,7 +2396,7 @@ namespace PayDesk.Components.UI
                 chequeDGV.Update();
 
                 // * UpdateSumInfo(true);
-                this.profileCnt.refresh(true);
+                this.profileCnt.Default.refresh();
                 SrchTbox.Select();
                 SrchTbox.SelectAll();
 
@@ -3228,7 +3243,7 @@ namespace PayDesk.Components.UI
                 // *** CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", realSUMA);
                 CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", this.profileCnt.getDefaultProfileValue<double>(CoreConst.CASH_REAL_SUMA));
 
-                if (ConfigManager.Instance.CommonConfiguration.APP_ShowInfoOnIndicator && Program.AppPlugins.IsActive(PluginType.FPDriver)/* && updateCustomer*/)
+                if (ConfigManager.Instance.CommonConfiguration.APP_ShowInfoOnIndicator && Program.AppPlugins.IsActive(PluginType.FPDriver) && p.ContainsKey("UPDATE_CUSTOMER") && (bool)p["UPDATE_CUSTOMER"]/* && updateCustomer*/)
                     try
                     {
                         string _topLabel = "СУМА:" + CashLbl.Text;

@@ -111,10 +111,10 @@ namespace driver.Components.Profiles
                 OnUpdateRequired(EventArgs.Empty);
         }
 
-        public void reset(bool includeProfiles)
+        public void reset(bool includeProfiles, bool resetOrder)
         {
             foreach (KeyValuePair<string, AppProfile> ap in profiles)
-                ap.Value.reset();
+                ap.Value.reset(resetOrder);
         }
 
         public void initContainerProfiles(bool clearAll)
