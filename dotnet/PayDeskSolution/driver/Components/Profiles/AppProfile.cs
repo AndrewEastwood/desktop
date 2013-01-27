@@ -13,6 +13,7 @@ namespace driver.Components.Profiles
     {
         // container link
         private ProfilesContainer parent;
+        private bool _lockEvents;
 
         /* data */
         // data must be used in the default profile only
@@ -697,11 +698,15 @@ namespace driver.Components.Profiles
 
         public void Merge(AppProfile profile)
         {
+            _lockEvents = true;
             Properties.Clear();
             Data.Clear();
 
             Properties = (Hashtable)profile.Properties.Clone();
             Data = profile.Data;
+            _lockEvents = false;
+
+            OnPropertiesUpdated(this, Properties, "order_profile_merged", EventArgs.Empty);
         }
 
         public Dictionary<string, object> getPropertyBlock(DataSection ds)
@@ -747,22 +752,12 @@ namespace driver.Components.Profiles
             refreshProperties();
         }
 
-        public bool reset(bool clearOrder)
+        public bool resetOrder()
         {
             if (!isDefaultProfile())
-                return Container.Default.reset(clearOrder);
-
-            if (clearOrder)
-                resetOrder();
-
-
-
-            return true;
-        }
-
-        public void resetOrder()
-        {
+                return Container.Default.resetOrder();
             DataOrder.Rows.Clear();
+            return true;
         }
 
         // triggers
@@ -886,7 +881,10 @@ namespace driver.Components.Profiles
             Properties[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB] = 0.0;
 
             // recalculate cash and trigger event
+            _lockEvents = true;
             refreshProperties();
+            _lockEvents = false;
+            OnPropertiesUpdated(this, Properties, "discount_reset_manual", EventArgs.Empty);
         }
         public void customResetBlockDiscountAll()
         {
@@ -899,7 +897,10 @@ namespace driver.Components.Profiles
             Properties[CoreConst.DISCOUNT_ALL_ITEMS] = false;
 
             // recalculate cash and trigger event
+            _lockEvents = true;
             refreshProperties();
+            _lockEvents = false;
+            OnPropertiesUpdated(this, Properties, "discount_reset_all", EventArgs.Empty);
         }
 
         // = events
@@ -908,9 +909,10 @@ namespace driver.Components.Profiles
 
         protected virtual void OnPropertiesUpdated(AppProfile sender, Hashtable props, string actionKey, EventArgs e)
         {
-            if (onPropertiesUpdated != null)
+            if (!_lockEvents && onPropertiesUpdated != null)
                 onPropertiesUpdated(sender, props, actionKey, e);
         }
+
 
 
         protected void Order_RowChanged(object sender, DataRowChangeEventArgs e)

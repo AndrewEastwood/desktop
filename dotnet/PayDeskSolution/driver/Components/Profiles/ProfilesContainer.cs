@@ -111,12 +111,6 @@ namespace driver.Components.Profiles
                 OnUpdateRequired(EventArgs.Empty);
         }
 
-        public void reset(bool includeProfiles, bool resetOrder)
-        {
-            foreach (KeyValuePair<string, AppProfile> ap in profiles)
-                ap.Value.reset(resetOrder);
-        }
-
         public void initContainerProfiles(bool clearAll)
         {
             if (clearAll && profiles.Count > 0)
@@ -183,7 +177,6 @@ namespace driver.Components.Profiles
         }
 
         /* = data management */
-
 
         public DataSet getDataAllProfiles(DataType dType)
         {

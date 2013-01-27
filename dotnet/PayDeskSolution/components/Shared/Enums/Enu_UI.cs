@@ -14,13 +14,15 @@ namespace components.Shared.Enums
         InformersType1 = 0x0008, // 0000.0000|0000.1000
         InformersType2 = 0x0010,
         InformersType3 = 0x0020,
+        InformersTypeAll = (InformersType1 | InformersType2 | InformersType3),
         Components = 0x0040,
         AppWindow = 0x0080, // 0000.0000|1000.0000
         ControlsType1 = 0x0100,
         ControlsType2 = 0x0200,
-        MenuEnable = 0x0800,
-        MenuTicks = 0x0400,
-        MenuAll = (MenuEnable | MenuTicks),
-        InformersAll = (InformersType1 | InformersType2 | InformersType3)
+        ControlsTypeAll = ControlsType1 | ControlsType2,
+        MenuItemsEnable = 0x0800,
+        MenuItemsTicks = 0x0400,
+        MenuItemsAll = (MenuItemsEnable | MenuItemsTicks),
+        InformersMenusControlsAll = (InformersTypeAll | MenuItemsAll | ControlsTypeAll)
     }
 }

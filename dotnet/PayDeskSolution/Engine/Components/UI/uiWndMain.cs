@@ -157,13 +157,13 @@ namespace PayDesk.Components.UI
                         // move it into UpdateGUI
                         відмінитиЗнижкунадбавкуToolStripMenuItem.Text = "Без знижки/надбавки";
                         // 
-                        UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersAll);
+                        UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersTypeAll);
                         break;
                     }
                 case "pu_reset_cash":
                     {
                         // *** UpdateSumDisplay();
-                        UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersAll, new Hashtable() {
+                        UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersTypeAll, new Hashtable() {
                             {"RESET_CASH_INDICATOR", true}
                         });
                         break;
@@ -200,10 +200,10 @@ namespace PayDesk.Components.UI
                         */
                         // --- this.profileCnt.refresh(true);
                         // handle reset search param
-                        UpdateGUI(uiComponents.ControlsType1 | uiComponents.InformersType2 | uiComponents.MenuAll, new Hashtable() {
-                            {"CLOSE",true},
-                            {"STYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
-                            {"SAVESRCH", false},
+                        UpdateGUI(uiComponents.ControlsType1 | uiComponents.InformersType2 | uiComponents.MenuItemsAll, new Hashtable() {
+                            {"SEARCH_FILTER_RESET",true},
+                            {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
+                            {"SEARCH_TEXT_RESET", true},
                             {"RESET_CASH_INDICATOR", true}
                         });
 
@@ -211,6 +211,10 @@ namespace PayDesk.Components.UI
                         // *** UpdateSumDisplay(/*false*/);
                         // *********** latest and from the top : UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersType2);
 
+                        break;
+                    }
+                case "pu_profile_merged":
+                    {
                         break;
                     }
             }
@@ -312,9 +316,9 @@ namespace PayDesk.Components.UI
             // UpdateMyControls();
             // UpdateGUI(uiComponents.All);
             UpdateGUI(uiComponents.All, new Hashtable() {
-                {"CLOSE",true},
-                {"STYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
-                {"SAVESRCH", false}
+                {"SEARCH_FILTER_RESET",true},
+                {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
+                {"SEARCH_TEXT_RESET", true}
             });
 
 
@@ -640,26 +644,18 @@ namespace PayDesk.Components.UI
                                 
                                 /* !!!!!!!!!!!!!!!!!!!!!!!
                                 if (m.LParam.ToInt32() == 0x100)
-                                    RowsRemoved_MyEvent(true, false);
+                                    RowsRemoved_MyEvent(true, false, false);
                                 else
-                                    RowsRemoved_MyEvent(true);
+                                    RowsRemoved_MyEvent(true, true, false);
 
                                 */
-
-                                if (m.LParam.ToInt32() == 0x100)
-                                {
-                                    UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersType2, new Hashtable() { 
-                                        {"UPDATE_CUSTOMER", true}
-                                    });
-                                }
-                                else
-                                {
-                                    UpdateGUI(uiComponents.ControlsType2 | uiComponents.InformersType2, new Hashtable() { 
-                                        {"UPDATE_CUSTOMER", true},
-                                        {"CLOSE", true}
-                                    });
-                                }
-
+                                
+                                UpdateGUI(uiComponents.InformersTypeAll | uiComponents.MenuItemsAll, new Hashtable(){
+                                    {"UPDATE_CUSTOMER", true},
+                                    {"SEARCH_FILTER_RESET", (m.LParam.ToInt32() != 0x100)},
+                                    {"SEARCH_TEXT_RESET", true},
+                                    {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType}
+                                });
 
                                 index--;
                                 if (index < 0)
@@ -711,7 +707,6 @@ namespace PayDesk.Components.UI
                             }
 
 
-                            this.profileCnt.Default.DataOrder.Rows.Clear();
                             /* !!!!!!!!!!!!!!!!!!!!!!!!!
                             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
                                 foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
@@ -726,8 +721,15 @@ namespace PayDesk.Components.UI
                             
                              * 
                              * 
-                             */ 
-                            
+                             */
+
+                            this.profileCnt.Default.DataOrder.Rows.Clear();
+                            UpdateGUI(uiComponents.InformersMenusControlsAll, new Hashtable(){
+                                {"UPDATE_CUSTOMER", true},
+                                {"SEARCH_FILTER_RESET", (m.LParam.ToInt32() != 0x100)},
+                                {"SEARCH_TEXT_RESET", true},
+                                {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType}
+                            });
                             break;
                         }
                         #endregion
@@ -920,9 +922,9 @@ namespace PayDesk.Components.UI
                                         //winapi.WinAPI.OutputDebugString("srch: " + chararray);
                                         // **** SearchFilter(false, 2, true);
                                         UpdateGUI(uiComponents.ControlsType1, new Hashtable() {
-                                            {"CLOSE",true},
-                                            {"STYPE", 2},
-                                            {"SAVESRCH", false}
+                                            {"SEARCH_FILTER_RESET",true},
+                                            {"SEARCH_TYPE", 2},
+                                            {"SEARCH_TEXT_RESET", true}
                                         });
                                         SrchTbox.Text = chararray;
                                     }
@@ -932,9 +934,9 @@ namespace PayDesk.Components.UI
                                         string _sameText = SrchTbox.Text;
                                         // **** SearchFilter(false, 2, true);
                                         UpdateGUI(uiComponents.ControlsType1, new Hashtable() {
-                                            {"CLOSE",true},
-                                            {"STYPE", 2},
-                                            {"SAVESRCH", false}
+                                            {"SEARCH_FILTER_RESET",true},
+                                            {"SEARCH_TYPE", 2},
+                                            {"SEARCH_TEXT_RESET", true}
                                         });
                                         SrchTbox.Text = _sameText;
                                     }
@@ -982,9 +984,9 @@ namespace PayDesk.Components.UI
                                     CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article, ConfigManager.Instance.CommonConfiguration.APP_StartTotal, this.profileCnt.Default.DataProducts);
                                     // *** SearchFilter(true, this.currSrchType, false);
                                     UpdateGUI(uiComponents.ControlsType1, new Hashtable() {
-                                        {"CLOSE",false},
-                                        {"STYPE", this.currSrchType},
-                                        {"SAVESRCH", true}
+                                        {"SEARCH_FILTER_RESET",false},
+                                        {"SEARCH_TYPE", this.currSrchType},
+                                        {"SEARCH_TEXT_RESET", false}
                                     });
                                     // hide product panel when it was displayed automatically
                                     /*if (splitContainer1.Panel2.Tag != null)
@@ -1067,9 +1069,9 @@ namespace PayDesk.Components.UI
                                                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                                                     // *** SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
                                                     UpdateGUI(uiComponents.ControlsType1, new Hashtable() {
-                                                        {"CLOSE",true},
-                                                        {"STYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
-                                                        {"SAVESRCH", false}
+                                                        {"SEARCH_FILTER_RESET",true},
+                                                        {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
+                                                        {"SEARCH_TEXT_RESET", true}
                                                     });
                                                 }
 
@@ -1088,9 +1090,9 @@ namespace PayDesk.Components.UI
                                                         MMessageBoxEx.Show(this.chequeDGV, "Нажаль нічого не вдалось знайти", "Результат пошуку", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                                         // *** SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
                                                         UpdateGUI(uiComponents.ControlsType1, new Hashtable() {
-                                                            {"CLOSE",true},
-                                                            {"STYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
-                                                            {"SAVESRCH", false}
+                                                            {"SEARCH_FILTER_RESET",true},
+                                                            {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
+                                                            {"SEARCH_TEXT_RESET", true}
                                                         });
                                                         break;
                                                     }
@@ -1098,9 +1100,9 @@ namespace PayDesk.Components.UI
                                                     {
                                                         // **** SearchFilter(false, currSrchType, true);
                                                         UpdateGUI(uiComponents.ControlsType1, new Hashtable() {
-                                                            {"CLOSE",true},
-                                                            {"STYPE", currSrchType},
-                                                            {"SAVESRCH", false}
+                                                            {"SEARCH_FILTER_RESET",true},
+                                                            {"SEARCH_TYPE", currSrchType},
+                                                            {"SEARCH_TEXT_RESET", true}
                                                         });
                                                         CoreLib.AddArticleToCheque(chequeDGV, articleDGV, dr[0], ConfigManager.Instance.CommonConfiguration.APP_StartTotal, this.profileCnt.Default.DataProducts);
                                                         allowToShow = false;
@@ -1276,9 +1278,9 @@ namespace PayDesk.Components.UI
                             {
                                 // *** SearchFilter(false, 0, true);
                                 UpdateGUI(uiComponents.ControlsType1, new Hashtable() {
-                                    {"CLOSE",true},
-                                    {"STYPE", 0},
-                                    {"SAVESRCH", false}
+                                    {"SEARCH_FILTER_RESET",true},
+                                    {"SEARCH_TYPE", 0},
+                                    {"SEARCH_TEXT_RESET", true}
                                 });
                             }
                             else
@@ -1304,9 +1306,9 @@ namespace PayDesk.Components.UI
                             {
                                 // *** SearchFilter(false, 1, true);
                                 UpdateGUI(uiComponents.ControlsType1, new Hashtable() {
-                                    {"CLOSE",true},
-                                    {"STYPE", 1},
-                                    {"SAVESRCH", false}
+                                    {"SEARCH_FILTER_RESET",true},
+                                    {"SEARCH_TYPE", 1},
+                                    {"SEARCH_TEXT_RESET", true}
                                 });
                             } 
                             else
@@ -1333,9 +1335,9 @@ namespace PayDesk.Components.UI
                             {
                                 // *** SearchFilter(false, 2, true);
                                 UpdateGUI(uiComponents.ControlsType1, new Hashtable() {
-                                    {"CLOSE",true},
-                                    {"STYPE", 2},
-                                    {"SAVESRCH", false}
+                                    {"SEARCH_FILTER_RESET",true},
+                                    {"SEARCH_TYPE", 2},
+                                    {"SEARCH_TEXT_RESET", true}
                                 });
                             } 
                             else
@@ -1382,9 +1384,9 @@ namespace PayDesk.Components.UI
                             {
                                 // ** SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
                                 UpdateGUI(uiComponents.ControlsType1, new Hashtable() {
-                                    {"CLOSE",true},
-                                    {"STYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
-                                    {"SAVESRCH", false}
+                                    {"SEARCH_FILTER_RESET",true},
+                                    {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
+                                    {"SEARCH_TEXT_RESET", true}
                                 });
                                 //this.sensorDataPanel1.Navigator.DisplayedCategoryFilter = "";
                                 //this.Navigator_OnFilterChanged("", EventArgs.Empty);
@@ -1488,7 +1490,7 @@ namespace PayDesk.Components.UI
                                 break;
                         }
 
-                        UpdateGUI(uiComponents.MenuEnable | uiComponents.MenuTicks);
+                        UpdateGUI(uiComponents.MenuItemsEnable | uiComponents.MenuItemsTicks);
 
                         // **** RefershMenus();
                         break;
@@ -1561,12 +1563,19 @@ namespace PayDesk.Components.UI
                             //UpdateSumDisplay(true, true);
                             // *** RowsRemoved_MyEvent(true, true, true);
                             this.profileCnt.Default.resetOrder();
+
+                            UpdateGUI(uiComponents.InformersMenusControlsAll, new Hashtable(){
+                                {"UPDATE_CUSTOMER", true},
+                                {"SEARCH_FILTER_RESET", true},
+                                {"SEARCH_TEXT_RESET", true},
+                                {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType}
+                            });
                         }
 
                         // *** RefershMenus();
                         // *** RefreshChequeInformer(true);
 
-                        UpdateGUI(uiComponents.MenuEnable | uiComponents.InformersType2 | uiComponents.InformersType3 | uiComponents.MenuTicks);
+                        UpdateGUI(uiComponents.MenuItemsAll | uiComponents.InformersTypeAll);
                         // ***** інвентаризаціяToolStripMenuItem.Checked = _fl_isInvenCheque;
                         break;
                     }
@@ -1576,7 +1585,7 @@ namespace PayDesk.Components.UI
                         // **** чекПоверненняToolStripMenuItem.Checked = _fl_isReturnCheque;
                         // *** RefreshChequeInformer(true);
                         this.profileCnt.triggerReturnCheque = !this.profileCnt.triggerReturnCheque;
-                        UpdateGUI(uiComponents.InformersType2 | uiComponents.InformersType3 | uiComponents.MenuTicks);
+                        UpdateGUI(uiComponents.InformersTypeAll | uiComponents.MenuItemsTicks);
                         break;
                     }
                 case "Settings":
@@ -1592,9 +1601,9 @@ namespace PayDesk.Components.UI
 
                             // *** SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
                             UpdateGUI(uiComponents.All, new Hashtable() {
-                                {"CLOSE",true},
-                                {"STYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
-                                {"SAVESRCH", false}
+                                {"SEARCH_FILTER_RESET",true},
+                                {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
+                                {"SEARCH_TEXT_RESET", true}
                             });
                         }
                         set.Dispose();
@@ -1651,7 +1660,7 @@ namespace PayDesk.Components.UI
                             splitContainer1.SplitterDistance = splitContainer1.Height / 2;
                         }
                         // **** RefreshWindowMenu();
-                        UpdateGUI(uiComponents.MenuEnable);
+                        UpdateGUI(uiComponents.MenuItemsEnable);
                         break;
                     }
                 case "ArticleWindow":
@@ -1659,7 +1668,7 @@ namespace PayDesk.Components.UI
                         splitContainer1.Panel2Collapsed = !splitContainer1.Panel2Collapsed;
                         ConfigManager.Instance.CommonConfiguration.STYLE_ArtSideCollapsed = !ConfigManager.Instance.CommonConfiguration.STYLE_ArtSideCollapsed;
                         // **** RefreshWindowMenu();
-                        UpdateGUI(uiComponents.MenuEnable);
+                        UpdateGUI(uiComponents.MenuItemsEnable);
                         break;
                     }
                 case "SensorType":
@@ -1833,7 +1842,12 @@ namespace PayDesk.Components.UI
                         // *** this.RefershMenus();
                         
                         this.profileCnt.Default.resetOrder();
-                        this.UpdateGUI(uiComponents.MenuEnable);
+                        UpdateGUI(uiComponents.InformersMenusControlsAll, new Hashtable(){
+                                {"UPDATE_CUSTOMER", true},
+                                {"SEARCH_FILTER_RESET", true},
+                                {"SEARCH_TEXT_RESET", true},
+                                {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType}
+                            });
 
                         //this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", billNo);
                         break;
@@ -1883,12 +1897,18 @@ namespace PayDesk.Components.UI
                             if (bPrn.ShowDialog(this) == DialogResult.OK)
                             {
                                 // *** this.RefershMenus();
-                                UpdateGUI(uiComponents.MenuEnable);
+                                UpdateGUI(uiComponents.MenuItemsEnable);
                             }
                             bPrn.Dispose();
                             // *** addChequeInfo.Text = string.Empty;
                             // *** RowsRemoved_MyEvent(true, true, true);
                             this.profileCnt.Default.resetOrder();
+                            UpdateGUI(uiComponents.InformersMenusControlsAll, new Hashtable(){
+                                {"UPDATE_CUSTOMER", true},
+                                {"SEARCH_FILTER_RESET", true},
+                                {"SEARCH_TEXT_RESET", true},
+                                {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType}
+                            });
                             //this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", bs.GetNewBillNo);
                         }
                         bs.Dispose();
@@ -1938,7 +1958,7 @@ namespace PayDesk.Components.UI
                             //DataWorkShared.MergeDataTableProperties(ref this.profileCnt.Default.Order, bs.SavedBill);
                             // this.profileCnt.Default.DataOrder.Merge(bs.SavedBill);
                             // **** this.RefershMenus();
-                            UpdateGUI(uiComponents.MenuEnable);
+                            UpdateGUI(uiComponents.MenuItemsEnable);
                         }
                         bs.Dispose();
                         break;
@@ -1988,6 +2008,12 @@ namespace PayDesk.Components.UI
 
                             this.profileCnt.Default.resetOrder();
 
+                            UpdateGUI(uiComponents.InformersMenusControlsAll, new Hashtable(){
+                                {"UPDATE_CUSTOMER", true},
+                                {"SEARCH_FILTER_RESET", true},
+                                {"SEARCH_TEXT_RESET", true},
+                                {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType}
+                            });
                             // if (bs.IsNewBill)
                             // ------ this.addBillInfo.Text = string.Format("{0} {1}", "ЗБЕРЕЖЕНИЙ РАХ.№", bs.GetNewBillNo);
                             //else
@@ -2147,7 +2173,7 @@ namespace PayDesk.Components.UI
                             // *** DataWorkShared.MergeDataTableProperties(ref this.profileCnt.Default.DataOrder, bs.SavedBill);
 
                             // *** this.RefershMenus();
-                            UpdateGUI(uiComponents.MenuEnable);
+                            UpdateGUI(uiComponents.MenuItemsEnable);
 
                         }
                         bs.Dispose();
@@ -2158,11 +2184,18 @@ namespace PayDesk.Components.UI
                         object billName = this.profileCnt.Default.Properties[CoreConst.BILL_PATH];
                         AppProfile LoadedBill = DataWorkBill.LoadCombinedBill(ConfigManager.Instance.CommonConfiguration.Path_Bills + "\\" + billName.ToString());
                         // **** RowsRemoved_MyEvent(true, true, true);
-                        // ****** ADD/REPLACE DATA MEREGE FUNCTION INTO PROFILE
+
                         this.profileCnt.Default.Merge(LoadedBill);
+                        UpdateGUI(uiComponents.InformersMenusControlsAll, new Hashtable(){
+                                {"UPDATE_CUSTOMER", true},
+                                {"SEARCH_FILTER_RESET", true},
+                                {"SEARCH_TEXT_RESET", true},
+                                {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType}
+                            });
+                        // ****** ADD/REPLACE DATA MEREGE FUNCTION INTO PROFILE
                         this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_NO));
                         // * UpdateSumInfo(true);
-                        profileCnt.Default.refresh();
+                        this.profileCnt.Default.refresh();
                         break;
                     }
                 case "CloseBillWithoutChanges": // CloseBill
@@ -2170,6 +2203,12 @@ namespace PayDesk.Components.UI
                         addChequeInfo.Text = string.Empty;
                         // *** RowsRemoved_MyEvent(true, true, true);
                         this.profileCnt.Default.resetOrder();
+                        UpdateGUI(uiComponents.InformersTypeAll | uiComponents.MenuItemsAll, new Hashtable(){
+                            {"UPDATE_CUSTOMER", true},
+                            {"SEARCH_FILTER_RESET", true},
+                            {"SEARCH_TEXT_RESET", true},
+                            {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType}
+                        });
                         break;
                     }
                 #endregion
@@ -2332,7 +2371,7 @@ namespace PayDesk.Components.UI
                 DataWorkCheque.SaveInvent(this.profileCnt.Default.DataOrder, true, this.profileCnt.getDataAllProfiles(DataType.ORDER));
 
             if (chequeDGV.Rows.Count == 1)
-                UpdateGUI(uiComponents.MenuEnable); // *** RefershMenus();
+                UpdateGUI(uiComponents.MenuItemsEnable); // *** RefershMenus();
 
             if (!this.profileCnt.triggerInventCheque)
             {
@@ -2548,8 +2587,8 @@ namespace PayDesk.Components.UI
                                 // **** SearchFilter(true, this.currSrchType, false);
                                 UpdateGUI(uiComponents.ControlsType1, new Hashtable() {
                                     {"CLOSE", false},
-                                    {"STYPE", this.currSrchType},
-                                    {"SAVESRCH", true}
+                                    {"SEARCH_TYPE", this.currSrchType},
+                                    {"SEARCH_TEXT_RESET", false}
                                 });
                             }
                         }
@@ -2590,8 +2629,8 @@ namespace PayDesk.Components.UI
                                 // *** SearchFilter(true, this.currSrchType, false);
                                 UpdateGUI(uiComponents.ControlsType1, new Hashtable() {
                                     {"CLOSE", false},
-                                    {"STYPE", this.currSrchType},
-                                    {"SAVESRCH", true}
+                                    {"SEARCH_TYPE", this.currSrchType},
+                                    {"SEARCH_TEXT_RESET", false}
                                 });
                             }
                         }
@@ -2951,7 +2990,7 @@ namespace PayDesk.Components.UI
 
             // *** Menu Items
 
-            if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.MenuEnable) != 0)
+            if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.MenuItemsEnable) != 0)
             {
                 if (Program.AppPlugins.IsActive(PluginType.FPDriver))
                     try
@@ -2995,7 +3034,7 @@ namespace PayDesk.Components.UI
                 задатиНадбавкуToolStripMenuItem1.Enabled = !this.profileCnt.triggerInventCheque && profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
             }
 
-            if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.MenuTicks) != 0)
+            if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.MenuItemsTicks) != 0)
             {
                 інвентаризаціяToolStripMenuItem.Checked = this.profileCnt.triggerInventCheque;
                 чекПоверненняToolStripMenuItem.Checked = this.profileCnt.triggerReturnCheque;
@@ -3082,7 +3121,7 @@ namespace PayDesk.Components.UI
             // control type 1
             if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.ControlsType1) != 0)
             {
-                if (p.ContainsKey("CLOSE") && (bool)p["CLOSE"] /*close*/)
+                if (p.ContainsKey("SEARCH_FILTER_RESET") && (bool)p["SEARCH_FILTER_RESET"] /*close*/)
                 {
                     Com_WinApi.OutputDebugString("MainWnd --- SearchFilter - reseting data begin");
                     // *** articleDGV.DataSource = this.profileCnt.Default.Products;
@@ -3090,7 +3129,7 @@ namespace PayDesk.Components.UI
                     Com_WinApi.OutputDebugString("MainWnd --- SearchFilter - reseting data end");
                 }
 
-                if (p.ContainsKey("SAVESRCH") && (bool)p["SAVESRCH"]  /*!saveSearchText*/)
+                if (p.ContainsKey("SEARCH_TEXT_RESET") && (bool)p["SEARCH_TEXT_RESET"]  /*!saveSearchText*/)
                     SrchTbox.Text = string.Empty;
 
                 // hide product panel when it was displayed automatically
@@ -3103,9 +3142,9 @@ namespace PayDesk.Components.UI
                         this.chequeContainer.Panel2Collapsed = false;
                 }
 
-                if (p.ContainsKey("STYPE"))
+                if (p.ContainsKey("SEARCH_TYPE"))
                 {
-                    currSrchType = int.Parse(p["STYPE"].ToString());
+                    currSrchType = int.Parse(p["SEARCH_TYPE"].ToString());
                     switch (currSrchType/*SrchType*/)
                     {
                         case 0:
@@ -3138,7 +3177,7 @@ namespace PayDesk.Components.UI
             } // control type 1
 
 
-            // = update sum display
+            // = update discount/bill block
             // control type 2
             if (((int)blockToUpdate & (int)global::components.Shared.Enums.uiComponents.ControlsType2) != 0)
             {
@@ -4276,7 +4315,12 @@ namespace PayDesk.Components.UI
                 closedInfo += string.Format("{0} {1} ", "з рахунку №", this.profileCnt.Default.Properties[CoreConst.BILL_NO]);
 
             // ****** RowsRemoved_MyEvent(false, true, true);
-
+            this.profileCnt.Default.resetOrder();
+            UpdateGUI(uiComponents.InformersMenusControlsAll, new Hashtable(){
+                {"SEARCH_FILTER_RESET", true},
+                {"SEARCH_TEXT_RESET", true},
+                {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType}
+            });
 
             CashLbl.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_RestFontColor;
             CashLbl.Font = ConfigManager.Instance.CommonConfiguration.STYLE_RestFont;
@@ -4980,9 +5024,9 @@ namespace PayDesk.Components.UI
                         clientID = (string)dr[0]["CID"];
                         // *** SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, false);
                         UpdateGUI(uiComponents.ControlsType1, new Hashtable() {
-                            {"CLOSE", false},
-                            {"STYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
-                            {"SAVESRCH", false}
+                            {"SEARCH_FILTER_RESET", false},
+                            {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
+                            {"SEARCH_TEXT_RESET", true}
                         });
                     }
                     else
@@ -5025,9 +5069,9 @@ namespace PayDesk.Components.UI
                 profileCnt.Default.refresh();
                 // *** SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, false);
                 UpdateGUI(uiComponents.ControlsType1, new Hashtable() {
-                    {"CLOSE", false},
-                    {"STYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
-                    {"SAVESRCH", false}
+                    {"SEARCH_FILTER_RESET", false},
+                    {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
+                    {"SEARCH_TEXT_RESET", true}
                 });
                 return allowToShow;
             }
@@ -5070,18 +5114,18 @@ namespace PayDesk.Components.UI
                 {
                     // *** SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
                     UpdateGUI(uiComponents.ControlsType1, new Hashtable() {
-                        {"CLOSE", true},
-                        {"STYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
-                        {"SAVESRCH", false}
+                        {"SEARCH_FILTER_RESET", true},
+                        {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType},
+                        {"SEARCH_TEXT_RESET", true}
                     });
                 }
                 else
                 {
                     // *** SearchFilter(true, currSrchType, false);
                     UpdateGUI(uiComponents.ControlsType1, new Hashtable() {
-                        {"CLOSE", false},
-                        {"STYPE", this.currSrchType},
-                        {"SAVESRCH", true}
+                        {"SEARCH_FILTER_RESET", false},
+                        {"SEARCH_TYPE", this.currSrchType},
+                        {"SEARCH_TEXT_RESET", false}
                     });
                 }
                 return allowToShow;
@@ -5094,9 +5138,9 @@ namespace PayDesk.Components.UI
                 {
                     // *** SearchFilter(true, currSrchType, true);
                     UpdateGUI(uiComponents.ControlsType1, new Hashtable() {
-                        {"CLOSE", true},
-                        {"STYPE", this.currSrchType},
-                        {"SAVESRCH", true}
+                        {"SEARCH_FILTER_RESET", true},
+                        {"SEARCH_TYPE", this.currSrchType},
+                        {"SEARCH_TEXT_RESET", false}
                     });
                 }
                 allowToShow = false;
@@ -5129,18 +5173,42 @@ namespace PayDesk.Components.UI
         /// (обраховує суму, відновлує фільтрацію таблиці товарів, оновлює повідомлення на панелях)
         /// </summary>
         /// <param name="updateCustomer">Якщо true то результати обчислення будуть ще виведені на дисплей ФП</param>
-        
+
         /*********
         private void RowsRemoved_MyEvent(bool updateCustomer)
         {
             this.RowsRemoved_MyEvent(updateCustomer, true, false);
+            UpdateGUI(uiComponents.InformersTypeAll | uiComponents.MenuItemsAll, new Hashtable(){
+                {"UPDATE_CUSTOMER", updateCustomer}
+                {"SEARCH_FILTER_RESET", true},
+                {"SEARCH_TEXT_RESET", true},
+                {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType}
+            });
         }
         private void RowsRemoved_MyEvent(bool updateCustomer, bool resetSrchFilter)
         {
             this.RowsRemoved_MyEvent(updateCustomer, resetSrchFilter, false);
+            UpdateGUI(uiComponents.InformersTypeAll | uiComponents.MenuItemsAll, new Hashtable(){
+                {"UPDATE_CUSTOMER", updateCustomer}
+                {"SEARCH_FILTER_RESET", resetSrchFilter},
+                {"SEARCH_TEXT_RESET", true},
+                {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType}
+            });
         }
         private void RowsRemoved_MyEvent(bool updateCustomer, bool resetSrchFilter, bool clearData)
         {
+            this.profileCnt.Default.DataOrder.Rows.Clear();
+            UpdateGUI(uiComponents.InformersTypeAll | uiComponents.MenuItemsAll, new Hashtable(){
+                {"UPDATE_CUSTOMER", updateCustomer},
+                {"SEARCH_FILTER_RESET", resetSrchFilter},
+                {"SEARCH_TEXT_RESET", true},
+                {"SEARCH_TYPE", ConfigManager.Instance.CommonConfiguration.APP_SearchType}
+            });
+         * // + InformersType2 <----- atop sum block
+         * // + ControlsType2 <----- discount/bill block
+         * // + ControlsType1 <---- search block
+         * //               saveSearchText,             int SrchType                          , bool close
+         * // SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, resetSrchFilter);
             if (clearData)
             {
                 // *--- this.profileCnt.Default.Order.Rows.Clear();
