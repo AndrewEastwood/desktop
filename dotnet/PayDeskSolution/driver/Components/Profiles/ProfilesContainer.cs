@@ -103,7 +103,7 @@ namespace driver.Components.Profiles
                 _local_needUpdate = true;
             }
 
-            if (includeProfiles)
+            //if (includeProfiles)
                 foreach (KeyValuePair<string, AppProfile> ap in profiles)
                     ap.Value.refresh();
 
@@ -182,7 +182,7 @@ namespace driver.Components.Profiles
         {
             DataSet ds = new DataSet();
             foreach (KeyValuePair<string, AppProfile> ap in profiles)
-                ds.Tables.Add(ap.Value.Data[dType]);
+                ds.Tables.Add(ap.Value.CommonData[dType]);
             return ds;
         }
 
@@ -223,14 +223,14 @@ namespace driver.Components.Profiles
 
                 if (Configuration.CommonConfiguration.PROFILES_UseProfiles)
                 {
-                    DataRow[] dRows = this.Default.Data[getValueByName<DataType>(prData[0])].Select("F = " + key);
+                    DataRow[] dRows = this.Default.CommonData[getValueByName<DataType>(prData[0])].Select("F = " + key);
                     foreach (DataRow dr in dRows)
                         dr.Delete();
                 }
                 else
-                    this.Default.Data[getValueByName<DataType>(prData[0])].Clear();
+                    this.Default.CommonData[getValueByName<DataType>(prData[0])].Clear();
                 _local_fl_updated = true;
-                this.Default.Data[getValueByName<DataType>(prData[0])].Merge(dt.Copy());
+                this.Default.CommonData[getValueByName<DataType>(prData[0])].Merge(dt.Copy());
             }
 
             if (_local_fl_updated)
@@ -242,7 +242,7 @@ namespace driver.Components.Profiles
                 string[] dKeys = getDataKeys();
                 for (int i = 0; i < getDataKeys().Length; i++)
                 {
-                    DataRow[] unusedRows = this.Default.Data[getValueByName<DataType>(dKeys[i])].Select(String.Join(" AND ", cleanupQuery.ToArray()));
+                    DataRow[] unusedRows = this.Default.CommonData[getValueByName<DataType>(dKeys[i])].Select(String.Join(" AND ", cleanupQuery.ToArray()));
                     foreach (DataRow dr in unusedRows)
                         dr.Delete();
                 }

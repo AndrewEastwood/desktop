@@ -559,7 +559,7 @@ namespace PayDesk.Components.UI.wndBills
             {
                 foreach (KeyValuePair<string, AppProfile> billEntry in items)
                 {
-                    currentBill = billEntry.Value.DataOrder;
+                    currentBill = billEntry.Value.CommonOrder;
                     props = billEntry.Value.Properties;
                     billInfo = ((Dictionary<string, object>)props[CoreConst.ORDER_BILL]);
                     this.billFileList.Add(billInfo[CoreConst.BILL_OID].ToString(), billEntry.Key);

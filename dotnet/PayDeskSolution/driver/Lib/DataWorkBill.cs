@@ -51,13 +51,13 @@ namespace driver.Lib
         public static bool BillUpdatePrintedCount(AppProfile dtBill)
         {
             bool success = true;
-            for (int i = 0; i < dtBill.DataOrder.Rows.Count; i++)
+            for (int i = 0; i < dtBill.CommonOrder.Rows.Count; i++)
                 try
                 {
-                    dtBill.DataOrder.Rows[i]["PRINTCOUNT"] = Convert.ToDouble(dtBill.DataOrder.Rows[i]["TOT"]);
+                    dtBill.CommonOrder.Rows[i]["PRINTCOUNT"] = Convert.ToDouble(dtBill.CommonOrder.Rows[i]["TOT"]);
                 }
                 catch(Exception e) {
-                    CoreLib.WriteLog(e, "driver.Lib.BillUpdatePrintedCount(DataTable dtBill); can't update PRINTCOUNT field at row ["+i+"]\r\n" + DataWorkShared.DumpDataTableRow(dtBill.DataOrder.Rows[i]));
+                    CoreLib.WriteLog(e, "driver.Lib.BillUpdatePrintedCount(DataTable dtBill); can't update PRINTCOUNT field at row ["+i+"]\r\n" + DataWorkShared.DumpDataTableRow(dtBill.CommonOrder.Rows[i]));
                     success = false; 
                 }
             return success;

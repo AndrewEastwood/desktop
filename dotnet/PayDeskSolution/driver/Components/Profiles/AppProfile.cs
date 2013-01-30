@@ -29,7 +29,7 @@ namespace driver.Components.Profiles
         private bool trExchangeAccessError;
 
         public AppProfile(string id, string name, ProfilesContainer parent)
-            : this(id, name, "%", parent)
+            : this(id, name, "*", parent)
         {
         }
         public AppProfile(string id, string name, string filter, ProfilesContainer parent)
@@ -39,8 +39,8 @@ namespace driver.Components.Profiles
             this.productFilter = filter;
             this.parent = parent;
 
-            if (this.isDefaultProfile()/* || parent.Configuration.CommonConfiguration.PROFILES_UseProfiles*/)
-            {
+            //if (this.isDefaultProfile()/* || parent.Configuration.CommonConfiguration.PROFILES_UseProfiles*/)
+            //{
                 this.props = getEmptyProperties(DataSection.All);
                 // init data containers
                 string[] dataKeys = Enum.GetNames(typeof(DataType));
@@ -51,9 +51,9 @@ namespace driver.Components.Profiles
                 }
 
                 // init order event handlers
-                DataOrder.RowDeleted += new DataRowChangeEventHandler(Order_RowDeleted);
-                DataOrder.RowChanged += new DataRowChangeEventHandler(Order_RowChanged);
-            }
+                CommonData[DataType.ORDER].RowDeleted += new DataRowChangeEventHandler(Order_RowDeleted);
+                CommonData[DataType.ORDER].RowChanged += new DataRowChangeEventHandler(Order_RowChanged);
+            //}
         }
 
         /* setup */
@@ -154,24 +154,30 @@ namespace driver.Components.Profiles
         public string ProductFilter { get { return this.productFilter; } set { productFilter = value; } }
         
         // profile dynamic data
-        public DataTable DataOrder { get { return getOrder(); } }
-        public DataTable DataProducts { get { return getProducts(); } }
-        public DataTable DataAlternative { get { return getAlternative(); } }
-        public DataTable DataDiscountCards { get { return getDiscountCards(); } }
+        //public DataTable DataOrderReadOnly { get { return getOrder(); } }
+        //public DataTable DataProductsReadOnly { get { return getProducts(); } }
+        //public DataTable DataAlternativeReadOnly { get { return getAlternative(); } }
+        //public DataTable DataDiscountCardsReadOnly { get { return getDiscountCards(); } }
         public Hashtable Properties
         {
-            get { return props; }
+            get
+            {
+                //if (this.isDefaultProfile())
+                    return props;
+                //return getProperties(this.Data[DataType.ORDER]);
+            }
             set
             {
                 props = value;
             }
         }
-        public Dictionary<DataType, DataTable> Data
+        public Dictionary<DataType, DataTable> CommonData
         {
             get
             {
                 if (!this.isDefaultProfile())
-                    return Container.Default.Data;
+                    return Container.Default.CommonData;
+                
                 return data;
             }
             set
@@ -179,8 +185,28 @@ namespace driver.Components.Profiles
                 if (this.isDefaultProfile())
                     data = value;
                 else
-                    Container.Default.Data = value;
+                    Container.Default.CommonData = value;
             }
+        }
+        public DataTable CommonOrder
+        {
+            get { return CommonData[DataType.ORDER]; }
+            set { CommonData[DataType.ORDER] = value; }
+        }
+        public DataTable CommonProducts
+        {
+            get { return CommonData[DataType.PRODUCT]; }
+            set { CommonData[DataType.PRODUCT] = value; }
+        }
+        public DataTable CommonAlternative
+        {
+            get { return CommonData[DataType.ALTERNATEBC]; }
+            set { CommonData[DataType.ALTERNATEBC] = value; }
+        }
+        public DataTable CommonDiscountCards
+        {
+            get { return CommonData[DataType.DCARDS]; }
+            set { CommonData[DataType.DCARDS] = value; }
         }
 
         /* in progress */
@@ -216,10 +242,10 @@ namespace driver.Components.Profiles
                 Container.Default.setProperties(key, value);
         }
 
-        public Hashtable refreshProperties()
+        private Hashtable getProperties(DataTable _local_order)
         {
             // Hashtable Properties = new Hashtable();
-            DataTable _local_order = this.DataOrder;
+            //DataTable _local_order = this.Data[DataType.ORDER];
 
             //*bool useConstDisc = discArrPercent[0] == 0.0 && discArrPercent[1] == 0.0 &&
             //*    discArrdataProps[0] == 0.0 && discArrdataProps[1] == 0.0;
@@ -504,8 +530,8 @@ namespace driver.Components.Profiles
         /* data access and management */
         public string getProductFilterQuery()
         {
-            if (ProductFilter.Length == 0 || ProductFilter.Equals("%"))
-                return string.Format("F='{0}'", ID);
+            if (ProductFilter.Length == 0 || ProductFilter.Equals("*"))
+                return string.Format("F LIKE '{0}'", /*ID*/"*");
 
             List<string> profileFilteredProducts = new List<string>();
             string[] filterProductIDs = ProductFilter.Split(' ', ',', ';');
@@ -516,8 +542,8 @@ namespace driver.Components.Profiles
             if (profileFilteredProducts.Capacity > 0)
                 return String.Join(" OR ", profileFilteredProducts.ToArray());
 
-            return string.Format("F='{0}'", ID);
-        }
+            return string.Format("F LIKE '{0}'", ID);
+        }/*
         public DataTable getProducts()
         {
             return getData(DataType.PRODUCT);
@@ -533,20 +559,24 @@ namespace driver.Components.Profiles
         public DataTable getDiscountCards()
         {
             return getData(DataType.DCARDS);
-        }
-        public DataTable getData(DataType dType)
+        }*/
+        public DataTable getProfileData(DataType dType)
         {
-            List<DataRow> dRows = new List<DataRow>();
-            dRows.AddRange(data[dType].Select(getProductFilterQuery()));
-            DataTable dT = setupEmptyDataTable(DataType.PRODUCT);
-            foreach (DataRow dr in dRows)
-                dT.Rows.Add(dr.ItemArray);
-            return dT;
+            //if (this.isDefaultProfile())
+            //{
+                List<DataRow> dRows = new List<DataRow>();
+                dRows.AddRange(data[dType].Select(getProductFilterQuery()));
+                DataTable dT = setupEmptyDataTable(dType);
+                foreach (DataRow dr in dRows)
+                    dT.Rows.Add(dr.ItemArray);
+                return dT;
+            //}
+            //else return Container.Default.getData(dType);
         }
-        public DataTable getData(DataType dType, string profileID)
+        public DataTable getProfileData(DataType dType, string profileID)
         {
             if (Container.Profiles.ContainsKey(profileID))
-                return Container[profileID].getData(dType);
+                return Container[profileID].getProfileData(dType);
             throw new Exception("Wrong profile ID requested");
         }
 
@@ -700,10 +730,10 @@ namespace driver.Components.Profiles
         {
             _lockEvents = true;
             Properties.Clear();
-            Data.Clear();
+            CommonData.Clear();
 
             Properties = (Hashtable)profile.Properties.Clone();
-            Data = profile.Data;
+            CommonData = profile.CommonData;
             _lockEvents = false;
 
             OnPropertiesUpdated(this, Properties, "order_profile_merged", EventArgs.Empty);
@@ -749,14 +779,17 @@ namespace driver.Components.Profiles
         //
         public void refresh()
         {
-            refreshProperties();
+            // update props with default data
+            //if (this.isDefaultProfile())
+                getProperties(CommonData[DataType.ORDER]);
+            //else Container.Default.refresh();
         }
 
         public bool resetOrder()
         {
             if (!isDefaultProfile())
                 return Container.Default.resetOrder();
-            DataOrder.Rows.Clear();
+            CommonData[DataType.ORDER].Rows.Clear();
             return true;
         }
 
@@ -882,7 +915,7 @@ namespace driver.Components.Profiles
 
             // recalculate cash and trigger event
             _lockEvents = true;
-            refreshProperties();
+            this.refresh();
             _lockEvents = false;
             OnPropertiesUpdated(this, Properties, "discount_reset_manual", EventArgs.Empty);
         }
@@ -898,7 +931,7 @@ namespace driver.Components.Profiles
 
             // recalculate cash and trigger event
             _lockEvents = true;
-            refreshProperties();
+            this.refresh();
             _lockEvents = false;
             OnPropertiesUpdated(this, Properties, "discount_reset_all", EventArgs.Empty);
         }
@@ -909,7 +942,7 @@ namespace driver.Components.Profiles
 
         protected virtual void OnPropertiesUpdated(AppProfile sender, Hashtable props, string actionKey, EventArgs e)
         {
-            if (!_lockEvents && onPropertiesUpdated != null)
+            if (this.isDefaultProfile() && !_lockEvents && onPropertiesUpdated != null)
                 onPropertiesUpdated(sender, props, actionKey, e);
         }
 
@@ -918,23 +951,35 @@ namespace driver.Components.Profiles
         protected void Order_RowChanged(object sender, DataRowChangeEventArgs e)
         {
             // refresh();
-            OnPropertiesUpdated(this, Properties, "order_item_changed", EventArgs.Empty);
+            if (this.isDefaultProfile())
+            {
+                _lockEvents = true;
+                refresh();
+                _lockEvents = false;
+                OnPropertiesUpdated(this, Properties, "order_item_changed", EventArgs.Empty);
+            }
         }
 
         protected void Order_RowDeleted(object sender, DataRowChangeEventArgs e)
         {
             // refresh();
-            if (DataOrder.Rows.Count > 0)
-                OnPropertiesUpdated(this, Properties, "order_item_removed", EventArgs.Empty);
-            else
-                OnPropertiesUpdated(this, Properties, "order_cleared", EventArgs.Empty);
+            if (this.isDefaultProfile())
+            {
+                _lockEvents = true;
+                refresh();
+                _lockEvents = false;
+                if (this.CommonData[DataType.ORDER].Rows.Count > 0)
+                    OnPropertiesUpdated(this, Properties, "order_item_removed", EventArgs.Empty);
+                else
+                    OnPropertiesUpdated(this, Properties, "order_cleared", EventArgs.Empty);
+            }
         }
 
         public object Clone()
         {
             AppProfile p = new AppProfile(ID, Name, ProductFilter, Container);
             p.Properties = this.Properties;
-            p.Data = Data;
+            p.CommonData = CommonData;
 
             return p;
         }
