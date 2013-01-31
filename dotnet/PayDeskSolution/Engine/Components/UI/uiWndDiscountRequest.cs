@@ -212,14 +212,14 @@ namespace PayDesk.Components.UI
             textBox2.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UseAbsoluteTypeDisc && !Program.AppPlugins.IsActive(PluginType.FPDriver);
             radioButton2.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UseAbsoluteTypeDisc && !Program.AppPlugins.IsActive(PluginType.FPDriver);
 
-            textBox1.Text = Math.Round(Math.Abs(profile.customCashDiscountItems[items[0]]), ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, MidpointRounding.AwayFromZero).ToString();
-            textBox2.Text = Math.Round(Math.Abs(profile.customCashDiscountItems[items[1]]), ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, MidpointRounding.AwayFromZero).ToString();
+            textBox1.Text = Math.Round(Math.Abs(profile.getPropertyValue<double>(items[0])), ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, MidpointRounding.AwayFromZero).ToString();
+            textBox2.Text = Math.Round(Math.Abs(profile.getPropertyValue<double>(items[1])), ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, MidpointRounding.AwayFromZero).ToString();
 
             if (textBox1.Enabled && textBox2.Enabled)
                 if (ConfigManager.Instance.CommonConfiguration.APP_DefaultTypeDisc == 0)//if percent variant is dafault
-                    SetVariant((profile.customCashDiscountItems[items[1]] != 0.0 || (profile.customCashDiscountItems[items[0]] == 0.0 && profile.customCashDiscountItems[items[1]] == 0.0)) ? 1 : 2);
+                    SetVariant((profile.getPropertyValue<double>(items[1]) != 0.0 || (profile.getPropertyValue<double>(items[0]) == 0.0 && profile.getPropertyValue<double>(items[1]) == 0.0)) ? 1 : 2);
                 else
-                    SetVariant((profile.customCashDiscountItems[items[1]] != 0.0 || (profile.customCashDiscountItems[items[0]] == 0.0 && profile.customCashDiscountItems[items[1]] == 0.0)) ? 2 : 1);
+                    SetVariant((profile.getPropertyValue<double>(items[1]) != 0.0 || (profile.getPropertyValue<double>(items[0]) == 0.0 && profile.getPropertyValue<double>(items[1]) == 0.0)) ? 2 : 1);
             else
             {
                 if (textBox1.Enabled)
@@ -246,16 +246,16 @@ namespace PayDesk.Components.UI
                 // *** dm[0] = dsc;
                 // *** cdm[0] = cdisc;
 
-                profile.customCashDiscountItems[items[0]] = dsc;
-                profile.customCashDiscountItems[items[1]] = cdisc;
+                profile.Properties[items[0]] = dsc;
+                profile.Properties[items[1]] = cdisc;
             }
             else
             {
                 // nadbavka
                 // *** dm[1] = -dsc;
                 // *** cdm[1] = -cdisc;
-                profile.customCashDiscountItems[items[0]] = -dsc;
-                profile.customCashDiscountItems[items[1]] = -cdisc;
+                profile.Properties[items[0]] = -dsc;
+                profile.Properties[items[1]] = -cdisc;
             }
         }
     }

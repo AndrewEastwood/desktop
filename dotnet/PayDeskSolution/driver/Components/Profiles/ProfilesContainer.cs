@@ -295,16 +295,16 @@ namespace driver.Components.Profiles
                 onUpdateRequired(this, e);
         }
 
-        protected virtual void OnProfileCommandReceived(AppProfile sender, string command, EventArgs e)
+        protected virtual void OnProfileCommandReceived(AppProfile sender, Hashtable props, string command, EventArgs e)
         {
             if (onProfileCommandReceived != null)
-                onProfileCommandReceived(sender, command, e);
+                onProfileCommandReceived(sender, props, command, e);
         }
 
         // profile event handlers
         void ProfilesContainer_onPropertiesUpdated(AppProfile sender, Hashtable props, string actionKey, EventArgs e)
         {
-            OnProfileCommandReceived(sender, "pu_" + actionKey, e);
+            OnProfileCommandReceived(sender, props, "pu_" + actionKey, e);
         }
 
     }
@@ -314,7 +314,7 @@ namespace driver.Components.Profiles
     public delegate void DataUnchangedEventHandler(object sender, EventArgs e);
     public delegate void SuibUnitChangedEventHandler(object sender, EventArgs e);
     public delegate void UpdateRequiredEventHandler(object sender, EventArgs e);
-    public delegate void ProfileCommandReceivedEventHandler(AppProfile sender, string command, EventArgs e);
+    public delegate void ProfileCommandReceivedEventHandler(AppProfile sender, Hashtable props, string command, EventArgs e);
 
     public enum DataType : int
     {

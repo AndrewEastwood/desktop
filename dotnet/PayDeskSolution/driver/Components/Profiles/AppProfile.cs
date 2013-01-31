@@ -19,6 +19,7 @@ namespace driver.Components.Profiles
         // data must be used in the default profile only
         private Dictionary<DataType, DataTable> data = new Dictionary<DataType, DataTable>();
         private Hashtable props = new Hashtable();
+        private Dictionary<DataType, Stack<Hashtable>> customParams = new Dictionary<DataType, Stack<Hashtable>>();
 
         // profile data
         private string id;
@@ -249,8 +250,8 @@ namespace driver.Components.Profiles
 
             //*bool useConstDisc = discArrPercent[0] == 0.0 && discArrPercent[1] == 0.0 &&
             //*    discArrdataProps[0] == 0.0 && discArrdataProps[1] == 0.0;
-            double[] _discArrP = { customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_SUB], customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_PERCENT_ADD] };
-            double[] _discArrC = { customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_SUB], customCashDiscountItems[CoreConst.DISCOUNT_MANUAL_CASH_ADD] };
+            double[] _discArrP = { getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_PERCENT_SUB), getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_PERCENT_ADD)};
+            double[] _discArrC = { getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_CASH_SUB), getPropertyValue<double>(CoreConst.DISCOUNT_MANUAL_CASH_ADD) };
             bool useConstDisc = _discArrP[0] == 0 && _discArrP[1] == 0 && _discArrC[0] == 0 && _discArrC[1] == 0;
 
             // Get discount value
@@ -776,6 +777,47 @@ namespace driver.Components.Profiles
             
         }
 
+        public void DataRecordRemove(DataType dType, string recordID)
+        {
+            DataRecordRemove(dType, recordID, null);
+        }
+
+        public void DataRecordRemove(DataType dType, string recordID, Hashtable customParams)
+        {
+            DataRow[] dProfileRow = this.CommonData[dType].Select(string.Format("ID LIKE '{0}'", recordID));
+            if (customParams != null || customParams.Count != 0)
+            {
+                if (!this.customParams.ContainsKey(dType))
+                    this.customParams[dType] = new Stack<Hashtable>();
+                this.customParams[dType].Push(customParams);
+            }
+            _lockEvents = true;
+            if (dProfileRow != null)
+                for (int i = 0; i < dProfileRow.Length; i++)
+                {
+                    if (i + 1 >= dProfileRow.Length)
+                        _lockEvents = false;
+                    dProfileRow[i].Delete();
+                }
+        }
+        public void DataRecordRemove(DataType dType, int recordIndex)
+        {
+            DataRecordRemove(dType, recordIndex, null);
+        }
+
+        public void DataRecordRemove(DataType dType, int recordIndex, Hashtable customParams)
+        {
+            if (customParams != null || customParams.Count != 0)
+            {
+                if (!this.customParams.ContainsKey(dType))
+                    this.customParams[dType] = new Stack<Hashtable>();
+                this.customParams[dType].Push(customParams);
+            }
+            this.CommonData[dType].Rows.RemoveAt(recordIndex);
+        }
+
+
+
         //
         public void refresh()
         {
@@ -888,7 +930,7 @@ namespace driver.Components.Profiles
             }
         }
 
-        public Dictionary<string, double> customCashDiscountItems
+        /*public Dictionary<string, double> customCashDiscountItems
         {
             get {
                 Dictionary<string, double> _discount = new Dictionary<string, double>();
@@ -903,7 +945,7 @@ namespace driver.Components.Profiles
                 _discount[CoreConst.DISCOUNT_ONLY_PERCENT] = Container.Default.getPropertyValue<double>(CoreConst.DISCOUNT_ONLY_PERCENT);
                 return _discount;
             }
-        }
+        }*/
 
         // = custom methods
         public void customResetBlockDiscountManual()
@@ -922,8 +964,12 @@ namespace driver.Components.Profiles
         public void customResetBlockDiscountAll()
         {
             // reset all values
-            foreach (KeyValuePair<string, double> de in customCashDiscountItems)
-                Properties[de.Key.ToString()] = 0.0;
+            customResetBlockDiscountManual();
+            Properties[CoreConst.DISCOUNT_CONST_PERCENT] = 0.0;
+            Properties[CoreConst.DISCOUNT_FINAL_CASH] = 0.0;
+            Properties[CoreConst.DISCOUNT_FINAL_PERCENT] = 0.0;
+            Properties[CoreConst.DISCOUNT_ONLY_CASH] = 0.0;
+            Properties[CoreConst.DISCOUNT_ONLY_PERCENT] = 0.0;
 
             // setup default values
             Properties[CoreConst.DISCOUNT_APPLIED] = false;
@@ -951,7 +997,7 @@ namespace driver.Components.Profiles
         protected void Order_RowChanged(object sender, DataRowChangeEventArgs e)
         {
             // refresh();
-            if (this.isDefaultProfile())
+            if (this.isDefaultProfile() && !_lockEvents)
             {
                 _lockEvents = true;
                 refresh();
@@ -963,15 +1009,20 @@ namespace driver.Components.Profiles
         protected void Order_RowDeleted(object sender, DataRowChangeEventArgs e)
         {
             // refresh();
-            if (this.isDefaultProfile())
+            if (this.isDefaultProfile() && !_lockEvents)
             {
                 _lockEvents = true;
                 refresh();
                 _lockEvents = false;
+
+                Hashtable _lastCustomParams = new Hashtable();
+                if (this.customParams[DataType.ORDER].Count > 0)
+                    _lastCustomParams = this.customParams[DataType.ORDER].Pop();
+
                 if (this.CommonData[DataType.ORDER].Rows.Count > 0)
-                    OnPropertiesUpdated(this, Properties, "order_item_removed", EventArgs.Empty);
+                    OnPropertiesUpdated(this, _lastCustomParams, "order_item_removed", EventArgs.Empty);
                 else
-                    OnPropertiesUpdated(this, Properties, "order_cleared", EventArgs.Empty);
+                    OnPropertiesUpdated(this, _lastCustomParams, "order_cleared", EventArgs.Empty);
             }
         }
 
