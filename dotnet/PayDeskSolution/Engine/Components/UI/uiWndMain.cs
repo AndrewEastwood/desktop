@@ -132,7 +132,7 @@ namespace PayDesk.Components.UI
             InitializeComponent();
 
             timerDataImportSynchronizer = new System.Windows.Forms.Timer();
-            timerDataImportSynchronizer.Interval = 50000;
+            // timerDataImportSynchronizer.Interval = 50000;
             timerDataImportSynchronizer.Tick += new EventHandler(timerDataImportSynchronizer_Tick);
             
             profileCnt = new ProfilesContainer();
@@ -2739,7 +2739,6 @@ namespace PayDesk.Components.UI
                 readedBuyerBarCode = serialPort1.ReadExisting().Trim('%', '?', '\r', '\n');
             }
         }
-
         #endregion
 
         #region UI
@@ -3325,14 +3324,14 @@ namespace PayDesk.Components.UI
         /// Custom method. Used for updating data of elements.
         ///  !!! Must be replaced with UpdateGUI
         /// </summary>
-        private void _UpdateMyControls()
+        private void __UpdateMyControls()
         {
             //winapi.Funcs.OutputDebugString("UpdateMyControls_begin");
-            _RefreshAppInformer();
-            _RefreshChequeInformer(true);
-            _RefershStyles();
-            _RefershMenus();
-            _RefreshWindowMenu();
+            __RefreshAppInformer();
+            __RefreshChequeInformer(true);
+            __RefershStyles();
+            __RefershMenus();
+            __RefreshWindowMenu();
 
 
             // ---- moved to profile container
@@ -3383,7 +3382,7 @@ namespace PayDesk.Components.UI
             }
 
         }
-        private void _RefreshAppInformer()
+        private void __RefreshAppInformer()
         {
             appInfoLabel.Text = string.Format("{0}: {1}     {2}: \"{3}\"     {4}: {5}     {6}: \"{7}\"",
                 "Підрозділ №",
@@ -3395,7 +3394,7 @@ namespace PayDesk.Components.UI
                 "Касир",
                 UserConfig.UserID);
         }//ok//label
-        private void _RefreshChequeInformer(bool resetDigitalPanel)
+        private void __RefreshChequeInformer(bool resetDigitalPanel)
         {
             if (this.profileCnt.triggerInventCheque)
             {
@@ -3443,7 +3442,7 @@ namespace PayDesk.Components.UI
                 // ** _fl_taxDocRequired = false;
             }
         }
-        private void _RefershStyles()
+        private void __RefershStyles()
         {
             //Colors
             infoPanel.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundInfPan;
@@ -3485,7 +3484,7 @@ namespace PayDesk.Components.UI
             //this.chequeDGV.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
 
         }//ok
-        private void _RefershMenus()
+        private void __RefershMenus()
         {
             if (Program.AppPlugins.IsActive(PluginType.FPDriver))
                 try
@@ -3530,12 +3529,12 @@ namespace PayDesk.Components.UI
             задатиНадбавкуToolStripMenuItem1.Enabled = !this.profileCnt.triggerInventCheque && profileCnt.Default.CommonOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
 
         }//ok
-        private void _RefreshWindowMenu()
+        private void __RefreshWindowMenu()
         {
             вертикальноToolStripMenuItem.Checked = (splitContainer1.Orientation == Orientation.Vertical);
             вікноТоварівToolStripMenuItem.Checked = !splitContainer1.Panel2Collapsed;
         }
-        private void _RefreshComponents(bool force)
+        private void __RefreshComponents(bool force)
         {
             if (this.сенсорToolStripMenuItem.Checked || force)
             {
@@ -3602,33 +3601,33 @@ namespace PayDesk.Components.UI
 
         private void timerDataImportSynchronizer_Tick(object sender, EventArgs e)
         {
-            Com_WinApi.OutputDebugString("timerDataImportSynchronizer: started");
+            Com_WinApi.OutputDebugString("timerDataImportSynchronizer_Tick: started");
             timerDataImportSynchronizer.Stop();
             timerExchangeImport.Start();
-            Com_WinApi.OutputDebugString("timerDataImportSynchronizer: end");
+            Com_WinApi.OutputDebugString("timerDataImportSynchronizer_Tick: end");
 
             //if (!timerExchangeImport.Enabled && !timerExchangeScanner.Enabled)
             //    ;
         }
         private void timerExchangeScanner_Tick(object sender, EventArgs e)
         {
-            Com_WinApi.OutputDebugString("TimerExchangeGrabbermer: started");
+            Com_WinApi.OutputDebugString("timerExchangeScanner_Tick: started");
             if (_fl_importIsRunning || ImportedData.Tables.Count != 0)
             {
-                Com_WinApi.OutputDebugString("TimerExchangeGrabbermer: import is running");
+                Com_WinApi.OutputDebugString("timerExchangeScanner_Tick: import is running");
                 return;
             }
             FetchProductData(true, false, true);
-            Com_WinApi.OutputDebugString("TimerExchangeGrabbermer: end");
+            Com_WinApi.OutputDebugString("timerExchangeScanner_Tick: end");
         }
         private void timerExchangeImport_Tick(object sender, EventArgs e)//lbl
         {
             //timerExchangeImport.Start();
-            Com_WinApi.OutputDebugString("timerExchangeImport: started");
+            Com_WinApi.OutputDebugString("timerExchangeImport_Tick: started");
             
             if (_fl_importIsRunning)
             {
-                Com_WinApi.OutputDebugString("timerExchangeImport: is running");
+                Com_WinApi.OutputDebugString("timerExchangeImport_Tick: is running");
                 return;
             }
 
@@ -3636,7 +3635,7 @@ namespace PayDesk.Components.UI
             if (profileCnt.Default.CommonOrder.Rows.Count != 0)
             {
                 _fl_canUpdate = true;
-                Com_WinApi.OutputDebugString("timerExchangeImport: waiting for empty checkque");
+                Com_WinApi.OutputDebugString("timerExchangeImport_Tick: waiting for empty checkque");
                 return;
             }
 
@@ -3671,9 +3670,12 @@ namespace PayDesk.Components.UI
             }
             catch (Exception ex)
             {
-                CoreLib.WriteLog(ex, "PayDesk.Components.UI.uiWndMain@timerDataLoader_Tick");
+                CoreLib.WriteLog(ex, "PayDesk.Components.UI.uiWndMain@timerExchangeImport_Tick");
             }
-            _fl_importIsRunning = false;
+            finally
+            {
+                _fl_importIsRunning = false;
+            }
 
             Com_WinApi.OutputDebugString("timerExchangeImport: end");
         }
@@ -4128,8 +4130,6 @@ namespace PayDesk.Components.UI
                     profileResult["PROFILE_ID"] = profileKey;
                     profileResult["PROFILE_LAST"] = pIdx == ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count;
 
-
-
                     /* close logic implementation */
 
                     // if this is a legal or in-between profile and there are other profiles
@@ -4154,10 +4154,8 @@ namespace PayDesk.Components.UI
                     profileResult[CoreConst.ORDER_PAYMENT] = _tmpPaymanet;
                     profileResult[CoreConst.ORDER_IS_LEGAL] = isLegalMode;
 
-
                     localData = new object[8];
                     chqNom = string.Empty;
-
 
                     localData[0] = clientID == string.Empty ? ConfigManager.Instance.CommonConfiguration.APP_ClientID : clientID;
                     localData[1] = _discCommonPercent;

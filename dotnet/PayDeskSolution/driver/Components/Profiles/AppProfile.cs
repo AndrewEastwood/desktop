@@ -50,10 +50,12 @@ namespace driver.Components.Profiles
                     data.Add((DataType)i, setupEmptyDataTable((DataType)i));
                     data[(DataType)i].TableName = string.Format("{0}_{1}", dataKeys[i], id);
                 }
-
-                // init order event handlers
-                CommonData[DataType.ORDER].RowDeleted += new DataRowChangeEventHandler(Order_RowDeleted);
-                CommonData[DataType.ORDER].RowChanged += new DataRowChangeEventHandler(Order_RowChanged);
+                if (isDefaultProfile())
+                {
+                    // init order event handlers
+                    CommonData[DataType.ORDER].RowDeleted += new DataRowChangeEventHandler(Order_RowDeleted);
+                    CommonData[DataType.ORDER].RowChanged += new DataRowChangeEventHandler(Order_RowChanged);
+                }
             //}
         }
 
@@ -781,7 +783,6 @@ namespace driver.Components.Profiles
         {
             DataRecordRemove(dType, recordID, null);
         }
-
         public void DataRecordRemove(DataType dType, string recordID, Hashtable customParams)
         {
             DataRow[] dProfileRow = this.CommonData[dType].Select(string.Format("ID LIKE '{0}'", recordID));
@@ -804,7 +805,6 @@ namespace driver.Components.Profiles
         {
             DataRecordRemove(dType, recordIndex, null);
         }
-
         public void DataRecordRemove(DataType dType, int recordIndex, Hashtable customParams)
         {
             if (customParams != null || customParams.Count != 0)
@@ -815,8 +815,6 @@ namespace driver.Components.Profiles
             }
             this.CommonData[dType].Rows.RemoveAt(recordIndex);
         }
-
-
 
         //
         public void refresh()

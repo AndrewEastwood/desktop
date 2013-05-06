@@ -80,7 +80,9 @@ namespace driver.Components.Profiles
         {
             return Default.getPropertyValue<T>(key);
         }
-
+        // 
+        // at startup app has subunit equals -1 to load data
+        // 
         public void refresh(bool includeProfiles)
         {
             bool _local_needUpdate = false;
@@ -97,10 +99,10 @@ namespace driver.Components.Profiles
             {
                 // save current subunit to compare in future
                 valueOfCurrentSubUnit = Configuration.CommonConfiguration.APP_SubUnit;
-                // trigger event
-                OnSubUnitChanged(EventArgs.Empty);
                 valueOfUpdateMode = UpdateMode.ALLSOURCES;
                 _local_needUpdate = true;
+                // trigger event
+                OnSubUnitChanged(EventArgs.Empty);
             }
 
             //if (includeProfiles)
@@ -249,9 +251,10 @@ namespace driver.Components.Profiles
 
                 OnDataUpdated(EventArgs.Empty);
             }
-            else OnDataUchanged(EventArgs.Empty);
+            else OnDataUnChanged(EventArgs.Empty);
 
             // this.triggerRunUpdateOnly = true;
+            // 
             this.valueOfUpdateMode = UpdateMode.SERVERDATAONLY;
         }
 
@@ -277,7 +280,7 @@ namespace driver.Components.Profiles
                 onDataUpdated(this, e);
         }
 
-        protected virtual void OnDataUchanged(EventArgs e)
+        protected virtual void OnDataUnChanged(EventArgs e)
         {
             if (onDataUnchanged != null)
                 onDataUnchanged(this, e);
