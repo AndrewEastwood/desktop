@@ -45,8 +45,8 @@ namespace driver.Lib
             Dictionary<string, object> billInfo = GetStandartBillInfoStructure();
             try
             {
-                if (dtOrder.ExtendedProperties.ContainsKey(CoreConst.BILL))
-                    billInfo = ((Dictionary<string, object>)dtOrder.ExtendedProperties[CoreConst.BILL]);
+                if (dtOrder.ExtendedProperties.ContainsKey(CoreConst.ORDER_BILL))
+                    billInfo = ((Dictionary<string, object>)dtOrder.ExtendedProperties[CoreConst.ORDER_BILL]);
             }
             catch (Exception ex) { CoreLib.WriteLog(ex, "GetBillInfo(DataTable dtOrder); Unable to extract bill info."); }
 
@@ -69,9 +69,9 @@ namespace driver.Lib
             object propData = defaultValue;
             try
             {
-                if (dtBill.ExtendedProperties.ContainsKey(CoreConst.BILL) && dtBill.ExtendedProperties[CoreConst.BILL] != null)
+                if (dtBill.ExtendedProperties.ContainsKey(CoreConst.ORDER_BILL) && dtBill.ExtendedProperties[CoreConst.ORDER_BILL] != null)
                 {
-                    Dictionary<string, object> bill = ((Dictionary<string, object>)dtBill.ExtendedProperties[CoreConst.BILL]);
+                    Dictionary<string, object> bill = ((Dictionary<string, object>)dtBill.ExtendedProperties[CoreConst.ORDER_BILL]);
                     if (bill.ContainsKey(propertyKey))
                     {
                         if ((bill[propertyKey] == null && allowNull) || bill[propertyKey] != null)
@@ -110,9 +110,9 @@ namespace driver.Lib
             bool fnRez = false;
             try
             {
-                if (dtBill.ExtendedProperties.ContainsKey(CoreConst.BILL) && dtBill.ExtendedProperties[CoreConst.BILL] != null)
+                if (dtBill.ExtendedProperties.ContainsKey(CoreConst.ORDER_BILL) && dtBill.ExtendedProperties[CoreConst.ORDER_BILL] != null)
                 {
-                    Dictionary<string, object> bill = ((Dictionary<string, object>)dtBill.ExtendedProperties[CoreConst.BILL]);
+                    Dictionary<string, object> bill = ((Dictionary<string, object>)dtBill.ExtendedProperties[CoreConst.ORDER_BILL]);
                     if (bill.ContainsKey(propertyKey))
                     {
                         fnRez = true;
@@ -180,25 +180,25 @@ namespace driver.Lib
             dTable.ExtendedProperties.Add("CHEQUE", extendedProps);*/
             Dictionary<string, object> billInfoStructure = new Dictionary<string, object>();
             // DataTable source
-            billInfoStructure.Add(CoreConst.OID, string.Empty);
+            billInfoStructure.Add(CoreConst.BILL_OID, string.Empty);
             // DataTable source
             billInfoStructure.Add(CoreConst.BILL_NO, string.Empty);
             // String - owner number (for clonned bill)
-            billInfoStructure.Add(CoreConst.OWNER_NO, string.Empty);
+            billInfoStructure.Add(CoreConst.BILL_OWNER_NO, string.Empty);
             // Storu Number
-            billInfoStructure.Add(CoreConst.DATETIME, DateTime.Now);
+            billInfoStructure.Add(CoreConst.BILL_DATETIME, DateTime.Now);
             // Storu Number
-            billInfoStructure.Add(CoreConst.DATETIMEEDIT, DateTime.Now);
+            billInfoStructure.Add(CoreConst.BILL_DATETIMEEDIT, DateTime.Now);
             // Default Client ID
-            billInfoStructure.Add(CoreConst.COMMENT, string.Empty);
+            billInfoStructure.Add(CoreConst.BILL_COMMENT, string.Empty);
             // Detect if cheque is retiermant
-            billInfoStructure.Add(CoreConst.IS_LOCKED, false);
+            billInfoStructure.Add(CoreConst.BILL_IS_LOCKED, false);
             // Determinate that cheque is legal
-            billInfoStructure.Add(CoreConst.PATH, string.Empty);
+            billInfoStructure.Add(CoreConst.BILL_PATH, string.Empty);
             // Determinate that cheque is legal
-            billInfoStructure.Add(CoreConst.DELETED_ROWS, new Dictionary<string, object[]>());
+            billInfoStructure.Add(CoreConst.BILL_DELETED_ROWS, new Dictionary<string, object[]>());
             // Determinate that cheque is legal
-            billInfoStructure.Add(CoreConst.DATETIME_LOCK, "-");
+            billInfoStructure.Add(CoreConst.BILL_DATETIME_LOCK, "-");
             // Cheque Number
             //chequeInfoStructure.Add("CHEQUE_NO", null);
             // Cheque Suma with all discounts
@@ -228,13 +228,13 @@ namespace driver.Lib
             // DataTable source
             //chequeInfoStructure.Add("DATA", null);
             // Storu Number
-            chequeInfoStructure.Add(CoreConst.STORE_NO, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_STORE_NO, null);
             // Default Client ID
-            chequeInfoStructure.Add(CoreConst.CLIENT_ID, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_CLIENT_ID, null);
             // Detect if cheque is retiermant
-            chequeInfoStructure.Add(CoreConst.IS_RET, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_IS_RET, null);
             // Determinate that cheque is legal
-            chequeInfoStructure.Add(CoreConst.IS_LEGAL, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_IS_LEGAL, null);
             // Cheque Number
             chequeInfoStructure.Add(CoreConst.ORDER_NO, null);
             // Cheque Suma with all discounts
@@ -242,15 +242,15 @@ namespace driver.Lib
             // Cheque real suma (without discount)
             chequeInfoStructure.Add(CoreConst.ORDER_REAL_SUMA, null);
             // Cheque's tax suma
-            chequeInfoStructure.Add(CoreConst.TAX_SUMA, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_TAX_SUMA, null);
             // Determinate if this cheque need tax bill
-            chequeInfoStructure.Add(CoreConst.TAX_BILL, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_TAX_BILL, null);
             // Discount Structure
-            chequeInfoStructure.Add(CoreConst.DISCOUNT, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_DISCOUNT, null);
             // Payment Structure
-            chequeInfoStructure.Add(CoreConst.PAYMENT, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_PAYMENT, null);
             // Payment Structure
-            chequeInfoStructure.Add(CoreConst.BILL, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_BILL, null);
             // Bil number. If cheque is a bill.
             //chequeInfoStructure.Add("BILL_NO", null);
             // ad comment for this bill
@@ -499,13 +499,13 @@ namespace driver.Lib
             // DataTable source
             //chequeInfoStructure.Add("DATA", null);
             // Store Number
-            chequeInfoStructure.Add(CoreConst.STORE_NO, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_STORE_NO, null);
             // Default Client ID
-            chequeInfoStructure.Add(CoreConst.CLIENT_ID, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_CLIENT_ID, null);
             // Detect if cheque is retiermant
-            chequeInfoStructure.Add(CoreConst.IS_RET, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_IS_RET, null);
             // Determinate that cheque is legal
-            chequeInfoStructure.Add(CoreConst.IS_LEGAL, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_IS_LEGAL, null);
             // Cheque Number
             chequeInfoStructure.Add(CoreConst.ORDER_NO, null);
             // Cheque Suma with all discounts
@@ -513,15 +513,15 @@ namespace driver.Lib
             // Cheque real suma (without discount)
             chequeInfoStructure.Add(CoreConst.ORDER_REAL_SUMA, null);
             // Cheque's tax suma
-            chequeInfoStructure.Add(CoreConst.TAX_SUMA, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_TAX_SUMA, null);
             // Determinate if this cheque need tax bill
-            chequeInfoStructure.Add(CoreConst.TAX_BILL, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_TAX_BILL, null);
             // Discount Structure
-            chequeInfoStructure.Add(CoreConst.DISCOUNT, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_DISCOUNT, null);
             // Payment Structure
-            chequeInfoStructure.Add(CoreConst.PAYMENT, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_PAYMENT, null);
             // Payment Structure
-            chequeInfoStructure.Add(CoreConst.BILL, null);
+            chequeInfoStructure.Add(CoreConst.ORDER_BILL, null);
             // Bil number. If cheque is a bill.
             //chequeInfoStructure.Add("BILL_NO", null);
             // ad comment for this bill
@@ -551,23 +551,23 @@ namespace driver.Lib
             dTable.ExtendedProperties.Add("CHEQUE", extendedProps);*/
             Hashtable billInfoStructure = new Hashtable();
             // DataTable source
-            billInfoStructure.Add(CoreConst.OID, string.Empty);
+            billInfoStructure.Add(CoreConst.BILL_OID, string.Empty);
             // DataTable source
             billInfoStructure.Add(CoreConst.BILL_NO, string.Empty);
             // String - owner number (for clonned bill)
-            billInfoStructure.Add(CoreConst.OWNER_NO, string.Empty);
+            billInfoStructure.Add(CoreConst.BILL_OWNER_NO, string.Empty);
             // Storu Number
-            billInfoStructure.Add(CoreConst.DATETIME, DateTime.Now);
+            billInfoStructure.Add(CoreConst.BILL_DATETIME, DateTime.Now);
             // Storu Number
-            billInfoStructure.Add(CoreConst.DATETIMEEDIT, DateTime.Now);
+            billInfoStructure.Add(CoreConst.BILL_DATETIMEEDIT, DateTime.Now);
             // Default Client ID
-            billInfoStructure.Add(CoreConst.COMMENT, string.Empty);
+            billInfoStructure.Add(CoreConst.BILL_COMMENT, string.Empty);
             // Detect if cheque is retiermant
-            billInfoStructure.Add(CoreConst.IS_LOCKED, false);
+            billInfoStructure.Add(CoreConst.BILL_IS_LOCKED, false);
             // Determinate that cheque is legal
-            billInfoStructure.Add(CoreConst.PATH, string.Empty);
+            billInfoStructure.Add(CoreConst.BILL_PATH, string.Empty);
             // Determinate that cheque is legal
-            billInfoStructure.Add(CoreConst.DELETED_ROWS, new Dictionary<string, object[]>());
+            billInfoStructure.Add(CoreConst.BILL_DELETED_ROWS, new Dictionary<string, object[]>());
             // Cheque Number
             //chequeInfoStructure.Add("CHEQUE_NO", null);
             // Cheque Suma with all discounts
@@ -595,9 +595,9 @@ namespace driver.Lib
         {
             Hashtable calculationStructure = new Hashtable();
 
-            calculationStructure[CoreConst.CALC_CHEQUE_SUMA] = 0.0;
-            calculationStructure[CoreConst.CALC_REAL_SUMA] = 0.0;
-            calculationStructure[CoreConst.CALC_TAX_SUMA] = 0.0;
+            calculationStructure[CoreConst.CASH_CHEQUE_SUMA] = 0.0;
+            calculationStructure[CoreConst.CASH_REAL_SUMA] = 0.0;
+            calculationStructure[CoreConst.CASH_TAX_SUMA] = 0.0;
 
             return calculationStructure;
         }
@@ -607,9 +607,9 @@ namespace driver.Lib
             //Якщо true то знижка чи надбавка діє на всі позиції(товари) чеку
             discountInfoStructure.Add(CoreConst.DISC_ALL_ITEMS, false);
             //Масив з значеннями знижки та надбавки в процентних значеннях
-            discountInfoStructure.Add(CoreConst.DISC_ARRAY_PERCENT, new double[2]);
+            // **** discountInfoStructure.Add(CoreConst.DISC_ARRAY_PERCENT, new double[2]);
             //Масив з значеннями знижки та надбавки в грошових значеннях
-            discountInfoStructure.Add(CoreConst.DISC_ARRAY_CASH, new double[2]);
+            // **** discountInfoStructure.Add(CoreConst.DISC_ARRAY_CASH, new double[2]);
             //Значення постійної знижки в процентному значенні
             discountInfoStructure.Add(CoreConst.DISC_CONST_PERCENT, 0.0);
             //Сума знижки і надбавки з процентними значеннями

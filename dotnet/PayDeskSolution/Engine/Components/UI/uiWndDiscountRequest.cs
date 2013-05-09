@@ -10,6 +10,8 @@ using driver.Config;
 using components.Shared.Attributes;
 using driver.Components.UI;
 using components.Components.MMessageBox;
+using driver.Components.Profiles;
+using driver.Common;
 //using ;
 //using mdcore.Config;
 //using mdcore.Components.UI;
@@ -166,30 +168,6 @@ namespace PayDesk.Components.UI
                     SetVariant(2);
             }
 
-            //if (!textBox2.Enabled || (dm[idx] != 0.0 && cdm[idx] == 0.0))
-            //}
-            //else
-            //{
-            //    textBox1.Text = Math.Round(-dm[1], mdcore.AppConfig.APP_MoneyDecimals, MidpointRounding.AwayFromZero).ToString();
-            //    //textBox2.Text = Math.Round(suma * (-dm[1] / 100), mdcore.AppConfig.APP_MoneyDecimals, MidpointRounding.AwayFromZero).ToString();
-            //    textBox2.Text = Math.Round(-cdm[1], mdcore.AppConfig.APP_MoneyDecimals, MidpointRounding.AwayFromZero).ToString();
-            //    if (dm[1] == 0.0)
-            //        this.radioButton2.Checked = true;
-            //    else
-            //        this.radioButton1.Checked = true;
-            //}
-
-            //if (this.radioButton1.Checked)
-            //{
-            //    this.textBox1.Select();
-            //    this.textBox1.Focus();
-            //}
-            //else
-            //{
-            //    this.textBox2.Select();
-            //    this.textBox2.Focus();
-            //    this.textBox2.SelectAll();
-            //}
             this.ShowDialog();
 
             if (this.DialogResult != DialogResult.OK)
@@ -212,6 +190,72 @@ namespace PayDesk.Components.UI
                 // nadbavka
                 dm[1] = -dsc;
                 cdm[1] = -cdisc;
+            }
+        }
+
+
+        public void SetupDiscount(AppProfile profile)
+        {
+            // ** string[] idx = (type ? {"SUB"} : {"ADD"});
+            //if (type)
+            //{
+
+            List<string> items = new List<string>(2);
+
+            if (type)
+                items.AddRange(new string[] { CoreConst.DISC_ARRAY_PERCENT_SUB, CoreConst.DISC_ARRAY_CASH_SUB });
+            else
+                items.AddRange(new string[] { CoreConst.DISC_ARRAY_PERCENT_ADD, CoreConst.DISC_ARRAY_CASH_ADD });
+
+            textBox1.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UsePercentTypeDisc;
+            radioButton1.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UsePercentTypeDisc;
+            textBox2.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UseAbsoluteTypeDisc && !Program.AppPlugins.IsActive(PluginType.FPDriver);
+            radioButton2.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UseAbsoluteTypeDisc && !Program.AppPlugins.IsActive(PluginType.FPDriver);
+
+            textBox1.Text = Math.Round(Math.Abs(profile.customCashDiscountItems[items[0]]), ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, MidpointRounding.AwayFromZero).ToString();
+            textBox2.Text = Math.Round(Math.Abs(profile.customCashDiscountItems[items[1]]), ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, MidpointRounding.AwayFromZero).ToString();
+
+            if (textBox1.Enabled && textBox2.Enabled)
+                if (ConfigManager.Instance.CommonConfiguration.APP_DefaultTypeDisc == 0)//if percent variant is dafault
+                    SetVariant((profile.customCashDiscountItems[items[1]] != 0.0 || (profile.customCashDiscountItems[items[0]] == 0.0 && profile.customCashDiscountItems[items[1]] == 0.0)) ? 1 : 2);
+                else
+                    SetVariant((profile.customCashDiscountItems[items[1]] != 0.0 || (profile.customCashDiscountItems[items[0]] == 0.0 && profile.customCashDiscountItems[items[1]] == 0.0)) ? 2 : 1);
+            else
+            {
+                if (textBox1.Enabled)
+                    SetVariant(1);
+                if (textBox2.Enabled)
+                    SetVariant(2);
+            }
+
+            this.ShowDialog();
+
+            if (this.DialogResult != DialogResult.OK)
+                return;
+
+            if (ConfigManager.Instance.CommonConfiguration.APP_OnlyDiscount)
+            {
+                // *** dm[0] = dm[1] = 0.0;
+                // *** cdm[0] = cdm[1] = 0.0;
+                profile.customResetBlockDiscountManual();
+            }
+
+            if (type)
+            {
+                // znugka
+                // *** dm[0] = dsc;
+                // *** cdm[0] = cdisc;
+
+                profile.customCashDiscountItems[items[0]] = dsc;
+                profile.customCashDiscountItems[items[1]] = cdisc;
+            }
+            else
+            {
+                // nadbavka
+                // *** dm[1] = -dsc;
+                // *** cdm[1] = -cdisc;
+                profile.customCashDiscountItems[items[0]] = -dsc;
+                profile.customCashDiscountItems[items[1]] = -cdisc;
             }
         }
     }

@@ -38,6 +38,7 @@ using components.Components.HashObject;
 using components.Public;
 using components.UI.Controls;
 using System.Threading;
+using driver.Components.Profiles;
 //using comport;
 /*
  * Notes:
@@ -60,18 +61,18 @@ namespace PayDesk.Components.UI
         // Administrator access defender
         private uiWndAdmin admin;
         // Main Data
-        private DataTable Cheque;
-        private DataTable Articles;
-        private DataTable AltBC;
-        private DataTable Cards;
+        // *** private DataTable this.profileCnt.Default.Order;
+        // *** private DataTable this.profileCnt.Default.Products;
+        // *** private DataTable this.profileCnt.Default.Alternative;
+        // *** private DataTable this.profileCnt.Default.DiscountCards;
         private DataSet ImportedData = new DataSet();
         // Scanner Data
         private string chararray;
         private DateTime lastInputChar;
         // Order Data
-        private double chqSUMA;
-        private double realSUMA;
-        private double taxSUMA;
+        // *** private double chqSUMA;
+        // *** private double realSUMA;
+        // *** private double taxSUMA;
 
         private string clientID;
         private byte currentSubUnit;
@@ -79,10 +80,11 @@ namespace PayDesk.Components.UI
         private int lastPayment;
 
         // Discount Data
-        private double discConstPercent;
+        // *** private double this.profileCnt.Default.getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT);
         private int clientPriceNo;
-        private double[] discArrPercent = new double[2] { 0.0, 0.0 };
-        private double[] discArrCash = new double[2] { 0.0, 0.0 };
+        /*
+         * private double[] this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT) = new double[2] { 0.0, 0.0 };
+        private double[] this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH) = new double[2] { 0.0, 0.0 };
         private double discOnlyPercent = 0.0;
         private double discOnlyCash = 0.0;
         private double discCommonPercent = 0.0;
@@ -93,6 +95,7 @@ namespace PayDesk.Components.UI
         private Hashtable Discount = new Hashtable();
         private Hashtable Summa = new Hashtable();
         private DataSet Cheques = new DataSet();
+        */
         private Dictionary<string, bool> State = new Dictionary<string, bool>();
 
         // Statements
@@ -115,6 +118,11 @@ namespace PayDesk.Components.UI
         /* new data */
         components.Components.DataContainer.DataContainer dataContainer2;
 
+        /* profiles 2.0  */
+        private ProfilesContainer profileCnt;
+
+        private System.Windows.Forms.Timer timerDataImportSynchronizer;
+
         /// <summary>
         /// Application's Constructor
         /// </summary>
@@ -122,104 +130,111 @@ namespace PayDesk.Components.UI
         {
             InitializeComponent();
 
-            //OnCheckCompleted += new EventHandler<ExchangeEventArgs>(PostActionOnCheckComplete);
-            // DoSomething.OnNeedsUI += new EventHandler<EventArgs>(DoSomething_OnNeedsUI);
-
-            dataContainer2 = DataWorkShared.GetDataContainer();
-
-            // initialize statements
-            dataContainer2.Structures[CoreConst.CONTAINER_STATE, CoreConst.STATE_CALC_USE_TOTAL_DISC] = true;
-
-            dataContainer2.Structures[CoreConst.CONTAINER_STATE].UpdateMethod = this.GetAppStatements;
-            //dataContainer2.Structures[CoreConst.CONTAINER_STATE] = this.GetAppStatements;
-            dataContainer2.Structures[CoreConst.CONTAINER_STATE].Update();
-
-            //Program.AppPlugins.GetActive<IAppUI>().Execute(this);
-                    
-           // Settings1.Default["test"] = "gfdgdgdf";
-            //Settings1.Default.Save();
-            /*
-            Properties.Settings.Default.Context.Add("gdfgdfg", "gdfgdfg");
-            Properties.Settings.Default.Save();
-
-            System.Configuration.ConfigXmlDocument f = new System.Configuration.ConfigXmlDocument();
-            f.LoadXml("PayDesk.exe.config");
-            System.Configuration.SettingElement g = new System.Configuration.SettingElement("gfdgf", System.Configuration.SettingsSerializeAs.Xml);
-            System.Configuration.SettingsContext sc = new System.Configuration.SettingsContext();
-            System.Configuration.LocalFileSettingsProvider lfs = new System.Configuration.LocalFileSettingsProvider();
-            System.Collections.Specialized.NameValueCollection nvc = new System.Collections.Specialized.NameValueCollection();
-            nvc.Add("test2", "tttt"); lfs.Initialize("PayDesk.xml", nvc);
-            lfs.Reset(sc);
-
-
-            */
-
-            
-
-            /*
-            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new BinaryFormatter();
-
-            XmlPO.XmlParserObject xobj = new XmlPO.XmlParserObject();
-            */
-            /*
-            System.Collections.Hashtable _driverData = new System.Collections.Hashtable();
-            _driverData.Add("Status", 1);
-            _driverData.Add("ErrorStatus", 1);
-            _driverData.Add("ArtMemorySize", (uint)11800);
-            _driverData.Add("UserNo", (byte)1);
-            _driverData.Add("UserPwd", "0000");
-            _driverData.Add("DeskNo", (byte)1);
-            
-            System.Collections.Hashtable _driverData2 = new System.Collections.Hashtable();
-            _driverData2.Add("LastFunc", "");
-            _driverData2.Add("LastArtNo", (uint)1);
-            _driverData2.Add("LastFOrderNo", (uint)0);
-            _driverData2.Add("LastNOrderNo", (uint)0);
-            _driverData2.Add("LastROrderNo", (uint)0);
-
-            System.Collections.Hashtable _xData = new System.Collections.Hashtable();
-            _xData.Add("testBlock", _driverData);
-            _xData.Add("testBlock2", _driverData2);
-            _xData.Add("listtest", new int[] { 1, 2, 3, 5, 7, 0 });
-            
-            xobj.ParseDataToXml("myxmlfile.xml", _xData);
-            */
-            /*
-            System.Collections.Hashtable ldata = xobj.ParseXmlToData("AppConfig.xml");
-            ;
-
-            XmlPO.Components.Objects.SectionElement section = new XmlPO.Components.Objects.SectionElement("simple");
-            section.Comment = "demo test";
-
-            XmlPO.Components.Objects.BlockElement b = new XmlPO.Components.Objects.BlockElement("b1");
-            XmlPO.Components.Objects.PropertyElement p = new XmlPO.Components.Objects.PropertyElement("p1");
-            p.Value = 12345;
-            b.Add(p);
-            section.Add(b);
-            XmlPO.Components.Objects.DocumentElement doc = new XmlPO.Components.Objects.DocumentElement();
-            doc.AddContainer(section);
-
-
-
-            xobj.ParseDocumentToXml("t.xml", doc);
-            */
-            //System.Collections.Hashtable ldata = xobj.ParseXmlToData("myxmlfile.xml");
-
-
-            //ComPort _cport = new ComPort();
-            //PayDesk.Config.AppSettings sett = new Config.AppSettings();
-
-           /* ConfigManager cm = new ConfigManager();
-            sett.Tax_AppTaxChar = new char[] { 'a' };
-            sett.Tax_AppTaxDisc = new bool[] { true };
-            sett.PRN_Templates = new Dictionary<string, object>();
-            sett.PRN_Templates.Add("test", new Dictionary<string, object>(2));
-            string rez = cm.SerializeObject(sett, sett.GetType());
-            cm.Save(rez);*/
-
             timerDataImportSynchronizer = new System.Windows.Forms.Timer();
             timerDataImportSynchronizer.Interval = 50000;
             timerDataImportSynchronizer.Tick += new EventHandler(timerDataImportSynchronizer_Tick);
+
+            profileCnt = new ProfilesContainer();
+            profileCnt.onSubUnitChanged += new SuibUnitChangedEventHandler(profileCnt_onSubUnitChanged);
+            profileCnt.onUpdateRequired += new UpdateRequiredEventHandler(profileCnt_onUpdateRequired);
+            profileCnt.onDataUpdated += new DataUpdatedEventHandler(profileCnt_onDataUpdated);
+            profileCnt.onDataUnchanged += new DataUnchangedEventHandler(profileCnt_onDataUnchanged);
+            //profileCnt.onCashChanged += new CashChangedEventHandler(profileCnt_onCashChanged);
+            profileCnt.onProfileCommandReceived += new ProfileCommandReceivedEventHandler(profileCnt_onProfileCommandReceived);
+
+            // setup order data row handlers
+            profileCnt.Default.DataOrder.RowDeleted += new DataRowChangeEventHandler(Order_RowDeleted);
+            profileCnt.Default.DataOrder.RowChanged += new DataRowChangeEventHandler(Order_RowChanged);
+        }
+
+        private void Order_RowChanged(object sender, DataRowChangeEventArgs e)
+        {
+        }
+
+        private void Order_RowDeleted(object sender, DataRowChangeEventArgs e)
+        {
+        }
+
+        private void profileCnt_onProfileCommandReceived(AppProfile sender, string command, EventArgs e)
+        {
+            switch (command)
+            {
+                case "pu_reset_discount":
+                    {
+                        відмінитиЗнижкунадбавкуToolStripMenuItem.Text = "Без знижки/надбавки";
+                        break;
+                    }
+                case "pu_refresh_cash":
+                    {
+                        UpdateSumDisplay();
+                        break;
+                    }
+                case "order_item_changed":
+                    {
+                        UpdateSumDisplay();
+                        break;
+                    }
+                case "order_item_removed":
+                    {
+                        UpdateSumDisplay();
+                        break;
+                    }
+                case "pu_order_cleared":
+                    {
+                        RefershMenus();
+                        if (_fl_isReturnCheque)
+                            чекПоверненняToolStripMenuItem.PerformClick();
+                        //winapi.Funcs.OutputDebugString("3");
+                        // ??? if (resetSrchFilter)
+                        if (true)
+                            SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
+                        else
+                            SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, false);
+                        RefreshChequeInformer(false);
+                        UpdateSumDisplay(/*false*/);
+
+                        break;
+                    }
+            }
+        }
+
+        private void profileCnt_onDataUnchanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void profileCnt_onDataUpdated(object sender, EventArgs e)
+        {
+            // *** articleDGV.DataSource = profileCnt.Default.DataProducts;
+            MMessageBoxEx.Show(this.chequeDGV, "Були внесені зміни в базу товарів", Application.ProductName,
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            /* device status */
+            if (Program.AppPlugins.IsActive(PluginType.FPDriver))
+            {
+                try
+                {
+                    bool status = (bool)Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_SetCashier", ConfigManager.Instance.CommonConfiguration.APP_PayDesk, UserConfig.UserFpLogin, UserConfig.UserFpPassword, UserConfig.UserID);
+                    if (status)
+                        DDM_FPStatus.Image = Properties.Resources.ok;
+                    else
+                        DDM_FPStatus.Image = Properties.Resources.FpNotOk;
+                }
+                catch { DDM_FPStatus.Image = Properties.Resources.FpNotOk; }
+            }
+            else
+                DDM_FPStatus.Image = Properties.Resources.FpNotOk;
+            SrchTbox.Select();
+            GC.Collect();
+        }
+
+        private void profileCnt_onUpdateRequired(object sender, EventArgs e)
+        {
+            FetchProductData(true, true, false);
+        }
+
+        private void profileCnt_onSubUnitChanged(object sender, EventArgs e)
+        {
+
         }
 
         ~uiWndMain()
@@ -238,7 +253,7 @@ namespace PayDesk.Components.UI
             base.OnLoad(e);
 
             /* initialise data values */
-            InitChequeInformationStructure();
+            // *** InitChequeInformationStructure();
             admin = new uiWndAdmin();
             admin.OwnerControlEx = this.chequeDGV;
 
@@ -265,17 +280,22 @@ namespace PayDesk.Components.UI
 
             //create tables
 
-
-            DataWorkSource.CreateTables(ref Cheque, ref Articles, ref AltBC, ref Cards, ref Cheques);
-            this.CreateOrderStructure(this.Cheque);
+            /******
+            DataWorkSource.CreateTables(ref this.profileCnt.Default.Order, ref this.profileCnt.Default.Products, ref this.profileCnt.Default.Alternative, ref this.profileCnt.Default.DiscountCards, ref Cheques);
+            this.CreateOrderStructure(this.profileCnt.Default.Order);
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
                 foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
-                    this.CreateOrderStructure(this.Cheques.Tables[de.Key.ToString()]);
-
+                    this.CreateOrderStructure(this.profileCnt.Default.Orders.Tables[de.Key.ToString()]);
+            */
             // new feature: this.bdo
 
-            chequeDGV.DataSource = Cheque;
-            articleDGV.DataSource = Articles;
+            // * chequeDGV.DataSource = this.profileCnt.Default.Order;
+            // * articleDGV.DataSource = this.profileCnt.Default.Products;
+
+            articleDGV.DataSource = profileCnt.Default.DataProducts;
+            chequeDGV.DataSource = profileCnt.Default.DataOrder;
+
+
             DataGridView[] grids = new DataGridView[] { chequeDGV, articleDGV };
             ViewLib.LoadGridsView(ref grids, splitContainer1.Orientation);
 
@@ -306,75 +326,15 @@ namespace PayDesk.Components.UI
 
             //Set default type of search
             SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
-            UpdateSumInfo(true);
-
+            // * UpdateSumInfo(true);
+            profileCnt.Default.refresh();
             this.Activate();
             this.BringToFront();
             this.UpdateZOrder();
 
-            if (ConfigManager.Instance.CommonConfiguration.APP_BuyerBarCodeSource != 0)
-            {
-                // port config
 
-                //Hashtable xmlPortCfg = ComPort.GetXmlPortConfiguration("MagstripeCardReaderPort.xml");
-                Hashtable xmlPortCfg = (Hashtable)ApplicationConfiguration.Instance["serialPortConnect.additionalDevices.magstripe"];
-                bool error = false;
-                try
-                {
-                    this.serialPort1.PortName = xmlPortCfg["PORT"].ToString();
-                    this.serialPort1.BaudRate = int.Parse(xmlPortCfg["RATE"].ToString());
-                    this.serialPort1.DataBits = int.Parse(xmlPortCfg["DBITS"].ToString());
-                    this.serialPort1.StopBits = (System.IO.Ports.StopBits)(int.Parse(xmlPortCfg["SBITS"].ToString()));
-                    this.serialPort1.Parity = (System.IO.Ports.Parity)(int.Parse(xmlPortCfg["PARITY"].ToString()));
-                }
-                catch (Exception ex)
-                {
-                    error = true;
-                    driver.Lib.CoreLib.WriteLog(ex, "Неможливо налаштувати сом-порт зчитувача карток");
-                    MMessageBox.Show("Неможливо налаштувати сом-порт зчитувача карток.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
 
-                if (!error)
-                    try
-                    {
-                        this.serialPort1.Open();
-                        this.timer_buyer_ready.Start();
-                    }
-                    catch (Exception ex)
-                    {
-                        driver.Lib.CoreLib.WriteLog(ex, "Неможливо відкрити сом-порт зчитувача карток");
-                        MMessageBox.Show("Неможливо відкрити сом-порт зчитувача карток.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-            }
-            else
-            {
-                this.timer_buyer_ready.Stop();
-            }
-
-            if (Program.AppPlugins.IsActive(PluginType.FPDriver))
-            {
-                try
-                {
-                    bool status = (bool)Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_SetCashier", ConfigManager.Instance.CommonConfiguration.APP_PayDesk, UserConfig.UserFpLogin, UserConfig.UserFpPassword, UserConfig.UserID);
-                    if (status)
-                        DDM_FPStatus.Image = Properties.Resources.ok;
-                    else
-                    {
-                        MMessageBoxEx.Show(this.chequeDGV, "Немає зв'язку з фіскальним пристроєм.\r\nНеможливо зареєструвати касира в ЕККР",
-                            Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        DDM_FPStatus.Image = Properties.Resources.FpNotOk;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    DDM_FPStatus.Image = Properties.Resources.FpNotOk;
-                    driver.Lib.CoreLib.WriteLog(ex, "Немає зв'язку з фіскальним пристроєм.\r\nНеможливо зареєструвати касира в ЕККР");
-                    MMessageBoxEx.Show(this.chequeDGV, ex.Message + "\r\nНемає зв'язку з фіскальним пристроєм.\r\nНеможливо зареєструвати касира в ЕККР",
-                        Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else
-                DDM_FPStatus.Image = Properties.Resources.FpNotOk;
+            configureAdditionalDevices();
 
             this.label_uiWndmain_DemoShowArt.Visible = this.label_uiWndmain_DemoShowChq.Visible = !this._fl_isOk;
 
@@ -640,18 +600,18 @@ namespace PayDesk.Components.UI
                     case 0x10:
                         #region CONTROL + DELETE
                         {
-                            //if (this.Cheque.ExtendedProperties.ContainsKey("BILL") && this.Cheque.ExtendedProperties["BILL"] != null && bool.Parse(this.Cheque.ExtendedProperties["LOCK"].ToString()))
-                            if ((bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false))
+                            //if (this.profileCnt.Default.Order.ExtendedProperties.ContainsKey("BILL") && this.profileCnt.Default.Order.ExtendedProperties["BILL"] != null && bool.Parse(this.profileCnt.Default.Order.ExtendedProperties["LOCK"].ToString()))
+                            if ((bool)DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_IS_LOCKED, false))
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
+                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
-
-                            if (Cheque.Rows.Count == 0)
+                            
+                            if (this.profileCnt.Default.DataOrder.Rows.Count == 0)
                                 break;//r
 
-                            if (!(_fl_adminMode || UserConfig.Properties[24]) && (DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.OWNER_NO, string.Empty).ToString() == string.Empty))
+                            if (!(_fl_adminMode || UserConfig.Properties[24]) && (DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_OWNER_NO, string.Empty).ToString() == string.Empty))
                                 if (admin.ShowDialog() != DialogResult.OK)
                                     break;//r
 
@@ -659,46 +619,51 @@ namespace PayDesk.Components.UI
                             {
                                 int index = chequeDGV.CurrentRow.Index;
 
-                                if (DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.OID, string.Empty).ToString() != string.Empty)
+                                if (DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_OID, string.Empty).ToString() != string.Empty)
                                 {
                                     try
                                     {
                                         Dictionary<string, object[]> deletedRows = new Dictionary<string, object[]>();
-                                        deletedRows = (Dictionary<string, object[]>)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.DELETED_ROWS, deletedRows);
+                                        deletedRows = (Dictionary<string, object[]>)DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_DELETED_ROWS, deletedRows);
                                         //DataRow[] dRow = new DataRow[1] { };
-                                        //this.Cheque.Rows.CopyTo(dRow, index);
-                                        if (!deletedRows.ContainsKey(this.Cheque.Rows[index]["C"].ToString()))
+                                        //this.profileCnt.Default.Order.Rows.CopyTo(dRow, index);
+                                        if (!deletedRows.ContainsKey(this.profileCnt.Default.DataOrder.Rows[index]["C"].ToString()))
                                         {
-                                            deletedRows.Add(this.Cheque.Rows[index]["C"].ToString(), this.Cheque.Rows[index].ItemArray);
-                                            DataWorkShared.SetBillProperty(this.Cheque, CoreConst.DELETED_ROWS, deletedRows);
+                                            deletedRows.Add(this.profileCnt.Default.DataOrder.Rows[index]["C"].ToString(), this.profileCnt.Default.DataOrder.Rows[index].ItemArray);
+                                            DataWorkShared.SetBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_DELETED_ROWS, deletedRows);
                                         }
                                     }
                                     catch { }
                                 }
 
 
-                                object profileKey = this.Cheque.Rows[index]["F"];
-                                object productId = this.Cheque.Rows[index]["ID"];
-                                object productOID = this.Cheque.Rows[index]["C"];
+                                object profileKey = this.profileCnt.Default.DataOrder.Rows[index]["F"];
+                                object productId = this.profileCnt.Default.DataOrder.Rows[index]["ID"];
+                                object productOID = this.profileCnt.Default.DataOrder.Rows[index]["C"];
 
-                                Cheque.Rows.RemoveAt(index);
+                                this.profileCnt.Default.DataOrder.Rows.RemoveAt(index);
 
                                 try
                                 {
-                                    DataRow dProfileRow = this.Cheques.Tables[profileKey.ToString()].Rows.Find(productOID);
-                                    int idxPR = this.Cheques.Tables[profileKey.ToString()].Rows.IndexOf(dProfileRow);
-                                    this.Cheques.Tables[profileKey.ToString()].Rows.RemoveAt(idxPR);
+                                    DataRow dProfileRow = this.profileCnt[profileKey].DataOrder.Rows.Find(productOID);
+                                    int idxPR = this.profileCnt[profileKey].DataOrder.Rows.IndexOf(dProfileRow);
+                                    this.profileCnt[profileKey].DataOrder.Rows.RemoveAt(idxPR);
                                 }
                                 catch { }
 
                                 //AppFunc.OutputDebugString("k");
+                                
+                                /* !!!!!!!!!!!!!!!!!!!!!!!
                                 if (m.LParam.ToInt32() == 0x100)
                                     RowsRemoved_MyEvent(true, false);
                                 else
                                     RowsRemoved_MyEvent(true);
+
+                                */
+
                                 index--;
                                 if (index < 0)
-                                    if (Cheque.Rows.Count != 0)
+                                    if (this.profileCnt.Default.DataOrder.Rows.Count != 0)
                                         index = 0;
                                     else
                                         break;//r
@@ -712,63 +677,68 @@ namespace PayDesk.Components.UI
                     case 0x11:
                         #region CONTROL + SHIFT + DELETE
                         {
-                            //if (this.Cheque.ExtendedProperties.ContainsKey("BILL") && this.Cheque.ExtendedProperties["BILL"] != null && bool.Parse(this.Cheque.ExtendedProperties["LOCK"].ToString()))
-                            if ((bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false))
+                            //if (this.profileCnt.Default.Order.ExtendedProperties.ContainsKey("BILL") && this.profileCnt.Default.Order.ExtendedProperties["BILL"] != null && bool.Parse(this.profileCnt.Default.Order.ExtendedProperties["LOCK"].ToString()))
+                            if ((bool)DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_IS_LOCKED, false))
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
+                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
 
-                            if (Cheque.Rows.Count == 0)
+                            if (this.profileCnt.Default.DataOrder.Rows.Count == 0)
                                 break;//r
 
                             if (!(_fl_adminMode || UserConfig.Properties[24]))
                                 if (admin.ShowDialog() != DialogResult.OK)
                                     break;//r
 
-                            if (DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.OID, string.Empty).ToString() != string.Empty)
+                            if (DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_OID, string.Empty).ToString() != string.Empty)
                             {
                                 try
                                 {
                                     Dictionary<string, object[]> deletedRows = new Dictionary<string, object[]>();
-                                    deletedRows = (Dictionary<string, object[]>)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.DELETED_ROWS, deletedRows);
-                                    for (int index = 0; index < this.Cheque.Rows.Count; index++)
+                                    deletedRows = (Dictionary<string, object[]>)DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_DELETED_ROWS, deletedRows);
+                                    for (int index = 0; index < this.profileCnt.Default.DataOrder.Rows.Count; index++)
                                     {
-                                        if (!deletedRows.ContainsKey(this.Cheque.Rows[index]["C"].ToString()))
-                                            deletedRows.Add(this.Cheque.Rows[index]["C"].ToString(), this.Cheque.Rows[index].ItemArray);
+                                        if (!deletedRows.ContainsKey(this.profileCnt.Default.DataOrder.Rows[index]["C"].ToString()))
+                                            deletedRows.Add(this.profileCnt.Default.DataOrder.Rows[index]["C"].ToString(), this.profileCnt.Default.DataOrder.Rows[index].ItemArray);
                                     }
-                                    DataWorkShared.SetBillProperty(this.Cheque, CoreConst.DELETED_ROWS, deletedRows);
+                                    DataWorkShared.SetBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_DELETED_ROWS, deletedRows);
 
                                 }
                                 catch { }
                             }
 
 
-                            Cheque.Rows.Clear();
-                            /*
+                            this.profileCnt.Default.DataOrder.Rows.Clear();
+                            /* !!!!!!!!!!!!!!!!!!!!!!!!!
                             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
                                 foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
                                 RowsRemoved_MyEvent_profile(de.Key);
                             */
+
+                            /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                             if (m.LParam.ToInt32() == 0x100)
                                 RowsRemoved_MyEvent(true, false, false);
                             else
                                 RowsRemoved_MyEvent(true, true, true);
+                            
+                             * 
+                             * 
+                             */ 
+                            
                             break;
                         }
                         #endregion
                     case 0x12:
                         #region CONTROL + PageDown
                         {
-                            if ((bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false))
+                            if ((bool)DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_IS_LOCKED, false))
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
+                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
-
-
 
                             if (_fl_isInvenCheque)
                                 return;
@@ -780,15 +750,17 @@ namespace PayDesk.Components.UI
                             double discSUMA = 0.0;
                             try
                             {
-                                discSUMA = (double)Cheque.Compute("Sum(SUM)", "USEDDISC = " + Boolean.TrueString);
+                                discSUMA = (double)this.profileCnt.Default.DataOrder.Compute("Sum(SUM)", "USEDDISC = " + Boolean.TrueString);
                             }
                             catch { }
                             uiWndDiscountRequest d = new uiWndDiscountRequest(discSUMA, true);
-                            d.SetDiscount(ref discArrPercent, ref discArrCash);
+                            // *** d.SetDiscount(ref this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT), ref this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH));
+                            d.SetupDiscount(this.profileCnt.Default);
                             d.Dispose();
 
-                            if (discArrPercent[0] == 0.0 && discArrPercent[1] == 0.0 && discArrCash[0] == 0.0 && discArrCash[1] == 0.0)
-                                ResetDiscount();
+                            //if (this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[0] == 0.0 && this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[1] == 0.0 && this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[0] == 0.0 && this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[1] == 0.0)
+                            if (this.profileCnt.Default.customCashDiscountManualIsEmpty)
+                                this.profileCnt.Default.customResetBlockDiscountAll(); // *** ResetDiscount();
                             else
                             {
                                 відмінитиЗнижкунадбавкуToolStripMenuItem.Enabled = true;
@@ -796,25 +768,29 @@ namespace PayDesk.Components.UI
                                     відмінитиЗнижкунадбавкуToolStripMenuItem.Text = "Скасувати знижку";
                                 else
                                 {
-                                    if ((discArrPercent[0] != 0.0 && discArrPercent[1] != 0.0) || (discArrCash[0] != 0.0 && discArrCash[1] != 0.0))
+                                    //if ((this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[0] != 0.0 && this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[1] != 0.0) || (this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[0] != 0.0 && this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[1] != 0.0))
+                                    if (this.profileCnt.Default.customCashDiscountManualOnlyEnabled)
                                         відмінитиЗнижкунадбавкуToolStripMenuItem.Text = "Скасувати знижку і націнку";
-                                    if ((discArrPercent[0] == 0.0 && discArrPercent[1] != 0.0) || (discArrCash[0] == 0.0 && discArrCash[1] != 0.0))
+                                    //if ((this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[0] == 0.0 && this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[1] != 0.0) || (this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[0] == 0.0 && this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[1] != 0.0))
+                                    if (this.profileCnt.Default.customCashDiscountManualExtraOnlyEnabled)
                                         відмінитиЗнижкунадбавкуToolStripMenuItem.Text = "Скасувати націнку";
-                                    if ((discArrPercent[0] != 0.0 && discArrPercent[1] == 0.0) || (discArrCash[0] != 0.0 && discArrCash[1] == 0.0))
+                                    //if ((this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[0] != 0.0 && this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[1] == 0.0) || (this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[0] != 0.0 && this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[1] == 0.0))
+                                    if (this.profileCnt.Default.customCashDiscountManualSavingsOnlyEnabled)
                                         відмінитиЗнижкунадбавкуToolStripMenuItem.Text = "Скасувати знижку";
                                 }
                             }
 
-                            UpdateSumInfo(true);
+                            // * UpdateSumInfo(true);
+                            profileCnt.Default.refresh();
                             break;
                         }
                         #endregion
                     case 0x13:
                         #region CONTROL + PageUp
                         {
-                            if ((bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false))
+                            if ((bool)DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_IS_LOCKED, false))
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
+                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
@@ -829,15 +805,18 @@ namespace PayDesk.Components.UI
                             double discSUMA = 0;
                             try
                             {
-                                discSUMA = (double)Cheque.Compute("Sum(SUM)", "USEDDISC = " + Boolean.TrueString);
+                                discSUMA = (double)this.profileCnt.Default.DataOrder.Compute("Sum(SUM)", "USEDDISC = " + Boolean.TrueString);
                             }
                             catch { }
                             uiWndDiscountRequest d = new uiWndDiscountRequest(discSUMA, false);
-                            d.SetDiscount(ref discArrPercent, ref discArrCash);
+                            //d.SetDiscount(ref this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT), ref this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH));
+
+                            d.SetupDiscount(this.profileCnt.Default);
                             d.Dispose();
 
-                            if (discArrPercent[0] == 0.0 && discArrPercent[1] == 0.0 && discArrCash[0] == 0.0 && discArrCash[1] == 0.0)
-                                ResetDiscount();
+                            // ** if (this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[0] == 0.0 && this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[1] == 0.0 && this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[0] == 0.0 && this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[1] == 0.0)
+                            if (this.profileCnt.Default.customCashDiscountManualIsEmpty)
+                                this.profileCnt.Default.customResetBlockDiscountAll();  // ** ResetDiscount();
                             else
                             {
                                 відмінитиЗнижкунадбавкуToolStripMenuItem.Enabled = true;
@@ -845,25 +824,26 @@ namespace PayDesk.Components.UI
                                     відмінитиЗнижкунадбавкуToolStripMenuItem.Text = "Скасувати націнку";
                                 else
                                 {
-                                    if ((discArrPercent[0] != 0.0 && discArrPercent[1] != 0.0) || (discArrCash[0] != 0.0 && discArrCash[1] != 0.0))
+                                    if (this.profileCnt.Default.customCashDiscountSomeEnabled)
                                         відмінитиЗнижкунадбавкуToolStripMenuItem.Text = "Скасувати знижку і націнку";
-                                    if ((discArrPercent[0] == 0.0 && discArrPercent[1] != 0.0) || (discArrCash[0] == 0.0 && discArrCash[1] != 0.0))
+                                    if (this.profileCnt.Default.customCashDiscountManualExtraOnlyEnabled)
                                         відмінитиЗнижкунадбавкуToolStripMenuItem.Text = "Скасувати націнку";
-                                    if ((discArrPercent[0] != 0.0 && discArrPercent[1] == 0.0) || (discArrCash[0] != 0.0 && discArrCash[1] == 0.0))
+                                    if (this.profileCnt.Default.customCashDiscountManualSavingsOnlyEnabled)
                                         відмінитиЗнижкунадбавкуToolStripMenuItem.Text = "Скасувати знижку";
                                 }
                             }
 
-                            UpdateSumInfo(true);
+                            // * UpdateSumInfo(true);
+                            profileCnt.Default.refresh();
                             break;
                         }
                         #endregion
                     case 0x14:
                         #region SHIFT + DELETE
                         {
-                            if ((bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false))
+                            if ((bool)DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_IS_LOCKED, false))
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
+                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
@@ -871,8 +851,12 @@ namespace PayDesk.Components.UI
                             if (_fl_isInvenCheque)
                                 return;
 
-                            ResetDiscount();
-                            UpdateSumInfo(true);
+                            // ***** ResetDiscount();
+                            
+                        this.profileCnt.Default.customResetBlockDiscountAll();
+
+                            // * UpdateSumInfo(true);
+                            profileCnt.Default.refresh();
                             addChequeInfo.Text = string.Empty;
                             break;
                         }
@@ -888,10 +872,10 @@ namespace PayDesk.Components.UI
                                 global::components.Components.WinApi.Com_WinApi.ReplyMessage(new IntPtr(0x15));
                             }
 
-                            //if (   this.Cheque.ExtendedProperties.ContainsKey("BILL") && this.Cheque.ExtendedProperties["BILL"] != null && bool.Parse(((Dictionary<string, object>)this.Cheque.ExtendedProperties["BILL"])["IS_LOCKED"].ToString()))
-                            if ((bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false))
+                            //if (   this.profileCnt.Default.Order.ExtendedProperties.ContainsKey("BILL") && this.profileCnt.Default.Order.ExtendedProperties["BILL"] != null && bool.Parse(((Dictionary<string, object>)this.profileCnt.Default.Order.ExtendedProperties["BILL"])["IS_LOCKED"].ToString()))
+                            if ((bool)DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_IS_LOCKED, false))
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
+                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
@@ -953,24 +937,25 @@ namespace PayDesk.Components.UI
                             //launch article property
                             if (chequeDGV.Focused && chequeDGV.RowCount != 0)
                             {
-                                if (!(_fl_adminMode || UserConfig.Properties[24]) && (DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.OWNER_NO, string.Empty).ToString() == string.Empty))
+                                if (!(_fl_adminMode || UserConfig.Properties[24]) && (DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_OWNER_NO, string.Empty).ToString() == string.Empty))
                                     if (admin.ShowDialog(this) != DialogResult.OK)
                                         return;
 
-                                DataRow dRow = Cheque.Rows.Find(chequeDGV.CurrentRow.Cells["C"].Value);
+                                DataRow dRow = this.profileCnt.Default.DataOrder.Rows.Find(chequeDGV.CurrentRow.Cells["C"].Value);
                                 Request req = new Request(dRow, MathLib.GetDouble(dRow["TOT"]));
                                 req.UpdateRowSource(this.chequeDGV, this);
                                 req.Dispose();
-                                UpdateSumInfo(true);
+                                // * UpdateSumInfo(true);
+                                profileCnt.Default.refresh();
                                 break;//r
                             }
 
-                            //Adding article to Cheque
+                            //Adding article to this.profileCnt.Default.Order
                             if (articleDGV.Focused && articleDGV.RowCount != 0)
                             {
-                                DataRow article = Articles.Rows.Find(articleDGV.CurrentRow.Cells["C"].Value);
+                                DataRow article = this.profileCnt.Default.DataProducts.Rows.Find(articleDGV.CurrentRow.Cells["C"].Value);
 
-                                if (!this._fl_isOk && this.Cheque.Rows.Count >= 3 && this.Cheque.Rows.Find(article["C"].ToString()) == null)
+                                if (!this._fl_isOk && this.profileCnt.Default.DataOrder.Rows.Count >= 3 && this.profileCnt.Default.DataOrder.Rows.Find(article["C"].ToString()) == null)
                                 {
                                     MMessageBoxEx.Show(this.chequeDGV, "Ви не можете продавати більше позицій в демо-режимі", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                                     break;
@@ -978,7 +963,7 @@ namespace PayDesk.Components.UI
 
                                 if (article != null)
                                 {
-                                    CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article, ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles);
+                                    CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article, ConfigManager.Instance.CommonConfiguration.APP_StartTotal, this.profileCnt.Default.DataProducts);
                                     SearchFilter(true, this.currSrchType, false);
                                     // hide product panel when it was displayed automatically
                                     /*if (splitContainer1.Panel2.Tag != null)
@@ -997,7 +982,7 @@ namespace PayDesk.Components.UI
                             //Searching
                             if (!editWasClosed && SrchTbox.Focused && SrchTbox.Text != string.Empty)
                             {
-                                DataTable sTable = Articles.Clone();
+                                DataTable sTable = this.profileCnt.Default.DataProducts.Clone();
                                 bool allowToShow = false;
                                 int i = 0;
 
@@ -1070,7 +1055,7 @@ namespace PayDesk.Components.UI
                                                 #region by id
                                                 try
                                                 {
-                                                    DataRow[] dr = Articles.Select("ID Like \'" + SrchTbox.Text + "%\'");
+                                                    DataRow[] dr = this.profileCnt.Default.DataProducts.Select("ID Like \'" + SrchTbox.Text + "%\'");
 
                                                     if (dr.Length == 0)
                                                     {
@@ -1081,7 +1066,7 @@ namespace PayDesk.Components.UI
                                                     if (dr.Length == 1)
                                                     {
                                                         SearchFilter(false, currSrchType, true);
-                                                        CoreLib.AddArticleToCheque(chequeDGV, articleDGV, dr[0], ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles);
+                                                        CoreLib.AddArticleToCheque(chequeDGV, articleDGV, dr[0], ConfigManager.Instance.CommonConfiguration.APP_StartTotal, this.profileCnt.Default.DataProducts);
                                                         allowToShow = false;
                                                         break;
                                                     }
@@ -1147,7 +1132,7 @@ namespace PayDesk.Components.UI
                     case 0x16:
                         #region CONTROL + ENTER
                         {
-                            if (_fl_isInvenCheque || Cheque.Rows.Count == 0)
+                            if (_fl_isInvenCheque || this.profileCnt.Default.DataOrder.Rows.Count == 0)
                                 break;//r
 
                             if (!(_fl_adminMode || UserConfig.Properties[23]))
@@ -1161,7 +1146,8 @@ namespace PayDesk.Components.UI
                             if (Program.AppPlugins.IsActive(PluginType.FPDriver))
                             {
                                 // we close legal cheque
-                                CloseCheque(true);
+                                // ******* CloseCheque(true);
+                                OrderClose(true);
                             }
                             else
                             {
@@ -1170,7 +1156,8 @@ namespace PayDesk.Components.UI
                                 if (UserConfig.Properties[6])
                                 {
                                     // we close normal cheque
-                                    CloseCheque(false);
+                                    // ****** CloseCheque(false);
+                                    OrderClose(false);
                                 }
                                 else
                                     MMessageBoxEx.Show(this.chequeDGV, "Закриття чеку заблоковано", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1185,7 +1172,7 @@ namespace PayDesk.Components.UI
                             if (_fl_isInvenCheque)
                                 break;//r
 
-                            if (Cheque.Rows.Count == 0 && UserConfig.Properties[12])
+                            if (this.profileCnt.Default.DataOrder.Rows.Count == 0 && UserConfig.Properties[12])
                             {
                                 string nextChqNom = string.Empty;
                                 object[] localData = new object[0];
@@ -1207,7 +1194,7 @@ namespace PayDesk.Components.UI
                                 break;//r
                             }
 
-                            if (Cheque.Rows.Count == 0)// || !Program.Service.UseEKKR)
+                            if (this.profileCnt.Default.DataOrder.Rows.Count == 0)// || !Program.Service.UseEKKR)
                                 break;//r
 
                             if (!(_fl_adminMode || (UserConfig.Properties[23] && UserConfig.Properties[6])))
@@ -1228,7 +1215,11 @@ namespace PayDesk.Components.UI
                                 if (admin.ShowDialog() != DialogResult.OK)
                                     break;//r
                             */
-                            CloseCheque(false);
+
+                            // ****** CloseCheque(false);
+
+                            OrderClose(false);
+                            
                             break;
                         }
                         #endregion
@@ -1296,8 +1287,8 @@ namespace PayDesk.Components.UI
                     case 0x1B:
                         #region F8
                         {
-                            if (Cheque.ExtendedProperties.Contains("BILL"))
-                                MMessageBoxEx.Show(this.chequeDGV, "Відкритий рахунок №" + " " + Cheque.ExtendedProperties["NOM"], Application.ProductName,
+                            if (this.profileCnt.Default.DataOrder.ExtendedProperties.Contains("BILL"))
+                                MMessageBoxEx.Show(this.chequeDGV, "Відкритий рахунок №" + " " + this.profileCnt.Default.DataOrder.ExtendedProperties["NOM"], Application.ProductName,
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                             break;
                         }
@@ -1320,7 +1311,7 @@ namespace PayDesk.Components.UI
                         {
                             if (this.currSrchType != ConfigManager.Instance.CommonConfiguration.APP_SearchType ||
                                 this.SrchTbox.Text.Length != 0 ||
-                                this.Articles.Rows.Count != this.articleDGV.RowCount)
+                                this.profileCnt.Default.DataProducts.Rows.Count != this.articleDGV.RowCount)
                             {
                                 SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
                                 //this.sensorDataPanel1.Navigator.DisplayedCategoryFilter = "";
@@ -1429,7 +1420,7 @@ namespace PayDesk.Components.UI
                     {
                         if (_fl_adminMode || admin.ShowDialog() == DialogResult.OK)
                         {
-                            uiWndUnitFilter fl = new uiWndUnitFilter(Articles);
+                            uiWndUnitFilter fl = new uiWndUnitFilter(this.profileCnt.Default.DataProducts);
                             fl.ShowDialog();
                             fl.Dispose();
                         }
@@ -1440,13 +1431,18 @@ namespace PayDesk.Components.UI
                         uiWndDiscountSettings billRul = new uiWndDiscountSettings();
                         billRul.ShowDialog();
                         billRul.Dispose();
-                        ResetDiscount();
-                        UpdateSumInfo(true);
+
+
+                        // *** ResetDiscount();
+                        this.profileCnt.Default.customResetBlockDiscountAll();
+                        
+                        // * UpdateSumInfo(true);
+                        profileCnt.Default.refresh();
                         break;
                     }
                 case "Invent":
                     {
-                        if (Cheque.Rows.Count != 0 && !_fl_isInvenCheque)
+                        if (this.profileCnt.Default.DataOrder.Rows.Count != 0 && !_fl_isInvenCheque)
                             return;
                         _fl_isInvenCheque = !_fl_isInvenCheque;
                         if (_fl_isInvenCheque)
@@ -1455,11 +1451,15 @@ namespace PayDesk.Components.UI
                             DataSet dSet = new DataSet();
                             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
                             {
-                                dSet = DataWorkCheque.OpenInvent(this.Cheques);
-                                this.Cheques.Tables.Clear();
+                                dSet = DataWorkCheque.OpenInvent(this.profileCnt.getDataAllProfiles(DataType.ORDER));
+
+
+                                // ******* this.profileCnt.Default.Orders.Tables.Clear();
+                                
+                                
                                 foreach (DataTable dt in dSet.Tables)
                                 {
-                                    this.Cheques.Tables.Add(dt.Copy());
+                                    // ****** this.profileCnt.Default.Orders.Tables.Add(dt.Copy());
                                     dTable.Merge(dt.Copy());
                                 }
                             }
@@ -1470,8 +1470,8 @@ namespace PayDesk.Components.UI
                             if (dTable != null)
                             {
                                 dTable.ExtendedProperties.Add("loading", true);
-                                Cheque.Merge(dTable);
-                                Cheque.ExtendedProperties.Remove("loading");
+                                this.profileCnt.Default.DataOrder.Merge(dTable);
+                                this.profileCnt.Default.DataOrder.ExtendedProperties.Remove("loading");
                                 dTable.ExtendedProperties.Remove("loading");
                             }
                             else
@@ -1479,10 +1479,11 @@ namespace PayDesk.Components.UI
                         }
                         else
                         {
-                            DataWorkCheque.SaveInvent(Cheque, false, this.Cheques);
-                            //Cheque.Rows.Clear();
+                            DataWorkCheque.SaveInvent(this.profileCnt.Default.DataOrder, false, this.profileCnt.getDataAllProfiles(DataType.ORDER));
+                            //this.profileCnt.Default.Order.Rows.Clear();
                             //UpdateSumDisplay(true, true);
-                            RowsRemoved_MyEvent(true, true, true);
+                            // *** RowsRemoved_MyEvent(true, true, true);
+                            this.profileCnt.Default.resetOrder();
                         }
 
                         RefershMenus();
@@ -1504,6 +1505,9 @@ namespace PayDesk.Components.UI
                         {
                             RefreshComponents(false);
                             UpdateMyControls();
+                            // profile 2.0
+                            this.profileCnt.refresh(true);
+
                             SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
                             this.Text = string.Format("{2}{1}{0}", Application.ProductName, " - ", ConfigManager.Instance.CommonConfiguration.APP_SubUnitName);
                         }
@@ -1598,7 +1602,7 @@ namespace PayDesk.Components.UI
                                 this.chequeContainer.SplitterDistance = this.chequeContainer.Height * 2 / 3;
 
                             */
-                            this.articleDGV.Parent = this.sensorDataPanel1.Placeholder;
+                            this.sensorDataPanel1.setupDataContainer(this.articleDGV);
                             //this.articleDGV.BringToFront();
 
                             RefreshComponents(true);
@@ -1716,9 +1720,9 @@ namespace PayDesk.Components.UI
                         if (changeState != 0)
                             break;
 
-                        if ((bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false))
+                        if ((bool)DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_IS_LOCKED, false))
                         {
-                            MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
+                            MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
                                 Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             break;//r
                         }
@@ -1727,14 +1731,18 @@ namespace PayDesk.Components.UI
                             break;
                         */
 
-                        if (DialogResult.Yes != MMessageBoxEx.Show(this.chequeDGV, "Анулювати поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO),
+                        if (DialogResult.Yes != MMessageBoxEx.Show(this.chequeDGV, "Анулювати поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_NO),
                             Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                             break;
-                        //CoreLib.LockBill(Cheque, "null");
+                        //CoreLib.LockBill(this.profileCnt.Default.Order, "null");
                         string billNo = DataWorkShared.ExtractBillProperty(this.PD_Order, CoreConst.BILL_NO, string.Empty, false).ToString();
                         DataWorkBill.LockBill(this.PD_Order, "null");
-                        RowsRemoved_MyEvent(true, true, true);
+                        // *** RowsRemoved_MyEvent(true, true, true);
                         this.RefershMenus();
+                        
+                        this.profileCnt.Default.resetOrder();
+                        this.UpdateGUI();
+
                         //this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", billNo);
                         break;
                     }
@@ -1743,7 +1751,8 @@ namespace PayDesk.Components.UI
                         if (_fl_isInvenCheque)
                             break;
 
-                        int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.PD_Order);
+                        // *** int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.PD_Order);
+                        int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.profileCnt.Default.DataOrder);
                         switch (changeState)
                         {
                             case 1:
@@ -1784,8 +1793,9 @@ namespace PayDesk.Components.UI
                                 this.RefershMenus();
                             }
                             bPrn.Dispose();
-                            addChequeInfo.Text = string.Empty;
-                            RowsRemoved_MyEvent(true, true, true);
+                            // *** addChequeInfo.Text = string.Empty;
+                            // *** RowsRemoved_MyEvent(true, true, true);
+                            this.profileCnt.Default.resetOrder();
                             //this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", bs.GetNewBillNo);
                         }
                         bs.Dispose();
@@ -1832,8 +1842,8 @@ namespace PayDesk.Components.UI
                                 this.RefershMenus();
                             }
                             bPrn.Dispose();
-                            //DataWorkShared.MergeDataTableProperties(ref this.Cheque, bs.SavedBill);
-                            Cheque.Merge(bs.SavedBill);
+                            //DataWorkShared.MergeDataTableProperties(ref this.profileCnt.Default.Order, bs.SavedBill);
+                            this.profileCnt.Default.DataOrder.Merge(bs.SavedBill);
                             this.RefershMenus();
                         }
                         bs.Dispose();
@@ -1879,8 +1889,11 @@ namespace PayDesk.Components.UI
                         uiWndBillSave bs = new uiWndBillSave(this.PD_Order);
                         if (bs.ShowDialog() == DialogResult.OK)
                         {
-                            addChequeInfo.Text = string.Empty;
-                            RowsRemoved_MyEvent(true, true, true);
+                            // *** addChequeInfo.Text = string.Empty;
+                            // **** RowsRemoved_MyEvent(true, true, true);
+
+                            this.profileCnt.Default.resetOrder();
+
                             // if (bs.IsNewBill)
                             // ------ this.addBillInfo.Text = string.Format("{0} {1}", "ЗБЕРЕЖЕНИЙ РАХ.№", bs.GetNewBillNo);
                             //else
@@ -1891,20 +1904,21 @@ namespace PayDesk.Components.UI
                     }
                 case "AllBills": // show bill manager
                     {
-                        string currentBillNumber = DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO).ToString();
+                        string currentBillNumber = DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_NO).ToString();
                         /*
-                            if (this.Cheque.ExtendedProperties["NOM"] != null)
-                                currentBillNumber = this.Cheque.ExtendedProperties["NOM"].ToString();
+                            if (this.profileCnt.Default.Order.ExtendedProperties["NOM"] != null)
+                                currentBillNumber = this.profileCnt.Default.Order.ExtendedProperties["NOM"].ToString();
                         */
                         //if ()
                         uiWndBillList bl = new uiWndBillList(currentBillNumber);
                         if (bl.ShowDialog() == DialogResult.OK)
-                            if (Cheque.Rows.Count == 0)
+                            if (this.profileCnt.Default.DataOrder.Rows.Count == 0)
                             {
-                                Cheque.Merge(bl.LoadedBill);
-                                this.UpdateDiscountValues(this.Cheque);
-                                this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO));
-                                UpdateSumInfo(true);
+                                this.profileCnt.Default.DataOrder.Merge(bl.LoadedBill);
+                                // **** this.UpdateDiscountValues(this.profileCnt.Default.Order);
+                                this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_NO));
+                                // * UpdateSumInfo(true);
+                                profileCnt.Default.refresh();
                             }
                             else MMessageBoxEx.Show(this.chequeDGV, "Неможливо відкрити рахунок\nТаблиця чеку не є порожня", Application.ProductName,
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1986,9 +2000,11 @@ namespace PayDesk.Components.UI
                             // else
                             //    this.addBillInfo.Text = "";
 
-                            DataWorkShared.MergeDataTableProperties(ref this.Cheque, bs.SavedBill);
+                            // ????? 
+                            // ****** DataWorkShared.MergeDataTableProperties(ref this.profileCnt.Default.DataOrder, bs.SavedBill);
 
-                            this.RefershMenus();
+                            // **** this.RefershMenus();
+                            // PUT REFRESH FUNCTION CALL HERE
 
                         }
                         bs.Dispose();
@@ -2035,7 +2051,7 @@ namespace PayDesk.Components.UI
                             // else
                             //    this.addBillInfo.Text = "";
 
-                            DataWorkShared.MergeDataTableProperties(ref this.Cheque, bs.SavedBill);
+                            // *** DataWorkShared.MergeDataTableProperties(ref this.profileCnt.Default.DataOrder, bs.SavedBill);
 
                             this.RefershMenus();
 
@@ -2045,18 +2061,21 @@ namespace PayDesk.Components.UI
                     }
                 case "ReloadBill": // ReloadBill
                     {
-                        object billName = DataWorkShared.ExtractBillProperty(this.PD_Order, CoreConst.PATH);
+                        object billName = DataWorkShared.ExtractBillProperty(this.PD_Order, CoreConst.BILL_PATH);
                         DataTable LoadedBill = DataWorkBill.LoadCombinedBill(ConfigManager.Instance.CommonConfiguration.Path_Bills + "\\" + billName.ToString());
-                        RowsRemoved_MyEvent(true, true, true);
-                        Cheque.Merge(LoadedBill);
-                        this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO));
-                        UpdateSumInfo(true);
+                        // **** RowsRemoved_MyEvent(true, true, true);
+                        // ****** ADD/REPLACE DATA MEREGE FUNCTION INTO PROFILE
+                        this.profileCnt.Default.DataOrder.Merge(LoadedBill);
+                        this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", DataWorkShared.ExtractBillProperty(this.profileCnt.Default.DataOrder, CoreConst.BILL_NO));
+                        // * UpdateSumInfo(true);
+                        profileCnt.Default.refresh();
                         break;
                     }
                 case "CloseBillWithoutChanges": // CloseBill
                     {
                         addChequeInfo.Text = string.Empty;
-                        RowsRemoved_MyEvent(true, true, true);
+                        // *** RowsRemoved_MyEvent(true, true, true);
+                        this.profileCnt.Default.resetOrder();
                         break;
                     }
                 #endregion
@@ -2212,17 +2231,17 @@ namespace PayDesk.Components.UI
         /// <param name="e"></param>
         private void chequeDGV_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
-            if (Cheque.ExtendedProperties.Contains("loading"))
+            if (this.profileCnt.Default.DataOrder.ExtendedProperties.Contains("loading"))
                 return;
 
-            if (Cheque.Rows.Count % ConfigManager.Instance.CommonConfiguration.APP_InvAutoSave == 0 && _fl_isInvenCheque)
-                DataWorkCheque.SaveInvent(Cheque, true, this.Cheques);
+            if (this.profileCnt.Default.DataOrder.Rows.Count % ConfigManager.Instance.CommonConfiguration.APP_InvAutoSave == 0 && _fl_isInvenCheque)
+                DataWorkCheque.SaveInvent(this.profileCnt.Default.DataOrder, true, this.profileCnt.getDataAllProfiles(DataType.ORDER));
 
             if (chequeDGV.Rows.Count == 1)
                 RefershMenus();
 
             if (!_fl_isInvenCheque)
-                RefreshChequeInformer(Cheque.Rows.Count == 1);
+                RefreshChequeInformer(this.profileCnt.Default.DataOrder.Rows.Count == 1);
         }//ok
         /// <summary>
         /// Invoke when row begin editing 
@@ -2264,7 +2283,7 @@ namespace PayDesk.Components.UI
                 double price = MathLib.GetDouble(chequeDGV["PRICE", e.RowIndex].Value.ToString());
                 if (UserConfig.Properties[8])
                 {
-                    DataRow dRow = Cheque.Rows.Find(chequeDGV.CurrentRow.Cells["C"].Value);
+                    DataRow dRow = this.profileCnt.Default.DataOrder.Rows.Find(chequeDGV.CurrentRow.Cells["C"].Value);
                     price = CoreLib.AutomaticPrice(thisTot, dRow);
                 }
                 double sum = MathLib.GetRoundedMoney(thisTot * price);
@@ -2276,19 +2295,20 @@ namespace PayDesk.Components.UI
                 chequeDGV["ASUM", e.RowIndex].Value = sum;
                 chequeDGV.Update();
 
-                UpdateSumInfo(true);
+                // * UpdateSumInfo(true);
+                profileCnt.Default.refresh();
                 SrchTbox.Select();
                 SrchTbox.SelectAll();
 
                 try
                 {
-                    DataRow[] dr = Articles.Select("ID like '" + chequeDGV.CurrentRow.Cells["TID"].Value + "'");
+                    DataRow[] dr = this.profileCnt.Default.DataProducts.Select("ID like '" + chequeDGV.CurrentRow.Cells["TID"].Value + "'");
                     if (dr != null && dr.Length != 0 && dr[0] != null)
                     {
                         thisTot = MathLib.GetDouble(chequeDGV["TQ", e.RowIndex].Value);
                         if (thisTot != 0)
                             addedTot *= MathLib.GetDouble(chequeDGV["TQ", e.RowIndex].Value);
-                        CoreLib.AddArticleToCheque(chequeDGV, articleDGV, dr[0], addedTot, Articles);
+                        CoreLib.AddArticleToCheque(chequeDGV, articleDGV, dr[0], addedTot, this.profileCnt.Default.DataProducts);
                     }
                 }
                 catch { }
@@ -2386,11 +2406,11 @@ namespace PayDesk.Components.UI
         private void Navigator_OnFilterChanged(string filter, EventArgs e)
         {
             if (filter.Length == 0)
-                this.articleDGV.DataSource = this.Articles;
+                this.articleDGV.DataSource = this.profileCnt.Default.DataProducts;
             else
             {
-                DataRow[] dr = this.Articles.Select("ID Like '" + filter + "%'");
-                DataTable sTable = this.Articles.Clone();
+                DataRow[] dr = this.profileCnt.Default.DataProducts.Select("ID Like '" + filter + "%'");
+                DataTable sTable = this.profileCnt.Default.DataProducts.Clone();
                 sTable.Clear();
                 sTable.BeginLoadData();
                 for (int i = 0; i < dr.Length; i++)
@@ -2438,11 +2458,11 @@ namespace PayDesk.Components.UI
                         this.chequeDGV.Select();
                         if (chequeDGV.CurrentRow != null)
                         {
-                            //DataRow[] article = Articles.Select("ID =" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString());
-                            DataRow[] article = Articles.Select("ID =\'" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString() + "\'");
+                            //DataRow[] article = this.profileCnt.Default.Products.Select("ID =" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString());
+                            DataRow[] article = this.profileCnt.Default.DataProducts.Select("ID =\'" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString() + "\'");
                             if (article != null && article.Length == 1)
                             {
-                                CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article[0], -ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles);
+                                CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article[0], -ConfigManager.Instance.CommonConfiguration.APP_StartTotal, this.profileCnt.Default.DataProducts);
                                 SearchFilter(true, this.currSrchType, false);
                             }
                         }
@@ -2476,10 +2496,10 @@ namespace PayDesk.Components.UI
                         this.chequeDGV.Select();
                         if (chequeDGV.CurrentRow != null)
                         {
-                            DataRow[] article = Articles.Select("ID =\'" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString() + "\'");
+                            DataRow[] article = this.profileCnt.Default.DataProducts.Select("ID =\'" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString() + "\'");
                             if (article != null && article.Length == 1)
                             {
-                                CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article[0], ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles, false, false);
+                                CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article[0], ConfigManager.Instance.CommonConfiguration.APP_StartTotal, this.profileCnt.Default.DataProducts, false, false);
                                 SearchFilter(true, this.currSrchType, false);
                             }
                         }
@@ -2619,18 +2639,10 @@ namespace PayDesk.Components.UI
                 }
             }
         }
-        /// <summary>
-        /// Custom method. Used for updating data of elements.
-        /// </summary>
-        private void UpdateMyControls()
-        {
-            //winapi.Funcs.OutputDebugString("UpdateMyControls_begin");
-            RefreshAppInformer();
-            RefreshChequeInformer(true);
-            RefershStyles();
-            RefershMenus();
-            RefreshWindowMenu();
 
+        public void UpdateGUI()
+        {
+            // ---- moved to profile container
             bool needUpdate = false;
             if (_fl_singleMode != ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
             {
@@ -2667,6 +2679,269 @@ namespace PayDesk.Components.UI
             // will run only once and launch timerScanner
             timerDataImportSynchronizer.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate / 2;
 
+            if (!timerDataImportSynchronizer.Enabled || !timerExchangeScanner.Enabled)
+            {
+                timerExchangeScanner.Start();
+                timerDataImportSynchronizer.Start();
+                //timerExchangeImport.Start();
+                // trigger import timer with delay of 2 sec.
+                //Thread.Sleep(2000);
+                //timerExchangeImport.Start();
+            }
+
+            // *** APP Informer
+
+            appInfoLabel.Text = string.Format("{0}: {1}     {2}: \"{3}\"     {4}: {5}     {6}: \"{7}\"",
+                "Підрозділ №",
+                ConfigManager.Instance.CommonConfiguration.APP_SubUnit,
+                "Назва підрозділу",
+                ConfigManager.Instance.CommonConfiguration.APP_SubUnitName == string.Empty ? "без назви" : ConfigManager.Instance.CommonConfiguration.APP_SubUnitName,
+                "Каса №",
+                ConfigManager.Instance.CommonConfiguration.APP_PayDesk,
+                "Касир",
+                UserConfig.UserID);
+
+            // *** Order Informer
+            if (_fl_isInvenCheque)
+            {
+                CashLbl.Text = string.Format("{0}", "ІНВЕНТАРИЗАЦІЯ"); ;
+                chequeInfoLabel.Text = string.Format("{0}", profileCnt.Default.Properties["Date"]);
+            }
+            else
+            {
+                string ctrlWord = "чеку";
+                // *** if (this.profileCnt.Default.Order.ExtendedProperties["BILL"] != null)
+                if (profileCnt.Default.Properties["BILL"] != null)
+                    ctrlWord = "рахунку";
+                string totalWord = "позиці";
+                int numValue = profileCnt.Default.DataOrder.Rows.Count;
+
+                while (numValue > 20)
+                    numValue %= 10;
+
+                switch (numValue)
+                {
+                    case 1: totalWord += 'я'; break;
+                    case 2: totalWord += 'ї'; break;
+                    case 3: totalWord += 'ї'; break;
+                    case 4: totalWord += 'ї'; break;
+                    default: totalWord += 'й'; break;
+                }
+
+                if (_fl_isReturnCheque)
+                    chequeInfoLabel.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, profileCnt.Default.DataOrder.Rows.Count, totalWord, "повертається на суму");
+                else
+                    chequeInfoLabel.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, profileCnt.Default.DataOrder.Rows.Count, totalWord, "продається на суму");
+                CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", profileCnt.Default.Properties[CoreConst.CASH_REAL_SUMA]);
+                //if (DataWorkShared.ExtractOrderProperty(this.profileCnt.Default.Order, CoreConst.BILL, null, true) == null)
+                if (profileCnt.Default.Properties["BILL"] == null)
+                    this.addBillInfo.Text = string.Empty;
+            }
+
+            if (true) // ??? resetDigitalPanel
+            {
+                CashLbl.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_SumFontColor;
+                CashLbl.Font = ConfigManager.Instance.CommonConfiguration.STYLE_SumFont;
+
+                CashLbl.Image = null;
+                digitalPanel.BackgroundImage = null;
+                _fl_taxDocRequired = false;
+            }
+
+            // *** Styling
+            //Colors
+            infoPanel.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundInfPan;
+            addChequeInfo.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundAddPan;
+            digitalPanel.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundSumRest;
+            chequeDGV.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundNAChqTbl;
+            chequeDGV.DefaultCellStyle.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundNAChqTbl;
+            articleDGV.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundArtTbl;
+            articleDGV.DefaultCellStyle.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundArtTbl;
+            statusStrip1.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundStatPan;
+
+            //Fonts
+            CashLbl.Font = ConfigManager.Instance.CommonConfiguration.STYLE_SumFont;
+            CashLbl.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_SumFontColor;
+            articleDGV.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ArticlesFont;
+            articleDGV.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ArticlesFontColor;
+            chequeDGV.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ChequeFont;
+            chequeDGV.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ChequeFontColor;
+            statusStrip1.Font = ConfigManager.Instance.CommonConfiguration.STYLE_StatusFont;
+            statusStrip1.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_StatusFontColor;
+            addChequeInfo.Font = ConfigManager.Instance.CommonConfiguration.STYLE_AddInformerFont;
+            addChequeInfo.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_AddInformerFontColor;
+            chequeInfoLabel.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ChqInformerFont;
+            chequeInfoLabel.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ChqInformerFontColor;
+            appInfoLabel.Font = ConfigManager.Instance.CommonConfiguration.STYLE_AppInformerFont;
+            appInfoLabel.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_AppInformerFontColor;
+
+            // misc
+            this.articleDGV.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_ArticleRowHeight;
+            this.articleDGV.Invalidate();//
+            this.articleDGV.Refresh();
+            this.articleDGV.Update();
+            //this.articleDGV.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+
+            this.chequeDGV.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_ChequeRowHeight;
+            this.chequeDGV.Invalidate();
+            this.chequeDGV.Refresh();
+            this.chequeDGV.Update();
+            //this.chequeDGV.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+
+
+            // *** Menu Items
+
+            if (Program.AppPlugins.IsActive(PluginType.FPDriver))
+                try
+                {
+                    fxFunc_toolStripMenuItem.Enabled = Program.AppPlugins.GetActive<IFPDriver>().AllowedMethods.Count != 0;
+                }
+                catch { }
+            else
+                fxFunc_toolStripMenuItem.Enabled = false;
+            адміністраторToolStripMenuItem.Checked = _fl_adminMode;
+            фільтрОдиницьToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && (_fl_adminMode || UserConfig.Properties[9]);
+            формуванняЧекуToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && _fl_adminMode;
+            інвентаризаціяToolStripMenuItem.Enabled = (_fl_isInvenCheque || profileCnt.Default.DataOrder.Rows.Count == 0) && _fl_adminMode;
+            чекПоверненняToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && (_fl_adminMode || UserConfig.Properties[5]);
+            налаштуванняToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && _fl_adminMode;
+            параметриДрукуToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && _fl_adminMode;
+            змінитиКористувачаToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0;
+            вихідToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0;
+
+            //друкуватиРахунокToolStripMenuItem.Enabled = this.profileCnt.Default.Order.ExtendedProperties.Contains("BILL");
+            /*bool isLocked = (bool)DataWorkShared.ExtractBillProperty(this.profileCnt.Default.Order, CoreConst.IS_LOCKED, false);
+            bool isBill = DataWorkShared.ExtractOrderProperty(this.profileCnt.Default.Order, CoreConst.BILL, null, true) != null;
+            */
+            bool isLocked = profileCnt.Default.Properties[CoreConst.BILL_IS_LOCKED] != null && (bool)profileCnt.Default.Properties[CoreConst.BILL_IS_LOCKED] == false;
+            bool isBill = profileCnt.Default.Properties[CoreConst.ORDER_BILL] != null;
+
+            анулюватиРахунокToolStripMenuItem.Enabled = isBill && !isLocked;
+            зберегтиРахунокToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && !_fl_isInvenCheque && !isLocked;
+            всіРахункиToolStripMenuItem.Enabled = !_fl_isInvenCheque;
+            зберегтиІЗакритиToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && !_fl_isInvenCheque;
+            зберегтиІДрукуватиToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && !_fl_isInvenCheque;// && !isLocked;
+            ToolStripMenu_Bills_SavePrintAndClose.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && !_fl_isInvenCheque;// && !isLocked;
+            закритиБезЗмінToolStripMenuItem.Enabled = isBill;
+            перезавантажитиРахунокToolStripMenuItem.Enabled = isBill;
+            змінитиКоментарToolStripMenuItem.Enabled = isBill;
+
+            змінитиКстьТоваруToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
+            видалитиВибранийТоварToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
+            видалитиВсіТовариToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
+            здійснитиОплатуToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[23]);
+            задатиЗнижкаToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
+            задатиНадбавкуToolStripMenuItem1.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
+
+
+            вертикальноToolStripMenuItem.Checked = (splitContainer1.Orientation == Orientation.Vertical);
+            вікноТоварівToolStripMenuItem.Checked = !splitContainer1.Panel2Collapsed;
+
+            // *** Sensor Mode
+
+            if (this.сенсорToolStripMenuItem.Checked/* ???? || force*/)
+            {
+                //Com_WinApi.OutputDebugString("RefershStyles_Sensor_Activated");
+
+                this.sensorPanel1.SensorType = ConfigManager.Instance.CommonConfiguration.skin_sensor_com_size_cheque;
+
+
+                // cheque
+                переміщенняПоЧекуToolStripMenuItem1.Checked = this.sensorPanel1.ShowComponent(SensorUgcPanel.SensorComponents.Scrolling, ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqnav);
+                операціїЧекуToolStripMenuItem1.Checked = this.sensorPanel1.ShowComponent(SensorUgcPanel.SensorComponents.Operations, ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqopr);
+                режимиПошукуToolStripMenuItem1.Checked = this.sensorPanel1.ShowComponent(SensorUgcPanel.SensorComponents.Search, ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqsrch);
+                рахункиToolStripMenuItem1.Checked = this.sensorPanel1.ShowComponent(SensorUgcPanel.SensorComponents.Additional, ConfigManager.Instance.CommonConfiguration.skin_sensor_com_chqbills);
+
+                // art
+                навігаціяТоварівToolStripMenuItem.Checked = ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artnav;
+                переміщенняПоТоварахToolStripMenuItem.Checked = this.sensorDataPanel1.Scroller.Visible = ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artscroll;
+
+                // splitters
+                this.sensorDataPanel1.Container.Panel1Collapsed = !ConfigManager.Instance.CommonConfiguration.skin_sensor_com_artnav;
+                this.sensorDataPanel1.Container.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_artnav;
+                this.sensorDataPanel1.NavigatorFont = ConfigManager.Instance.CommonConfiguration.skin_sensor_fontsize;
+                this.chequeContainer.Orientation = (Orientation)ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_orient;
+                //this.splitContainer_chequeControlContainer.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chqcontrols;
+                try
+                {
+
+                    switch (this.sensorPanel1.SensorType)
+                    {
+                        case 50:
+                            {
+
+                                this.chequeContainer.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_50;
+                                this.sensorPanel1.SetSplitterDistance("h_50", ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_h_50);
+                                this.sensorPanel1.SetSplitterDistance("v_50", ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_v_50);
+                                break;
+                            }
+                        default:
+                        case 100:
+                            {
+                                this.chequeContainer.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_100;
+                                this.sensorPanel1.SetSplitterDistance("h_100", ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_h_100);
+                                this.sensorPanel1.SetSplitterDistance("v_100", ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_v_100);
+                                break;
+                            }
+                    }
+
+                    ;//this.splitContainer_chequeControls.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chqmain;
+                }
+                catch { }
+            }
+
+        }
+        
+        /// <summary>
+        /// Custom method. Used for updating data of elements.
+        ///  !!! Must be replaced with UpdateGUI
+        /// </summary>
+        private void UpdateMyControls()
+        {
+            //winapi.Funcs.OutputDebugString("UpdateMyControls_begin");
+            RefreshAppInformer();
+            RefreshChequeInformer(true);
+            RefershStyles();
+            RefershMenus();
+            RefreshWindowMenu();
+
+
+            // ---- moved to profile container
+            bool needUpdate = false;
+            if (_fl_singleMode != ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
+            {
+                _fl_singleMode = ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles;
+                _fl_onlyUpdate = false;
+                needUpdate = true;
+            }
+
+            if (currentSubUnit != ConfigManager.Instance.CommonConfiguration.APP_SubUnit)
+            {
+                _fl_onlyUpdate = false;
+                _fl_subUnitChanged = true;
+                needUpdate = true;
+                currentSubUnit = ConfigManager.Instance.CommonConfiguration.APP_SubUnit;
+            }
+
+            // trigger update function
+            if (needUpdate)
+                FetchProductData(true, true, false);
+            //timer1_Tick(timer1, EventArgs.Empty);
+            //winapi.Funcs.OutputDebugString("UpdateMyControls_end");
+
+            //if (!timerExchangeImport.Enabled && !timerExchangeScanner.Enabled)
+
+            timerExchangeScanner.Stop();
+            timerExchangeImport.Stop();
+            timerDataImportSynchronizer.Stop();
+
+            // update import timer
+            timerExchangeImport.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate;
+            // update exchange scanner timer
+            timerExchangeScanner.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate;
+            // will setup exchnage scanner in 10 sec.
+            // will run only once and launch timerScanner
+            timerDataImportSynchronizer.Interval = ConfigManager.Instance.CommonConfiguration.APP_RefreshRate / 2;
 
             if (!timerDataImportSynchronizer.Enabled || !timerExchangeScanner.Enabled)
             {
@@ -2696,15 +2971,16 @@ namespace PayDesk.Components.UI
             if (_fl_isInvenCheque)
             {
                 CashLbl.Text = string.Format("{0}", "ІНВЕНТАРИЗАЦІЯ"); ;
-                chequeInfoLabel.Text = string.Format("{0}", Cheque.ExtendedProperties["Date"]);
+                chequeInfoLabel.Text = string.Format("{0}", profileCnt.Default.Properties["Date"]);
             }
             else
             {
                 string ctrlWord = "чеку";
-                if (Cheque.ExtendedProperties["BILL"] != null)
+                // *** if (this.profileCnt.Default.Order.ExtendedProperties["BILL"] != null)
+                if (profileCnt.Default.Properties["BILL"] != null)
                     ctrlWord = "рахунку";
                 string totalWord = "позиці";
-                int numValue = Cheque.Rows.Count;
+                int numValue = profileCnt.Default.DataOrder.Rows.Count;
 
                 while (numValue > 20)
                     numValue %= 10;
@@ -2719,11 +2995,12 @@ namespace PayDesk.Components.UI
                 }
 
                 if (_fl_isReturnCheque)
-                    chequeInfoLabel.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, Cheque.Rows.Count, totalWord, "повертається на суму");
+                    chequeInfoLabel.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, profileCnt.Default.DataOrder.Rows.Count, totalWord, "повертається на суму");
                 else
-                    chequeInfoLabel.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, Cheque.Rows.Count, totalWord, "продається на суму");
-                CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", realSUMA);
-                if (DataWorkShared.ExtractOrderProperty(this.Cheque, CoreConst.BILL, null, true) == null)
+                    chequeInfoLabel.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, profileCnt.Default.DataOrder.Rows.Count, totalWord, "продається на суму");
+                CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", profileCnt.Default.Properties[CoreConst.CASH_REAL_SUMA]);
+                //if (DataWorkShared.ExtractOrderProperty(this.profileCnt.Default.Order, CoreConst.BILL, null, true) == null)
+                if (profileCnt.Default.Properties["BILL"] == null)
                     this.addBillInfo.Text = string.Empty;
             }
 
@@ -2790,34 +3067,38 @@ namespace PayDesk.Components.UI
             else
                 fxFunc_toolStripMenuItem.Enabled = false;
             адміністраторToolStripMenuItem.Checked = _fl_adminMode;
-            фільтрОдиницьToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0 && (_fl_adminMode || UserConfig.Properties[9]);
-            формуванняЧекуToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0 && _fl_adminMode;
-            інвентаризаціяToolStripMenuItem.Enabled = (_fl_isInvenCheque || Cheque.Rows.Count == 0) && _fl_adminMode;
-            чекПоверненняToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0 && (_fl_adminMode || UserConfig.Properties[5]);
-            налаштуванняToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0 && _fl_adminMode;
-            параметриДрукуToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0 && _fl_adminMode;
-            змінитиКористувачаToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0;
-            вихідToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count == 0;
+            фільтрОдиницьToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && (_fl_adminMode || UserConfig.Properties[9]);
+            формуванняЧекуToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && _fl_adminMode;
+            інвентаризаціяToolStripMenuItem.Enabled = (_fl_isInvenCheque || profileCnt.Default.DataOrder.Rows.Count == 0) && _fl_adminMode;
+            чекПоверненняToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && (_fl_adminMode || UserConfig.Properties[5]);
+            налаштуванняToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && _fl_adminMode;
+            параметриДрукуToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0 && _fl_adminMode;
+            змінитиКористувачаToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0;
+            вихідToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count == 0;
 
-            //друкуватиРахунокToolStripMenuItem.Enabled = Cheque.ExtendedProperties.Contains("BILL");
-            bool isLocked = (bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false);
-            bool isBill = DataWorkShared.ExtractOrderProperty(this.Cheque, CoreConst.BILL, null, true) != null;
+            //друкуватиРахунокToolStripMenuItem.Enabled = this.profileCnt.Default.Order.ExtendedProperties.Contains("BILL");
+            /*bool isLocked = (bool)DataWorkShared.ExtractBillProperty(this.profileCnt.Default.Order, CoreConst.IS_LOCKED, false);
+            bool isBill = DataWorkShared.ExtractOrderProperty(this.profileCnt.Default.Order, CoreConst.BILL, null, true) != null;
+            */
+            bool isLocked = profileCnt.Default.Properties[CoreConst.BILL_IS_LOCKED] != null && (bool)profileCnt.Default.Properties[CoreConst.BILL_IS_LOCKED] == false;
+            bool isBill = profileCnt.Default.Properties[CoreConst.ORDER_BILL] != null;
+
             анулюватиРахунокToolStripMenuItem.Enabled = isBill && !isLocked;
-            зберегтиРахунокToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && !_fl_isInvenCheque && !isLocked;
+            зберегтиРахунокToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && !_fl_isInvenCheque && !isLocked;
             всіРахункиToolStripMenuItem.Enabled = !_fl_isInvenCheque;
-            зберегтиІЗакритиToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && !_fl_isInvenCheque;
-            зберегтиІДрукуватиToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && !_fl_isInvenCheque;// && !isLocked;
-            ToolStripMenu_Bills_SavePrintAndClose.Enabled = Cheque.Rows.Count != 0 && !_fl_isInvenCheque;// && !isLocked;
+            зберегтиІЗакритиToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && !_fl_isInvenCheque;
+            зберегтиІДрукуватиToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && !_fl_isInvenCheque;// && !isLocked;
+            ToolStripMenu_Bills_SavePrintAndClose.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && !_fl_isInvenCheque;// && !isLocked;
             закритиБезЗмінToolStripMenuItem.Enabled = isBill;
             перезавантажитиРахунокToolStripMenuItem.Enabled = isBill;
             змінитиКоментарToolStripMenuItem.Enabled = isBill;
 
-            змінитиКстьТоваруToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
-            видалитиВибранийТоварToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
-            видалитиВсіТовариToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
-            здійснитиОплатуToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[23]);
-            задатиЗнижкаToolStripMenuItem.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
-            задатиНадбавкуToolStripMenuItem1.Enabled = !_fl_isInvenCheque && Cheque.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
+            змінитиКстьТоваруToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
+            видалитиВибранийТоварToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
+            видалитиВсіТовариToolStripMenuItem.Enabled = profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[24]);
+            здійснитиОплатуToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[23]);
+            задатиЗнижкаToolStripMenuItem.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
+            задатиНадбавкуToolStripMenuItem1.Enabled = !_fl_isInvenCheque && profileCnt.Default.DataOrder.Rows.Count != 0 && (_fl_adminMode || UserConfig.Properties[3]);
 
         }//ok
         private void RefreshWindowMenu()
@@ -2890,9 +3171,6 @@ namespace PayDesk.Components.UI
         /// <param name="sender">Timer object</param>
         /// <param name="e">Timer event arguments</param>
 
-
-        private System.Windows.Forms.Timer timerDataImportSynchronizer;
-
         private void timerDataImportSynchronizer_Tick(object sender, EventArgs e)
         {
             Com_WinApi.OutputDebugString("timerDataImportSynchronizer: started");
@@ -2925,7 +3203,8 @@ namespace PayDesk.Components.UI
                 return;
             }
 
-            if (Cheque.Rows.Count != 0)
+            //if (this.profileCnt.Default.Order.Rows.Count != 0)
+            if (profileCnt.Default.DataOrder.Rows.Count != 0)
             {
                 _fl_canUpdate = true;
                 Com_WinApi.OutputDebugString("timerExchangeImport: waiting for empty checkque");
@@ -2934,11 +3213,11 @@ namespace PayDesk.Components.UI
 
             _fl_canUpdate = false;
 
-            if (_fl_subUnitChanged)
+            /*if (_fl_subUnitChanged)
             {
-                Articles.Rows.Clear();
-                AltBC.Rows.Clear();
-            }
+                this.profileCnt.Default.Products.Rows.Clear();
+                this.profileCnt.Default.Alternative.Rows.Clear();
+            }*/
 
             /*
              * bool hasUpdates = scanExchangeFolder(); 
@@ -2991,21 +3270,22 @@ namespace PayDesk.Components.UI
 
 
         // shold be removed after dataContainer2
-
+        // **************************************************************************
         public Hashtable PD_DiscountInfo
         {
             set { }
             get
             {
                 Hashtable chqInfo = DataWorkShared.GetStandartDiscountInfoStructure2();
+                /*
                 //Якщо true то знижка чи надбавка діє на всі позиції(товари) чеку
                 chqInfo["DISC_ALL_ITEMS"] = this._fl_useTotDisc;
                 //Масив з значеннями знижки та надбавки в процентних значеннях
-                chqInfo["DISC_ARRAY_PERCENT"] = new double[2] { discArrPercent[0], discArrPercent[1] };
+                chqInfo["DISC_ARRAY_PERCENT"] = new double[2] { this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[0], this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[1] };
                 //Масив з значеннями знижки та надбавки в грошових значеннях
-                chqInfo["DISC_ARRAY_CASH"] = new double[2] { discArrCash[0], discArrCash[1] };
+                chqInfo["DISC_ARRAY_CASH"] = new double[2] { this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[0], this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[1] };
                 //Значення постійної знижки в процентному значенні
-                chqInfo["DISC_CONST_PERCENT"] = this.discConstPercent;
+                chqInfo["DISC_CONST_PERCENT"] = this.profileCnt.Default.getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT);
                 //Сума знижки і надбавки з процентними значеннями
                 chqInfo["DISC_ONLY_PERCENT"] = this.discOnlyPercent;
                 //Сума знижки і надбавки з грошовими значеннями
@@ -3016,6 +3296,7 @@ namespace PayDesk.Components.UI
                 chqInfo["DISC_FINAL_CASH"] = this.discCommonCash;
                 //Загальний коефіціент знижки в грошовому значенні
                 chqInfo["DISC_APPLIED"] = this.discApplied;
+                */
                 return chqInfo;
             }
         }
@@ -3032,8 +3313,8 @@ namespace PayDesk.Components.UI
             {
                 Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure();
                 // fill cheque structure
-                //chqInfo["DATA"] = this.Cheque.Copy();
-                chqInfo["STORE_NO"] = this.currentSubUnit;
+                //chqInfo["DATA"] = this.profileCnt.Default.Order.Copy();
+                /*****chqInfo["STORE_NO"] = this.currentSubUnit;
                 chqInfo["CLIENT_ID"] = this.clientID;
                 chqInfo["IS_RET"] = this._fl_isReturnCheque;
                 chqInfo["IS_LEGAL"] = false;
@@ -3043,20 +3324,20 @@ namespace PayDesk.Components.UI
                 chqInfo["TAX_SUMA"] = this.realSUMA;
                 chqInfo["TAX_BILL"] = this._fl_taxDocRequired;
                 chqInfo["DISCOUNT"] = this.PD_DiscountInfo;
-
-                object bill = this.Cheque.ExtendedProperties["BILL"];
-                DataWorkShared.UpdateExtendedProperties(this.Cheque, chqInfo);
-                this.Cheque.ExtendedProperties["BILL"] = bill;
+                */
+                object bill = this.profileCnt.Default.DataOrder.ExtendedProperties["BILL"];
+                DataWorkShared.UpdateExtendedProperties(this.profileCnt.Default.DataOrder, chqInfo);
+                this.profileCnt.Default.DataOrder.ExtendedProperties["BILL"] = bill;
                 /*
                 chqInfo["BILL_NO"] = string.Empty;
                 chqInfo["BILL_COMMENT"] = string.Empty;
-                if (this.Cheque.ExtendedProperties.Contains("BILL")) {
+                if (this.profileCnt.Default.Order.ExtendedProperties.Contains("BILL")) {
                     //Номер рахунку
-                    chqInfo["BILL_NO"] = Cheque.ExtendedProperties["NOM"];
+                    chqInfo["BILL_NO"] = this.profileCnt.Default.Order.ExtendedProperties["NOM"];
                     //Коментр рахунку
-                    chqInfo["BILL_COMMENT"] = Cheque.ExtendedProperties["CMT"];
+                    chqInfo["BILL_COMMENT"] = this.profileCnt.Default.Order.ExtendedProperties["CMT"];
                 }*/
-                return this.Cheque;
+                return this.profileCnt.Default.DataOrder;
             }
         }
 
@@ -3064,10 +3345,10 @@ namespace PayDesk.Components.UI
         {
             get
             {
-                Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure(this.Cheque);
+                Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure(this.profileCnt.Default.DataOrder);
                 // fill cheque structure
-                //chqInfo["DATA"] = this.Cheque.Copy();
-                chqInfo["STORE_NO"] = this.currentSubUnit;
+                //chqInfo["DATA"] = this.profileCnt.Default.Order.Copy();
+                /******chqInfo["STORE_NO"] = this.currentSubUnit;
                 chqInfo["CLIENT_ID"] = this.clientID;
                 chqInfo["IS_RET"] = this._fl_isReturnCheque;
                 chqInfo["IS_LEGAL"] = false;
@@ -3077,37 +3358,38 @@ namespace PayDesk.Components.UI
                 chqInfo["TAX_SUMA"] = this.realSUMA;
                 chqInfo["TAX_BILL"] = this._fl_taxDocRequired;
                 chqInfo["DISCOUNT"] = this.PD_DiscountInfo;
-
-                DataWorkShared.UpdateExtendedProperties(this.Cheque, chqInfo);
+                */
+                DataWorkShared.UpdateExtendedProperties(this.profileCnt.Default.DataOrder, chqInfo);
                 /*
                 chqInfo["BILL_NO"] = string.Empty;
                 chqInfo["BILL_COMMENT"] = string.Empty;
-                if (this.Cheque.ExtendedProperties.Contains("BILL")) {
+                if (this.profileCnt.Default.Order.ExtendedProperties.Contains("BILL")) {
                     //Номер рахунку
-                    chqInfo["BILL_NO"] = Cheque.ExtendedProperties["NOM"];
+                    chqInfo["BILL_NO"] = this.profileCnt.Default.Order.ExtendedProperties["NOM"];
                     //Коментр рахунку
-                    chqInfo["BILL_COMMENT"] = Cheque.ExtendedProperties["CMT"];
+                    chqInfo["BILL_COMMENT"] = this.profileCnt.Default.Order.ExtendedProperties["CMT"];
                 }*/
-                return this.Cheque;
+                return this.profileCnt.Default.DataOrder;
             }
         }
 
         #endregion
 
         #region Helpful Methods
-        private Hashtable GetAppStatements()
+        /*private Hashtable GetAppStatements()
         {
             Hashtable currentStates = new Hashtable();
             currentStates[CoreConst.STATE_DATA_UPDATED] = false;
 
             return currentStates;
-        }
+        }*/
         private void SearchFilter(bool saveSearchText, int SrchType, bool close)
         {
             if (close)
             {
                 Com_WinApi.OutputDebugString("MainWnd --- SearchFilter - reseting data begin");
-                articleDGV.DataSource = Articles;
+                // *** articleDGV.DataSource = this.profileCnt.Default.Products;
+                articleDGV.DataSource = profileCnt.Default.DataProducts;
                 Com_WinApi.OutputDebugString("MainWnd --- SearchFilter - reseting data end");
             }
 
@@ -3155,27 +3437,32 @@ namespace PayDesk.Components.UI
 
             currSrchType = SrchType;
         }
+
+        // will be removed after Profile2
+        // used in main menu bill section
+        // setup app values with loaded bill
+        /*
         public void UpdateDiscountValues(DataTable order)
         {
-            this.currentSubUnit = (byte)order.ExtendedProperties[CoreConst.STORE_NO];
+            this.currentSubUnit = (byte)order.ExtendedProperties[CoreConst.ORDER_STORE_NO];
             try
             {
-                this.clientID = order.ExtendedProperties[CoreConst.CLIENT_ID].ToString();
+                this.clientID = order.ExtendedProperties[CoreConst.ORDER_CLIENT_ID].ToString();
             }
             catch { }
-            this._fl_isReturnCheque = (bool)order.ExtendedProperties[CoreConst.IS_RET];
+            this._fl_isReturnCheque = (bool)order.ExtendedProperties[CoreConst.ORDER_IS_RET];
 
-            if (order.ExtendedProperties.ContainsKey(CoreConst.DISCOUNT))
+            if (order.ExtendedProperties.ContainsKey(CoreConst.ORDER_DISCOUNT))
             {
 
-                Hashtable discount = (Hashtable)order.ExtendedProperties[CoreConst.DISCOUNT];
+                Hashtable discount = (Hashtable)order.ExtendedProperties[CoreConst.ORDER_DISCOUNT];
 
                 try
                 {
                     this._fl_useTotDisc = (bool)discount[CoreConst.DISC_ALL_ITEMS];
-                    this.discArrPercent = (double[])discount[CoreConst.DISC_ARRAY_PERCENT];
-                    this.discArrCash = (double[])discount[CoreConst.DISC_ARRAY_CASH];
-                    this.discConstPercent = (double)discount[CoreConst.DISC_CONST_PERCENT];
+                    this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT) = (double[])discount[CoreConst.DISC_ARRAY_PERCENT];
+                    this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH) = (double[])discount[CoreConst.DISC_ARRAY_CASH];
+                    this.profileCnt.Default.getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT) = (double)discount[CoreConst.DISC_CONST_PERCENT];
                     this.discOnlyCash = (double)discount[CoreConst.DISC_ONLY_CASH];
                     this.discOnlyPercent = (double)discount[CoreConst.DISC_ONLY_PERCENT];
                     this.discCommonPercent = (double)discount[CoreConst.DISC_FINAL_PERCENT];
@@ -3186,11 +3473,11 @@ namespace PayDesk.Components.UI
                 /*
                 chqInfo["DISC_ALL_ITEMS"] = this._fl_useTotDisc;
                 //Масив з значеннями знижки та надбавки в процентних значеннях
-                chqInfo["DISC_ARRAY_PERCENT"] = new double[2] { discArrPercent[0], discArrPercent[1] };
+                chqInfo["DISC_ARRAY_PERCENT"] = new double[2] { this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[0], this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[1] };
                 //Масив з значеннями знижки та надбавки в грошових значеннях
-                chqInfo["DISC_ARRAY_CASH"] = new double[2] { discArrCash[0], discArrCash[1] };
+                chqInfo["DISC_ARRAY_CASH"] = new double[2] { this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[0], this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[1] };
                 //Значення постійної знижки в процентному значенні
-                chqInfo["DISC_CONST_PERCENT"] = this.discConstPercent;
+                chqInfo["DISC_CONST_PERCENT"] = this.profileCnt.Default.getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT);
                 //Сума знижки і надбавки з процентними значеннями
                 chqInfo["DISC_ONLY_PERCENT"] = this.discOnlyPercent;
                 //Сума знижки і надбавки з грошовими значеннями
@@ -3199,21 +3486,19 @@ namespace PayDesk.Components.UI
                 chqInfo["DISC_FINAL_PERCENT"] = this.discCommonPercent;
                 //Загальний коефіціент знижки в грошовому значенні
                 chqInfo["DISC_FINAL_CASH"] = this.discCommonCash;
-                 */
+                 *--------/
             }
         }
         public DataTable GetProfileOrder(object profileKey)
         {
             Hashtable _suma = (Hashtable)this.Summa[profileKey];
             Hashtable _discount = (Hashtable)this.Discount[profileKey];
-            DataTable _cheque = this.Cheques.Tables[profileKey.ToString()];
-
+            DataTable _cheque = this.profileCnt.Default.Orders.Tables[profileKey.ToString()];
 
             Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure(_cheque);
             Hashtable discInfo = DataWorkShared.GetStandartDiscountInfoStructure2();
 
-
-            /* initializing discount values */
+            /* initializing discount values *------/
             bool _discApplied = CoreLib.GetValue<bool>(_discount, CoreConst.DISC_APPLIED);
             double[] _discArrPercent = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_PERCENT);
             double[] _discArrCash = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_CASH);
@@ -3222,10 +3507,10 @@ namespace PayDesk.Components.UI
             double _discOnlyCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_ONLY_CASH);
             double _discCommonPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_PERCENT);
             double _discCommonCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_CASH);
-            /* calculation items */
-            double _realSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_REAL_SUMA);
-            double _chqSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_CHEQUE_SUMA);
-            double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_TAX_SUMA);
+            /* calculation items *----/
+            double _realSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CASH_REAL_SUMA);
+            double _chqSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CASH_CHEQUE_SUMA);
+            double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CASH_TAX_SUMA);
 
             discInfo["DISC_ALL_ITEMS"] = this._fl_useTotDisc;
             //Масив з значеннями знижки та надбавки в процентних значеннях
@@ -3243,8 +3528,6 @@ namespace PayDesk.Components.UI
             //Загальний коефіціент знижки в грошовому значенні
             discInfo["DISC_FINAL_CASH"] = _discCommonCash;
             discInfo["DISC_APPLIED"] = _discApplied;
-
-
 
             chqInfo["STORE_NO"] = this.currentSubUnit;
             chqInfo["CLIENT_ID"] = this.clientID;
@@ -3265,7 +3548,8 @@ namespace PayDesk.Components.UI
             Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure();
             DataWorkShared.AppendExtendedProperties(dtOrder, chqInfo, true);
         }
-
+        */
+        // ---
         
         // discount
         /// <summary>
@@ -3274,11 +3558,12 @@ namespace PayDesk.Components.UI
         /// </summary>
         /// <param name="updateCustomer">Якщо true то результати обчислення будуть ще виведені на дисплей ФП</param>
         /// 
+        // will be removed after Profile2
         private void UpdateSumInfo(bool updateCustomer)
         {
-            UpdateSumInfo_single(updateCustomer);
+            /*UpdateSumInfo_single(updateCustomer);
 
-            /* perform update for all profiles if it necessary */
+            /* perform update for all profiles if it necessary *-/
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
             {
 
@@ -3313,20 +3598,20 @@ namespace PayDesk.Components.UI
                     if (selectAdditionalCommandForLegalProducts != string.Empty)
                         selectCommandForLegalProducts = string.Format("{0}", selectAdditionalCommandForLegalProducts);
 
-                    profileDataRows = this.Cheque.Select(selectCommandForLegalProducts);
-                    this.Cheques.Tables[de.Key.ToString()].Rows.Clear();
+                    profileDataRows = this.profileCnt.Default.Order.Select(selectCommandForLegalProducts);
+                    this.profileCnt.Default.Orders.Tables[de.Key.ToString()].Rows.Clear();
                     foreach (DataRow dr in profileDataRows)
-                        this.Cheques.Tables[de.Key.ToString()].Rows.Add(dr.ItemArray);
+                        this.profileCnt.Default.Orders.Tables[de.Key.ToString()].Rows.Add(dr.ItemArray);
 
 
-                    /* set discounts */
+                    /* set discounts *-/
 
 
 
                     Hashtable _discount = (Hashtable)this.Discount[de.Key.ToString()];
-                    _discount[CoreConst.DISC_ARRAY_PERCENT] = this.discArrPercent;
-                    _discount[CoreConst.DISC_ARRAY_CASH] = this.discArrCash;
-                    //_discount[CoreConst.DISC_CONST_PERCENT] = this.discConstPercent;
+                    _discount[CoreConst.DISC_ARRAY_PERCENT] = this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT);
+                    _discount[CoreConst.DISC_ARRAY_CASH] = this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH);
+                    //_discount[CoreConst.DISC_CONST_PERCENT] = this.profileCnt.Default.getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT);
                     //_discount[CoreConst.DISC_ONLY_CASH] = this.discOnlyCash;
                     //_discount[CoreConst.DISC_ONLY_PERCENT] = this.discOnlyPercent;
                     this.Discount[de.Key.ToString()] = _discount;
@@ -3334,7 +3619,7 @@ namespace PayDesk.Components.UI
 
                     UpdateSumInfo_profile(de.Key.ToString(), updateCustomer);
 
-                    if (this.Cheque.Rows.Count == 0)
+                    if (this.profileCnt.Default.Order.Rows.Count == 0)
                     {
                         realSUMA = chqSUMA = taxSUMA = 0.0;
                         UpdateSumDisplay(false, updateCustomer);
@@ -3342,660 +3627,75 @@ namespace PayDesk.Components.UI
                         return;
                     }
                 }
-            }
-        }
-
-        private void UpdateSumInfo_profile(object profileKey, bool updateCustomer)
-        {
-            //OnDeactivate(EventArgs.Empty);
-            //winapi.Funcs.OutputDebugString("X");
-            //if (inventChq)
-            //    return;
-            /* Current cheque is this.Cheques.Tables[profileKey.ToString()] */
-
-            Hashtable _suma = (Hashtable)this.Summa[profileKey];
-            Hashtable _discount = (Hashtable)this.Discount[profileKey];
-            DataTable _cheque = this.Cheques.Tables[profileKey.ToString()];
-
-            /* standart product filtering */
-
-            /*
-            DataRow[] profileDataRows = Cheque.Select("F = " + profileKey);
-            this.Cheques.Tables[profileKey.ToString()].Rows.Clear();
-
-            foreach (DataRow dr in profileDataRows)
-                this.Cheques.Tables[profileKey.ToString()].Rows.Add(dr.ItemArray);
-            */
-
-
-            /* initializing discount values */
-            bool _discApplied = CoreLib.GetValue<bool>(_discount, CoreConst.DISC_APPLIED);
-            double[] _discArrPercent = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_PERCENT);
-            double[] _discArrCash = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_CASH);
-            double _discConstPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_CONST_PERCENT);
-            double _discOnlyPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_ONLY_PERCENT);
-            double _discOnlyCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_ONLY_CASH);
-            double _discCommonPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_PERCENT);
-            double _discCommonCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_CASH);
-            /* calculation items */
-            double _realSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_REAL_SUMA);
-            double _chqSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_CHEQUE_SUMA);
-            double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_TAX_SUMA);
-            /* internal */
-            int i = 0;
-            double dValue = 0.0;
-            double taxValue = 0.0;
-            double artSum = 0.0;
-            int index = 0;
-            DataRow[] dRows = null;
-            double discSUMA = 0.0;
-            //DataRow[] artRecord = null;
-            double newPrice = 0.0;
-            double newTmpPrice = 0.0; //bool isSet = false;
-
-            /*  */
-            bool useConstDisc = _discArrPercent[0] == 0.0 && _discArrPercent[1] == 0.0 &&
-                _discArrCash[0] == 0.0 && _discArrCash[1] == 0.0;
-
-
-            // Get discount value
-            if (useConstDisc)
-            {
-                _discConstPercent = 0.0;
-                //form "sum" by static discount
-                if (ConfigManager.Instance.CommonConfiguration.APP_UseStaticDiscount)
-                    _discConstPercent = ConfigManager.Instance.CommonConfiguration.APP_StaticDiscountValue;
-                //form "sum" by dynamic discount
-                if (ConfigManager.Instance.CommonConfiguration.APP_UseStaticRules)
-                    _discConstPercent = CoreLib.UpdateSumbyRules(_cheque);
-            }
-            else
-            {
-                _discOnlyPercent = _discArrPercent[0] + _discArrPercent[1];
-                _discOnlyCash = _discArrCash[0] + _discArrCash[1];
-                _discOnlyPercent = MathLib.GetRoundedMoney(_discOnlyPercent);
-                _discOnlyCash = MathLib.GetRoundedMoney(_discOnlyCash);
-            }
-            if (_cheque.Rows.Count == 0) return;
-            /* removed             if (_cheque.Rows.Count == 0)
-            {
-                _realSUMA = _chqSUMA = _taxSUMA = 0.0;
-                UpdateSumDisplay(false, updateCustomer);
-                // this.PD_EmptyOrder;
-                return;
-            } */
-
-            // restore native cheque sum
-            // and set price acording to client's discount card
-            for (i = 0; i < _cheque.Rows.Count; i++)
-            {
-                newPrice = MathLib.GetDouble(_cheque.Rows[i]["ORIGPRICE"]);
-
-                //isSet = false;
-                if (this.clientPriceNo != 0)
-                {
-                    newTmpPrice = MathLib.GetDouble(_cheque.Rows[i]["PR" + this.clientPriceNo].ToString());
-                    if (newTmpPrice != 0.0) newPrice = newTmpPrice;
-                }
-                else if (UserConfig.Properties[8])
-                {
-                    //DataRow dRow = Cheque.Rows.Find(chequeDGV.CurrentRow.Cells["C"].Value);
-                    //price = AppFunc.AutomaticPrice(thisTot, dRow);
-                    newPrice = CoreLib.AutomaticPrice(MathLib.GetDouble(_cheque.Rows[i]["TOT"].ToString()), _cheque.Rows[i]);
-                }
-                _cheque.Rows[i]["PRICE"] = newPrice;
-                _cheque.Rows[i]["ASUM"] = _cheque.Rows[i]["SUM"] = MathLib.GetRoundedMoney(MathLib.GetDouble(_cheque.Rows[i]["TOT"].ToString()) * newPrice);
-                _cheque.Rows[i]["DISC"] = 0.0;
-            }
-            _chqSUMA = (double)_cheque.Compute("sum(SUM)", "");
-            _chqSUMA = MathLib.GetRoundedMoney(_chqSUMA);
-            _realSUMA = _chqSUMA;
-
-            //select rows with discount mode
-            try
-            {
-                dRows = _cheque.Select("USEDDISC = " + Boolean.TrueString);
-                _fl_useTotDisc = (dRows.Length == _cheque.Rows.Count);
-                object d = _cheque.Compute("Sum(SUM)", "USEDDISC = " + Boolean.TrueString);
-                if (d != DBNull.Value)
-                    double.TryParse(d.ToString(), out discSUMA);
-                if (dRows.Length == 0)
-                {
-                    _discApplied = false;
-                    /*
-                    _discArrPercent[0] = 0.0;
-                    _discArrPercent[1] = 0.0;
-                    _discArrCash[0] = 0.0;
-                    _discArrCash[1] = 0.0;
-                    */
-                }
-                else
-                    _discApplied = true;
-            }
-            catch { };
-
-
-            //procentnuj zagalnuj koeficient
-            if (useConstDisc)
-                _discCommonPercent = _discConstPercent;
-            else
-                _discCommonPercent = _discOnlyPercent;
-            if (discSUMA != 0.0)
-                _discCommonPercent += (_discOnlyCash * 100) / discSUMA;
-            _discCommonPercent = MathLib.GetRoundedMoney(_discCommonPercent);
-
-
-
-
-            DataRow[] prRows = null;
-            if (this.clientPriceNo != 0)
-                prRows = _cheque.Select("PR" + this.clientPriceNo + " <> 0");
-
-            if (_fl_useTotDisc && prRows == null)
-            {
-                //obrahunok realnoi sumu cheku zi znugkojy
-                if (useConstDisc)
-                {
-                    dValue = (_discConstPercent * discSUMA) / 100;
-                    dValue = MathLib.GetRoundedMoney(dValue);
-                    _realSUMA -= dValue;
-                }
-                else
-                {
-                    dValue = (_discOnlyPercent * discSUMA) / 100;
-                    dValue = MathLib.GetRoundedMoney(dValue);
-                    _realSUMA -= dValue;
-                    _realSUMA -= discOnlyCash;
-                }
-            }
-            else
-            {
-                _fl_useTotDisc = false;
-                for (i = 0; i < dRows.Length; i++)
-                {
-                    // don't use discount when client want to has another price for current article
-                    if (this.clientPriceNo != 0 && MathLib.GetDouble(dRows[i]["PR" + this.clientPriceNo].ToString()) > 0.0)
-                    {
-                        dRows[i]["DISC"] = 0.0;
-                        continue;
-                    }
-                    dRows[i]["DISC"] = _discCommonPercent;
-                    dValue = (_discCommonPercent * (double)dRows[i]["SUM"]) / 100;
-                    //discValue = AppFunc.GetRoundedMoney(discValue);
-                    dValue = (double)dRows[i]["SUM"] - dValue;
-                    dRows[i]["ASUM"] = MathLib.GetRoundedMoney(dValue);
-                }
-                _realSUMA = (double)_cheque.Compute("Sum(ASUM)", "");
-            }
-            _realSUMA = MathLib.GetRoundedMoney(_realSUMA);
-
-
-            //vuvedennja zagalnogo koeficientu znugku v 2oh tupah
-            //groshovuj koeficient
-            _discCommonCash = _chqSUMA - _realSUMA;
-            _discCommonCash = MathLib.GetRoundedMoney(_discCommonCash);
-
-            // calculating tax sum
-            taxSUMA = 0.0;
-            for (i = 0; i < _cheque.Rows.Count; i++)
-            {
-                try
-                {
-                    taxValue = MathLib.GetDouble(_cheque.Rows[i]["TAX_VAL"]);
-                    if (Boolean.Parse(_cheque.Rows[i]["USEDDISC"].ToString()))
-                    {
-                        artSum = (discCommonPercent * (double)_cheque.Rows[i]["SUM"]) / 100;
-                        artSum = (double)_cheque.Rows[i]["SUM"] - artSum;
-                        artSum = MathLib.GetRoundedMoney(artSum);
-                        taxValue = (artSum * taxValue) / (taxValue + 100);
-                    }
-                    else
-                        taxValue = (((double)_cheque.Rows[i]["ASUM"]) * taxValue) / (taxValue + 100);
-                }
-                catch
-                {
-                    taxValue = 0;
-                }
-
-                /*
-                index = Array.IndexOf<char>(ConfigManager.Instance.CommonConfiguration.TAX_AppTaxChar, _cheque.Rows[i]["VG"].ToString()[0]);
-                if (index >= 0)
-                {
-                    taxValue = ConfigManager.Instance.CommonConfiguration.TAX_AppTaxRates[index];
-
-                    if (ConfigManager.Instance.CommonConfiguration.TAX_AppTaxDisc[index])
-                    {
-                        artSum = (_discCommonPercent * (double)_cheque.Rows[i]["SUM"]) / 100;
-                        artSum = (double)_cheque.Rows[i]["SUM"] - artSum;
-                        artSum = MathLib.GetRoundedMoney(artSum);
-                        taxValue = (artSum * taxValue) / (taxValue + 100);
-                    }
-                    else
-                        taxValue = (((double)Cheque.Rows[i]["ASUM"]) * taxValue) / (taxValue + 100);
-                }
-                else
-                    taxValue = 0;
-                */
-                //if (!_fl_useTotDisc)
-                //else
-                //taxValue = AppFunc.GetRoundedMoney(taxValue);
-                _cheque.Rows[i]["TAX_MONEY"] = taxValue;
-                taxSUMA += taxValue;
-            }
-            //taxSUMA = (double)Cheque.Compute("sum(TAX_MONEY)", "");
-            taxSUMA = MathLib.GetRoundedMoney(taxSUMA);
-
-
-            /* initializing discount values */
-            CoreLib.SetContainerValue(ref _discount, CoreConst.DISC_APPLIED, _discApplied);
-            CoreLib.SetContainerValue(ref _discount, CoreConst.DISC_ARRAY_PERCENT, _discArrPercent);
-            CoreLib.SetContainerValue(ref _discount, CoreConst.DISC_ARRAY_CASH, _discArrCash);
-            CoreLib.SetContainerValue(ref _discount, CoreConst.DISC_CONST_PERCENT, _discConstPercent);
-            CoreLib.SetContainerValue(ref _discount, CoreConst.DISC_ONLY_PERCENT, _discOnlyPercent);
-            CoreLib.SetContainerValue(ref _discount, CoreConst.DISC_ONLY_CASH, _discOnlyCash);
-            CoreLib.SetContainerValue(ref _discount, CoreConst.DISC_FINAL_PERCENT, _discCommonPercent);
-            CoreLib.SetContainerValue(ref _discount, CoreConst.DISC_FINAL_CASH, _discCommonCash);
-            /* calculation items */
-            CoreLib.SetContainerValue(ref _suma, CoreConst.CALC_REAL_SUMA, _realSUMA);
-            CoreLib.SetContainerValue(ref _suma, CoreConst.CALC_CHEQUE_SUMA, _chqSUMA);
-            CoreLib.SetContainerValue(ref _suma, CoreConst.CALC_TAX_SUMA, _taxSUMA);
-
-            this.Discount[profileKey] = _discount;
-            this.Summa[profileKey] = _suma;
-
-            /*
-            double[] _discArrPercent = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_PERCENT);
-            double[] _discArrCash = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_CASH);
-            double _discConstPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_CONST_PERCENT);
-            double _discOnlyPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_ONLY_PERCENT);
-            double _discOnlyCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_ONLY_CASH);
-            double _discCommonPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_PERCENT);
-            double _discCommonCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_CASH);*/
-            /* calculation items */
-            /*
-double _realSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);
-double _chqSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);
-double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
-
-
-            if (!_fl_isInvenCheque)
-                UpdateSumDisplay(true, updateCustomer);
-
-            return;
-            //winapi.Funcs.OutputDebugString("Z");
-        }//ok
-
-        private void UpdateSumInfo_single(bool updateCustomer)
-        {
-            //OnDeactivate(EventArgs.Empty);
-            //winapi.Funcs.OutputDebugString("X");
-            //if (inventChq)
-            //    return;
-
-            bool useConstDisc = discArrPercent[0] == 0.0 && discArrPercent[1] == 0.0 &&
-                discArrCash[0] == 0.0 && discArrCash[1] == 0.0;
-
-            // Get discount value
-            if (useConstDisc)
-            {
-                discConstPercent = 0.0;
-                //form "sum" by static discount
-                if (ConfigManager.Instance.CommonConfiguration.APP_UseStaticDiscount)
-                    discConstPercent = ConfigManager.Instance.CommonConfiguration.APP_StaticDiscountValue;
-                //form "sum" by dynamic discount
-                if (ConfigManager.Instance.CommonConfiguration.APP_UseStaticRules)
-                    discConstPercent = CoreLib.UpdateSumbyRules(Cheque);
-            }
-            else
-            {
-                discOnlyPercent = discArrPercent[0] + discArrPercent[1];
-                discOnlyCash = discArrCash[0] + discArrCash[1];
-                discOnlyPercent = MathLib.GetRoundedMoney(discOnlyPercent);
-                discOnlyCash = MathLib.GetRoundedMoney(discOnlyCash);
-            }
-
-            if (Cheque.Rows.Count == 0)
-            {
-                realSUMA = chqSUMA = taxSUMA = 0.0;
-                UpdateSumDisplay(false, updateCustomer);
-                // this.PD_EmptyOrder;
-                return;
-            }
-
-            int i = 0;
-            double dValue = 0.0;
-            double taxValue = 0.0;
-            double artSum = 0.0;
-            //int index = 0;
-            DataRow[] dRows = null;
-            double discSUMA = 0.0;
-
-
-            //procentnuj zagalnuj koeficient
-            if (useConstDisc)
-                discCommonPercent = discConstPercent;
-            else
-                discCommonPercent = discOnlyPercent;
-            if (discSUMA != 0.0)
-                discCommonPercent += (discOnlyCash * 100) / discSUMA;
-            discCommonPercent = MathLib.GetRoundedMoney(discCommonPercent);
-
-
-            // restore native cheque sum
-            // and set price acording to client's discount card
-            //DataRow[] artRecord = null;
-            double newPrice = 0.0;
-            double newTmpPrice = 0.0; //bool isSet = false;
-            Hashtable profileDefinedTaxGrid = new Hashtable();
-            Hashtable profileCompatibleTaxGrid = new Hashtable();
-            for (i = 0; i < Cheque.Rows.Count; i++)
-            {
-                newPrice = MathLib.GetDouble(Cheque.Rows[i]["ORIGPRICE"]);
-
-                //isSet = false;
-                if (this.clientPriceNo != 0)
-                {
-                    newTmpPrice = MathLib.GetDouble(Cheque.Rows[i]["PR" + this.clientPriceNo].ToString());
-                    if (newTmpPrice != 0.0) newPrice = newTmpPrice;
-                }
-                else if (UserConfig.Properties[8])
-                {
-                    //DataRow dRow = Cheque.Rows.Find(chequeDGV.CurrentRow.Cells["C"].Value);
-                    //price = AppFunc.AutomaticPrice(thisTot, dRow);
-                    double _newPrice = CoreLib.AutomaticPrice(MathLib.GetDouble(Cheque.Rows[i]["TOT"].ToString()), Cheque.Rows[i]);
-                    try
-                    {
-                        profileDefinedTaxGrid = (Hashtable)driver.Config.ConfigManager.Instance.CommonConfiguration.TAX_DefinedRates[Cheque.Rows[i]["F"]];
-                    }
-                    catch { }
-                    // new tax mode
-                    bool _thisRowCanUseDiscount = true;
-                    try
-                    {
-                        // get application tax char with compatible tax grid
-                        string[] definedTaxData = profileDefinedTaxGrid[Cheque.Rows[i]["VG"].ToString()].ToString().Split(';');
-                        _thisRowCanUseDiscount = Boolean.Parse(definedTaxData[1]);
-                    }
-                    catch { }
-
-                    if (_thisRowCanUseDiscount)
-                    {
-
-                        double _discountPrices = 0.0;
-                        //for (int ii = 0; ii < Cheque.Rows.Count; ii++)
-                        //{
-                        if (_newPrice != (double)Cheque.Rows[i]["ORIGPRICE"])
-                        {
-                            _discountPrices = 100 - _newPrice * 100 / (double)Cheque.Rows[i]["ORIGPRICE"];
-                            if (_discountPrices > discCommonPercent)
-                            {
-                                Cheque.Rows[i]["USEDDISC"] = Boolean.FalseString;
-                                newPrice = _newPrice;
-                            }
-                            else
-                            {
-                                Cheque.Rows[i]["USEDDISC"] = Boolean.TrueString;
-                                newPrice = MathLib.GetDouble(Cheque.Rows[i]["ORIGPRICE"]);
-                            }
-                        }
-                        else newPrice = _newPrice;
-                        //}
-                    }
-                    else newPrice = _newPrice;
-                }
-                else if (UserConfig.Properties[1] || UserConfig.Properties[2])
-                {
-                    newPrice = MathLib.GetDouble(Cheque.Rows[i]["PRICE"]);
-                }
-                Cheque.Rows[i]["PRICE"] = newPrice;
-                Cheque.Rows[i]["ASUM"] = Cheque.Rows[i]["SUM"] = MathLib.GetRoundedMoney(MathLib.GetDouble(Cheque.Rows[i]["TOT"].ToString()) * newPrice);
-                Cheque.Rows[i]["DISC"] = 0.0;
-            }
-            chqSUMA = (double)Cheque.Compute("sum(SUM)", "");
-            chqSUMA = MathLib.GetRoundedMoney(chqSUMA);
-            realSUMA = chqSUMA;
-
-
-
-
-            // check if we apply discount ot second or third price 
-            /*if (UserConfig.Properties[8])
-            {
-                double _discountPrices = 0.0;
-                for (i = 0; i < Cheque.Rows.Count; i++)
-                {
-                    if ((double)Cheque.Rows[i]["PRICE"] != (double)Cheque.Rows[i]["ORIGPRICE"])
-                    {
-                        _discountPrices = 100 - (double)Cheque.Rows[i]["PRICE"] * 100 / (double)Cheque.Rows[i]["ORIGPRICE"];
-                        if (_discountPrices > discCommonPercent)
-                        {
-                            Cheque.Rows[i]["USEDDISC"] = Boolean.FalseString;
-                        }
-                        else
-                        {
-                            Cheque.Rows[i]["USEDDISC"] = Boolean.TrueString;
-                            Cheque.Rows[i]["PRICE"] = Cheque.Rows[i]["ORIGPRICE"];
-                        }
-                    }
-                }
             }*/
-
-            //select rows with discount mode
-            try
-            {
-                dRows = Cheque.Select("USEDDISC = " + Boolean.TrueString);
-                _fl_useTotDisc = (dRows.Length == Cheque.Rows.Count);
-                //discSUMA = (double)Cheque.Compute("Sum(SUM)", "USEDDISC = " + Boolean.TrueString);
-                object d = Cheque.Compute("Sum(SUM)", "USEDDISC = " + Boolean.TrueString);
-                if (d != DBNull.Value)
-                    double.TryParse(d.ToString(), out discSUMA);
-                if (dRows.Length == 0)
-                {
-                    this.discApplied = false;
-                    /*
-                    _discArrPercent[0] = 0.0;
-                    _discArrPercent[1] = 0.0;
-                    _discArrCash[0] = 0.0;
-                    _discArrCash[1] = 0.0;
-                    */
-                }
-                else
-                    this.discApplied = true;
-            }
-            catch { };
-
-
-            DataRow[] prRows = null;
-            if (this.clientPriceNo != 0)
-                prRows = Cheque.Select("PR" + this.clientPriceNo + " <> 0");
-
-
-            if (_fl_useTotDisc && prRows == null)
-            {
-                //obrahunok realnoi sumu cheku zi znugkojy
-                if (useConstDisc)
-                {
-                    dValue = (discConstPercent * discSUMA) / 100;
-                    dValue = MathLib.GetRoundedMoney(dValue);
-                    realSUMA -= dValue;
-                }
-                else
-                {
-                    dValue = (discOnlyPercent * discSUMA) / 100;
-                    dValue = MathLib.GetRoundedMoney(dValue);
-                    realSUMA -= dValue;
-                    realSUMA -= discOnlyCash;
-                }
-            }
-            else
-            {
-                _fl_useTotDisc = false;
-                for (i = 0; i < dRows.Length; i++)
-                {
-                    // don't use discount when client want to has another price for current article
-                    if (this.clientPriceNo != 0 && MathLib.GetDouble(dRows[i]["PR" + this.clientPriceNo].ToString()) > 0.0)
-                    {
-                        dRows[i]["DISC"] = 0.0;
-                        continue;
-                    }
-                    dRows[i]["DISC"] = discCommonPercent;
-                    dValue = (discCommonPercent * (double)dRows[i]["SUM"]) / 100;
-                    //discValue = AppFunc.GetRoundedMoney(discValue);
-                    dValue = (double)dRows[i]["SUM"] - dValue;
-                    dRows[i]["ASUM"] = MathLib.GetRoundedMoney(dValue);
-                }
-                realSUMA = (double)Cheque.Compute("Sum(ASUM)", "");
-            }
-            realSUMA = MathLib.GetRoundedMoney(realSUMA);
-
-            //vuvedennja zagalnogo koeficientu znugku v 2oh tupah
-            //groshovuj koeficient
-            discCommonCash = chqSUMA - realSUMA;
-            discCommonCash = MathLib.GetRoundedMoney(discCommonCash);
-
-            // calculating tax sum
-            taxSUMA = 0.0;
-
-            //Hashtable profileDefinedTaxGrid = new Hashtable();
-            //Hashtable profileCompatibleTaxGrid = new Hashtable();
-            //bool taxGridError = false;
-            //string[] definedTaxData = null;
-            for (i = 0; i < Cheque.Rows.Count; i++)
-            {/*
-                try
-                {
-                    profileDefinedTaxGrid = (Hashtable)driver.Config.ConfigManager.Instance.CommonConfiguration.TAX_DefinedRates[Cheque.Rows[i]["F"]];
-                    profileCompatibleTaxGrid = (Hashtable)driver.Config.ConfigManager.Instance.CommonConfiguration.TAX_Compatibility[Cheque.Rows[i]["F"]];
-                }
-                catch { taxGridError = false; }
-                */
-                // new tax operation
-                //Cheque.Rows[i]["VG"].ToString()[0]
-                // if ( true)
-                // {
-                // defined data structure
-                // 0 - tax rate
-                // 1- use discount
-
-                //definedTaxData = profileDefinedTaxGrid[profileCompatibleTaxGrid[Cheque.Rows[i]["VG"].ToString()[0]]].ToString().Split(';');
-                //taxValue = MathLib.GetDouble(definedTaxData[0]);
-                try
-                {
-                    taxValue = MathLib.GetDouble(Cheque.Rows[i]["TAX_VAL"]);
-                    if (Boolean.Parse(Cheque.Rows[i]["USEDDISC"].ToString()))
-                    {
-                        artSum = (discCommonPercent * (double)Cheque.Rows[i]["SUM"]) / 100;
-                        artSum = (double)Cheque.Rows[i]["SUM"] - artSum;
-                        artSum = MathLib.GetRoundedMoney(artSum);
-                        taxValue = (artSum * taxValue) / (taxValue + 100);
-                    }
-                    else
-                        taxValue = (((double)Cheque.Rows[i]["ASUM"]) * taxValue) / (taxValue + 100);
-                }
-                catch
-                {
-                    taxValue = 0;
-                }
-                /* }
-                 else
-                     taxValue = 0;*/
-
-                /* // old tax operation
-                index = Array.IndexOf<char>(ConfigManager.Instance.CommonConfiguration.TAX_AppTaxChar, Cheque.Rows[i]["VG"].ToString()[0]);
-                if (index >= 0)
-                {
-                    taxValue = ConfigManager.Instance.CommonConfiguration.TAX_AppTaxRates[index];
-
-                    if (ConfigManager.Instance.CommonConfiguration.TAX_AppTaxDisc[index])
-                    {
-                        artSum = (discCommonPercent * (double)Cheque.Rows[i]["SUM"]) / 100;
-                        artSum = (double)Cheque.Rows[i]["SUM"] - artSum;
-                        artSum = MathLib.GetRoundedMoney(artSum);
-                        taxValue = (artSum * taxValue) / (taxValue + 100);
-                    }
-                    else
-                        taxValue = (((double)Cheque.Rows[i]["ASUM"]) * taxValue) / (taxValue + 100);
-                }
-                else
-                    taxValue = 0;
-                */
-                //if (!_fl_useTotDisc)
-                //else
-                //taxValue = AppFunc.GetRoundedMoney(taxValue);
-                Cheque.Rows[i]["TAX_MONEY"] = taxValue;
-                taxSUMA += taxValue;
-            }
-            //taxSUMA = (double)Cheque.Compute("sum(TAX_MONEY)", "");
-            taxSUMA = MathLib.GetRoundedMoney(taxSUMA);
-
-            if (!_fl_isInvenCheque)
-                UpdateSumDisplay(true, updateCustomer);
-
-            //winapi.Funcs.OutputDebugString("Z");
-        }//ok
+        }
 
         /// <summary>
         /// Custom method. Perform updating of information labels. Also update device displai
         /// </summary>
         /// <param name="updateAddChequeInfo"></param>
         /// <param name="updateCustomer">If true methid will update device display otherwise false</param>
-        private void UpdateSumDisplay(bool updateAddChequeInfo, bool updateCustomer)
+        private void UpdateSumDisplay(/*bool updateAddChequeInfo, bool updateCustomer*/ )
         {
-            if (updateAddChequeInfo)
+            // ***** if (updateAddChequeInfo)
                 addChequeInfo.Text = string.Empty;
             // if (updateAddChequeInfo && discCommonPercent != 0.0)
 
-            if (discConstPercent != 0.0 || discArrPercent[0] != 0.0 || discArrPercent[1] != 0.0 ||
-                discArrCash[0] != 0.0 || discArrCash[1] != 0.0)
+            /*if (this.profileCnt.Default.getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT) != 0.0 || this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[0] != 0.0 || this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[1] != 0.0 ||
+                this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[0] != 0.0 || this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[1] != 0.0)*/
+            if (this.profileCnt.Default.customCashDiscountSomeEnabled)
             {
                 object[] discInfo = new object[6];
                 string valueMask = "{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}{1}";
-                bool useConstDisc = discArrPercent[0] == 0.0 && discArrPercent[1] == 0.0 &&
-                    discArrCash[0] == 0.0 && discArrCash[1] == 0.0;
-
+                /*bool useConstDisc = this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[0] == 0.0 && this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[1] == 0.0 &&
+                    this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[0] == 0.0 && this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[1] == 0.0;
+                */
                 discInfo[0] = "";
-                if (Cheque.Rows.Count != 0)
+                if (this.profileCnt.Default.DataOrder.Rows.Count != 0)
                     if (_fl_useTotDisc)
                         discInfo[0] = " загальна";
                     else
                         discInfo[0] = " позиційна";
 
-                if (useConstDisc)
+                // *** if (useConstDisc)
+                if (this.profileCnt.Default.customCashDiscountPropgramOnlyEnable)
                 {
                     discInfo[0] = "постійна" + discInfo[0].ToString();
-                    discInfo[1] = discConstPercent > 0 ? "знижка" : "націнка";
-                    discInfo[2] = string.Format(valueMask, Math.Abs(discConstPercent), "%");
+                    discInfo[1] = this.profileCnt.Default.getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT) > 0 ? "знижка" : "націнка";
+                    discInfo[2] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT)), "%");
                 }
                 else
                     if (ConfigManager.Instance.CommonConfiguration.APP_OnlyDiscount)
                     {
-                        if (discArrPercent[0] != 0.0 || discArrCash[0] != 0.0)
+                        // ** if (this.profileCnt.Default.customCashDiscountItems.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[0] != 0.0 || this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[0] != 0.0)
+                        if (this.profileCnt.Default.customCashDiscountManualSavingsEnabled)                        
                         {
+                            // !!!! NEED TO BE REFACTORED
                             discInfo[1] = "знижка";
                             if (ConfigManager.Instance.CommonConfiguration.APP_DefaultTypeDisc == 0)
-                                if (discArrCash[0] == 0.0)
-                                    discInfo[2] = string.Format(valueMask, discArrPercent[0], "%");
+                                if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_SUB] == 0.0)
+                                    discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB], "%");
                                 else
-                                    discInfo[2] = string.Format(valueMask, discArrCash[0], "грн.");
+                                    discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_SUB], "грн.");
                             else
-                                if (discArrPercent[0] == 0.0)
-                                    discInfo[2] = string.Format(valueMask, discArrCash[0], "грн.");
+                                if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] == 0.0)
+                                    discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_SUB], "грн.");
                                 else
-                                    discInfo[2] = string.Format(valueMask, discArrPercent[0], "%");
+                                    discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB], "%");
                         }
-                        if (discArrPercent[1] != 0.0 || discArrCash[1] != 0.0)
+                        if (this.profileCnt.Default.customCashDiscountManualExtraEnabled)
                         {
                             discInfo[1] = "націнка";
                             if (ConfigManager.Instance.CommonConfiguration.APP_DefaultTypeDisc == 0)
-                                if (discArrCash[1] == 0.0)
-                                    discInfo[2] = string.Format(valueMask, Math.Abs(discArrPercent[1]), "%");
+                                if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_ADD] == 0.0)
+                                    discInfo[2] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD]), "%");
                                 else
-                                    discInfo[2] = string.Format(valueMask, Math.Abs(discArrCash[1]), "грн.");
+                                    discInfo[2] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_ADD]), "грн.");
                             else
-                                if (discArrPercent[1] == 0.0)
-                                    discInfo[2] = string.Format(valueMask, Math.Abs(discArrCash[1]), "грн.");
+                                if (this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT_ADD)[1] == 0.0)
+                                    discInfo[2] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_ADD]), "грн.");
                                 else
-                                    discInfo[2] = string.Format(valueMask, Math.Abs(discArrPercent[1]), "%");
+                                    discInfo[2] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD]), "%");
                         }
                     }
                     else
@@ -4003,29 +3703,29 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                         discInfo[1] = "знижка";
 
                         if (ConfigManager.Instance.CommonConfiguration.APP_DefaultTypeDisc == 0)
-                            if (discArrCash[0] == 0.0)
-                                discInfo[2] = string.Format(valueMask, discArrPercent[0], "%");
+                            if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_SUB] == 0.0)
+                                discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB], "%");
                             else
-                                discInfo[2] = string.Format(valueMask, discArrCash[0], "грн.");
+                                discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_SUB], "грн.");
                         else
-                            if (discArrPercent[0] == 0.0)
-                                discInfo[2] = string.Format(valueMask, discArrCash[0], "грн.");
+                            if (this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT_SUB)[0] == 0.0)
+                                discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_SUB], "грн.");
                             else
-                                discInfo[2] = string.Format(valueMask, discArrPercent[0], "%");
+                                discInfo[2] = string.Format(valueMask, this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB], "%");
 
                         discInfo[3] = "i";
                         discInfo[4] = "націнка";
 
                         if (ConfigManager.Instance.CommonConfiguration.APP_DefaultTypeDisc == 0)
-                            if (discArrCash[1] == 0.0)
-                                discInfo[5] = string.Format(valueMask, Math.Abs(discArrPercent[1]), "%");
+                            if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_ADD] == 0.0)
+                                discInfo[5] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD]), "%");
                             else
-                                discInfo[5] = string.Format(valueMask, Math.Abs(discArrCash[1]), "грн.");
+                                discInfo[5] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_ADD]), "грн.");
                         else
-                            if (discArrPercent[1] == 0.0)
-                                discInfo[5] = string.Format(valueMask, Math.Abs(discArrCash[1]), "грн.");
+                            if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD] == 0.0)
+                                discInfo[5] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_CASH_ADD]), "грн.");
                             else
-                                discInfo[5] = string.Format(valueMask, Math.Abs(discArrPercent[1]), "%");
+                                discInfo[5] = string.Format(valueMask, Math.Abs(this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD]), "%");
                     }
 
                 addChequeInfo.Text = valueMask = string.Empty;
@@ -4035,35 +3735,372 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
             }
 
             //Show cheque Suma on display
-            CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", realSUMA);
+            // *** CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", realSUMA);
+            CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", this.profileCnt.getDefaultProfileValue<double>(CoreConst.CASH_REAL_SUMA));
 
-            if (ConfigManager.Instance.CommonConfiguration.APP_ShowInfoOnIndicator && Program.AppPlugins.IsActive(PluginType.FPDriver) && updateCustomer)
+            if (ConfigManager.Instance.CommonConfiguration.APP_ShowInfoOnIndicator && Program.AppPlugins.IsActive(PluginType.FPDriver)/* && updateCustomer*/)
                 try
                 {
                     string _topLabel = "СУМА:" + CashLbl.Text;
-                    if (discCommonPercent != 0)
+                    // if (discCommonPercent != 0)
+                    if (profileCnt.getDefaultProfileValue<double>(CoreConst.DISC_FINAL_PERCENT) != 0.0)
                     {
-                        if (discCommonPercent > 0)
+                        if (profileCnt.getDefaultProfileValue<double>(CoreConst.DISC_FINAL_PERCENT) > 0)
                             _topLabel += " Зн:";
                         else
                             _topLabel += " Нб:";
-                        _topLabel += Math.Abs(discCommonPercent) + "%";
+                        _topLabel += Math.Abs(profileCnt.getDefaultProfileValue<double>(CoreConst.DISC_FINAL_PERCENT)) + "%";
                     }
 
                     string[] lines = new string[] { string.Empty, string.Empty };
                     bool[] show = new bool[] { true, true };
-                    if (Cheque.Rows.Count != 0)
+                    if (this.profileCnt.Default.DataOrder.Rows.Count != 0)
                         lines = new string[] { _topLabel, chequeDGV.CurrentRow.Cells["DESC"].Value.ToString() };
                     Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_SendCustomer", lines, show);
                 }
                 catch { }
         }
 
+        private void OrderClose(bool isLegalMode)
+        {
+
+            List<Hashtable> fullResult = new List<Hashtable>();
+            Hashtable profileResult = new Hashtable();
+            bool appIsLegal = isLegalMode;
+            int pIdx = 0;
+            object currentProfileKey = new object();
+            object[] localData = new object[9];
+            string chqNom = string.Empty;
+            List<string> chqNumbers = new List<string>();
+            List<string> chqNumbersFull = new List<string>();
+            bool generalError = false;
+            uiWndPayment pMethod = new uiWndPayment(this.profileCnt.getDefaultProfileValue<double>(CoreConst.CASH_REAL_SUMA), true);
+            pMethod.ShowDialog();
+            pMethod.Dispose();
+
+            if (pMethod.DialogResult != DialogResult.OK)
+                return;
+
+            if (UserConfig.Properties[4] &&
+                DialogResult.Yes == MMessageBoxEx.Show(this.chequeDGV, "Видати накладну згідно цього чеку ?", Application.ProductName,
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2))
+            {
+                _fl_taxDocRequired = true;
+                CashLbl.Image = Properties.Resources.naklad;
+            }
+
+            switch (pMethod.Type[0])
+            {
+                case 0: { digitalPanel.BackgroundImage = Properties.Resources.payment_card; break; }
+                case 1: { digitalPanel.BackgroundImage = Properties.Resources.payment_credit; break; }
+                case 2: { digitalPanel.BackgroundImage = Properties.Resources.payment_cheque; break; }
+                case 3: { digitalPanel.BackgroundImage = Properties.Resources.payment_cash; break; }
+            }
+
+            // check if there are any profile as legal marked
+            // if it exists - use it at first and then all other
+            // otherwise peroform profiles as they are
+
+
+            /*List<string> _allProfiles = new List<string>();
+            bool hasLegalProfile = ConfigManager.Instance.CommonConfiguration.PROFILES_Items.ContainsKey(ConfigManager.Instance.CommonConfiguration.PROFILES_LegalProgileID);
+            foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
+                _allProfiles.Add(de.Key.ToString());
+            if (hasLegalProfile)
+            {
+                _allProfiles.Remove(ConfigManager.Instance.CommonConfiguration.PROFILES_LegalProgileID.ToString());
+                _allProfiles.Insert(0, ConfigManager.Instance.CommonConfiguration.PROFILES_LegalProgileID.ToString());
+            }*/
+
+            List<string> _allProfiles = this.profileCnt.getProfileList();
+
+
+            Dictionary<string, object> _orgPaymanet = pMethod.PaymentInfo;
+            // *** DataTable dtCopy = this.PD_Order.Copy();
+            AppProfile dtCopy = (AppProfile)this.profileCnt.Default.Clone();
+            int skippedProfiles = 0;
+
+            //foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
+            foreach (string profileKey in _allProfiles.ToArray())
+            {
+                try
+                {
+                    // profile id
+                    //profileKey = de.Key;
+                    // profile main index
+                    currentProfileKey = profileKey;
+
+                    pIdx++;
+                    /*
+                    Hashtable _suma = (Hashtable)this.Summa[profileKey];
+                    Hashtable _discount = (Hashtable)this.Discount[profileKey];
+                    DataTable _cheque = this.profileCnt.Default.Orders.Tables[profileKey.ToString()];
+                    */
+
+
+
+                    if (this.profileCnt[profileKey].DataOrder.Rows.Count == 0)
+                    {
+                        skippedProfiles++;
+                        continue;
+                    }
+
+                    /* initializing discount values */
+                    double[] _discArrPercent = {this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_SUB), 
+                                               this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_ARRAY_PERCENT_ADD)};
+                    double[] _discArrCash = { this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_SUB), 
+                                                this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_ARRAY_CASH_ADD) };
+                    double _discConstPercent = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT);
+                    double _discOnlyPercent = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_ONLY_PERCENT);
+                    double _discOnlyCash = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_ONLY_CASH);
+                    double _discCommonPercent = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_FINAL_PERCENT);
+                    double _discCommonCash = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.DISC_FINAL_CASH);
+                    /* calculation items */
+                    double _realSUMA = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.CASH_REAL_SUMA);
+                    double _chqSUMA = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.CASH_CHEQUE_SUMA);
+                    double _taxSUMA = this.profileCnt[profileKey].getPropertyValue<double>(CoreConst.CASH_TAX_SUMA);
+
+
+                    // it's checking if the running profile allows to save order as legal
+                    appIsLegal = isLegalMode && ConfigManager.Instance.CommonConfiguration.PROFILES_LegalProgileID.Equals(profileKey);
+                    //closeResult = CloseCheque_profile(de.Key.ToString(), isLegalMode);
+
+                    profileResult = new Hashtable();
+
+                    profileResult["PROFILE_ID"] = profileKey;
+                    profileResult["PROFILE_LAST"] = pIdx == ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count;
+
+
+
+                    /* close logic implementation */
+
+                    // if this is a legal or in-between profile and there are other profiles
+                    // it requires to change payment info and set it without change
+                    // but las profile should has the rest and chnaged payment
+
+                    Dictionary<string, object> _tmpPaymanet = new Dictionary<string, object>(_orgPaymanet);
+                    _tmpPaymanet["CASHLIST"] = new List<double>((List<double>)_tmpPaymanet["CASHLIST"]);
+                    _tmpPaymanet["TYPE"] = new List<byte>((List<byte>)_tmpPaymanet["TYPE"]);
+
+                    if (_allProfiles.IndexOf(profileKey) + 1 < _allProfiles.Count)
+                    {
+                        _tmpPaymanet["SUMA"] = _realSUMA;
+                        ((List<double>)_tmpPaymanet["CASHLIST"])[0] = _realSUMA;
+                        _tmpPaymanet["REST"] = 0.0;
+
+                        // removing these values from original payment
+                        _orgPaymanet["SUMA"] = MathLib.GetRoundedMoney(MathLib.GetDouble(_orgPaymanet["SUMA"]) - _realSUMA);
+                        ((List<double>)_orgPaymanet["CASHLIST"])[0] = MathLib.GetRoundedMoney(MathLib.GetDouble(((List<double>)_orgPaymanet["CASHLIST"])[0]) - _realSUMA);
+                    }
+
+                    profileResult[CoreConst.ORDER_PAYMENT] = _tmpPaymanet;
+                    profileResult[CoreConst.ORDER_IS_LEGAL] = isLegalMode;
+
+
+                    localData = new object[8];
+                    chqNom = string.Empty;
+
+
+                    localData[0] = clientID == string.Empty ? ConfigManager.Instance.CommonConfiguration.APP_ClientID : clientID;
+                    localData[1] = _discCommonPercent;
+                    localData[2] = _realSUMA;
+                    localData[3] = _taxSUMA;
+                    localData[4] = _fl_taxDocRequired;
+                    localData[5] = _fl_isReturnCheque;
+                    localData[6] = _fl_useTotDisc;
+
+                    //winapi.Funcs.OutputDebugString("B");
+                    if (appIsLegal)
+                    {
+                        global::components.Components.WinApi.Com_WinApi.OutputDebugString("is legal cheque for profile " + currentProfileKey + " and legal profile is " + ConfigManager.Instance.CommonConfiguration.PROFILES_LegalProgileID);
+                        try
+                        {
+                            if (_fl_isReturnCheque)
+                                Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_PayMoney", this.profileCnt[profileKey].DataOrder, ConfigManager.Instance.CommonConfiguration.APP_DoseDecimals, _fl_useTotDisc, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals);
+                            else
+                                Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_Sale", this.profileCnt[profileKey].DataOrder, ConfigManager.Instance.CommonConfiguration.APP_DoseDecimals, _fl_useTotDisc, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals);
+
+                            if (_fl_useTotDisc && _discCommonPercent != 0.0)
+                            {
+                                Program.AppPlugins.GetActive<IFPDriver>().CallFunction(
+                                    "FP_Discount",
+                                     new object[] {
+                                     (byte)2,
+                                     _discCommonPercent, 
+                                     ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, 
+                                     string.Empty
+                                 }
+                                );
+                            }
+
+                            if (lastPayment >= pMethod.Type.Count)
+                                lastPayment = 0;
+
+                            for (int i = lastPayment; i < pMethod.Type.Count; i++)
+                            {
+                                Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_Payment", pMethod.Type[i], ((List<double>)_tmpPaymanet["CASHLIST"])[i], true);
+                                lastPayment++;
+                            }
+
+                            chqNom = Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_LastChqNo", _fl_isReturnCheque).ToString();
+                            localData[7] = Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_LastZRepNo", _fl_isReturnCheque);
+                        }
+                        catch (Exception ex)
+                        {
+                            CoreLib.WriteLog(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name);
+
+                            MMessageBoxEx.Show(this.chequeDGV, "Помилка під час закриття чеку" + "\r\n" + ex.Message,
+                                Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                            uiWndChqNomRequest chqR = new uiWndChqNomRequest();
+
+                            bool customOrderNo = false;
+                            if (chqR.ShowDialog(this.chequeDGV) == System.Windows.Forms.DialogResult.Yes)
+                            {
+                                customOrderNo = true;
+                                chqNom = chqR.ChequeNumber.ToString();
+                            }
+
+                            chqR.Dispose();
+
+                            if (!customOrderNo)
+                                return;
+                        }
+
+                        try
+                        {
+                            Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_OpenBox");
+                        }
+                        catch (Exception ex)
+                        {
+                            MMessageBoxEx.Show(this.chequeDGV, "Помилка відкриття грошової скриньки" + "\r\n" + ex.Message,
+                                Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            CoreLib.WriteLog(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name);
+                        }
+                    }
+
+                    lastPayment = 0;
+                    chqNom = DataWorkCheque.SaveCheque(this.profileCnt[profileKey].DataOrder, localData, pMethod.Type[0], chqNom);
+                    profileResult[CoreConst.ORDER_NO] = chqNom;
+
+                    // *** DataWorkShared.SetOrderProperty(this.profileCnt[profileKey].DataOrder, CoreConst.ORDER_PAYMENT, _tmpPaymanet);
+                    // ***DataWorkShared.SetOrderProperty(this.profileCnt[profileKey].DataOrder, CoreConst.ORDER_NO, chqNom);
+
+
+                    this.profileCnt[profileKey].Properties[CoreConst.ORDER_PAYMENT] = _tmpPaymanet;
+                    this.profileCnt[profileKey].Properties[CoreConst.ORDER_NO] = chqNom;
+
+
+                    if (appIsLegal && UserConfig.Properties[10])
+                    {
+                        // *** must be migrated
+                        // *** DataWorkOutput.Print(Enums.PrinterType.OrderLegal, this.GetProfileOrder(profileKey));
+                    }
+
+                    if (!appIsLegal && UserConfig.Properties[11])
+                    {
+                        // *** must be migrated
+                        // *** DataWorkOutput.Print(Enums.PrinterType.OrderNormal, this.GetProfileOrder(profileKey));
+                    }
+
+                    fullResult.Add(profileResult);
+                    chqNumbers.Add(chqNom);
+                    chqNumbersFull.Add(appIsLegal ? chqNom : 'N' + chqNom);
+
+                    // *** RowsRemoved_MyEvent_profile(profileKey);
+                    this.profileCnt[profileKey].resetOrder();
+                }
+                catch { generalError = true; }
+
+                if (generalError)
+                    break;
+            }
+
+            if (skippedProfiles == this.profileCnt.Profiles.Count/* ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count*/)
+            {
+                MMessageBox.Show(this.chequeDGV, "Немає товарів для усіх профілів. Обновіть фільтри профілів.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //UpdateSumInfo_profile(currentProfileKey, false);
+                profileCnt[currentProfileKey].refresh();
+                return;
+            }
+
+
+            if (generalError)
+            {
+                MMessageBox.Show(this.chequeDGV, "Виникла помилка під час збереження частини чеку.\r\nСпробуйте ще раз закрити чек", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // - UpdateSumInfo_profile(currentProfileKey, false);
+                profileCnt[currentProfileKey].refresh();
+                return;
+            }
+            //if (DataWorkShared.ExtractBillProperty(dtCopy, CoreConst.BILL_OID, string.Empty) != string.Empty)
+
+            if ( this.profileCnt.Default.Properties[CoreConst.BILL_OID] != null)
+            {
+                //CoreLib.LockBill(this.PD_Order.Copy(), chqNom);
+                if (ConfigManager.Instance.CommonConfiguration.Content_Bills_KeepAliveAfterCheque)
+                {
+                    //string billChqNumFmt = string.Empty;
+                    //for (int cqnc = 0; cqnc < chqNumbers.Count; cqnc++)
+                    //    billChqNumFmt += "{" + cqnc + "},";
+                    //billChqNumFmt = billChqNumFmt.TrimEnd(',');
+                    //DataWorkBill.LockBill(dtCopy.Copy(), string.Format("[" + billChqNumFmt + "]", chqNumbers.ToArray()));
+                    // ***** DataWorkBill.LockBill(dtCopy.Copy(), string.Join(" | ", chqNumbersFull.ToArray()));
+                    
+                    // *** migrate to profile
+                    // *** DataWorkBill.LockBill(dtCopy.Copy(), string.Join(" | ", chqNumbersFull.ToArray()));
+
+                }
+                else
+                {
+                    // *** must be migrated
+                    // *** DataWorkBill.BillDelete(dtCopy);
+                }
+                //this.profileCnt.Default.Order.ExtendedProperties["FXNO"] = chqNom;
+
+                //File.Delete(this.profileCnt.Default.Order.ExtendedProperties["PATH"].ToString());
+            }
+
+            string closedInfo = string.Empty;
+            if (chqNumbers.Count > 1)
+                closedInfo = string.Format("{0} {1} ", "Закриті чеки №", string.Join(",", chqNumbers.ToArray()));
+            else
+                closedInfo = string.Format("{0} {1} ", "Закритий чек №", string.Join(string.Empty, chqNumbers.ToArray()));
+            // *** if (!string.IsNullOrEmpty(DataWorkShared.ExtractBillProperty(this.PD_Order, CoreConst.BILL_NO, string.Empty).ToString()))
+            // ***    closedInfo += string.Format("{0} {1} ", "з рахунку №", DataWorkShared.ExtractBillProperty(this.PD_Order, CoreConst.BILL_NO, string.Empty));
+
+            if (this.profileCnt.Default.Properties[CoreConst.BILL_NO] != null )
+                closedInfo += string.Format("{0} {1} ", "з рахунку №", this.profileCnt.Default.Properties[CoreConst.BILL_NO]);
+
+            // ****** RowsRemoved_MyEvent(false, true, true);
+
+
+            CashLbl.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_RestFontColor;
+            CashLbl.Font = ConfigManager.Instance.CommonConfiguration.STYLE_RestFont;
+            CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", pMethod.Rest);
+            chequeInfoLabel.Text = string.Format("{0} {1:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", "залишок з суми", pMethod.CashSum);
+            this.addBillInfo.Text = string.Empty;
+            addChequeInfo.Text = closedInfo;
+
+            if (isLegalMode && ConfigManager.Instance.CommonConfiguration.APP_ShowInfoOnIndicator)
+                try
+                {
+                    string[] lines = new string[2];
+                    lines[0] = string.Format("{0} : {1:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", "Гроші", pMethod.CashSum);
+                    lines[1] = string.Format("{0} : {1}", "Здача", CashLbl.Text);
+                    bool[] show = new bool[] { true, true };
+                    Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_SendCustomer", lines, show);
+                }
+                catch { }
+
+
+
+        }
+
         /// <summary>
         /// Закриття чеку
         /// </summary>
         /// <param name="isLegalMode">Якщо true то чек є фіскальний</param>
-        private void CloseCheque_profile(bool isLegalMode)//1_msg//lbl7
+        /*private void CloseCheque_profile(bool isLegalMode)//1_msg//lbl7
         {
 
             List<Hashtable> fullResult = new List<Hashtable>();
@@ -4135,7 +4172,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
 
                     Hashtable _suma = (Hashtable)this.Summa[profileKey];
                     Hashtable _discount = (Hashtable)this.Discount[profileKey];
-                    DataTable _cheque = this.Cheques.Tables[profileKey.ToString()];
+                    DataTable _cheque = this.profileCnt.Default.Orders.Tables[profileKey.ToString()];
 
 
                     if (_cheque.Rows.Count == 0)
@@ -4144,7 +4181,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                         continue;
                     }
 
-                    /* initializing discount values */
+                    /* initializing discount values *-----/
                     double[] _discArrPercent = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_PERCENT);
                     double[] _discArrCash = CoreLib.GetValue<double[]>(_discount, CoreConst.DISC_ARRAY_CASH);
                     double _discConstPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_CONST_PERCENT);
@@ -4152,10 +4189,10 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                     double _discOnlyCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_ONLY_CASH);
                     double _discCommonPercent = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_PERCENT);
                     double _discCommonCash = CoreLib.GetValue<double>(_discount, CoreConst.DISC_FINAL_CASH);
-                    /* calculation items */
-                    double _realSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_REAL_SUMA);
-                    double _chqSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_CHEQUE_SUMA);
-                    double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CALC_TAX_SUMA);
+                    /* calculation items *----/
+                    double _realSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CASH_REAL_SUMA);
+                    double _chqSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CASH_CHEQUE_SUMA);
+                    double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.CASH_TAX_SUMA);
 
 
                     // it's checking if the running profile allows to save order as legal
@@ -4169,7 +4206,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
 
 
 
-                    /* close logic implementation */
+                    /* close logic implementation *---/
 
                     // if this is a legal or in-between profile and there are other profiles
                     // it requires to change payment info and set it without change
@@ -4190,8 +4227,8 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                         ((List<double>)_orgPaymanet["CASHLIST"])[0] = MathLib.GetRoundedMoney(MathLib.GetDouble(((List<double>)_orgPaymanet["CASHLIST"])[0]) - _realSUMA);
                     }
 
-                    profileResult[CoreConst.PAYMENT] = _tmpPaymanet;
-                    profileResult[CoreConst.IS_LEGAL] = isLegalMode;
+                    profileResult[CoreConst.ORDER_PAYMENT] = _tmpPaymanet;
+                    profileResult[CoreConst.ORDER_IS_LEGAL] = isLegalMode;
 
 
                     localData = new object[8];
@@ -4280,7 +4317,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                     chqNom = DataWorkCheque.SaveCheque(_cheque, localData, pMethod.Type[0], chqNom);
                     profileResult[CoreConst.ORDER_NO] = chqNom;
 
-                    DataWorkShared.SetOrderProperty(_cheque, CoreConst.PAYMENT, _tmpPaymanet);
+                    DataWorkShared.SetOrderProperty(_cheque, CoreConst.ORDER_PAYMENT, _tmpPaymanet);
                     DataWorkShared.SetOrderProperty(_cheque, CoreConst.ORDER_NO, chqNom);
 
                     if (appIsLegal && UserConfig.Properties[10])
@@ -4309,6 +4346,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
             {
                 MMessageBox.Show(this.chequeDGV, "Немає товарів для усіх профілів. Обновіть фільтри профілів.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 //UpdateSumInfo_profile(currentProfileKey, false);
+                profileCnt[currentProfileKey].refresh();
                 return;
             }
 
@@ -4316,10 +4354,11 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
             if (generalError)
             {
                 MMessageBox.Show(this.chequeDGV, "Виникла помилка під час збереження частини чеку.\r\nСпробуйте ще раз закрити чек", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                UpdateSumInfo_profile(currentProfileKey, false);
+                // - UpdateSumInfo_profile(currentProfileKey, false);
+                profileCnt[currentProfileKey].refresh();
                 return;
             }
-            if (DataWorkShared.ExtractBillProperty(dtCopy, CoreConst.OID, string.Empty) != string.Empty)
+            if (DataWorkShared.ExtractBillProperty(dtCopy, CoreConst.BILL_OID, string.Empty) != string.Empty)
             {
                 //CoreLib.LockBill(this.PD_Order.Copy(), chqNom);
                 if (ConfigManager.Instance.CommonConfiguration.Content_Bills_KeepAliveAfterCheque)
@@ -4335,9 +4374,9 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                 else
                     DataWorkBill.BillDelete(dtCopy);
 
-                //Cheque.ExtendedProperties["FXNO"] = chqNom;
+                //this.profileCnt.Default.Order.ExtendedProperties["FXNO"] = chqNom;
 
-                //File.Delete(Cheque.ExtendedProperties["PATH"].ToString());
+                //File.Delete(this.profileCnt.Default.Order.ExtendedProperties["PATH"].ToString());
             }
 
             string closedInfo = string.Empty;
@@ -4416,9 +4455,9 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                 try
                 {
                     if (_fl_isReturnCheque)
-                        Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_PayMoney", Cheque, ConfigManager.Instance.CommonConfiguration.APP_DoseDecimals, _fl_useTotDisc, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals);
+                        Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_PayMoney", this.profileCnt.Default.DataOrder, ConfigManager.Instance.CommonConfiguration.APP_DoseDecimals, _fl_useTotDisc, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals);
                     else
-                        Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_Sale", Cheque, ConfigManager.Instance.CommonConfiguration.APP_DoseDecimals, _fl_useTotDisc, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals);
+                        Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_Sale", this.profileCnt.Default.DataOrder, ConfigManager.Instance.CommonConfiguration.APP_DoseDecimals, _fl_useTotDisc, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals);
 
                     if (_fl_useTotDisc && discCommonPercent != 0.0)
                     {
@@ -4437,8 +4476,8 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                         ; Program.AppPlugins.GetActive<IFPDriver>().CallFunction(
                               "FP_Discount",
                              new object[] { 
-                                    (byte)2/*types[i]*/, 
-                                    /*valueDISC[i]*/discCommonPercent/*(discount[0] + discount[1]) == 0 ? constDiscount : (discount[0] + discount[1])*/,
+                                    (byte)2/*types[i]* --- /, 
+                                    /*valueDISC[i]* -- /discCommonPercent/*(discount[0] + discount[1]) == 0 ? constDiscount : (discount[0] + discount[1])* -- /,
                                     ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, "" });
                     }
 
@@ -4477,7 +4516,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                     /*
                     MMessageBox.Show(this, "Натисніть ОК та повторно закрийте чек." + "\r\n",
                         Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    */
+                    * --- /
 
                     //Program.AppPlugins.GetActive<IFPDriver>().CallFunction("ResetOrder");
 
@@ -4504,14 +4543,14 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
             lastPayment = 0;
 
             //winapi.Funcs.OutputDebugString("C");
-            chqNom = DataWorkCheque.SaveCheque(Cheque, localData, pMethod.Type[0], chqNom);
+            chqNom = DataWorkCheque.SaveCheque(this.profileCnt.Default.DataOrder, localData, pMethod.Type[0], chqNom);
 
             //object[] printerData = this.CreatePrinterData(fix, pMethod.PaymentInfo);
             //Dictionary<string, object> printerData = this.PD_Order;
             // add additional information
             //DataWorkShared.SetOrderProperty(this.PD_Order, CoreConst.ORDER_NO, chqNom);
-            DataWorkShared.SetOrderProperty(this.Cheque, CoreConst.PAYMENT, pMethod.PaymentInfo);
-            DataWorkShared.SetOrderProperty(this.Cheque, CoreConst.ORDER_NO, isLegalMode ? chqNom : 'N' + chqNom);
+            DataWorkShared.SetOrderProperty(this.profileCnt.Default.DataOrder, CoreConst.ORDER_PAYMENT, pMethod.PaymentInfo);
+            DataWorkShared.SetOrderProperty(this.profileCnt.Default.DataOrder, CoreConst.ORDER_NO, isLegalMode ? chqNom : 'N' + chqNom);
             // 1 this.PD_EmptyOrder.ExtendedProperties["ORDER_NO"] = chqNom;
             // 1 this.PD_EmptyOrder.ExtendedProperties["PAYMENT"] = pMethod.PaymentInfo;
             //printerData["IS_LEGAL"] = isLegalMode;
@@ -4527,7 +4566,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                 DataWorkOutput.Print(Enums.PrinterType.OrderNormal, this.PD_Order);
                 //CoreLib.Print(printerData, "none", 0);
             }
-            if (DataWorkShared.ExtractBillProperty(this.PD_Order, CoreConst.OID, string.Empty) != string.Empty)
+            if (DataWorkShared.ExtractBillProperty(this.PD_Order, CoreConst.BILL_OID, string.Empty) != string.Empty)
             {
                 //CoreLib.LockBill(this.PD_Order.Copy(), chqNom);
                 if (ConfigManager.Instance.CommonConfiguration.Content_Bills_KeepAliveAfterCheque)
@@ -4535,9 +4574,9 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                 else
                     DataWorkBill.BillDelete(this.PD_Order);
 
-                //Cheque.ExtendedProperties["FXNO"] = chqNom;
+                //this.profileCnt.Default.Order.ExtendedProperties["FXNO"] = chqNom;
 
-                //File.Delete(Cheque.ExtendedProperties["PATH"].ToString());
+                //File.Delete(this.profileCnt.Default.Order.ExtendedProperties["PATH"].ToString());
             }
 
             RowsRemoved_MyEvent(false, true, true);
@@ -4621,7 +4660,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                 catch { }
             //}
         }
-        */
+        * --- /
         private void CloseCheque(bool isLegalMode)
         {
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
@@ -4634,34 +4673,36 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                 //this.Hook_OnChequeClose(closeResult);
             }
         }
-
+        */
         /// <summary>
         /// Custom method. Perform reset of discount variables
         /// </summary>
-        private void ResetDiscount()
+        private void _ResetDiscount()
         {
-            //discConstPercent = 0.0;
-            discArrPercent[0] = 0.0;
-            discArrPercent[1] = 0.0;
-            discArrCash[0] = 0.0;
-            discArrCash[1] = 0.0;
+            //this.profileCnt.Default.getPropertyValue<double>(CoreConst.DISC_CONST_PERCENT) = 0.0;
+            /*this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT] = 0.0;
+            this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_PERCENT)[1] = 0.0;
+            this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[0] = 0.0;
+            this.profileCnt.Default.getPropertyValue<double[]>(CoreConst.DISC_ARRAY_CASH)[1] = 0.0;
             discOnlyPercent = 0.0;
             discOnlyCash = 0.0;
             discCommonPercent = 0.0;
             discCommonCash = 0.0;
-            clientPriceNo = 0;
+            clientPriceNo = 0;*/
             //discApplied = false;
+
+
 
             //відмінитиЗнижкунадбавкуToolStripMenuItem.Enabled = false;
             відмінитиЗнижкунадбавкуToolStripMenuItem.Text = "Без знижки/надбавки";
 
-            if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
+            /*if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
                 foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
                 {
                     this.Discount[de.Key] = DataWorkShared.GetStandartDiscountInfoStructure2();
                     this.Summa[de.Key] = DataWorkShared.GetStandartCalculationInfoStructure2();
                 }
-
+            */
             //addChequeInfo.Text = string.Empty;
             //UpdateSumDisplay(true, true);
         }//ok
@@ -4678,7 +4719,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
             bool allowToShow = false;//returned value
             bool allowBBC = true;
 
-            DataTable sTable = Articles.Clone();
+            DataTable sTable = this.profileCnt.Default.DataProducts.Clone();
             DataRow[] dr = new DataRow[1];
             double weightOfArticle = ConfigManager.Instance.CommonConfiguration.APP_StartTotal;
 
@@ -4716,20 +4757,22 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
 
                 if (allowBBC && barcode.Length > 5 && (barcode.Substring(0, 3) == "998" || customClientCard))
                 {
+                    
                     //if (UserConfig.Properties[15] && barcode.Length > 5 && barcode.Substring(0, 3) == "998")
                     //{
-                    dr = Cards.Select("CBC =\'" + barcode + "\'");
+                    dr = this.profileCnt.Default.DataDiscountCards.Select("CBC =\'" + barcode + "\'");
 
                     if (dr.Length != 0 && dr[0] != null)
                     {
-                        if (discArrPercent[0] < (double)dr[0]["CDISC"] && discConstPercent < (double)dr[0]["CDISC"])
+                        if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] < (double)dr[0]["CDISC"] && this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_CONST_PERCENT] < (double)dr[0]["CDISC"])
                         {
                             if (ConfigManager.Instance.CommonConfiguration.APP_OnlyDiscount)
-                                discArrPercent[0] = discArrPercent[1] = 0.0;
-                            discArrPercent[0] = (double)dr[0]["CDISC"];
+                                this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] = this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD] = 0.0;
+                            this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] = (double)dr[0]["CDISC"];
                         }
                         this.clientPriceNo = (int)dr[0]["CPRICENO"];
-                        UpdateSumInfo(true);
+                        // - UpdateSumInfo(true);
+                        profileCnt.Default.refresh();
                         clientID = (string)dr[0]["CID"];
                         SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, false);
                     }
@@ -4750,37 +4793,38 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                 dec = Math.Round(dec, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, MidpointRounding.AwayFromZero);
 
                 if (dec <= 100)
-                    if (discArrPercent[0] < dec && discConstPercent < dec)
+                    if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] < dec && this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_CONST_PERCENT] < dec)
                     {
                         if (ConfigManager.Instance.CommonConfiguration.APP_OnlyDiscount)
-                            discArrPercent[0] = discArrPercent[1] = 0.0;
-                        discArrPercent[0] = dec;
+                            this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] = this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD] = 0.0;
+                        this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] = dec;
                     }
 
-                if (dec > 100 && (discArrPercent[0] == 0 || discConstPercent >= 0))
+                if (dec > 100 && (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] == 0 || this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_CONST_PERCENT] >= 0))
                 {
                     dec -= 100;
                     dec = -Math.Round(dec, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, MidpointRounding.AwayFromZero);
-                    if (discArrPercent[1] < dec || discConstPercent < dec)
+                    if (this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD] < dec || this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_CONST_PERCENT] < dec)
                     {
                         if (ConfigManager.Instance.CommonConfiguration.APP_OnlyDiscount)
-                            discArrPercent[0] = discArrPercent[1] = 0.0;
-                        discArrPercent[1] = dec;
+                            this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_SUB] = this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD] = 0.0;
+                        this.profileCnt.Default.customCashDiscountItems[CoreConst.DISC_ARRAY_PERCENT_ADD] = dec;
                     }
                 }
 
-                UpdateSumInfo(true);
+                // - UpdateSumInfo(true);
+                profileCnt.Default.refresh();
                 SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, false);
 
                 return allowToShow;
             }
             #endregion
             //search by barcodes of articles
-
-            dr = Articles.Select("BC = \'" + barcode.Trim() + "\'");
+            
+            dr = this.profileCnt.Default.DataProducts.Select("BC = \'" + barcode.Trim() + "\'");
             if (dr.Length == 0 && UserConfig.Properties[16])
             {
-                dr = AltBC.Select("ABC = \'" + barcode + "\'");
+                dr = this.profileCnt.Default.DataAlternative.Select("ABC = \'" + barcode + "\'");
                 if (dr.Length != 0)
                 {
                     string cmd = string.Empty;
@@ -4795,7 +4839,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                     DataRow[] rows = new DataRow[dr.Length];
                     try
                     {
-                        rows = Articles.Select(cmd);
+                        rows = this.profileCnt.Default.DataProducts.Select(cmd);
                     }
                     catch { }
 
@@ -4818,7 +4862,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
 
             if (dr.Length == 1)
             {
-                CoreLib.AddArticleToCheque(chequeDGV, articleDGV, dr[0], weightOfArticle, Articles);
+                CoreLib.AddArticleToCheque(chequeDGV, articleDGV, dr[0], weightOfArticle, this.profileCnt.Default.DataProducts);
                 if (!UserConfig.Properties[22])
                     SearchFilter(true, currSrchType, true);
                 allowToShow = false;
@@ -4851,6 +4895,8 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
         /// (обраховує суму, відновлує фільтрацію таблиці товарів, оновлює повідомлення на панелях)
         /// </summary>
         /// <param name="updateCustomer">Якщо true то результати обчислення будуть ще виведені на дисплей ФП</param>
+        
+        /*********
         private void RowsRemoved_MyEvent(bool updateCustomer)
         {
             this.RowsRemoved_MyEvent(updateCustomer, true, false);
@@ -4863,9 +4909,10 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
         {
             if (clearData)
             {
-                this.Cheque.Rows.Clear();
-                this.CreateOrderStructure(this.Cheque);
-                //this.Cheque.ExtendedProperties.Clear();
+                // *--- this.profileCnt.Default.Order.Rows.Clear();
+                // ***** this.CreateOrderStructure(this.profileCnt.Default.Order);
+                //this.profileCnt.Default.Order.ExtendedProperties.Clear();
+                this.profileCnt.reset(true);
 
                 if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
                     foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
@@ -4873,7 +4920,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
             }
 
             //winapi.Funcs.OutputDebugString("t");
-            if (Cheque.Rows.Count == 0)
+            if (this.profileCnt.Default.DataOrder.Rows.Count == 0)
             {
                 RefershMenus();
                 if (_fl_isReturnCheque)
@@ -4890,7 +4937,8 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                 ResetDiscount();
             }
             //winapi.Funcs.OutputDebugString("l");
-            UpdateSumInfo(updateCustomer);
+            // * UpdateSumInfo(updateCustomer);
+            profileCnt.Default.refresh();
             RefreshChequeInformer(false);
             //winapi.Funcs.OutputDebugString("e");
             //winapi.Funcs.OutputDebugString("r");
@@ -4905,34 +4953,35 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
 
             // clear rows from common cheque
 
-            foreach (DataRow dRow in this.Cheques.Tables[profileKey.ToString()].Rows)
+            foreach (DataRow dRow in this.profileCnt.Default.Orders.Tables[profileKey.ToString()].Rows)
             {
                 try
                 {
-                    this.Cheque.Rows.Find(dRow["C"]).Delete();
+                    this.profileCnt.Default.DataOrder.Rows.Find(dRow["C"]).Delete();
                 }
                 catch { }
             }
 
             // clear profile cheque
-            this.Cheques.Tables[profileKey.ToString()].Rows.Clear();
+            this.profileCnt.Default.Orders.Tables[profileKey.ToString()].Rows.Clear();
 
 
 
         }
+        */
 
         private void InitChequeInformationStructure()
         {
-            /* loop by all available profiles */
+            /* loop by all available profiles * -------- /
             this.Discount.Clear();
             this.Summa.Clear();
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
             {
-                DataWorkSource.CreateTables(ref Cheque, ref Articles, ref AltBC, ref Cards, ref Cheques);
-                this.CreateOrderStructure(this.Cheque);
+                DataWorkSource.CreateTables(ref this.profileCnt.Default.Order, ref this.profileCnt.Default.Products, ref this.profileCnt.Default.Alternative, ref this.profileCnt.Default.DiscountCards, ref Cheques);
+                this.CreateOrderStructure(this.profileCnt.Default.Order);
                 foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
                 {
-                    this.CreateOrderStructure(this.Cheques.Tables[de.Key.ToString()]);
+                    this.CreateOrderStructure(this.profileCnt.Default.Orders.Tables[de.Key.ToString()]);
                     this.Discount.Add(de.Key, DataWorkShared.GetStandartDiscountInfoStructure2());
                     this.Summa.Add(de.Key, DataWorkShared.GetStandartCalculationInfoStructure2());
                 }
@@ -4941,11 +4990,11 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
             {
                 this.Discount.Add(CoreConst.KEY_DEFAULT_PROFILE_ID, this.PD_DiscountInfo);
                 this.Summa.Add(CoreConst.KEY_DEFAULT_PROFILE_ID, DataWorkShared.GetStandartCalculationInfoStructure2());
-            }
+            }*/
         }
         #endregion
 
-        #region Data 
+        #region Data
         private void FetchProductData(bool doCheck, bool doImport, bool runCheckInSeparateThread)
         {
             // will download and transform new data
@@ -4963,7 +5012,13 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
             {
                 try
                 {
-                    PostDataImportAction();
+                    // *** PostDataImportAction();
+                    if (ImportedData.Tables.Count > 0)
+                        profileCnt.setupData(ImportedData);
+                    _fl_onlyUpdate = true;
+                    _fl_subUnitChanged = false;
+                    _fl_isOk = new Com_SecureRuntime().FullLoader();
+                    label_uiWndmain_DemoShowArt.Visible = label_uiWndmain_DemoShowChq.Visible = !_fl_isOk;
                 }
                 catch (Exception ex)
                 {
@@ -4978,7 +5033,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
             Hashtable filesToImport = new Hashtable();
             int currentProfileIndex = 0;
             int startupIndex = 0;
-            string[] tableNames = { "PROD", "ALT", "CARD" };
+            string[] tableNames = { "PRODUCT", "ALTERNATEBC", "DCARDS" };
             // check new data existance
             DataWorkSource.CheckForUpdate(ref filesToImport);
 
@@ -5054,7 +5109,7 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                 if (currentProfileIndex == 0)
                     startupIndex = 0;
                 else
-                    startupIndex = Articles.Rows.Count;
+                    startupIndex = profileCnt.Default.DataProducts.Rows.Count;// this.profileCnt.Default.Products.Rows.Count;
                 object[] loadResult = DataWorkSource.LoadData(localFiles, _fl_onlyUpdate, de.Key, startupIndex);
 
 
@@ -5084,29 +5139,29 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                 
                 /*
                 if (tables[0] != null) {
-                    //Articles = tables[0].Copy();
-                    //DataRow[] dRows = Articles.Select("F = " + de.Key);
+                    //this.profileCnt.Default.Products = tables[0].Copy();
+                    //DataRow[] dRows = this.profileCnt.Default.Products.Select("F = " + de.Key);
                     //foreach (DataRow dr in dRows)
                     //    dr.Delete();
-                    //Articles.Merge(tables[0]);
+                    //this.profileCnt.Default.Products.Merge(tables[0]);
                     //wasUpdatedAtLeastOneSource = true;
                 }
                 if (tables[1] != null)
                 {
 
-                    //AltBC = tables[1].Copy();
-                    //DataRow[] dRows = AltBC.Select("F = " + de.Key);
+                    //this.profileCnt.Default.Alternative = tables[1].Copy();
+                    //DataRow[] dRows = this.profileCnt.Default.Alternative.Select("F = " + de.Key);
                     //foreach (DataRow dr in dRows)
                     //    dr.Delete();
-                    //AltBC.Merge(tables[1]);
+                    //this.profileCnt.Default.Alternative.Merge(tables[1]);
                     //wasUpdatedAtLeastOneSource = true;
                 }
                 if (tables[2] != null)
                 {
-                    //Cards = tables[2].Copy();
+                    //this.profileCnt.Default.DiscountCards = tables[2].Copy();
                     //if (currentProfileIndex == 0)
-                    Cards.Rows.Clear();
-                    Cards.Merge(tables[2]);
+                    this.profileCnt.Default.DiscountCards.Rows.Clear();
+                    this.profileCnt.Default.DiscountCards.Merge(tables[2]);
                     //wasUpdatedAtLeastOneSource = true;
                 }
 
@@ -5122,33 +5177,34 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
 
         /* Checker callback */
 
-        // not ok
+        // not ok// remove
         private void PostDataImportAction()
         {
-            /*if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles && this.Cheques.Tables.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
+            /*if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles && this.profileCnt.Default.Orders.Tables.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
             {
-                DataWorkSource.CreateTables(ref Cheque, ref Articles, ref AltBC, ref Cards, ref Cheques);
-                this.CreateOrderStructure(this.Cheque);
+                DataWorkSource.CreateTables(ref this.profileCnt.Default.Order, ref this.profileCnt.Default.Products, ref this.profileCnt.Default.Alternative, ref this.profileCnt.Default.DiscountCards, ref Cheques);
+                this.CreateOrderStructure(this.profileCnt.Default.Order);
                 foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
                 {
-                    this.CreateOrderStructure(this.Cheques.Tables[de.Key.ToString()]);
+                    this.CreateOrderStructure(this.profileCnt.Default.Orders.Tables[de.Key.ToString()]);
                     this.Discount.Add(de.Key, DataWorkShared.GetStandartDiscountInfoStructure2());
                     this.Summa.Add(de.Key, DataWorkShared.GetStandartCalculationInfoStructure2());
                 }
             }
             */
             //if (this.Summa.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
-                this.InitChequeInformationStructure();
+            // *** this.InitChequeInformationStructure();
 
 
             //bool notificationIsActive = false;
-            bool _fl_updated = false;
+            // * bool _fl_updated = false;
             //uiWndUpdateWnd uw = new uiWndUpdateWnd(_fl_onlyUpdate);
             List<string> allProfiles = new List<string>();
             //foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
             //    allProfiles.Add(de.Key.ToString());
 
-            foreach (DataTable dt in this.ImportedData.Tables)
+            // add all data
+            /*foreach (DataTable dt in this.ImportedData.Tables)
             {
                 // get profile name and data
                 // 0 - data name
@@ -5164,51 +5220,51 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                 {
                     case "PROD":
                         {
-                            //Articles = tables[0].Copy();
-                            DataRow[] dRows = Articles.Select("F = " + key);
+                            //this.profileCnt.Default.Products = tables[0].Copy();
+                            DataRow[] dRows = this.profileCnt.Default.Products.Select("F = " + key);
                             foreach (DataRow dr in dRows)
                                 dr.Delete();
-                            Articles.Merge(dt);
+                            this.profileCnt.Default.Products.Merge(dt);
                             //wasUpdatedAtLeastOneSource = true;
                             _fl_updated = true;
                             break;
                         }
                     case "ALT":
                         {
-                            DataRow[] dRows = AltBC.Select("F = " + key);
+                            DataRow[] dRows = this.profileCnt.Default.Alternative.Select("F = " + key);
                             foreach (DataRow dr in dRows)
                                 dr.Delete();
-                            AltBC.Merge(dt);
+                            this.profileCnt.Default.Alternative.Merge(dt);
                             _fl_updated = true;
                             break;
                         }
                     case "CARD":
                         {
-                            Cards.Rows.Clear();
-                            Cards.Merge(dt);
+                            this.profileCnt.Default.DiscountCards.Rows.Clear();
+                            this.profileCnt.Default.DiscountCards.Merge(dt);
                             _fl_updated = true;
                             break;
                         }
                 }
 
-            }
+            }*/
 
             _fl_onlyUpdate = true;
             _fl_subUnitChanged = false;
             _fl_isOk = new Com_SecureRuntime().FullLoader();
             label_uiWndmain_DemoShowArt.Visible = label_uiWndmain_DemoShowChq.Visible = !_fl_isOk;
 
-            if (_fl_updated)
+            /*if (_fl_updated)
             {
-                /* Removing unused rows */
+                /* Removing unused rows * /
                 string cleanupQuery = string.Empty;
                 foreach (string existedProfiles in allProfiles)
                 {
                     cleanupQuery += " F <> " + existedProfiles + " AND ";
                 }
                 cleanupQuery = cleanupQuery.Trim(new char[] { ' ', 'A', 'N', 'D' });
-                DataRow[] unusedRowsArt = Articles.Select(cleanupQuery);
-                DataRow[] unusedRowsAlt = AltBC.Select(cleanupQuery);
+                DataRow[] unusedRowsArt = this.profileCnt.Default.Products.Select(cleanupQuery);
+                DataRow[] unusedRowsAlt = this.profileCnt.Default.Alternative.Select(cleanupQuery);
                 foreach (DataRow dr in unusedRowsArt)
                     dr.Delete();
                 foreach (DataRow dr in unusedRowsAlt)
@@ -5219,12 +5275,64 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                 //this.BringToFront();
                 MMessageBoxEx.Show(this.chequeDGV, "Були внесені зміни в базу товарів", Application.ProductName,
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }*/
+
+
+
+
+            // * DataTable ddt = profileCnt.dataGetProducts();
+            
+        }
+
+        #endregion
+
+        #region Temp
+
+        #endregion
+
+
+        #region Devices
+        private void configureAdditionalDevices()
+        {
+            if (ConfigManager.Instance.CommonConfiguration.APP_BuyerBarCodeSource != 0)
+            {
+                // port config
+
+                //Hashtable xmlPortCfg = ComPort.GetXmlPortConfiguration("MagstripeCardReaderPort.xml");
+                Hashtable xmlPortCfg = (Hashtable)ApplicationConfiguration.Instance["serialPortConnect.additionalDevices.magstripe"];
+                bool error = false;
+                try
+                {
+                    this.serialPort1.PortName = xmlPortCfg["PORT"].ToString();
+                    this.serialPort1.BaudRate = int.Parse(xmlPortCfg["RATE"].ToString());
+                    this.serialPort1.DataBits = int.Parse(xmlPortCfg["DBITS"].ToString());
+                    this.serialPort1.StopBits = (System.IO.Ports.StopBits)(int.Parse(xmlPortCfg["SBITS"].ToString()));
+                    this.serialPort1.Parity = (System.IO.Ports.Parity)(int.Parse(xmlPortCfg["PARITY"].ToString()));
+                }
+                catch (Exception ex)
+                {
+                    error = true;
+                    driver.Lib.CoreLib.WriteLog(ex, "Неможливо налаштувати сом-порт зчитувача карток");
+                    MMessageBox.Show("Неможливо налаштувати сом-порт зчитувача карток.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                if (!error)
+                    try
+                    {
+                        this.serialPort1.Open();
+                        this.timer_buyer_ready.Start();
+                    }
+                    catch (Exception ex)
+                    {
+                        driver.Lib.CoreLib.WriteLog(ex, "Неможливо відкрити сом-порт зчитувача карток");
+                        MMessageBox.Show("Неможливо відкрити сом-порт зчитувача карток.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+            }
+            else
+            {
+                this.timer_buyer_ready.Stop();
             }
 
-            SrchTbox.Select();
-            GC.Collect();
-
-            /* device status */
             if (Program.AppPlugins.IsActive(PluginType.FPDriver))
             {
                 try
@@ -5233,53 +5341,23 @@ double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
                     if (status)
                         DDM_FPStatus.Image = Properties.Resources.ok;
                     else
+                    {
+                        MMessageBoxEx.Show(this.chequeDGV, "Немає зв'язку з фіскальним пристроєм.\r\nНеможливо зареєструвати касира в ЕККР",
+                            Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         DDM_FPStatus.Image = Properties.Resources.FpNotOk;
+                    }
                 }
-                catch { DDM_FPStatus.Image = Properties.Resources.FpNotOk; }
+                catch (Exception ex)
+                {
+                    DDM_FPStatus.Image = Properties.Resources.FpNotOk;
+                    driver.Lib.CoreLib.WriteLog(ex, "Немає зв'язку з фіскальним пристроєм.\r\nНеможливо зареєструвати касира в ЕККР");
+                    MMessageBoxEx.Show(this.chequeDGV, ex.Message + "\r\nНемає зв'язку з фіскальним пристроєм.\r\nНеможливо зареєструвати касира в ЕККР",
+                        Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
                 DDM_FPStatus.Image = Properties.Resources.FpNotOk;
-            
-        }
-
-        #endregion
-
-        #region Temp
-        private delegate void SetControlImageThreadSafeDelegate(Control control, string propertyName, Bitmap image);
-        private delegate void SetControlPropertyThreadSafeDelegate(Control control, string propertyName, object propertyValue);
-        public static void SetControlImageThreadSafe(Control control, string propertyName, Bitmap image)
-        {
-            if (control.InvokeRequired)
-            {
-                control.Invoke(new SetControlImageThreadSafeDelegate(SetControlPropertyThreadSafe), new object[] { control, propertyName, image });
-            }
-            else
-            {
-                control.GetType().InvokeMember(propertyName, System.Reflection.BindingFlags.SetProperty, null, control, new object[] { image });
-            }
-        }
-        public static void SetControlPropertyThreadSafe(Control control, string propertyName, object propertyValue)
-        {
-            if (control.InvokeRequired)
-            {
-                control.Invoke(new SetControlPropertyThreadSafeDelegate(SetControlPropertyThreadSafe), new object[] { control, propertyName, propertyValue });
-            }
-            else
-            {
-                control.GetType().InvokeMember(propertyName, System.Reflection.BindingFlags.SetProperty, null, control, new object[] { propertyValue });
-            }
-        }
-        private void innerActivateSearchBox()
-        {
-            if (SrchTbox.InvokeRequired)
-            {
-                this.Invoke(new MethodInvoker(innerActivateSearchBox));
-                return;
-            }
-
-            SrchTbox.Select();
         }
         #endregion
-
     }
 }

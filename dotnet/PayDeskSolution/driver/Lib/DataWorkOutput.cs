@@ -806,7 +806,7 @@ namespace driver.Lib
                             string articleTemplate = template.Remove(0, 1);
                             try
                             {
-                                Dictionary<string, object[]> deletedRows = (Dictionary<string, object[]>)DataWorkShared.ExtractBillProperty(((DataTable)data[0]), driver.Common.CoreConst.DELETED_ROWS);
+                                Dictionary<string, object[]> deletedRows = (Dictionary<string, object[]>)DataWorkShared.ExtractBillProperty(((DataTable)data[0]), driver.Common.CoreConst.BILL_DELETED_ROWS);
                                 int i = 0;
                                 string art_name = string.Empty;
                                 string art_desc = string.Empty;
