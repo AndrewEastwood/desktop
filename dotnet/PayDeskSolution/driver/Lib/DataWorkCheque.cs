@@ -18,77 +18,7 @@ namespace driver.Lib
 {
     public class DataWorkCheque
     {
-        //dBase functions
-        //Use Intersolv ODBC Driver v3.10
-        private static void SaveDBF(DataTable DT, byte saveType)
-        {
-            StringBuilder shortPath = new StringBuilder(300);
-            Com_WinApi.GetShortPathName(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Cheques, shortPath, shortPath.Capacity);
 
-            //Check
-            if (File.Exists(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Cheques + "\\" + DT.TableName + ".DBF"))
-                File.Delete(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Cheques + "\\" + DT.TableName + ".DBF");
-
-            //Creating connection
-            System.Data.Odbc.OdbcConnectionStringBuilder c_string = new System.Data.Odbc.OdbcConnectionStringBuilder();
-            c_string.Driver = "VODBFODBC";
-            c_string.Dsn = "VODBF";
-            c_string.Add("DB", shortPath.ToString());
-            c_string.Add("ULN", 1);
-            c_string.Add("MS", 1);
-            System.Data.Odbc.OdbcConnection odbc_connection = new System.Data.Odbc.OdbcConnection(c_string.ConnectionString);
-            try
-            {
-                odbc_connection.Open();
-            }
-            catch { }
-            System.Data.Odbc.OdbcCommand odbc_command = odbc_connection.CreateCommand();
-
-            //Creating Table
-            odbc_command.CommandText = "CREATE TABLE " + DT.TableName + " (ID char(10), AP numeric(11, 5), VQ numeric(11, 3), DR numeric(8, 2))";
-            try
-            {
-                odbc_command.ExecuteNonQuery();
-            }
-            catch { }
-
-            //Adding data
-            string[] cols = new string[] { "PRICE", "PACK" };
-            if (saveType != 0)
-                Array.Reverse(cols);
-
-            for (int i = 0; i < DT.Rows.Count; i++)
-            {
-                odbc_command.CommandText = "INSERT INTO " + DT.TableName + " (ID,AP,VQ,DR) values (";
-                odbc_command.CommandText += "\'" + DT.Rows[i]["ID"] + "\'";
-                odbc_command.CommandText += ",";
-                odbc_command.CommandText += MathLib.ReplaceNDS(DT.Rows[i][cols[0]].ToString(), ".");
-                odbc_command.CommandText += ",";
-                odbc_command.CommandText += MathLib.ReplaceNDS(DT.Rows[i]["TOT"].ToString(), ".");
-                odbc_command.CommandText += ",";
-                odbc_command.CommandText += MathLib.ReplaceNDS(DT.Rows[i][cols[1]].ToString(), ".");
-                odbc_command.CommandText += ");";
-
-                try
-                {
-                    odbc_command.ExecuteNonQuery();
-                }
-                catch { }
-            }
-
-            odbc_connection.Close();
-
-            //string shortPath = "C:\\" + DT.TableName + ".dbf";
-            //mktChequeRow[] rows = new mktChequeRow[DT.Rows.Count + 5];
-            //for (int i = 0; i < DT.Rows.Count + 5; i++)
-            //{
-            //    rows[i].sz = DT.Rows[1]["ID"].ToString().ToCharArray();
-            //    rows[i].r1 = (double)DT.Rows[1]["PRICE"];
-            //    rows[i].r2 = (double)DT.Rows[1]["TOT"];
-            //    rows[i].r3 = (double)DT.Rows[1]["PACK"];
-            //}
-            //UInt32 r = MakeCheque((UInt32)DT.Rows.Count + 5, rows, shortPath);
-        }
         //Without driver
         private static string SaveDBF(DataTable DT, string path)
         {
@@ -282,7 +212,6 @@ namespace driver.Lib
             return outputDBPath;
         }//ok
 
-
         //Cheques
         /// <summary>
         /// Збереження чеку в спеціальний документ
@@ -349,8 +278,6 @@ namespace driver.Lib
             else
                 dRow["DR"] = 0.0;
 
-
-
             ALTdTable.Rows.InsertAt(dRow, 0);
             ALTdTable.TableName = ChequeTableName(chqSUMA, report, isFx ? chqNom : "N" + chqNom, retrive, pType, znom, info);
 
@@ -376,20 +303,8 @@ namespace driver.Lib
             try
             {
                 //winapi.Funcs.OutputDebugString("1");   C:\Server\out-2
-                string savedChequeFilePath = string.Empty;
-                string outputDir = "";
-                if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
-                    try
-                    {
-                        outputDir = ((System.Collections.Hashtable)driver.Config.ConfigManager.Instance.CommonConfiguration.PROFILES_Items[dTable.TableName])["OUTPUT"].ToString();
-                    }
-                    catch (Exception e) { CoreLib.WriteLog(e, MethodInfo.GetCurrentMethod().Name); } 
-                    
-                if (outputDir == string.Empty)
-                    outputDir = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Cheques;
-                if (!Directory.Exists(outputDir))
-                    Directory.CreateDirectory(outputDir);
-                savedChequeFilePath = SaveDBF(ALTdTable, outputDir);
+                string outputDir = getSavePathCheques(dTable.TableName);
+                string savedChequeFilePath = SaveDBF(ALTdTable, outputDir);
                 // if use secure saving
                 if (driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddCopyToArchive)
                     new components.Components.szStorage.szStorage().CompressFiles(outputDir, "#Cheques", driver.Config.ConfigManager.Instance.CommonConfiguration.APP_Admin, savedChequeFilePath);
@@ -481,7 +396,6 @@ namespace driver.Lib
             return localData;
         }//ok
         
-        
         #region PrivateFunctions
         /// <summary>
         /// Створення назви для документу чеку
@@ -519,14 +433,14 @@ namespace driver.Lib
             for (byte i = 0; i < values.Length; i++)
                 chqName = chqName.Replace("%" + i, values[i]);
 
-            if (File.Exists(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Cheques + "\\" + "C" + chqName + ".DBF"))
+            string outputDir = getSavePathCheques(info["PROFILE_ID"].ToString());
+            if (File.Exists(outputDir + "\\" + "C" + chqName + ".DBF"))
                 return ChequeTableName(suma, rep, nom + "c", ret, pType, znom, info);
             else
                 return "C" + chqName;
+
         }//ok
         #endregion
-
-
 
         //Invent
         /// <summary>
@@ -536,8 +450,6 @@ namespace driver.Lib
         /// <param name="isBackUp">Якщо true то чек буде збережено, як резервну копію
         /// в іншому випадку буде чек буде збережено як кінцевий документ</param>
         /// 
-
-
         public static void SaveInvent(DataTable dTable, bool isBackUp, DataSet cheques)
         {
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
@@ -712,6 +624,22 @@ namespace driver.Lib
             return "IS" + NamebyFormat;
         }//ok
 
+        public static string getSavePathCheques(string profileID)
+        {
+            string outputDir = "";
+            if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
+                try
+                {
+                    outputDir = ((System.Collections.Hashtable)driver.Config.ConfigManager.Instance.CommonConfiguration.PROFILES_Items[profileID])["OUTPUT"].ToString();
+                }
+                catch (Exception e) { CoreLib.WriteLog(e, MethodInfo.GetCurrentMethod().Name); }
+
+            if (outputDir == string.Empty)
+                outputDir = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Cheques;
+            if (!Directory.Exists(outputDir))
+                Directory.CreateDirectory(outputDir);
+            return outputDir;
+        }
 
     }
 }
