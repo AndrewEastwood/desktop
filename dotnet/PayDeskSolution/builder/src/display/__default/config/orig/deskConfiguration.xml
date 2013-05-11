@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="windows-1251" ?> 
+<document name="taxRelation">
+
+    <!-- General configuration -->
+    <property name="DeskNo" value="1"/>
+    <property name="DeskName" value=""/>
+    <property name="SubUnit" value="2"/>
+    <property name="RefreshRate" value="15"/>
+    <property name="InitialQuantity" value="1"/>
+    <property name="BuyerId" value=""/>
+    <property name="UseWeight" value="false"/>
+    <property name="DefaultSearch" value="Barcode"/>
+    <section name="SearchItems">
+        <property name="id" value="true"/>
+        <property name="barcode" value="true"/>
+        <property name="name" value="true"/>
+    </section>
+
+    <!-- Path configuration -->
+    <property name="PathToAppRoot" value="C:\\InTech\\PayDesk"/>
+    <property name="PathToDisplay" value="display"/>
+
+    <property name="PathToArticles" value="articles"/>
+    <property name="PathToBills" value="bills"/>
+    <property name="PathToCheques" value="cheques"/>
+    <property name="PathToExchange" value="\\server-name\\ExchangeZal"/>
+    <property name="PathToTemp" value="temp"/>
+    <property name="PathToLanguages" value="lib\\languages"/>
+    <property name="PathToPlugins" value="lib\\plugins"/>
+    <property name="PathToReports" value="lib\\reports"/>
+    <property name="PathToSchemes" value="lib\\schemes"/>
+    <property name="PathToSkins" value="lib\\skins"/>
+    <property name="PathToTemplates" value="lib\\templates"/>
+    <property name="PathToUsers" value="users"/>
+
+    <!-- Additional configuration -->
+    <property name="RefreshTimeout" value="100"/>
+    <property name="ChequeNamePattern" value="%0%1_%2_%3_%4_%5_%6_%7"/>
+    <property name="IventAutoSaveItems" value="10"/>
+    <property name="Language" value="ua-ua"/>
+    <property name="DigitsAfterDotForMoney" value="2"/>
+    <property name="DigitsAfterDotForQuntity" value="3"/>
+    <property name="ClearTempFolder" value="true"/>
+    <property name="ShowInventWindow" value="false"/>
+    <property name="SaveExchangeFiles" value="true"/>
+
+    <!-- non related configuration -->
+    <property name="UseIndicatorDevice" value="true"/>
+
+</document>

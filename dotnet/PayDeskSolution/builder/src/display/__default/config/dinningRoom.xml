@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="windows-1251" ?> 
+<document name="dinningRoom">
+
+    <!-- Список офіціантів 
+         Щоб відключити цію секцію встановіть значення value="false" в параметрів active
+         <property name="active" value="false"/>
+    -->
+    <section name="Waiters">
+        <property name="active" value="true"/>
+        <section name="items">
+            <property name="1" value="Офіціант"/>
+        </section>
+    </section>
+
+    <!-- Список доступних столиків в закладі
+         Щоб відключити цію секцію встановіть значення value="false" в параметрів active
+         <property name="active" value="false"/>
+    -->
+    <section name="DeskNumbers">
+        <property name="active" value="true"/>
+        <section name="items">
+            <property name="1" value="ст.1"/>
+            <property name="2" value="ст.2"/>
+            <property name="3" value="ст.3"/>
+            <property name="4" value="ст.4"/>
+            <property name="5" value="ст.5"/>
+            <property name="6" value="ст.6"/>
+            <property name="7" value="ст.7"/>
+            <property name="8" value="ст.8"/>
+            <property name="9" value="ст.9"/>
+            <property name="10" value="ст.10"/>
+            <property name="11" value="ст.14"/>
+            <property name="12" value="ст.12"/>
+            <property name="13" value="ст.13"/>
+            <property name="14" value="ст.14"/>
+            <property name="15" value="ст.15"/>
+            <property name="16" value="ст.16"/>
+            <property name="17" value="ст.17"/>
+            <property name="19" value="ст.19"/>
+            <property name="20" value="ст.20"/>
+        </section>
+    </section>
+
+    <!-- Додаткові позначки (фішки)
+         Щоб відключити цію секцію встановіть значення value="false" в параметрів active
+         <property name="active" value="false"/>
+    -->
+    <section name="OrderNumbers">
+        <property name="active" value="false"/>
+        <section name="items">
+            <property name="1" value="(фішка.1)"/>
+            <property name="2" value="(фішка.2)"/>
+            <property name="3" value="(фішка.3)"/>
+            <property name="4" value="(фішка.4)"/>
+            <property name="5" value="(фішка.5)"/>
+            <property name="6" value="(фішка.6)"/>
+            <property name="7" value="(фішка.7)"/>
+            <property name="8" value="(фішка.8)"/>
+        </section>
+    </section>
+
+    <!-- Порядок показу секцій -->
+    <property name="patternBarOrderComment" value="Waiters DeskNumbers OrderNumbers"/>
+    
+    <!-- Додатковий коментар -->
+    <property name="useAdditionalComment" value="false"/>
+
+
+</document>
