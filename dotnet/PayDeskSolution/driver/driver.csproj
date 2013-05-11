@@ -108,13 +108,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\components\components.csproj">
+    <None Include="Resources\market.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\components\components.csproj">
       <Project>{BE1911B7-9DDA-4F5C-8B55-ED05673B4429}</Project>
       <Name>components</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\market.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

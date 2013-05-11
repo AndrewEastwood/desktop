@@ -136,9 +136,9 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.chequeContainer = new System.Windows.Forms.SplitContainer();
             this.chequeDGV = new System.Windows.Forms.DataGridView();
-            this.sensorPanel1 = new components.UI.Controls.SensorUgcPanel();
+            this.sensorPanel1 = new components.UI.Controls.SensorUgcPanel.SensorUgcPanel();
             this.label_uiWndmain_DemoShowChq = new System.Windows.Forms.Label();
-            this.sensorDataPanel1 = new components.UI.Controls.SensorDataPanel();
+            this.sensorDataPanel1 = new components.UI.Controls.SensorDataPanel.SensorDataPanel();
             this.articleDGV = new System.Windows.Forms.DataGridView();
             this.label_uiWndmain_DemoShowArt = new System.Windows.Forms.Label();
             this.timer_buyer_ready = new System.Windows.Forms.Timer(this.components);
@@ -1193,7 +1193,7 @@
             this.sensorPanel1.SensorType = 50;
             this.sensorPanel1.Size = new System.Drawing.Size(150, 46);
             this.sensorPanel1.TabIndex = 0;
-            this.sensorPanel1.OnSensorButtonClicked += new global::components.UI.Controls.SensorUgcPanel.SensorButtonClicked(this.sensorPanel1_OnSensorButtonClicked);
+            this.sensorPanel1.OnSensorButtonClicked += new global::components.UI.Controls.SensorUgcPanel.SensorUgcPanel.SensorButtonClicked(this.sensorPanel1_OnSensorButtonClicked);
             // 
             // label_uiWndmain_DemoShowChq
             // 
@@ -1217,7 +1217,7 @@
             this.sensorDataPanel1.Size = new System.Drawing.Size(835, 312);
             this.sensorDataPanel1.TabIndex = 4;
             this.sensorDataPanel1.Visible = false;
-            this.sensorDataPanel1.Navigator.OnFilterChanged += new global::components.UI.Controls.CategoryNavBar.FilterChanged(Navigator_OnFilterChanged);
+            this.sensorDataPanel1.Navigator.OnFilterChanged += new global::components.UI.Controls.CategoryNavBar.CategoryNavBar.FilterChanged(Navigator_OnFilterChanged);
             // 
             // articleDGV
             // 
@@ -1447,8 +1447,8 @@
         private System.Windows.Forms.ToolStripDropDownButton DDM_Plugins;
         private System.Windows.Forms.ContextMenuStrip wndMainPlugins;
         private System.Windows.Forms.ToolStripMenuItem ddmPlugins_tsiMenu_comportCommands;
-        private components.UI.Controls.SensorUgcPanel sensorPanel1;
-        private components.UI.Controls.SensorDataPanel sensorDataPanel1;
+        private components.UI.Controls.SensorUgcPanel.SensorUgcPanel sensorPanel1;
+        private components.UI.Controls.SensorDataPanel.SensorDataPanel sensorDataPanel1;
         private System.Windows.Forms.Timer timer_buyer_ready;
         private System.IO.Ports.SerialPort serialPort1;
         // ------ Settings Properies ------

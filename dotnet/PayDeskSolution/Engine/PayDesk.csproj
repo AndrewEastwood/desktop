@@ -367,8 +367,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="Resources\by_bc.png" />
     <None Include="Resources\by_c.png" />
     <None Include="Resources\by_name.png" />
@@ -410,7 +408,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\components\components.csproj">
+    <ProjectReference Include="..\..\components\components.csproj">
       <Project>{BE1911B7-9DDA-4F5C-8B55-ED05673B4429}</Project>
       <Name>components</Name>
     </ProjectReference>

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.treeVisualizer1 = new components.UI.Controls.TreeVisualizer();
+            this.treeVisualizer1 = new components.UI.Controls.TreeVisualizer.TreeVisualizer();
             this.SuspendLayout();
             // 
             // treeVisualizer1
@@ -56,7 +56,7 @@
 
         #endregion
 
-        private components.UI.Controls.TreeVisualizer treeVisualizer1;
+        private components.UI.Controls.TreeVisualizer.TreeVisualizer treeVisualizer1;
     }
 }
 

@@ -10,17 +10,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-/* CUSTOM REFERENCES */
-//0using mdcore;
-//0using winapi;
-//0using PluginModule;
-//0using ;
-//0using mdcore.Config;
-//0using ;
-//0using mdcore.Components.Objects;
-//0using mdcore.Components.UI;
 using PayDesk.Components.UI.wndBills;
-//0using mdcore.Components;
 using System.Collections;
 using driver.Config;
 using driver.Common;
@@ -36,8 +26,9 @@ using driver.Components.Objects;
 using components.Components.MMessageBox;
 using components.Components.HashObject;
 using components.Public;
-using components.UI.Controls;
-//using comport;
+using components.UI.Controls.SensorUgcPanel;
+using components.UI.Controls.SensorDataPanel;
+
 /*
  * Notes:
  *  Application for perform selling products

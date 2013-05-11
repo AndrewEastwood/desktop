@@ -36,12 +36,6 @@
     <ApplicationIcon>Tree-02.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ionic.Zip">
-      <HintPath>..\components\Components\szStorage\Ionic.Zip.dll</HintPath>
-    </Reference>
-    <Reference Include="Npgsql">
-      <HintPath>..\components\Components\PostgreSql\Npgsql.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -83,13 +77,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\components\components.csproj">
+    <Content Include="Tree-02.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\components\components.csproj">
       <Project>{BE1911B7-9DDA-4F5C-8B55-ED05673B4429}</Project>
       <Name>components</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Tree-02.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

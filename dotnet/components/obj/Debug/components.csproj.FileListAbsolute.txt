@@ -81,3 +81,26 @@ D:\Dropbox\components\obj\Debug\GenerateResource-ResGen.read.1.tlog
 D:\Dropbox\components\obj\Debug\GenerateResource-ResGen.read.7.tlog
 D:\Dropbox\components\obj\Debug\GenerateResource-ResGen.write.1.tlog
 D:\Dropbox\components\obj\Debug\components.UI.Controls.wgtAppSettings.wgtAppSettings.resources
+D:\My Development\GitHub\desktop\dotnet\components\bin\Debug\components.dll
+D:\My Development\GitHub\desktop\dotnet\components\bin\Debug\components.pdb
+D:\My Development\GitHub\desktop\dotnet\components\bin\Debug\HtmlAgilityPack.dll
+D:\My Development\GitHub\desktop\dotnet\components\bin\Debug\Ionic.Zip.dll
+D:\My Development\GitHub\desktop\dotnet\components\bin\Debug\Npgsql.dll
+D:\My Development\GitHub\desktop\dotnet\components\bin\Debug\Mono.Security.dll
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\ResolveAssemblyReference.cache
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\components.Components.MMessageBox.MMessageBox.resources
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\components.UI.Controls.EmbeddedConsole.EmbeddedConsole.resources
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\components.UI.Controls.FileKeyValue.FileKeyValue.resources
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\components.UI.Controls.FileKeyValue.TabSource.resources
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\components.Properties.Resources.resources
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\components.UI.Controls.CategoryNavBar.CategoryNavBar.resources
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\components.UI.Controls.SensorDataPanel.SensorDataPanel.resources
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\components.UI.Controls.SensorUgcPanel.SensorUgcPanel.resources
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\components.UI.Controls.TreeVisualizer.TreeVisualizer.resources
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\components.UI.Controls.UploadControl.UploadControl.resources
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\components.UI.Controls.wgtAppSettings.wgtAppSettings.resources
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\components.UI.Windows.wndAppSettings.wndAppSettings.resources
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\GenerateResource-ResGen.read.1.tlog
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\GenerateResource-ResGen.write.1.tlog
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\components.dll
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\components.pdb

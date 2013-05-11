@@ -58,3 +58,4 @@ D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\ProductCategoryManager\o
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\ProductCategoryManager\obj\x86\Debug\ProductCategoryManager.Properties.Resources.resources
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\ProductCategoryManager\obj\x86\Debug\ProductCategoryManager.exe
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\ProductCategoryManager\obj\x86\Debug\ProductCategoryManager.pdb
+D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\ProductCategoryManager\bin\Debug\HtmlAgilityPack.dll

@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace components.UI.Controls.SensorDataPanel
+namespace components.UI.Controls
 {
     public partial class SensorDataPanel : UserControl
     {
@@ -15,7 +15,7 @@ namespace components.UI.Controls.SensorDataPanel
             InitializeComponent();
         }
 
-        public CategoryNavBar.CategoryNavBar Navigator
+        public CategoryNavBar Navigator
         {
             get { return this.categoryNavBar1; }
             set { this.categoryNavBar1 = value; }

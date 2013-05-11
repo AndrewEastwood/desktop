@@ -262,3 +262,4 @@ D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Plugin_DATECS_FP3530T\ob
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Plugin_DATECS_FP3530T\obj\Debug\DATECS_FP3530T.UI.AppUI.Tree.resources
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Plugin_DATECS_FP3530T\obj\Debug\DATECS_FP3530T.dll
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Plugin_DATECS_FP3530T\obj\Debug\DATECS_FP3530T.pdb
+D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Plugin_DATECS_FP3530T\bin\Debug\HtmlAgilityPack.dll

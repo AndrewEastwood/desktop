@@ -241,7 +241,6 @@ D:\My Development\Repository\desktop\dotnet\PayDeskSolution\Engine\obj\Debug\Pay
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\obj\Debug\ResolveAssemblyReference.cache
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\obj\Debug\GenerateResource-ResGen.read.1.tlog
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\obj\Debug\GenerateResource-ResGen.write.1.tlog
-D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\bin\Debug\PayDesk.exe.config
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\bin\Debug\PayDesk.exe
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\bin\Debug\PayDesk.pdb
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\bin\Debug\components.dll
@@ -283,3 +282,4 @@ D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\obj\Debug\PayDesk
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\obj\Debug\PayDesk.exe.licenses
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\obj\Debug\PayDesk.exe
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\obj\Debug\PayDesk.pdb
+D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\bin\Debug\HtmlAgilityPack.dll
