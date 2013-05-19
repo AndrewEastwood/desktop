@@ -49,7 +49,12 @@ function cleanup() {
     rm -rf ./bin/*
 }
 
+function getVersion() {
+    echo "Build Version: `date +%y.%m%d`"
+}
+
 function build() {
+
     chat "build"
     #
     # copy libraries
@@ -89,5 +94,13 @@ function build() {
     cp -v $PROJECT/Plugin_DATECS_FP3530T/bin/Debug/DATECS_FP3530T.dll ./bin/Plugins/DATECS_FP3530T/
     cp -v $PROJECT/Plugin_IKC_E260T/bin/Debug/IKC_E260T.dll ./bin/Plugins/IKC-E260T/
     end "copy (with overwrite) plugins"
+    
+    #
+    # set build version
+    #
+    VER="`getVersion`"
+    chat "$VER"
+    echo "$VER" > ./bin/VERSION.txt
+    
 
 }
