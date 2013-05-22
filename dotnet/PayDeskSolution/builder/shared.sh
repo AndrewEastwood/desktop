@@ -50,7 +50,7 @@ function cleanup() {
 }
 
 function getVersion() {
-    echo "Build Version: `date +%y.%m%d`"
+    echo "Build Version: `date +%y.%m%d.%H%M`"
 }
 
 function build() {
