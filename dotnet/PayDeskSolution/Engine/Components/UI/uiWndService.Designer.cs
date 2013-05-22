@@ -34,9 +34,13 @@
             this.uPassLbl = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.userPFPTbox = new System.Windows.Forms.TextBox();
             this.userPTbox = new System.Windows.Forms.TextBox();
             this.uIDTBox = new System.Windows.Forms.TextBox();
+            this.userLFPTbox = new System.Windows.Forms.TextBox();
             this.userLTbox = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.label3 = new System.Windows.Forms.Label();
             this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
@@ -75,10 +79,7 @@
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.userLFPTbox = new System.Windows.Forms.TextBox();
-            this.userPFPTbox = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
+            this.tabPage_printer_additional = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -151,6 +152,14 @@
             this.tabPage1.Text = "Інформація касира";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // userPFPTbox
+            // 
+            this.userPFPTbox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.userPFPTbox.Location = new System.Drawing.Point(159, 99);
+            this.userPFPTbox.Name = "userPFPTbox";
+            this.userPFPTbox.Size = new System.Drawing.Size(147, 21);
+            this.userPFPTbox.TabIndex = 1004;
+            // 
             // userPTbox
             // 
             this.userPTbox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -168,6 +177,15 @@
             this.uIDTBox.Size = new System.Drawing.Size(147, 21);
             this.uIDTBox.TabIndex = 1002;
             // 
+            // userLFPTbox
+            // 
+            this.userLFPTbox.AcceptsReturn = true;
+            this.userLFPTbox.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.userLFPTbox.Location = new System.Drawing.Point(159, 59);
+            this.userLFPTbox.Name = "userLFPTbox";
+            this.userLFPTbox.Size = new System.Drawing.Size(147, 21);
+            this.userLFPTbox.TabIndex = 1;
+            // 
             // userLTbox
             // 
             this.userLTbox.AcceptsReturn = true;
@@ -177,6 +195,24 @@
             this.userLTbox.ReadOnly = true;
             this.userLTbox.Size = new System.Drawing.Size(147, 21);
             this.userLTbox.TabIndex = 1;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(156, 43);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(65, 13);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "Логін ЕККР";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(156, 83);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(76, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Пароль ЕККР";
             // 
             // tabPage2
             // 
@@ -190,7 +226,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(312, 89);
+            this.tabPage2.Size = new System.Drawing.Size(312, 127);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Адміністратор";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -259,7 +295,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(312, 89);
+            this.tabPage5.Size = new System.Drawing.Size(312, 127);
             this.tabPage5.TabIndex = 2;
             this.tabPage5.Text = "Схеми";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -311,6 +347,7 @@
             // 
             this.tabControl3.Controls.Add(this.tabPage7);
             this.tabControl3.Controls.Add(this.tabPage8);
+            this.tabControl3.Controls.Add(this.tabPage_printer_additional);
             this.tabControl3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl3.Location = new System.Drawing.Point(3, 3);
             this.tabControl3.Multiline = true;
@@ -509,10 +546,10 @@
             this.checkedListBox1.ForeColor = System.Drawing.SystemColors.WindowText;
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.IntegralHeight = false;
-            this.checkedListBox1.Location = new System.Drawing.Point(3, 31);
+            this.checkedListBox1.Location = new System.Drawing.Point(3, 29);
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.checkedListBox1.Size = new System.Drawing.Size(456, 370);
+            this.checkedListBox1.Size = new System.Drawing.Size(456, 372);
             this.checkedListBox1.TabIndex = 10;
             this.checkedListBox1.UseCompatibleTextRendering = true;
             // 
@@ -531,7 +568,7 @@
             this.toolStrip1.Location = new System.Drawing.Point(3, 3);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip1.Size = new System.Drawing.Size(456, 28);
+            this.toolStrip1.Size = new System.Drawing.Size(456, 26);
             this.toolStrip1.TabIndex = 5;
             // 
             // newToolStripButton1
@@ -540,7 +577,7 @@
             this.newToolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripButton1.Image")));
             this.newToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.newToolStripButton1.Name = "newToolStripButton1";
-            this.newToolStripButton1.Size = new System.Drawing.Size(23, 25);
+            this.newToolStripButton1.Size = new System.Drawing.Size(23, 23);
             this.newToolStripButton1.Text = "Нова схема";
             this.newToolStripButton1.Click += new System.EventHandler(this.newToolStripButton1_Click);
             // 
@@ -551,7 +588,7 @@
             this.saveToolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripButton1.Image")));
             this.saveToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.saveToolStripButton1.Name = "saveToolStripButton1";
-            this.saveToolStripButton1.Size = new System.Drawing.Size(23, 25);
+            this.saveToolStripButton1.Size = new System.Drawing.Size(23, 23);
             this.saveToolStripButton1.Text = "Зберегти схему";
             this.saveToolStripButton1.Click += new System.EventHandler(this.saveToolStripButton1_Click);
             // 
@@ -562,7 +599,7 @@
             this.cancelToolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("cancelToolStripButton1.Image")));
             this.cancelToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.cancelToolStripButton1.Name = "cancelToolStripButton1";
-            this.cancelToolStripButton1.Size = new System.Drawing.Size(23, 25);
+            this.cancelToolStripButton1.Size = new System.Drawing.Size(23, 23);
             this.cancelToolStripButton1.Text = "Скасувати";
             this.cancelToolStripButton1.Click += new System.EventHandler(this.cancelToolStripButton1_Click);
             // 
@@ -574,7 +611,7 @@
             this.deleteToolStripButton3.Image = global::PayDesk.Components.UI.Properties.Resources.del;
             this.deleteToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.deleteToolStripButton3.Name = "deleteToolStripButton3";
-            this.deleteToolStripButton3.Size = new System.Drawing.Size(23, 25);
+            this.deleteToolStripButton3.Size = new System.Drawing.Size(23, 23);
             this.deleteToolStripButton3.Text = "Видалити";
             this.deleteToolStripButton3.Click += new System.EventHandler(this.deleteToolStripButton3_Click);
             // 
@@ -585,7 +622,7 @@
             this.editToolStripButton5.Image = global::PayDesk.Components.UI.Properties.Resources.edit;
             this.editToolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.editToolStripButton5.Name = "editToolStripButton5";
-            this.editToolStripButton5.Size = new System.Drawing.Size(23, 25);
+            this.editToolStripButton5.Size = new System.Drawing.Size(23, 23);
             this.editToolStripButton5.Text = "Редагувати";
             this.editToolStripButton5.Click += new System.EventHandler(this.editToolStripButton5_Click);
             // 
@@ -595,7 +632,7 @@
             this.toolStripTextBox1.Margin = new System.Windows.Forms.Padding(1, 1, 1, 4);
             this.toolStripTextBox1.MaxLength = 15;
             this.toolStripTextBox1.Name = "toolStripTextBox1";
-            this.toolStripTextBox1.Size = new System.Drawing.Size(140, 23);
+            this.toolStripTextBox1.Size = new System.Drawing.Size(140, 21);
             // 
             // toolStripComboBox1
             // 
@@ -603,7 +640,7 @@
             this.toolStripComboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
             this.toolStripComboBox1.Margin = new System.Windows.Forms.Padding(1, 1, 1, 4);
             this.toolStripComboBox1.Name = "toolStripComboBox1";
-            this.toolStripComboBox1.Size = new System.Drawing.Size(150, 23);
+            this.toolStripComboBox1.Size = new System.Drawing.Size(150, 21);
             // 
             // button1
             // 
@@ -615,40 +652,15 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // userLFPTbox
+            // tabPage_printer_additional
             // 
-            this.userLFPTbox.AcceptsReturn = true;
-            this.userLFPTbox.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.userLFPTbox.Location = new System.Drawing.Point(159, 59);
-            this.userLFPTbox.Name = "userLFPTbox";
-            this.userLFPTbox.Size = new System.Drawing.Size(147, 21);
-            this.userLFPTbox.TabIndex = 1;
-            // 
-            // userPFPTbox
-            // 
-            this.userPFPTbox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.userPFPTbox.Location = new System.Drawing.Point(159, 99);
-            this.userPFPTbox.Name = "userPFPTbox";
-            this.userPFPTbox.Size = new System.Drawing.Size(147, 21);
-            this.userPFPTbox.TabIndex = 1004;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(156, 83);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(76, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Пароль ЕККР";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(156, 43);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(65, 13);
-            this.label6.TabIndex = 5;
-            this.label6.Text = "Логін ЕККР";
+            this.tabPage_printer_additional.Location = new System.Drawing.Point(4, 22);
+            this.tabPage_printer_additional.Name = "tabPage_printer_additional";
+            this.tabPage_printer_additional.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage_printer_additional.Size = new System.Drawing.Size(448, 372);
+            this.tabPage_printer_additional.TabIndex = 2;
+            this.tabPage_printer_additional.Text = "Додатково";
+            this.tabPage_printer_additional.UseVisualStyleBackColor = true;
             // 
             // uiWndService
             // 
@@ -742,5 +754,6 @@
         private System.Windows.Forms.TextBox userLFPTbox;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TabPage tabPage_printer_additional;
     }
 }

@@ -69,6 +69,7 @@ namespace components.Shared.Interfaces
         // UI
         System.Windows.Forms.UserControl DriverUI { get; }
         System.Windows.Forms.UserControl PortUI { get; }
+        System.Windows.Forms.UserControl CompatibilityUI { get; }
 
         //
         bool Activate();

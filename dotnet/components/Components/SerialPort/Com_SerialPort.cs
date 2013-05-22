@@ -194,7 +194,7 @@ namespace components.Components.SerialPort
         public bool Available(int portIndex)
         {
             string portName = "COM" + portIndex.ToString() + ":";
-            IntPtr tmphPort = Com_WinApi.CreateFile(portName,
+            IntPtr tmphPort = Com_WinApi.CreateFileA(portName,
                 (UInt32)dwDesiredAccess.GENERIC_READ, 0, IntPtr.Zero,
                 (UInt32)dwCreationDisposion.OPEN_EXISTING, 0x0, IntPtr.Zero);
             if (tmphPort == (IntPtr)Com_WinApi.INVALID_HANDLE_VALUE)
@@ -212,7 +212,7 @@ namespace components.Components.SerialPort
         public bool Open(int portIndex)
         {
             string portName = "COM" + portIndex.ToString() + ":";
-            handle = Com_WinApi.CreateFile(portName, (UInt32)(dwDesiredAccess.GENERIC_READ | dwDesiredAccess.GENERIC_WRITE),
+            handle = Com_WinApi.CreateFileA(portName, (UInt32)(dwDesiredAccess.GENERIC_READ | dwDesiredAccess.GENERIC_WRITE),
                 0, IntPtr.Zero, (UInt32)dwCreationDisposion.OPEN_EXISTING, (UInt32)dwFileFlags.FILE_FLAG_OVERLAPPED, IntPtr.Zero);
 
             if (handle == (IntPtr)Com_WinApi.INVALID_HANDLE_VALUE)
@@ -330,7 +330,7 @@ namespace components.Components.SerialPort
             count = 0;
             OVERLAPPED OLRead = new OVERLAPPED();
             bool fOK = false;
-            OLRead.hEvent = Com_WinApi.CreateEvent(IntPtr.Zero, true, false, null);
+            OLRead.hEvent = Com_WinApi.CreateEventA(IntPtr.Zero, true, false, null);
 
             if (OLRead.hEvent != null)
             {
@@ -366,25 +366,51 @@ namespace components.Components.SerialPort
             uint BytesWritten = 0;
             OVERLAPPED OverlappedWrite = new OVERLAPPED();
             bool fOK = false;
-            OverlappedWrite.hEvent = Com_WinApi.CreateEvent(IntPtr.Zero, true, false, null);
+            int lastError = 0;
+            OverlappedWrite.hEvent = Com_WinApi.CreateEventA(IntPtr.Zero, true, false, null);
 
+            components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 1");
             if (OverlappedWrite.hEvent != null)
             {
+                components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 2");
                 fOK = Com_WinApi.WriteFile(handle, SendArr, (uint)SendArr.Length, out BytesWritten, ref OverlappedWrite);
+                components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 3: " + fOK.ToString());
+                components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
+
                 if (!fOK && Marshal.GetLastWin32Error() == Com_WinApi.ERROR_IO_PENDING)
                 {
+                    components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 4: " + fOK.ToString());
+                    components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
                     fOK = (Com_WinApi.WaitForSingleObject(OverlappedWrite.hEvent, 1000) == Com_WinApi.WAIT_OBJECT_0) &&
                         Com_WinApi.GetOverlappedResult(handle, ref OverlappedWrite, ref BytesWritten, false);
+                    components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 5: " + fOK.ToString());
+                    components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
                 }
+
                 if (fOK)
+                {
                     fOK = (BytesWritten == SendArr.Length);
+                    components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 6: " + fOK.ToString());
+                    components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
+                }
+
                 if (!fOK)
+                {
                     PortClear();
+                    components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 7: " + fOK.ToString());
+                    components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
+                }
                 Com_WinApi.CloseHandle(OverlappedWrite.hEvent);
+                components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 8: " + fOK.ToString());
+                components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
             }
             else
-                Marshal.GetLastWin32Error();
+                lastError = Marshal.GetLastWin32Error();
 
+            if (lastError != 0)
+                components.Components.WinApi.Com_WinApi.OutputDebugString("Marshal.GetLastWin32Error() returned " + lastError);
+
+            components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
             return fOK;
         }
         public bool PortClear()

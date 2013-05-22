@@ -33,7 +33,6 @@ namespace vk
             if (hargs.ContainsKey("runas"))
                 runas = hargs["runas"].ToString();
 
-
             /*string appType = string.Empty;
             int wndIdx = -1;
             Program.SleepTime = 100;
@@ -51,7 +50,6 @@ namespace vk
                 }
                 catch { }
             }*/
-
 
             // one copy only
             System.Threading.Mutex myMutex = null;

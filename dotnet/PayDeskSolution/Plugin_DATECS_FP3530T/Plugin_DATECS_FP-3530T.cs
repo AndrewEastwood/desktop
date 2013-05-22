@@ -3208,6 +3208,7 @@ namespace DATECS_FP3530T
         public Hashtable AllowedMethods { get { return Params.AllowedMethods; } }
         public UserControl DriverUI { get { return driverui; } }
         public UserControl PortUI { get { return portui; } }
+        public UserControl CompatibilityUI { get { return null; } }
         #endregion
     }
 }

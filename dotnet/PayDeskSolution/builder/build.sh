@@ -5,8 +5,12 @@
 function main() {
     cleanup
     build
-    start ./bin/PayDesk.exe &
-    ./bin/PayDesk.exe &
+    if [ "$1" = "start" ]
+    then
+        cd ./bin/
+        start PayDesk.exe
+        ./PayDesk.exe &
+    fi
 }
 
 time main

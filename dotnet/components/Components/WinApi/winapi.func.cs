@@ -37,7 +37,7 @@ namespace components.Components.WinApi
         public static extern UInt32 GetFileAttributes(String lpFileName);
         
         [DllImport("Kernel32.dll", SetLastError = true)]
-        public static extern IntPtr CreateFile(String lpFileName, UInt32 dwDesiredAccess,
+        public static extern IntPtr CreateFileA(String lpFileName, UInt32 dwDesiredAccess,
             UInt32 dwShareMode, IntPtr lpSecurityAttributes,
             UInt32 dwCreationDisposion, UInt32 dwFlagsAndAttributes, IntPtr hTemplateFile);
         
@@ -74,9 +74,9 @@ namespace components.Components.WinApi
         [DllImport("Kernel32.dll", SetLastError = true)]
         public static extern Boolean ReadFile(IntPtr hFile, Byte[] lpBuffer, 
             UInt32 nNumberOfBytesToRead, out UInt32 nNumberOfBytesRead, ref OVERLAPPED lpOverlapped);
-        
-        [DllImport("Kernel32.dll")]
-        public static extern IntPtr CreateEvent(IntPtr lpEventAttributes, 
+
+        [DllImport("Kernel32.dll", SetLastError = true)]
+        public static extern IntPtr CreateEventA(IntPtr lpEventAttributes, 
             Boolean bManualReset, Boolean bInitialState, String lpName);
         
         [DllImport("Kernel32.dll", SetLastError = true)]

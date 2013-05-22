@@ -83,6 +83,7 @@ namespace PayDesk.Components.UI
         {
             pluginPanel.Controls.Clear();
             tabPage8.Controls.Clear();
+            tabPage_printer_additional.Controls.Clear();
 
             if (comboBox4.SelectedItem != null && comboBox4.SelectedItem.ToString() != string.Empty)
             {
@@ -96,6 +97,11 @@ namespace PayDesk.Components.UI
                     pluginPanel.Controls[drv.PortUI.Name].Dock = DockStyle.Fill;
                     tabPage8.Controls.Add(drv.DriverUI);
                     tabPage8.Controls[drv.DriverUI.Name].Dock = DockStyle.Fill;
+                    if (drv.CompatibilityUI != null)
+                    {
+                        tabPage_printer_additional.Controls.Add(drv.CompatibilityUI);
+                        tabPage_printer_additional.Controls[drv.CompatibilityUI.Name].Dock = DockStyle.Fill;
+                    }
                 }
             }
             else

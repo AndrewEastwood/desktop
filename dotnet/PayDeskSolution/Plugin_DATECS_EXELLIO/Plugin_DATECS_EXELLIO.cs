@@ -3261,6 +3261,7 @@ namespace DATECS_EXELLIO
         public Hashtable AllowedMethods { get { return Params.AllowedMethods; } }
         public UserControl DriverUI { get { return driverui; } }
         public UserControl PortUI { get { return portui; } }
+        public UserControl CompatibilityUI { get { return null; } }
         #endregion
     }
 }

@@ -56,6 +56,14 @@ function getVersion() {
 function build() {
 
     chat "build"
+
+    _updateLibs
+    _updateStatic
+    _updatePlugins
+    _setBuildVersion
+}
+
+function _updateLibs() {
     #
     # copy libraries
     #
@@ -68,7 +76,9 @@ function build() {
     cp -v $DEBUG/Mono.Security.dll ./bin/
     cp -v $DEBUG/Npgsql.dll ./bin/
     end "copy libraries"
+}
 
+function _updateStatic() {
     #
     # copy source
     #
@@ -85,22 +95,24 @@ function build() {
     done
     # cp -rv ./src/* ./bin/
     end "copy source"
+}
 
+function _updatePlugins() {
     #
     # copy (with overwrite) plugins
     #
     start "copy (with overwrite) plugins"
     cp -v $PROJECT/Plugin_DATECS_EXELLIO/bin/Debug/DATECS_EXELLIO.dll ./bin/Plugins/DATECS_EXELLIO/
     cp -v $PROJECT/Plugin_DATECS_FP3530T/bin/Debug/DATECS_FP3530T.dll ./bin/Plugins/DATECS_FP3530T/
-    cp -v $PROJECT/Plugin_IKC_E260T/bin/Debug/IKC_E260T.dll ./bin/Plugins/IKC-E260T/
+    cp -v $PROJECT/Plugin_IKC-OP2/bin/Debug/IKC-OP2.dll ./bin/Plugins/IKC-OP2/
     end "copy (with overwrite) plugins"
-    
+}
+
+function _setBuildVersion() {
     #
     # set build version
     #
     VER="`getVersion`"
     chat "$VER"
     echo "$VER" > ./bin/VERSION.txt
-    
-
 }

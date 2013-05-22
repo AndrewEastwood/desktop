@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DATECS_EXELLIO", "Plugin_DA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DATECS_FP3530T", "Plugin_DATECS_FP3530T\DATECS_FP3530T.csproj", "{9A8BDF76-1FD9-4E47-A3C2-F0877A66CEBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IKC_E260T", "Plugin_IKC_E260T\IKC_E260T.csproj", "{C5DF6468-7FA6-450A-915F-A7C22BF185B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IKC-OP2", "Plugin_IKC-OP2\IKC-OP2.csproj", "{C5DF6468-7FA6-450A-915F-A7C22BF185B2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "virtualKeyboard", "Com_VirualKeyboard\virtualKeyboard.csproj", "{344B1E11-98C0-4284-B545-8541DB6EDD2E}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "components", "..\components\components.csproj", "{BE1911B7-9DDA-4F5C-8B55-ED05673B4429}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLoader", "MyLoader\MyLoader.csproj", "{2B47D429-6AA1-46BB-8EEC-9AEDBF721305}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IKC-OP6", "Plugin_IKC-OP6\IKC-OP6.csproj", "{A7EE1B6B-4668-431A-81F5-B66B6790EECE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -119,6 +121,16 @@ Global
 		{2B47D429-6AA1-46BB-8EEC-9AEDBF721305}.Release|Mixed Platforms.Build.0 = Release|x86
 		{2B47D429-6AA1-46BB-8EEC-9AEDBF721305}.Release|x86.ActiveCfg = Release|x86
 		{2B47D429-6AA1-46BB-8EEC-9AEDBF721305}.Release|x86.Build.0 = Release|x86
+		{A7EE1B6B-4668-431A-81F5-B66B6790EECE}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{A7EE1B6B-4668-431A-81F5-B66B6790EECE}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{A7EE1B6B-4668-431A-81F5-B66B6790EECE}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{A7EE1B6B-4668-431A-81F5-B66B6790EECE}.Debug|x86.ActiveCfg = Debug|x86
+		{A7EE1B6B-4668-431A-81F5-B66B6790EECE}.Debug|x86.Build.0 = Debug|x86
+		{A7EE1B6B-4668-431A-81F5-B66B6790EECE}.Release|Any CPU.ActiveCfg = Release|x86
+		{A7EE1B6B-4668-431A-81F5-B66B6790EECE}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{A7EE1B6B-4668-431A-81F5-B66B6790EECE}.Release|Mixed Platforms.Build.0 = Release|x86
+		{A7EE1B6B-4668-431A-81F5-B66B6790EECE}.Release|x86.ActiveCfg = Release|x86
+		{A7EE1B6B-4668-431A-81F5-B66B6790EECE}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

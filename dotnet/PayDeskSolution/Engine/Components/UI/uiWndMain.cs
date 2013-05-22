@@ -456,7 +456,7 @@ namespace PayDesk.Components.UI
                         {
                             try
                             {
-                                Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_SetCashier", ConfigManager.Instance.CommonConfiguration.APP_PayDesk, UserConfig.UserLogin, UserConfig.UserPassword, string.Empty);
+                                Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_SetCashier", UserConfig.UserPassword, UserConfig.UserLogin, 0, string.Empty);
                             }
                             catch (Exception ex)
                             {
@@ -2663,9 +2663,8 @@ namespace PayDesk.Components.UI
 
 
             /* Data Loader v2.0 */
-            //Com_HashObject newFiles = DataWorkSource.CheckGetDataSource(dataContainer2.Structures[CoreConst.CONTAINER_STATE].GetTypedProperty<bool>(CoreConst.STATE_DATA_UPDATE_ONLY));
-            //DataWorkSource.UpdateSource(newFiles, ref this.dataContainer2);
-
+            // Com_HashObject newFiles = DataWorkSource.CheckGetDataSource(dataContainer2.Structures[CoreConst.CONTAINER_STATE].GetTypedProperty<bool>(CoreConst.STATE_DATA_UPDATE_ONLY));
+            // DataWorkSource.UpdateSource(newFiles, ref this.dataContainer2);
 
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles && this.Cheques.Tables.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
             {
@@ -2674,8 +2673,8 @@ namespace PayDesk.Components.UI
                 foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
                 {
                     this.CreateOrderStructure(this.Cheques.Tables[de.Key.ToString()]);
-                    this.Discount.Add(de.Key, DataWorkShared.GetStandartDiscountInfoStructure2());
-                    this.Summa.Add(de.Key, DataWorkShared.GetStandartCalculationInfoStructure2());
+                    this.Discount[de.Key] = DataWorkShared.GetStandartDiscountInfoStructure2();
+                    this.Summa[de.Key] = DataWorkShared.GetStandartCalculationInfoStructure2();
                 }
             }
 
@@ -2685,8 +2684,8 @@ namespace PayDesk.Components.UI
                 this.Summa.Clear();
                 foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
                 {
-                    this.Discount.Add(de.Key, DataWorkShared.GetStandartDiscountInfoStructure2());
-                    this.Summa.Add(de.Key, DataWorkShared.GetStandartCalculationInfoStructure2());
+                    this.Discount[de.Key] = DataWorkShared.GetStandartDiscountInfoStructure2();
+                    this.Summa[de.Key] = DataWorkShared.GetStandartCalculationInfoStructure2();
                 }
             }
 
