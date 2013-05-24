@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="windows-1251" ?> 
+<document name="printersConfiguration">
+
+    <property name="commonMessages" value="PrnCommonDefault.xml"/>
+
+    <!-- Thermal printers configuration -->
+    <section name="printers">
+        <section name="DATECS-EP60">
+            <property name="type" value="default"/>
+            <property name="template" value="n.tpl"/>
+            <property name="driver" value="Mkt27Com.exe"/>
+            <property name="messages" value="PrnDefault.xml"/>
+        </section>
+        <section name="DATECS-EP50">
+            <property name="type" value="default"/>
+            <property name="template" value="n.tpl"/>
+            <property name="driver" value="Mkt27Com.exe"/>
+            <section name="additional">
+                <property name="dosDriver" value="printerDos.bat"/>
+            </section>
+        </section>
+        <section name="UNS-MTPR2">
+            <property name="type" value="default"/>
+            <property name="template" value="n.tpl"/>
+            <property name="driver" value="Mkt27Com.exe"/>
+        </section>
+        <section name="UNS-SP1">
+            <property name="type" value="default"/>
+            <property name="template" value="n.tpl"/>
+            <property name="driver" value="Mkt27Com.exe"/>
+        </section>
+        <section name="UNS-SRP350">
+            <property name="type" value="default"/>
+            <property name="template" value="n.tpl"/>
+            <property name="driver" value="Mkt27Com.exe"/>
+        </section>
+        <section name="UNS-STP103">
+            <property name="type" value="default"/>
+            <property name="template" value="n.tpl"/>
+            <property name="driver" value="Mkt27Com.exe"/>
+        </section>
+    </section>
+
+</document>
