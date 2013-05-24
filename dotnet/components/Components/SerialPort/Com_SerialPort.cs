@@ -240,6 +240,10 @@ namespace components.Components.SerialPort
             _dcb.XonChar = (char)0x11;
             _dcb.XoffChar = (char)0x13;
 
+
+            _dcb.XonLim = 0;
+            _dcb.XoffLim = 16384;
+
             if (!Com_WinApi.SetCommState(handle, ref _dcb))
             {
                 System.Windows.Forms.MessageBox.Show("Задані неправильні параметри порту", "COM Порт", 
