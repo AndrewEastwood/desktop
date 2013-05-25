@@ -213,7 +213,7 @@ namespace components.Components.SerialPort
         /// <returns>Якщо true то СОМ-порт відкритий успішно</returns>
         public bool Open(int portIndex)
         {
-            string portName = "COM" + portIndex.ToString() + ":";
+            string portName = "COM" + portIndex.ToString();
             //handle = Com_WinApi.CreateFileA(portName, (UInt32)(dwDesiredAccess.GENERIC_READ | dwDesiredAccess.GENERIC_WRITE),
             //    0, IntPtr.Zero, (UInt32)dwCreationDisposion.OPEN_EXISTING, (UInt32)dwFileFlags.FILE_FLAG_OVERLAPPED, IntPtr.Zero);
 
