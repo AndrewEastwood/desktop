@@ -280,9 +280,9 @@ namespace components.Components.SerialPort
                 _port.WriteTimeout = (int)WriteTotalTimeoutConstant;
                 _port.ReadTimeout = (int)ReadTotalTimeoutConstant;
 
-                _port.Parity = (System.IO.Ports.Parity)Parity;
-                _port.StopBits = (System.IO.Ports.StopBits)StopBits;
-                _port.DataBits = (int)ByteSize;
+                //_port.Parity = (System.IO.Ports.Parity)Parity;
+                //_port.StopBits = (System.IO.Ports.StopBits)StopBits;
+                //_port.DataBits = (int)ByteSize;
 
                 _port.Open();
 
