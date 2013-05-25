@@ -104,3 +104,4 @@ D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\GenerateResource-Re
 D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\GenerateResource-ResGen.write.1.tlog
 D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\components.dll
 D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\components.pdb
+D:\My Development\GitHub\desktop\dotnet\components\obj\Debug\components.Components.SerialPort.PortSettings.resources

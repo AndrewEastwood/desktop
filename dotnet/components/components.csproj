@@ -82,6 +82,12 @@
     <Compile Include="Components\SerialPort\Com_SerialPort.cs" />
     <Compile Include="Components\PluginManager\Com_PluginManager.cs" />
     <Compile Include="Components\SecureRuntime\Com_SecureRuntime.cs" />
+    <Compile Include="Components\SerialPort\PortSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\SerialPort\PortSettings.Designer.cs">
+      <DependentUpon>PortSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Components\szStorage\szStorage.cs" />
     <Compile Include="Components\WinApi\WinApi_Delegates.cs" />
     <Compile Include="Shared\Defaults\DefaultComponentSettings.cs">
@@ -216,6 +222,9 @@
     <EmbeddedResource Include="Components\MessageBoxEx\MMessageBox.resx">
       <DependentUpon>MMessageBox.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\SerialPort\PortSettings.resx">
+      <DependentUpon>PortSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\EmbeddedConsole\EmbeddedConsole.resx">
       <DependentUpon>EmbeddedConsole.cs</DependentUpon>

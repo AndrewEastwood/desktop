@@ -33,6 +33,8 @@ namespace components.Components.SerialPort
         private object tag = "-";
         //
         private Hashtable _pcfg;
+        // test
+        private System.IO.Ports.SerialPort _port;
 
         /* CONSTRUCTOR */
 
@@ -212,65 +214,86 @@ namespace components.Components.SerialPort
         public bool Open(int portIndex)
         {
             string portName = "COM" + portIndex.ToString() + ":";
-            handle = Com_WinApi.CreateFileA(portName, (UInt32)(dwDesiredAccess.GENERIC_READ | dwDesiredAccess.GENERIC_WRITE),
-                0, IntPtr.Zero, (UInt32)dwCreationDisposion.OPEN_EXISTING, (UInt32)dwFileFlags.FILE_FLAG_OVERLAPPED, IntPtr.Zero);
+            //handle = Com_WinApi.CreateFileA(portName, (UInt32)(dwDesiredAccess.GENERIC_READ | dwDesiredAccess.GENERIC_WRITE),
+            //    0, IntPtr.Zero, (UInt32)dwCreationDisposion.OPEN_EXISTING, (UInt32)dwFileFlags.FILE_FLAG_OVERLAPPED, IntPtr.Zero);
 
-            if (handle == (IntPtr)Com_WinApi.INVALID_HANDLE_VALUE)
-                return false;
+            //if (handle == (IntPtr)Com_WinApi.INVALID_HANDLE_VALUE)
+            //    return false;
 
-            DCB _dcb = new DCB();
-            Com_WinApi.GetCommState(handle, ref _dcb);
-            //Setup dcb
-            _dcb.BaudRate = (int)this.baudRate;
-            //Clear RtsControl
-            _dcb.Flags &= 0x7FFFCFFF;
-            //Clear DsrControl
-            _dcb.Flags &= 0x7FFFFFCF;
-            //Set fBinary to 1
-            _dcb.Flags |= 0x00000001;
-            //Set fParity to 1
-            _dcb.Flags |= 0x00000002;
-            _dcb.ByteSize = (byte)this.dataBits;
-            _dcb.Parity = (byte)this.parity;
-            _dcb.StopBits = (byte)this.stopBits;
+            //DCB _dcb = new DCB();
+            //Com_WinApi.GetCommState(handle, ref _dcb);
+            ////Setup dcb
+            //_dcb.BaudRate = (int)this.baudRate;
+            ////Clear RtsControl
+            //_dcb.Flags &= 0x7FFFCFFF;
+            ////Clear DsrControl
+            //_dcb.Flags &= 0x7FFFFFCF;
+            ////Set fBinary to 1
+            //_dcb.Flags |= 0x00000001;
+            ////Set fParity to 1
+            //_dcb.Flags |= 0x00000002;
+            //_dcb.ByteSize = (byte)this.dataBits;
+            //_dcb.Parity = (byte)this.parity;
+            //_dcb.StopBits = (byte)this.stopBits;
 
-            //Handflow
-            _dcb.XonLim = 2048;
-            _dcb.XoffLim = 512;
-            _dcb.XonChar = (char)0x11;
-            _dcb.XoffChar = (char)0x13;
+            ////Handflow
+            //_dcb.XonLim = 2048;
+            //_dcb.XoffLim = 512;
+            //_dcb.XonChar = (char)0x11;
+            //_dcb.XoffChar = (char)0x13;
 
 
-            _dcb.XonLim = 0;
-            _dcb.XoffLim = 16384;
+            //_dcb.XonLim = 0;
+            //_dcb.XoffLim = 16384;
 
-            if (!Com_WinApi.SetCommState(handle, ref _dcb))
+            //if (!Com_WinApi.SetCommState(handle, ref _dcb))
+            //{
+            //    System.Windows.Forms.MessageBox.Show("Задані неправильні параметри порту", "COM Порт", 
+            //        System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+            //    return false;
+            //}
+            //COMMTIMEOUTS _tOut = new COMMTIMEOUTS();
+            //Com_WinApi.GetCommTimeouts(handle, out _tOut);
+
+            ////Setup timeouts
+            //_tOut.ReadIntervalTimeout = ReadIntervalTimeout;
+            //_tOut.ReadTotalTimeoutConstant = ReadTotalTimeoutConstant;
+            //_tOut.ReadTotalTimeoutMultiplier = ReadTotalTimeoutMultiplier;
+            //_tOut.WriteTotalTimeoutConstant = WriteTotalTimeoutConstant;
+            //_tOut.WriteTotalTimeoutMultiplier = WriteTotalTimeoutMultiplier;
+
+            //if (!Com_WinApi.SetCommTimeouts(handle, ref _tOut))
+            //{
+            //    System.Windows.Forms.MessageBox.Show("Задані неправильні таймаути порту", "COM Порт",
+            //        System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+            //    return false;
+            //}
+
+            //Com_WinApi.PurgeComm(handle, Com_WinApi.PURGE_TXCLEAR);
+            //Com_WinApi.PurgeComm(handle, Com_WinApi.PURGE_RXCLEAR);
+
+
+            try
             {
-                System.Windows.Forms.MessageBox.Show("Задані неправильні параметри порту", "COM Порт", 
+                _port = new System.IO.Ports.SerialPort(portName, (int)BaudRate);
+
+                _port.WriteTimeout = (int)WriteTotalTimeoutConstant;
+                _port.ReadTimeout = (int)ReadTotalTimeoutConstant;
+
+                _port.Parity = (System.IO.Ports.Parity)Parity;
+                _port.StopBits = (System.IO.Ports.StopBits)StopBits;
+                _port.DataBits = (int)ByteSize;
+
+                _port.Open();
+
+                isOpen = _port.IsOpen;
+            }
+            catch(Exception ex){
+                System.Windows.Forms.MessageBox.Show("Помилка відкриття СОМ-потру\n" + ex.Message, "COM Порт",
                     System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
                 return false;
             }
-            COMMTIMEOUTS _tOut = new COMMTIMEOUTS();
-            Com_WinApi.GetCommTimeouts(handle, out _tOut);
 
-            //Setup timeouts
-            _tOut.ReadIntervalTimeout = ReadIntervalTimeout;
-            _tOut.ReadTotalTimeoutConstant = ReadTotalTimeoutConstant;
-            _tOut.ReadTotalTimeoutMultiplier = ReadTotalTimeoutMultiplier;
-            _tOut.WriteTotalTimeoutConstant = WriteTotalTimeoutConstant;
-            _tOut.WriteTotalTimeoutMultiplier = WriteTotalTimeoutMultiplier;
-
-            if (!Com_WinApi.SetCommTimeouts(handle, ref _tOut))
-            {
-                System.Windows.Forms.MessageBox.Show("Задані неправильні таймаути порту", "COM Порт",
-                    System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-                return false;
-            }
-
-            Com_WinApi.PurgeComm(handle, Com_WinApi.PURGE_TXCLEAR);
-            Com_WinApi.PurgeComm(handle, Com_WinApi.PURGE_RXCLEAR);
-
-            isOpen = true;
             return true;
         }
         /// <summary>
@@ -331,28 +354,41 @@ namespace components.Components.SerialPort
         /// <returns>Якщо true то читання з СОМ-порту відбулося успішно</returns>
         public bool Read(ref byte[] buffer, out uint count)
         {
-            count = 0;
-            OVERLAPPED OLRead = new OVERLAPPED();
-            bool fOK = false;
-            OLRead.hEvent = Com_WinApi.CreateEventA(IntPtr.Zero, true, false, null);
 
-            if (OLRead.hEvent != null)
+            bool fOK = false;
+            count = 0;
+            try
             {
-                fOK = Com_WinApi.ReadFile(handle, buffer, (uint)buffer.Length, out count, ref OLRead);
-                if (!fOK)
-                {
-                    if (Marshal.GetLastWin32Error() == Com_WinApi.ERROR_IO_PENDING)
-                    {
-                        fOK = (Com_WinApi.WaitForSingleObject(OLRead.hEvent, 5000) == Com_WinApi.WAIT_OBJECT_0) &&
-                            Com_WinApi.GetOverlappedResult(handle, ref OLRead, ref count, false);
-                    }
-                }
-                Com_WinApi.CloseHandle(OLRead.hEvent);
-                if (!fOK)
-                    PortClear();
+                count = (uint)_port.Read(buffer, 0, _port.ReadBufferSize);
+                fOK = true;
             }
-            else
-                Marshal.GetLastWin32Error();
+            catch
+            {
+                
+            }
+
+            //count = 0;
+            //OVERLAPPED OLRead = new OVERLAPPED();
+            //bool fOK = false;
+            //OLRead.hEvent = Com_WinApi.CreateEventA(IntPtr.Zero, true, false, null);
+
+            //if (OLRead.hEvent != null)
+            //{
+            //    fOK = Com_WinApi.ReadFile(handle, buffer, (uint)buffer.Length, out count, ref OLRead);
+            //    if (!fOK)
+            //    {
+            //        if (Marshal.GetLastWin32Error() == Com_WinApi.ERROR_IO_PENDING)
+            //        {
+            //            fOK = (Com_WinApi.WaitForSingleObject(OLRead.hEvent, 5000) == Com_WinApi.WAIT_OBJECT_0) &&
+            //                Com_WinApi.GetOverlappedResult(handle, ref OLRead, ref count, false);
+            //        }
+            //    }
+            //    Com_WinApi.CloseHandle(OLRead.hEvent);
+            //    if (!fOK)
+            //        PortClear();
+            //}
+            //else
+            //    Marshal.GetLastWin32Error();
 
             return fOK;
         }
@@ -363,58 +399,76 @@ namespace components.Components.SerialPort
         /// <returns>Якщо true то відправка інформації на СОМ-порт відбулася успішно</returns>
         public bool Write(byte[] SendArr)
         {
-            if (handle == (IntPtr)Com_WinApi.INVALID_HANDLE_VALUE) return false;
-            if (SendArr == null) return false;
-            if (SendArr.Length == 0) return true;
 
-            uint BytesWritten = 0;
-            OVERLAPPED OverlappedWrite = new OVERLAPPED();
             bool fOK = false;
-            int lastError = 0;
-            OverlappedWrite.hEvent = Com_WinApi.CreateEventA(IntPtr.Zero, true, false, null);
+            _port.Write(SendArr, 0, SendArr.Length);
 
-            components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 1");
-            if (OverlappedWrite.hEvent != null)
+            _port.WriteTimeout = 1000;
+
+            int attempts = 5;
+            do
             {
-                components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 2");
-                fOK = Com_WinApi.WriteFile(handle, SendArr, (uint)SendArr.Length, out BytesWritten, ref OverlappedWrite);
-                components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 3: " + fOK.ToString());
-                components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
-
-                if (!fOK && Marshal.GetLastWin32Error() == Com_WinApi.ERROR_IO_PENDING)
+                if (_port.BytesToWrite > 0)
+                    System.Threading.Thread.Sleep(100);
+                else
                 {
-                    components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 4: " + fOK.ToString());
-                    components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
-                    fOK = (Com_WinApi.WaitForSingleObject(OverlappedWrite.hEvent, 1000) == Com_WinApi.WAIT_OBJECT_0) &&
-                        Com_WinApi.GetOverlappedResult(handle, ref OverlappedWrite, ref BytesWritten, false);
-                    components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 5: " + fOK.ToString());
-                    components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
+                    fOK = true;
+                    break;
                 }
+            } while (--attempts < 0);
 
-                if (fOK)
-                {
-                    fOK = (BytesWritten == SendArr.Length);
-                    components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 6: " + fOK.ToString());
-                    components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
-                }
+            //if (handle == (IntPtr)Com_WinApi.INVALID_HANDLE_VALUE) return false;
+            //if (SendArr == null) return false;
+            //if (SendArr.Length == 0) return true;
 
-                if (!fOK)
-                {
-                    PortClear();
-                    components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 7: " + fOK.ToString());
-                    components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
-                }
-                Com_WinApi.CloseHandle(OverlappedWrite.hEvent);
-                components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 8: " + fOK.ToString());
-                components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
-            }
-            else
-                lastError = Marshal.GetLastWin32Error();
+            //uint BytesWritten = 0;
+            //OVERLAPPED OverlappedWrite = new OVERLAPPED();
+            //bool fOK = false;
+            //int lastError = 0;
+            //OverlappedWrite.hEvent = Com_WinApi.CreateEventA(IntPtr.Zero, true, false, null);
 
-            if (lastError != 0)
-                components.Components.WinApi.Com_WinApi.OutputDebugString("Marshal.GetLastWin32Error() returned " + lastError);
+            //components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 1");
+            //if (OverlappedWrite.hEvent != null)
+            //{
+            //    components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 2");
+            //    fOK = Com_WinApi.WriteFile(handle, SendArr, (uint)SendArr.Length, out BytesWritten, ref OverlappedWrite);
+            //    components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 3: " + fOK.ToString());
+            //    components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
 
-            components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
+            //    if (!fOK && Marshal.GetLastWin32Error() == Com_WinApi.ERROR_IO_PENDING)
+            //    {
+            //        components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 4: " + fOK.ToString());
+            //        components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
+            //        fOK = (Com_WinApi.WaitForSingleObject(OverlappedWrite.hEvent, 1000) == Com_WinApi.WAIT_OBJECT_0) &&
+            //            Com_WinApi.GetOverlappedResult(handle, ref OverlappedWrite, ref BytesWritten, false);
+            //        components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 5: " + fOK.ToString());
+            //        components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
+            //    }
+
+            //    if (fOK)
+            //    {
+            //        fOK = (BytesWritten == SendArr.Length);
+            //        components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 6: " + fOK.ToString());
+            //        components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
+            //    }
+
+            //    if (!fOK)
+            //    {
+            //        PortClear();
+            //        components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 7: " + fOK.ToString());
+            //        components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
+            //    }
+            //    Com_WinApi.CloseHandle(OverlappedWrite.hEvent);
+            //    components.Components.WinApi.Com_WinApi.OutputDebugString("COM-PORT WRITE: Step 8: " + fOK.ToString());
+            //    components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
+            //}
+            //else
+            //    lastError = Marshal.GetLastWin32Error();
+
+            //if (lastError != 0)
+            //    components.Components.WinApi.Com_WinApi.OutputDebugString("Marshal.GetLastWin32Error() returned " + lastError);
+
+            //components.Components.WinApi.Com_WinApi.OutputDebugString("" + Marshal.GetLastWin32Error());
             return fOK;
         }
         public bool PortClear()
