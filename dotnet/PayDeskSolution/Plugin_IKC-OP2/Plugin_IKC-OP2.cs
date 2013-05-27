@@ -3140,6 +3140,7 @@ namespace IKC_OP2
                 int attemptsGeneral = 20;
                 int attemptsToResend = 2;
                 int attemptsOnBusy = 40;
+                int attemptsToRead = 5;
 
                 byte[] buffer = new byte[512];
                 _outputData = new byte[0];
@@ -3209,7 +3210,13 @@ namespace IKC_OP2
                         }
                     }
                     else
-                        break;
+                    {
+                        attemptsToRead--;
+                        if (attemptsToRead > 0)
+                            System.Threading.Thread.Sleep(250);
+                        else
+                            break;
+                    }
 
                 } while (attemptsGeneral > 0);
                 components.Components.WinApi.Com_WinApi.OutputDebugString("EXCEPTION");
@@ -3273,6 +3280,7 @@ namespace IKC_OP2
                 Array.Resize<byte>(ref normalizedAnswer, normalizedAnswer.Length + 1);
                 normalizedAnswer[normalizedAnswer.Length - 1] = _outputData[i];
 
+                // detect CS and get its position
                 if (normalizedAnswer[normalizedAnswer.Length - 1] == ETX && normalizedAnswer[normalizedAnswer.Length - 2] == DLE)
                 {
                     i = (byte)(normalizedAnswer.Length - 3);

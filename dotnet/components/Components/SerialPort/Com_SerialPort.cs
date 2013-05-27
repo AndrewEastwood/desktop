@@ -279,7 +279,7 @@ namespace components.Components.SerialPort
 
                 _port.WriteTimeout = (int)WriteTotalTimeoutConstant;
                 _port.ReadTimeout = (int)ReadTotalTimeoutConstant;
-
+                
                 //_port.Parity = (System.IO.Ports.Parity)Parity;
                 //_port.StopBits = (System.IO.Ports.StopBits)StopBits;
                 //_port.DataBits = (int)ByteSize;
@@ -357,14 +357,34 @@ namespace components.Components.SerialPort
 
             bool fOK = false;
             count = 0;
+           
             try
             {
-                count = (uint)_port.Read(buffer, 0, _port.ReadBufferSize);
-                fOK = true;
+                count = (uint)_port.BytesToRead;
+                if (count > 0)
+                {
+                    for (int i = 0; i < count; i++)
+                        buffer[i] = (byte)_port.ReadByte();
+                    fOK = true;
+                }
+
+                //string f =  _port.ReadExisting();
+                //if (f != null & f.Length > 0)
+                //{
+                //    byte[] _fff = new byte[f.Length];
+
+                //    for (int j = 0; j < _fff.Length; j++)
+                //        _fff[j] = (byte)f[j];
+
+                //    byte[] _buff = Encoding.ASCII.GetBytes(f);
+                //    Array.Copy(_buff, 0, buffer, 0, _buff.Length);
+                //    count = (uint)_buff.Length;
+                //    fOK = true;
+                //}
             }
             catch
             {
-                
+               
             }
 
             //count = 0;
@@ -473,23 +493,27 @@ namespace components.Components.SerialPort
         }
         public bool PortClear()
         {
-            Marshal.GetLastWin32Error();
-            GC.SuppressFinalize(this);
+            return PortAbort();
+            //Marshal.GetLastWin32Error();
+            //GC.SuppressFinalize(this);
 
-            if (!Com_WinApi.PurgeComm(handle, (uint)(Com_WinApi.PURGE_TXCLEAR | Com_WinApi.PURGE_RXCLEAR)))
-                return false;
+            //if (!Com_WinApi.PurgeComm(handle, (uint)(Com_WinApi.PURGE_TXCLEAR | Com_WinApi.PURGE_RXCLEAR)))
+            //    return false;
 
-            Marshal.GetLastWin32Error();
+            //Marshal.GetLastWin32Error();
 
-            return true;
+            //return true;
         }
         public bool PortAbort()
         {
             Marshal.GetLastWin32Error();
             GC.SuppressFinalize(this);
 
-            if (!Com_WinApi.PurgeComm(handle, (uint)(Com_WinApi.PURGE_TXABORT | Com_WinApi.PURGE_RXABORT)))
-                return false;
+            _port.DiscardOutBuffer();
+            _port.DiscardInBuffer();
+
+            //if (!Com_WinApi.PurgeComm(handle, (uint)(Com_WinApi.PURGE_TXABORT | Com_WinApi.PURGE_RXABORT)))
+            //    return false;
 
             Marshal.GetLastWin32Error();
 
@@ -501,14 +525,17 @@ namespace components.Components.SerialPort
         /// <returns>Якщо true то СОМ-порт закритий успішно</returns>
         public bool Close()
         {
-            isOpen = !Com_WinApi.CloseHandle(handle);
+            //isOpen = !Com_WinApi.CloseHandle(handle);
 
-            if (!isOpen)
-                handle = IntPtr.Zero;
-            if (handle == IntPtr.Zero)
-                isOpen = false;
+            //if (!isOpen)
+            //    handle = IntPtr.Zero;
+            //if (handle == IntPtr.Zero)
+            //    isOpen = false;
 
-            return !isOpen;
+            if (_port != null && _port.IsOpen)
+                _port.Close();
+            isOpen = false;
+            return true;
         }
 
         /* PROPERTIES */

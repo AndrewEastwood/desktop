@@ -165,12 +165,18 @@ namespace PayDesk.Components.UI
                 return;
             }
 
-            if (totCash >= suma)
+            if (!type.Contains(3))
             {
-                if (!type.Contains(3))
-                    cash[0] = suma;
-                DialogResult = DialogResult.OK;
-                Close();
+                if (totCash == suma)
+                {
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                else
+                {
+                    MMessageBox.Show("Готівка не співпадає з сумою чеку", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
 
             if (totCash == 0.0)

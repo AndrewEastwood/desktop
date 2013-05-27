@@ -215,7 +215,6 @@ namespace components.Components.PluginManager
                 foreach (KeyValuePair<string, IPlugin> _typedItems in _plist[_pt])
                 {
                     ((IFPDriver)_typedItems.Value).Deactivate();
-
                 }
 
                 if (_plist[_pt].ContainsKey(_active[_pt]))
