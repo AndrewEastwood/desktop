@@ -61,6 +61,7 @@ function build() {
     _updateStatic
     _updatePlugins
     _setBuildVersion
+    _createAppPatch
 }
 
 function _updateLibs() {
@@ -115,4 +116,26 @@ function _setBuildVersion() {
     VER="`getVersion`"
     chat "$VER"
     echo "$VER" > ./bin/VERSION.txt
+}
+
+function _createAppPatch() {
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/*.bat"
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/*.cfg"
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/*.dll"
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/*.DLL"
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/*.exe"
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/*.ico"
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/*.ini"
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/*.lic"
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/*.txt"
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/*.xml"
+
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/display"
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/manuals"
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/Plugins"
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/reports"
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/schemes"
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/templates"
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/tools"
+    ./bin/tools/compressor/7z.exe a -t7z ./bin/________.zip "./bin/users"
 }
