@@ -29,8 +29,8 @@ using components.Lib;
 
 namespace DATECS_EXELLIO
 {
-    [PluginSimpleAttribute(PluginType.FPDriver)]
-    public class DATECS_EXELLIO : IFPDriver
+    [PluginSimpleAttribute(PluginType.ILegalPrinterDriver)]
+    public class DATECS_EXELLIO : ILegalPrinterDriver
     {
         // UI Components
         private UserControl driverui;
@@ -3245,7 +3245,7 @@ namespace DATECS_EXELLIO
             }
         }
 
-        #region IFPDriver Members
+        #region ILegalPrinterDriver Members
         /// <summary>
         /// Show plugin's name
         /// </summary>

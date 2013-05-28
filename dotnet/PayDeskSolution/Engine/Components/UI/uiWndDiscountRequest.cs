@@ -147,8 +147,8 @@ namespace PayDesk.Components.UI
 
             textBox1.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UsePercentTypeDisc;
             radioButton1.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UsePercentTypeDisc;
-            textBox2.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UseAbsoluteTypeDisc && !Program.AppPlugins.IsActive(PluginType.FPDriver);
-            radioButton2.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UseAbsoluteTypeDisc && !Program.AppPlugins.IsActive(PluginType.FPDriver);
+            textBox2.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UseAbsoluteTypeDisc && !Program.AppPlugins.IsActive(PluginType.ILegalPrinterDriver);
+            radioButton2.Enabled = ConfigManager.Instance.CommonConfiguration.APP_UseAbsoluteTypeDisc && !Program.AppPlugins.IsActive(PluginType.ILegalPrinterDriver);
 
             textBox1.Text = Math.Round(Math.Abs(dm[idx]), ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, MidpointRounding.AwayFromZero).ToString();
             textBox2.Text = Math.Round(Math.Abs(cdm[idx]), ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals, MidpointRounding.AwayFromZero).ToString();

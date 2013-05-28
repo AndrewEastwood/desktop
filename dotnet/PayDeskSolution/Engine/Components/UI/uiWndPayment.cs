@@ -79,7 +79,7 @@ namespace PayDesk.Components.UI
         {
             //Disable all other payments types
 
-            if (Program.AppPlugins.IsActive(PluginType.FPDriver) && !withProfile)
+            if (Program.AppPlugins.IsActive(PluginType.ILegalPrinterDriver) && !withProfile)
             {
                 textBox3.Enabled = UserConfig.Properties[18];//cash
 

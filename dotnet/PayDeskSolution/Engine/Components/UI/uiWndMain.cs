@@ -356,11 +356,11 @@ namespace PayDesk.Components.UI
                 this.timer_buyer_ready.Stop();
             }
 
-            if (Program.AppPlugins.IsActive(PluginType.FPDriver))
+            if (Program.AppPlugins.IsActive(PluginType.ILegalPrinterDriver))
             {
                 try
                 {
-                    bool status = (bool)Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_SetCashier", ConfigManager.Instance.CommonConfiguration.APP_PayDesk, UserConfig.UserFpLogin, UserConfig.UserFpPassword, UserConfig.UserID);
+                    bool status = (bool)Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_SetCashier", ConfigManager.Instance.CommonConfiguration.APP_PayDesk, UserConfig.UserFpLogin, UserConfig.UserFpPassword, UserConfig.UserID);
                     if (status)
                         DDM_FPStatus.Image = Properties.Resources.ok;
                     else
@@ -452,11 +452,11 @@ namespace PayDesk.Components.UI
 
                         if (ConfigManager.Instance.CommonConfiguration.APP_ClearTEMPonExit)
                             FileMgrLib.ClearFolder(ConfigManager.Instance.CommonConfiguration.Path_Temp);
-                        if (Program.AppPlugins.IsActive(PluginType.FPDriver))
+                        if (Program.AppPlugins.IsActive(PluginType.ILegalPrinterDriver))
                         {
                             try
                             {
-                                Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_SetCashier", UserConfig.UserPassword, UserConfig.UserLogin, 0, string.Empty);
+                                Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_SetCashier", UserConfig.UserPassword, UserConfig.UserLogin, 0, string.Empty);
                             }
                             catch (Exception ex)
                             {
@@ -1162,7 +1162,7 @@ namespace PayDesk.Components.UI
                             }
 
                             // if we use legal printer
-                            if (Program.AppPlugins.IsActive(PluginType.FPDriver))
+                            if (Program.AppPlugins.IsActive(PluginType.ILegalPrinterDriver))
                             {
                                 // we close legal cheque
                                 CloseCheque(true);
@@ -1506,10 +1506,10 @@ namespace PayDesk.Components.UI
         }//ok
         private void RefershMenus()
         {
-            if (Program.AppPlugins.IsActive(PluginType.FPDriver))
+            if (Program.AppPlugins.IsActive(PluginType.ILegalPrinterDriver))
                 try
                 {
-                    fxFunc_toolStripMenuItem.Enabled = Program.AppPlugins.GetActive<IFPDriver>().AllowedMethods.Count != 0;
+                    fxFunc_toolStripMenuItem.Enabled = Program.AppPlugins.GetActive<ILegalPrinterDriver>().AllowedMethods.Count != 0;
                 }
                 catch { }
             else
@@ -1623,11 +1623,11 @@ namespace PayDesk.Components.UI
                 #region Main
                 case "fiscalFunctions":
                     {
-                        uiWndFiscalFunctions ff = new uiWndFiscalFunctions(Program.AppPlugins.GetActive<IFPDriver>().Name, Program.AppPlugins.GetActive<IFPDriver>().AllowedMethods);
+                        uiWndFiscalFunctions ff = new uiWndFiscalFunctions(Program.AppPlugins.GetActive<ILegalPrinterDriver>().Name, Program.AppPlugins.GetActive<ILegalPrinterDriver>().AllowedMethods);
                         try
                         {
                             if (ff.ShowDialog(this) == DialogResult.OK)
-                                Program.AppPlugins.GetActive<IFPDriver>().CallFunction(ff.Function);
+                                Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction(ff.Function);
                         }
                         catch (Exception ex)
                         {
@@ -2845,11 +2845,11 @@ namespace PayDesk.Components.UI
             GC.Collect();
 
             /* device status */
-            if (Program.AppPlugins.IsActive(PluginType.FPDriver))
+            if (Program.AppPlugins.IsActive(PluginType.ILegalPrinterDriver))
             {
                 try
                 {
-                    bool status = (bool)Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_SetCashier", ConfigManager.Instance.CommonConfiguration.APP_PayDesk, UserConfig.UserFpLogin, UserConfig.UserFpPassword, UserConfig.UserID);
+                    bool status = (bool)Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_SetCashier", ConfigManager.Instance.CommonConfiguration.APP_PayDesk, UserConfig.UserFpLogin, UserConfig.UserFpPassword, UserConfig.UserID);
                     if (status)
                         DDM_FPStatus.Image = Properties.Resources.ok;
                     else
@@ -3706,7 +3706,7 @@ namespace PayDesk.Components.UI
             //Show cheque Suma on display
             CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", realSUMA);
 
-            if (ConfigManager.Instance.CommonConfiguration.APP_ShowInfoOnIndicator && Program.AppPlugins.IsActive(PluginType.FPDriver) && updateCustomer)
+            if (ConfigManager.Instance.CommonConfiguration.APP_ShowInfoOnIndicator && Program.AppPlugins.IsActive(PluginType.ILegalPrinterDriver) && updateCustomer)
                 try
                 {
                     string _topLabel = "СУМА:" + CashLbl.Text;
@@ -3723,7 +3723,7 @@ namespace PayDesk.Components.UI
                     bool[] show = new bool[] { true, true };
                     if (Cheque.Rows.Count != 0)
                         lines = new string[] { _topLabel, chequeDGV.CurrentRow.Cells["DESC"].Value.ToString() };
-                    Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_SendCustomer", lines, show);
+                    Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_SendCustomer", lines, show);
                 }
                 catch { }
         }
@@ -3882,13 +3882,13 @@ namespace PayDesk.Components.UI
                         try
                         {
                             if (retriveChq)
-                                Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_PayMoney", _cheque, ConfigManager.Instance.CommonConfiguration.APP_DoseDecimals, _fl_useTotDisc, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals);
+                                Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_PayMoney", _cheque, ConfigManager.Instance.CommonConfiguration.APP_DoseDecimals, _fl_useTotDisc, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals);
                             else
-                                Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_Sale", _cheque, ConfigManager.Instance.CommonConfiguration.APP_DoseDecimals, _fl_useTotDisc, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals);
+                                Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_Sale", _cheque, ConfigManager.Instance.CommonConfiguration.APP_DoseDecimals, _fl_useTotDisc, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals);
 
                             if (_fl_useTotDisc && _discCommonPercent != 0.0)
                             {
-                                Program.AppPlugins.GetActive<IFPDriver>().CallFunction(
+                                Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction(
                                     "FP_Discount",
                                      new object[] {
                                      (byte)2,
@@ -3904,12 +3904,12 @@ namespace PayDesk.Components.UI
 
                             for (int i = lastPayment; i < pMethod.Type.Count; i++)
                             {
-                                Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_Payment", pMethod.Type[i], ((List<double>)_tmpPaymanet["CASHLIST"])[i], true);
+                                Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_Payment", pMethod.Type[i], ((List<double>)_tmpPaymanet["CASHLIST"])[i], true);
                                 lastPayment++;
                             }
 
-                            chqNom = Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_LastChqNo", retriveChq).ToString();
-                            localData[7] = Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_LastZRepNo", retriveChq);
+                            chqNom = Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_LastChqNo", retriveChq).ToString();
+                            localData[7] = Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_LastZRepNo", retriveChq);
                         }
                         catch (Exception ex)
                         {
@@ -3935,7 +3935,7 @@ namespace PayDesk.Components.UI
 
                         try
                         {
-                            Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_OpenBox");
+                            Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_OpenBox");
                         }
                         catch (Exception ex)
                         {
@@ -4032,7 +4032,7 @@ namespace PayDesk.Components.UI
                     lines[0] = string.Format("{0} : {1:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", "Гроші", pMethod.CashSum);
                     lines[1] = string.Format("{0} : {1}", "Здача", CashLbl.Text);
                     bool[] show = new bool[] { true, true };
-                    Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_SendCustomer", lines, show);
+                    Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_SendCustomer", lines, show);
                 }
                 catch { }
 
@@ -4085,9 +4085,9 @@ namespace PayDesk.Components.UI
                 try
                 {
                     if (retriveChq)
-                        Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_PayMoney", Cheque, ConfigManager.Instance.CommonConfiguration.APP_DoseDecimals, _fl_useTotDisc, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals);
+                        Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_PayMoney", Cheque, ConfigManager.Instance.CommonConfiguration.APP_DoseDecimals, _fl_useTotDisc, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals);
                     else
-                        Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_Sale", Cheque, ConfigManager.Instance.CommonConfiguration.APP_DoseDecimals, _fl_useTotDisc, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals);
+                        Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_Sale", Cheque, ConfigManager.Instance.CommonConfiguration.APP_DoseDecimals, _fl_useTotDisc, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals);
 
                     if (_fl_useTotDisc && discCommonPercent != 0.0)
                     {
@@ -4103,7 +4103,7 @@ namespace PayDesk.Components.UI
 
                         //for (int i = 0; i < valueDISC.Length; i++)
                         //    if (valueDISC[i] != 0.0)
-                        ; Program.AppPlugins.GetActive<IFPDriver>().CallFunction(
+                        ; Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction(
                               "FP_Discount",
                              new object[] { 
                                     (byte)2/*types[i]*/, 
@@ -4116,13 +4116,13 @@ namespace PayDesk.Components.UI
 
                     for (int i = lastPayment; i < pMethod.Type.Count; i++)
                     {
-                        Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_Payment", pMethod.Type[i], pMethod.ItemsCash[i], pMethod.Autoclose);
+                        Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_Payment", pMethod.Type[i], pMethod.ItemsCash[i], pMethod.Autoclose);
                         lastPayment++;
                     }
 
 
-                    chqNom = Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_LastChqNo", retriveChq).ToString();
-                    localData[7] = Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_LastZRepNo", retriveChq);
+                    chqNom = Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_LastChqNo", retriveChq).ToString();
+                    localData[7] = Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_LastZRepNo", retriveChq);
                 }
                 catch (Exception ex)
                 {
@@ -4148,7 +4148,7 @@ namespace PayDesk.Components.UI
                         Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     */
 
-                    //Program.AppPlugins.GetActive<IFPDriver>().CallFunction("ResetOrder");
+                    //Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("ResetOrder");
 
                     //ChqNomRequest cnr = new ChqNomRequest();
                     //cnr.ShowDialog();
@@ -4160,7 +4160,7 @@ namespace PayDesk.Components.UI
 
                 try
                 {
-                    Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_OpenBox");
+                    Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_OpenBox");
                 }
                 catch (Exception ex)
                 {
@@ -4229,7 +4229,7 @@ namespace PayDesk.Components.UI
                     lines[0] = string.Format("{0} : {1:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", "Гроші", pMethod.CashSum);
                     lines[1] = string.Format("{0} : {1}", "Здача", CashLbl.Text);
                     bool[] show = new bool[] { true, true };
-                    Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_SendCustomer", lines, show);
+                    Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_SendCustomer", lines, show);
                 }
                 catch { }
 
@@ -4285,7 +4285,7 @@ namespace PayDesk.Components.UI
                     lines[0] = string.Format("{0} : {1:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", "Гроші", pMethod["SUMA"]);
                     lines[1] = string.Format("{0} : {1}", "Здача", CashLbl.Text);
                     bool[] show = new bool[] { true, true };
-                    Program.AppPlugins.GetActive<IFPDriver>().CallFunction("FP_SendCustomer", lines, show);
+                    Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_SendCustomer", lines, show);
                 }
                 catch { }
             //}

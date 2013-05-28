@@ -12,7 +12,7 @@ namespace components.Shared.Attributes
         /// <summary>
         /// Inticate driver type for fiscal printer device.
         /// </summary>
-        FPDriver = 0,
+        ILegalPrinterDriver = 0,
         /// <summary>
         /// Indicate plugin for service mode of application.
         /// </summary>
@@ -77,7 +77,7 @@ namespace components.Shared.Attributes
         //
         public PluginExtendedAttribute(PluginType T, PluginMode M)
         {
-            if (T == PluginType.FPDriver && M == PluginMode.MultiLoader)
+            if (T == PluginType.ILegalPrinterDriver && M == PluginMode.MultiLoader)
                 throw new Exception("Type FPDriver can't be used in multiloader plugin");
             _Type = T;
             _Mode = M;

@@ -93,6 +93,13 @@
     <Compile Include="Shared\Defaults\DefaultComponentSettings.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Shared\Defaults\DefaultLegalPrinterDriver.cs" />
+    <Compile Include="Shared\Defaults\DefaultPlugin.cs" />
+    <Compile Include="Shared\Interfaces\IAppUI.cs" />
+    <Compile Include="Shared\Interfaces\IDefault.cs" />
+    <Compile Include="Shared\Interfaces\ILegalPrinterDriver.cs" />
+    <Compile Include="Shared\Interfaces\IPlugin.cs" />
+    <Compile Include="Shared\Interfaces\IService.cs" />
     <Compile Include="UI\Controls\EmbeddedConsole\EmbeddedConsole.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -140,7 +147,6 @@
     <Compile Include="Shared\Enums\Enu_AllEnums.cs" />
     <Compile Include="Shared\Enums\Enu_SourceEnums.cs" />
     <Compile Include="Shared\Interfaces\IConfigurable.cs" />
-    <Compile Include="Shared\Interfaces\IPlugins.cs" />
     <Compile Include="Shared\Objects\Obj_textBoxStreamWriter.cs" />
     <Compile Include="Shared\Structures\St_AllStructures.cs" />
     <Compile Include="UI\Controls\CategoryNavBar\CategoryNavBar.cs">

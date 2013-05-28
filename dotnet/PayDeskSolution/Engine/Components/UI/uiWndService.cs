@@ -87,11 +87,11 @@ namespace PayDesk.Components.UI
 
             if (comboBox4.SelectedItem != null && comboBox4.SelectedItem.ToString() != string.Empty)
             {
-                Program.AppPlugins.SetActive(PluginType.FPDriver, comboBox4.SelectedItem.ToString());
+                Program.AppPlugins.SetActive(PluginType.ILegalPrinterDriver, comboBox4.SelectedItem.ToString());
 
-                if (Program.AppPlugins.IsActive(PluginType.FPDriver))
+                if (Program.AppPlugins.IsActive(PluginType.ILegalPrinterDriver))
                 {
-                    IFPDriver drv = Program.AppPlugins.GetActive<IFPDriver>();
+                    ILegalPrinterDriver drv = Program.AppPlugins.GetActive<ILegalPrinterDriver>();
 
                     pluginPanel.Controls.Add(drv.PortUI);
                     pluginPanel.Controls[drv.PortUI.Name].Dock = DockStyle.Fill;
@@ -105,18 +105,18 @@ namespace PayDesk.Components.UI
                 }
             }
             else
-                Program.AppPlugins.SetActive(PluginType.FPDriver, "");
+                Program.AppPlugins.SetActive(PluginType.ILegalPrinterDriver, "");
 
         }//save service settings
         private void LoadService()
         {
             comboBox4.Items.Add(string.Empty);
-            comboBox4.Items.AddRange(Program.AppPlugins.GetNames(PluginType.FPDriver));
+            comboBox4.Items.AddRange(Program.AppPlugins.GetNames(PluginType.ILegalPrinterDriver));
 
             // Restore last saved module
             try
             {
-                comboBox4.SelectedItem = Program.AppPlugins.GetActive<IFPDriver>().Name;
+                comboBox4.SelectedItem = Program.AppPlugins.GetActive<ILegalPrinterDriver>().Name;
                 button6.PerformClick();
             }
             catch { }

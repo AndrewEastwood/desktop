@@ -23,14 +23,13 @@ using IKC_OP2.Config;
 using IKC_OP2.DriverUI.Customs;
 using IKC_OP2.Components.UI.DriverUI;
 using components.Shared.Attributes;
-using components.Shared.Interfaces;
+using components.Shared.Defaults;
 using components.Components.SerialPort;
 using components.Lib;
 
 namespace IKC_OP2
 {
-    [PluginSimpleAttribute(PluginType.FPDriver)]
-    public class Plugin_IKC_OP2 : IFPDriver
+    public class Plugin_IKC_OP2 : DefaultLegalPrinterDriver
     {
         // UI Components
         private UserControl _driverui;
@@ -3413,7 +3412,7 @@ namespace IKC_OP2
             }
         }
 
-        #region IFPDriver Members
+        #region ILegalPrinterDriver Members
         /// <summary>
         /// Show plugin's name
         /// </summary>
