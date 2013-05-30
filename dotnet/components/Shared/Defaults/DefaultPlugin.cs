@@ -6,106 +6,22 @@ using System.Collections;
 
 namespace components.Shared.Defaults
 {
-    public class DefaultPlugin : IPlugin
+    public class DefaultPlugin// : IPlugin
     {
-        private InnerDefaultLegalPrinterDriverAssembly assemblyInfo;
+        private DefaultPluginAssembly assemblyInfo;
 
         public DefaultPlugin(Hashtable pluginAssemblyInfo)
         {
-            assemblyInfo = new InnerDefaultLegalPrinterDriverAssembly(pluginAssemblyInfo);
+            assemblyInfo = new DefaultPluginAssembly(pluginAssemblyInfo);
         }
         public DefaultPlugin()
-            : this(new Hashtable())
         {
+            assemblyInfo = new DefaultPluginAssembly();
         }
 
-        public string Name
+        public DefaultPluginAssembly Assembly
         {
-            get { throw new NotImplementedException(); }
-        }
-
-        public string Version
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public string Author
-        {
-            get { throw new NotImplementedException(); }
-        }
-    }
-
-    /// <summary>
-    /// Represent information about plugin module
-    /// </summary>
-    class InnerDefaultLegalPrinterDriverAssembly
-    {
-        private Hashtable assemblyInfo;
-
-        public InnerDefaultLegalPrinterDriverAssembly(Hashtable assemblyInfo)
-        {
-            this.assemblyInfo = assemblyInfo;
-        }
-
-        /// <summary>
-        /// The name of plugin
-        /// </summary>
-        public string NAME
-        {
-            get
-            {
-                if (this.assemblyInfo.ContainsKey("NAME"))
-                    return this.assemblyInfo["NAME"].ToString();
-                return string.Empty;
-            }
-        }
-        /// <summary>
-        /// Title of plugin
-        /// </summary>
-        public string TITLE
-        {
-            get
-            {
-                if (this.assemblyInfo.ContainsKey("TITLE"))
-                    return this.assemblyInfo["TITLE"].ToString();
-                return string.Empty;
-            }
-        }
-        /// <summary>
-        /// Version of realized plugin functionlaity
-        /// </summary>
-        public string VERSION
-        {
-            get
-            {
-                if (this.assemblyInfo.ContainsKey("VERSION"))
-                    return this.assemblyInfo["VERSION"].ToString();
-                return string.Empty;
-            }
-        }
-        /// <summary>
-        /// Version of plugin module
-        /// </summary>
-        public string PLUGIN_VERSION
-        {
-            get
-            {
-                if (this.assemblyInfo.ContainsKey("PLUGIN_VERSION"))
-                    return this.assemblyInfo["PLUGIN_VERSION"].ToString();
-                return string.Empty;
-            }
-        }
-        /// <summary>
-        /// Author's name
-        /// </summary>
-        public string AUTHOR
-        {
-            get
-            {
-                if (this.assemblyInfo.ContainsKey("AUTHOR"))
-                    return this.assemblyInfo["AUTHOR"].ToString();
-                return string.Empty;
-            }
+            get { return assemblyInfo; }
         }
     }
 }

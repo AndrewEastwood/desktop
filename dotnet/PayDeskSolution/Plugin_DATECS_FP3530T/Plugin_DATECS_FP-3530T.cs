@@ -29,7 +29,7 @@ using components.Shared.Interfaces;
 
 namespace DATECS_FP3530T
 {
-    [PluginSimpleAttribute(PluginType.ILegalPrinterDriver)]
+    [PluginSimpleAttribute(PluginType.LegalPrinterDriver)]
     public class Plugin_DATECSFP3530T : ILegalPrinterDriver
     {
         // UI Components

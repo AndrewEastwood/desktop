@@ -95,6 +95,7 @@
     </Compile>
     <Compile Include="Shared\Defaults\DefaultLegalPrinterDriver.cs" />
     <Compile Include="Shared\Defaults\DefaultPlugin.cs" />
+    <Compile Include="Shared\Defaults\DefaultPluginAssembly.cs" />
     <Compile Include="Shared\Interfaces\IAppUI.cs" />
     <Compile Include="Shared\Interfaces\IDefault.cs" />
     <Compile Include="Shared\Interfaces\ILegalPrinterDriver.cs" />

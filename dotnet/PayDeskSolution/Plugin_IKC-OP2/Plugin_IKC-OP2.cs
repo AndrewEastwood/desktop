@@ -26,10 +26,12 @@ using components.Shared.Attributes;
 using components.Shared.Defaults;
 using components.Components.SerialPort;
 using components.Lib;
+using components.Shared.Interfaces;
 
 namespace IKC_OP2
 {
-    public class Plugin_IKC_OP2 : DefaultLegalPrinterDriver
+    [PluginSimpleAttribute(PluginType.LegalPrinterDriver)]
+    public class Plugin_IKC_OP2 : ILegalPrinterDriver
     {
         // UI Components
         private UserControl _driverui;

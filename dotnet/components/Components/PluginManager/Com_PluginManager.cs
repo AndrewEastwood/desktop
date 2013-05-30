@@ -64,7 +64,7 @@ namespace components.Components.PluginManager
 
             if (_ldat != null)
             {
-                _active[PluginType.ILegalPrinterDriver] = _ldat.ToString();
+                _active[PluginType.LegalPrinterDriver] = _ldat.ToString();
             }
 
 
@@ -74,7 +74,7 @@ namespace components.Components.PluginManager
 
         ~Com_PluginManager()
         {
-            object _data = _active[PluginType.ILegalPrinterDriver];
+            object _data = _active[PluginType.LegalPrinterDriver];
             bdata.SaveData(Application.StartupPath + "\\" + CFG_FILE_NAME, _data);
         }
 
@@ -184,7 +184,7 @@ namespace components.Components.PluginManager
                 PluginType _pt = (PluginType)Enum.Parse(typeof(PluginType), tt.Name.Substring(1));
 
                 if (_plist[_pt].ContainsKey(name))
-                    return (T)_plist[PluginType.ILegalPrinterDriver][name];
+                    return (T)_plist[PluginType.LegalPrinterDriver][name];
             }
             catch { }
 
@@ -219,8 +219,8 @@ namespace components.Components.PluginManager
 
                 if (_plist[_pt].ContainsKey(_active[_pt]))
                 {
-                    ((ILegalPrinterDriver)_plist[PluginType.ILegalPrinterDriver][_active[_pt]]).Activate();
-                    return (T)_plist[PluginType.ILegalPrinterDriver][_active[_pt]];
+                    ((ILegalPrinterDriver)_plist[PluginType.LegalPrinterDriver][_active[_pt]]).Activate();
+                    return (T)_plist[PluginType.LegalPrinterDriver][_active[_pt]];
                 }
             }
             catch { }

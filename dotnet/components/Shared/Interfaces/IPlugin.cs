@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using components.Shared.Defaults;
 
 namespace components.Shared.Interfaces
 {
@@ -10,6 +11,8 @@ namespace components.Shared.Interfaces
     /// </summary>
     public interface IPlugin
     {
+        // Common Information
+        // DefaultPluginAssembly Assembly { get; }
         // Common Information
         string Name { get; }
         string Version { get; }

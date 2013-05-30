@@ -29,7 +29,7 @@ using components.Lib;
 
 namespace DATECS_EXELLIO
 {
-    [PluginSimpleAttribute(PluginType.ILegalPrinterDriver)]
+    [PluginSimpleAttribute(PluginType.LegalPrinterDriver)]
     public class DATECS_EXELLIO : ILegalPrinterDriver
     {
         // UI Components

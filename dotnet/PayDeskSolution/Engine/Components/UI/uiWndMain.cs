@@ -356,7 +356,7 @@ namespace PayDesk.Components.UI
                 this.timer_buyer_ready.Stop();
             }
 
-            if (Program.AppPlugins.IsActive(PluginType.ILegalPrinterDriver))
+            if (Program.AppPlugins.IsActive(PluginType.LegalPrinterDriver))
             {
                 try
                 {
@@ -452,7 +452,7 @@ namespace PayDesk.Components.UI
 
                         if (ConfigManager.Instance.CommonConfiguration.APP_ClearTEMPonExit)
                             FileMgrLib.ClearFolder(ConfigManager.Instance.CommonConfiguration.Path_Temp);
-                        if (Program.AppPlugins.IsActive(PluginType.ILegalPrinterDriver))
+                        if (Program.AppPlugins.IsActive(PluginType.LegalPrinterDriver))
                         {
                             try
                             {
@@ -1162,7 +1162,7 @@ namespace PayDesk.Components.UI
                             }
 
                             // if we use legal printer
-                            if (Program.AppPlugins.IsActive(PluginType.ILegalPrinterDriver))
+                            if (Program.AppPlugins.IsActive(PluginType.LegalPrinterDriver))
                             {
                                 // we close legal cheque
                                 CloseCheque(true);
@@ -1506,7 +1506,7 @@ namespace PayDesk.Components.UI
         }//ok
         private void RefershMenus()
         {
-            if (Program.AppPlugins.IsActive(PluginType.ILegalPrinterDriver))
+            if (Program.AppPlugins.IsActive(PluginType.LegalPrinterDriver))
                 try
                 {
                     fxFunc_toolStripMenuItem.Enabled = Program.AppPlugins.GetActive<ILegalPrinterDriver>().AllowedMethods.Count != 0;
@@ -2845,7 +2845,7 @@ namespace PayDesk.Components.UI
             GC.Collect();
 
             /* device status */
-            if (Program.AppPlugins.IsActive(PluginType.ILegalPrinterDriver))
+            if (Program.AppPlugins.IsActive(PluginType.LegalPrinterDriver))
             {
                 try
                 {
@@ -3706,7 +3706,7 @@ namespace PayDesk.Components.UI
             //Show cheque Suma on display
             CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", realSUMA);
 
-            if (ConfigManager.Instance.CommonConfiguration.APP_ShowInfoOnIndicator && Program.AppPlugins.IsActive(PluginType.ILegalPrinterDriver) && updateCustomer)
+            if (ConfigManager.Instance.CommonConfiguration.APP_ShowInfoOnIndicator && Program.AppPlugins.IsActive(PluginType.LegalPrinterDriver) && updateCustomer)
                 try
                 {
                     string _topLabel = "СУМА:" + CashLbl.Text;

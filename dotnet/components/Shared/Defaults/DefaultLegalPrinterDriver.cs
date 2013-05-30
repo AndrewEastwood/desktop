@@ -5,14 +5,67 @@ using components.Shared.Attributes;
 using components.Shared.Interfaces;
 using System.Windows.Forms;
 using System.Collections;
+using components.Components.SerialPort;
+using components.Lib;
 
 namespace components.Shared.Defaults
 {
-    [PluginSimpleAttribute(PluginType.ILegalPrinterDriver)]
-    public class DefaultLegalPrinterDriver : DefaultPlugin
+    [PluginSimpleAttribute(PluginType.LegalPrinterDriver)]
+    public class DefaultLegalPrinterDriver : DefaultPlugin//, ILegalPrinterDriver
     {
-        
 
+        private Com_SerialPort _port;
+        private CoreLib _utils;
+        // private Params _param;
+
+        // 
+        public virtual bool Activate()
+        {
+            return _port.Open();
+        }
+
+        public virtual bool Deactivate()
+        {
+            return _port.Close();
+        }
+
+        // Standart Legal Printer Commands
+        protected virtual void FP_Sale(object[] param)
+        {
+            throw new Exception("Implement FP_Sale");
+        }
+        protected virtual void FP_PayMoney(object[] param)
+        {
+            throw new Exception("Implement FP_PayMoney");
+        }
+        protected virtual void FP_Payment(object[] param)
+        {
+            throw new Exception("Implement FP_Payment");
+        }
+        protected virtual void FP_Discount(object[] param)
+        {
+            throw new Exception("Implement FP_Discount");
+        }
+        protected virtual uint FP_LastChqNo(object[] param)
+        {
+            throw new Exception("Implement FP_LastChqNo");
+        }
+        protected virtual uint FP_LastZRepNo(object[] param)
+        {
+            throw new Exception("Implement FP_LastZRepNo");
+        }
+        protected virtual void FP_OpenBox()
+        {
+            throw new Exception("Implement FP_OpenBox");
+        }
+        protected virtual bool FP_SetCashier(object[] param)
+        {
+            throw new Exception("Implement FP_SetCashier");
+        }
+        protected virtual void FP_SendCustomer(object[] param)
+        {
+            throw new Exception("Implement FP_SendCustomer");
+        }
 
         // Hooks
 
@@ -32,66 +85,33 @@ namespace components.Shared.Defaults
         }
 
         // = PROPERTIES
+        public Com_SerialPort ComPort { get { return _port; } set { _port = value; } }
+        public CoreLib Utils { get { return _utils; } }
 
-        // Service Controls
-        public UserControl DriverUI
-        {
-            get
-            {
-                return _hook_control_driverUI();
-            }
-        }
-        public UserControl PortUI
-        {
-            get
-            {
-                return _hook_control_portUI();
-            }
-        }
-        public UserControl CompatibilityUI
-        {
-            get
-            {
-                return _hook_control_settingsUI();
-            }
-        }
-
-
-        public string Name
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public string Version
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public string Author
-        {
-            get { throw new NotImplementedException(); }
-        }
 
         public object CallFunction(string name, params object[] param)
         {
             throw new NotImplementedException();
         }
 
-        public System.Collections.Hashtable AllowedMethods
+        public Hashtable AllowedMethods
         {
             get { throw new NotImplementedException(); }
         }
 
-        public bool Activate()
+        public UserControl DriverUI
         {
-            throw new NotImplementedException();
+            get { throw new NotImplementedException(); }
         }
 
-        public bool Deactivate()
+        public UserControl PortUI
         {
-            throw new NotImplementedException();
+            get { throw new NotImplementedException(); }
+        }
+
+        public UserControl CompatibilityUI
+        {
+            get { throw new NotImplementedException(); }
         }
     }
-
-
 }

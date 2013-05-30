@@ -5,7 +5,7 @@ using System.Collections;
 
 namespace components.Shared.Interfaces
 {
-    public interface ILegalPrinterDriver : IPlugin
+    public interface ILegalPrinterDriver: IPlugin
     {
         // Common Information
         /// <summary>

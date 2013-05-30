@@ -87,9 +87,9 @@ namespace PayDesk.Components.UI
 
             if (comboBox4.SelectedItem != null && comboBox4.SelectedItem.ToString() != string.Empty)
             {
-                Program.AppPlugins.SetActive(PluginType.ILegalPrinterDriver, comboBox4.SelectedItem.ToString());
+                Program.AppPlugins.SetActive(PluginType.LegalPrinterDriver, comboBox4.SelectedItem.ToString());
 
-                if (Program.AppPlugins.IsActive(PluginType.ILegalPrinterDriver))
+                if (Program.AppPlugins.IsActive(PluginType.LegalPrinterDriver))
                 {
                     ILegalPrinterDriver drv = Program.AppPlugins.GetActive<ILegalPrinterDriver>();
 
@@ -105,13 +105,13 @@ namespace PayDesk.Components.UI
                 }
             }
             else
-                Program.AppPlugins.SetActive(PluginType.ILegalPrinterDriver, "");
+                Program.AppPlugins.SetActive(PluginType.LegalPrinterDriver, "");
 
         }//save service settings
         private void LoadService()
         {
             comboBox4.Items.Add(string.Empty);
-            comboBox4.Items.AddRange(Program.AppPlugins.GetNames(PluginType.ILegalPrinterDriver));
+            comboBox4.Items.AddRange(Program.AppPlugins.GetNames(PluginType.LegalPrinterDriver));
 
             // Restore last saved module
             try
