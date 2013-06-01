@@ -72,7 +72,7 @@ namespace components.UI.Controls.TreeVisualizer
             Hashtable ht_level2 = new Hashtable();
             Hashtable ht_level3 = new Hashtable();
 
-            using (System.IO.StreamReader sRd = new System.IO.StreamReader(file))
+            using (System.IO.StreamReader sRd = new System.IO.StreamReader(file, Encoding.Default))
             {
 
                 string line = string.Empty;
@@ -83,9 +83,9 @@ namespace components.UI.Controls.TreeVisualizer
                         continue;
 
                     // key
-                    nodeInfo[0] = line.Substring(0, 10).Trim();
+                    nodeInfo[0] = line.Substring(0, 6).Trim();
                     // title
-                    nodeInfo[1] = line.Substring(10);
+                    nodeInfo[1] = line.Substring(6);
 
                     if (nodeInfo[0].Length == 2)
                         ht[nodeInfo[0]] = nodeInfo[1];
@@ -130,6 +130,7 @@ namespace components.UI.Controls.TreeVisualizer
                 }
             }
 
+            this.treeView_app.Sort();
         }
 
         private void CustomTreeLoader(Hashtable user, TreeNode parentNode)

@@ -66,7 +66,6 @@
     <Compile Include="Components\DataContainer\StorageSource.cs" />
     <Compile Include="Components\DataContainer\DataStructureItem.cs" />
     <Compile Include="Components\DataReader\Com_DataReader.cs" />
-    <Compile Include="Components\ExcelDataWorker\DataLayoutCollection.cs" />
     <Compile Include="Components\ExcelDataWorker\ExcelDataWorker.cs" />
     <Compile Include="Components\HashObject\Com_HashObject.cs" />
     <Compile Include="Components\HtmlDocumentParser\Com_HtmlDocumentParser.cs" />

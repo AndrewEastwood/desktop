@@ -13,6 +13,9 @@ namespace components.Components.ExcelDataWorker
     {
         public void FileWrite(string filePath, DataTable dataTable)
         {
+            if (dataTable == null)
+                return;
+
             FileInfo objFileInfo = new FileInfo(filePath);
             using (ExcelPackage pck = new ExcelPackage(objFileInfo))
             {
