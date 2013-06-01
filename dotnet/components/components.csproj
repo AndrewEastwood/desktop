@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>components</RootNamespace>
     <AssemblyName>components</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus">
+      <HintPath>Components\ExcelDataWorker\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Components\HtmlDocumentParser\HtmlAgilityPack.dll</HintPath>
@@ -62,6 +66,8 @@
     <Compile Include="Components\DataContainer\StorageSource.cs" />
     <Compile Include="Components\DataContainer\DataStructureItem.cs" />
     <Compile Include="Components\DataReader\Com_DataReader.cs" />
+    <Compile Include="Components\ExcelDataWorker\DataLayoutCollection.cs" />
+    <Compile Include="Components\ExcelDataWorker\ExcelDataWorker.cs" />
     <Compile Include="Components\HashObject\Com_HashObject.cs" />
     <Compile Include="Components\HtmlDocumentParser\Com_HtmlDocumentParser.cs" />
     <Compile Include="Components\MessageBoxEx\MessageBoxEx.cs">
@@ -97,6 +103,7 @@
     <Compile Include="Shared\Defaults\DefaultPlugin.cs" />
     <Compile Include="Shared\Defaults\DefaultPluginAssembly.cs" />
     <Compile Include="Shared\Interfaces\IAppUI.cs" />
+    <Compile Include="Shared\Interfaces\IComponent.cs" />
     <Compile Include="Shared\Interfaces\IDefault.cs" />
     <Compile Include="Shared\Interfaces\ILegalPrinterDriver.cs" />
     <Compile Include="Shared\Interfaces\IPlugin.cs" />

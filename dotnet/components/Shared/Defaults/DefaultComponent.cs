@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using components.Shared.Interfaces;
 
 namespace components.Shared.Defaults
 {
-    public class DefaultComponent
+    public class DefaultComponent : IComponent
     {
         private string _name;
         private Version _componentVersion;

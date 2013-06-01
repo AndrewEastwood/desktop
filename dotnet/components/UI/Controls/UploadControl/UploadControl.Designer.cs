@@ -33,6 +33,7 @@
             this.button_browse = new System.Windows.Forms.Button();
             this.button_open = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,10 +47,6 @@
             this.textBox1.Size = new System.Drawing.Size(43, 13);
             this.textBox1.TabIndex = 0;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // button_browse
             // 
@@ -119,5 +116,6 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button button_open;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
     }
 }

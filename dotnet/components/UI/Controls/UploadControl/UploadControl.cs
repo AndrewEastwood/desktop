@@ -10,6 +10,8 @@ namespace components.UI.Controls.UploadControl
 {
     public partial class UploadControl : UserControl
     {
+        private bool showFolderBrowser;
+
         public UploadControl()
         {
             InitializeComponent();
@@ -19,7 +21,11 @@ namespace components.UI.Controls.UploadControl
 
         private void button_browse_Click(object sender, EventArgs e)
         {
-            if (this.openFileDialog1.ShowDialog(this) == DialogResult.OK)
+            // folder browser
+            if (showFolderBrowser && this.folderBrowserDialog1.ShowDialog(this) == DialogResult.OK)
+                this.textBox1.Text = this.folderBrowserDialog1.SelectedPath;
+            //file browser
+            if (!showFolderBrowser && this.openFileDialog1.ShowDialog(this) == DialogResult.OK)
                 this.textBox1.Text = this.openFileDialog1.FileName;
         }
 
@@ -31,13 +37,16 @@ namespace components.UI.Controls.UploadControl
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             this.openFileDialog1.Reset();
+            this.folderBrowserDialog1.Reset();
         }
 
         public string FilePath
         {
             get
             {
-                if (System.IO.File.Exists(this.textBox1.Text))
+                if (showFolderBrowser && System.IO.Directory.Exists(this.textBox1.Text))
+                    return this.textBox1.Text;
+                if (!showFolderBrowser && System.IO.File.Exists(this.textBox1.Text))
                     return this.textBox1.Text;
                 return string.Empty;
             }
@@ -54,8 +63,6 @@ namespace components.UI.Controls.UploadControl
         
         public event FilePathChangedDelegate OnFilePathChanged;
 
-
-
-
+        public bool ShowFolderBrowser { get { return showFolderBrowser; } set { showFolderBrowser = value; } }
     }
 }
