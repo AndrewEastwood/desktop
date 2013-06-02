@@ -36,13 +36,23 @@ namespace components.Components.ArgumentParser
             int idx=0;
             string prevKey = string.Empty;
             foreach (string argItem in argumentsArray)
-                if (idx++ % 2 == 0)
+            {
+                if (argItem.Contains("="))
                 {
-                    prevKey = argItem;
-                    argContainer[argItem] = string.Empty;
+                    string[] keyValue = argItem.Split('=');
+                    argContainer[keyValue[0]] = keyValue[1];
                 }
                 else
-                    argContainer[prevKey] = argItem;
+                {
+                    if (idx++ % 2 == 0)
+                    {
+                        prevKey = argItem;
+                        argContainer[argItem] = string.Empty;
+                    }
+                    else
+                        argContainer[prevKey] = argItem;
+                }
+            }
         }
 
         public static void TransformArguments(string argumentString)

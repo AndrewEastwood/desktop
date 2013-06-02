@@ -60,6 +60,7 @@ function build() {
     _updateLibs
     _updateStatic
     _updatePlugins
+    _copyTools
     _setBuildVersion
     _createAppPatch
 }
@@ -119,6 +120,10 @@ function _setBuildVersion() {
 }
 
 function _createAppPatch() {
+    #
+    # creating app patch archive
+    #
+    start "creating app patch archive"
     ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/*.bat"
     ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/*.cfg"
     ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/*.dll"
@@ -138,4 +143,43 @@ function _createAppPatch() {
     ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/templates"
     ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/tools"
     ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/users"
+    
+    end "creating app patch archive"
+}
+
+function _copyTools() {
+    #
+    # copying tools
+    #
+    start "copying tools"
+
+    TOOLCFG='<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <probing privatePath="..\..\PayDesk\tools;bin;..\com" />
+    </assemblyBinding>
+  </runtime>
+</configuration>'
+
+    # BillsToExcel
+    mkdir -pv ./bin/tools/BillsToExcel/bin/
+    cp -rfv $PROJECT/../PayDeskTools/BillsToExcel/bin/Debug/*.dll ./bin/tools/BillsToExcel/bin/
+    cp -rfv $PROJECT/../PayDeskTools/BillsToExcel/bin/Debug/*.exe ./bin/tools/BillsToExcel/
+    cp -rfv $PROJECT/../PayDeskTools/BillsToExcel/bin/Debug/*.bat ./bin/tools/BillsToExcel/
+    echo $TOOLCFG > ./bin/tools/BillsToExcel/BillsToExcel.exe.config
+    # ProductCategoryManager
+    mkdir -pv ./bin/tools/ProductCategoryManager/bin/
+    cp -rfv $PROJECT/../PayDeskTools/ProductCategoryManager/bin/Debug/*.dll ./bin/tools/ProductCategoryManager/bin/
+    cp -rfv $PROJECT/../PayDeskTools/ProductCategoryManager/bin/Debug/*.exe ./bin/tools/ProductCategoryManager/
+    cp -rfv $PROJECT/../PayDeskTools/ProductCategoryManager/bin/Debug/*.bat ./bin/tools/ProductCategoryManager/
+    echo $TOOLCFG > ./bin/tools/ProductCategoryManager/ProductCategoryManager.exe.config
+    # VirtualKeyboard
+    mkdir -pv ./bin/tools/VirtualKeyboard/bin/
+    cp -rfv $PROJECT/../PayDeskTools/VirtualKeyboard/bin/Debug/*.dll ./bin/tools/VirtualKeyboard/bin/
+    cp -rfv $PROJECT/../PayDeskTools/VirtualKeyboard/bin/Debug/*.exe ./bin/tools/VirtualKeyboard/
+    cp -rfv $PROJECT/../PayDeskTools/VirtualKeyboard/bin/Debug/*.bat ./bin/tools/VirtualKeyboard/
+    echo $TOOLCFG > ./bin/tools/VirtualKeyboard/VirtualKeyboard.exe.config
+
+    end "copying tools"
 }

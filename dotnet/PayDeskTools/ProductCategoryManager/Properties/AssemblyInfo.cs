@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ProductCategoryManager")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Hewlett-Packard")]
+[assembly: AssemblyCompany("InTech")]
 [assembly: AssemblyProduct("ProductCategoryManager")]
-[assembly: AssemblyCopyright("Copyright © Hewlett-Packard 2011")]
+[assembly: AssemblyCopyright("Copyright © InTech 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

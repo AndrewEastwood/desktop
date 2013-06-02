@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "components", "..\components
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductCategoryManager", "ProductCategoryManager\ProductCategoryManager.csproj", "{1690C55D-5ABC-46AB-9DFA-EAE9F18B1C92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualKeyboard", "VirualKeyboard\VirtualKeyboard.csproj", "{344B1E11-98C0-4284-B545-8541DB6EDD2E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualKeyboard", "VirtualKeyboard\VirtualKeyboard.csproj", "{344B1E11-98C0-4284-B545-8541DB6EDD2E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BillsToExcel", "BillsToExcel\BillsToExcel.csproj", "{0778CAD9-3946-40FD-AB1F-E42FFD6FB285}"
 EndProject
