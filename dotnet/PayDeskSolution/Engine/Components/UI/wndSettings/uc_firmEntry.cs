@@ -28,6 +28,8 @@ namespace PayDesk.Components.UI.wndSettings
                 this.textBox4.Text = ht["OUTPUT"].ToString();
             if (ht.ContainsKey("FILTER"))
                 this.textBox5.Text = ht["FILTER"].ToString();
+            if (ht.ContainsKey("SUBUNIT"))
+                this.textBox6.Text = ht["SUBUNIT"].ToString();
         }
 
         private void uc_firmEntry_Load(object sender, EventArgs e)
@@ -57,6 +59,7 @@ namespace PayDesk.Components.UI.wndSettings
         public string Profile_Source { get { return this.textBox3.Text; } set { this.textBox3.Text = value; } }
         public string Profile_Output { get { return this.textBox4.Text; } set { this.textBox4.Text = value; } }
         public string Profile_Filter { get { return this.textBox5.Text; } set { this.textBox5.Text = value; } }
+        public string Profile_SubUnit { get { return this.textBox6.Text; } set { this.textBox6.Text = value; } }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {

@@ -785,6 +785,7 @@ namespace PayDesk.Components.UI
                     ht.Add("SOURCE", fe.Profile_Source);
                     ht.Add("OUTPUT", fe.Profile_Output);
                     ht.Add("FILTER", fe.Profile_Filter);
+                    ht.Add("SUBUNIT", fe.Profile_SubUnit);
                     ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Add(fe.Profile_ID, ht);
                     //ConfigManager.Instance.CommonConfiguration.PROFILES_updateDateTime.Add(fe.Profile_ID, new DateTime[3]);
                     ht = new Hashtable();

@@ -283,3 +283,6 @@ D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\obj\Debug\PayDesk
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\obj\Debug\PayDesk.exe
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\obj\Debug\PayDesk.pdb
 D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\bin\Debug\HtmlAgilityPack.dll
+D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\bin\Debug\PayDesk.exe.config
+D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\bin\Debug\EPPlus.dll
+D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\bin\Debug\EPPlus.xml

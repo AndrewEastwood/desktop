@@ -427,7 +427,14 @@ namespace driver.Lib
             values[7] = UserConfig.UserLogin;
             values[8] = znom;
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
+            {
                 values[9] = string.Format("{0:X2}", int.Parse(info["PROFILE_ID"].ToString()));
+                // override subunit
+                Hashtable profile = (Hashtable)ConfigManager.Instance.CommonConfiguration.PROFILES_Items[info["PROFILE_ID"]];
+                int profileSubunit = 0;
+                if (profile.ContainsKey("SUBUNIT") && int.TryParse(profile["SUBUNIT"].ToString(), out profileSubunit))
+                    values[0] = string.Format("{0:X2}", profileSubunit);
+            }
 
             string chqName = driver.Config.ConfigManager.Instance.CommonConfiguration.APP_ChequeName;
             for (byte i = 0; i < values.Length; i++)

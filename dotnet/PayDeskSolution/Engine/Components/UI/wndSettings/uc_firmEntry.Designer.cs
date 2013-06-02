@@ -43,6 +43,8 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.label5 = new System.Windows.Forms.Label();
             this.textBox5 = new System.Windows.Forms.TextBox();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
@@ -213,6 +215,26 @@
             this.textBox5.Size = new System.Drawing.Size(285, 20);
             this.textBox5.TabIndex = 10;
             // 
+            // textBox6
+            // 
+            this.textBox6.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBox6.Location = new System.Drawing.Point(20, 286);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(285, 20);
+            this.textBox6.TabIndex = 11;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label6.Location = new System.Drawing.Point(20, 260);
+            this.label6.Margin = new System.Windows.Forms.Padding(0);
+            this.label6.Name = "label6";
+            this.label6.Padding = new System.Windows.Forms.Padding(0, 10, 0, 3);
+            this.label6.Size = new System.Drawing.Size(95, 26);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "Номер підрозділу";
+            // 
             // uc_firmEntry
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -220,6 +242,8 @@
             this.AutoScroll = true;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.Control;
+            this.Controls.Add(this.textBox6);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.textBox5);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.tableLayoutPanel2);
@@ -232,7 +256,7 @@
             this.Controls.Add(this.label1);
             this.Name = "uc_firmEntry";
             this.Padding = new System.Windows.Forms.Padding(20);
-            this.Size = new System.Drawing.Size(325, 280);
+            this.Size = new System.Drawing.Size(325, 326);
             this.Load += new System.EventHandler(this.uc_firmEntry_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -260,5 +284,7 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.Label label6;
     }
 }

@@ -15,7 +15,7 @@
     <GenerateManifests>false</GenerateManifests>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <StartupObject>PayDesk.Program</StartupObject>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -368,6 +368,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Resources\by_bc.png" />
     <None Include="Resources\by_c.png" />
     <None Include="Resources\by_name.png" />

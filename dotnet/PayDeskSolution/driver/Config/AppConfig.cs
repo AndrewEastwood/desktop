@@ -92,7 +92,7 @@ namespace driver.Config
         public bool APP_ShowInventWindow = false;
         public int APP_WeightType = 0;
         public int APP_SearchType = 2;
-        public string APP_ChequeName = "%0%1_%2_%3_%4_%5_%6_%7";
+        public string APP_ChequeName = "%9%0%1_%2_%3_%4_%5_%6_%7";
         public int APP_DoseDecimals = 3;
         public byte APP_InvAutoSave = 10;
         public string[] APP_DiscountRules = new string[0];

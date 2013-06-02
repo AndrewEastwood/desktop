@@ -9,11 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DATECS_FP3530T", "Plugin_DA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IKC-OP2", "Plugin_IKC-OP2\IKC-OP2.csproj", "{C5DF6468-7FA6-450A-915F-A7C22BF185B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "virtualKeyboard", "Com_VirualKeyboard\virtualKeyboard.csproj", "{344B1E11-98C0-4284-B545-8541DB6EDD2E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "driver", "driver\driver.csproj", "{3C91D674-9568-42A9-A0DA-026C1A8FAB80}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductCategoryManager", "ProductCategoryManager\ProductCategoryManager.csproj", "{1690C55D-5ABC-46AB-9DFA-EAE9F18B1C92}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "components", "..\components\components.csproj", "{BE1911B7-9DDA-4F5C-8B55-ED05673B4429}"
 EndProject
@@ -69,16 +65,6 @@ Global
 		{C5DF6468-7FA6-450A-915F-A7C22BF185B2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C5DF6468-7FA6-450A-915F-A7C22BF185B2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C5DF6468-7FA6-450A-915F-A7C22BF185B2}.Release|x86.ActiveCfg = Release|Any CPU
-		{344B1E11-98C0-4284-B545-8541DB6EDD2E}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{344B1E11-98C0-4284-B545-8541DB6EDD2E}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{344B1E11-98C0-4284-B545-8541DB6EDD2E}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{344B1E11-98C0-4284-B545-8541DB6EDD2E}.Debug|x86.ActiveCfg = Debug|x86
-		{344B1E11-98C0-4284-B545-8541DB6EDD2E}.Debug|x86.Build.0 = Debug|x86
-		{344B1E11-98C0-4284-B545-8541DB6EDD2E}.Release|Any CPU.ActiveCfg = Release|x86
-		{344B1E11-98C0-4284-B545-8541DB6EDD2E}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{344B1E11-98C0-4284-B545-8541DB6EDD2E}.Release|Mixed Platforms.Build.0 = Release|x86
-		{344B1E11-98C0-4284-B545-8541DB6EDD2E}.Release|x86.ActiveCfg = Release|x86
-		{344B1E11-98C0-4284-B545-8541DB6EDD2E}.Release|x86.Build.0 = Release|x86
 		{3C91D674-9568-42A9-A0DA-026C1A8FAB80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3C91D674-9568-42A9-A0DA-026C1A8FAB80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C91D674-9568-42A9-A0DA-026C1A8FAB80}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -89,16 +75,6 @@ Global
 		{3C91D674-9568-42A9-A0DA-026C1A8FAB80}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3C91D674-9568-42A9-A0DA-026C1A8FAB80}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3C91D674-9568-42A9-A0DA-026C1A8FAB80}.Release|x86.ActiveCfg = Release|Any CPU
-		{1690C55D-5ABC-46AB-9DFA-EAE9F18B1C92}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{1690C55D-5ABC-46AB-9DFA-EAE9F18B1C92}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{1690C55D-5ABC-46AB-9DFA-EAE9F18B1C92}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{1690C55D-5ABC-46AB-9DFA-EAE9F18B1C92}.Debug|x86.ActiveCfg = Debug|x86
-		{1690C55D-5ABC-46AB-9DFA-EAE9F18B1C92}.Debug|x86.Build.0 = Debug|x86
-		{1690C55D-5ABC-46AB-9DFA-EAE9F18B1C92}.Release|Any CPU.ActiveCfg = Release|x86
-		{1690C55D-5ABC-46AB-9DFA-EAE9F18B1C92}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{1690C55D-5ABC-46AB-9DFA-EAE9F18B1C92}.Release|Mixed Platforms.Build.0 = Release|x86
-		{1690C55D-5ABC-46AB-9DFA-EAE9F18B1C92}.Release|x86.ActiveCfg = Release|x86
-		{1690C55D-5ABC-46AB-9DFA-EAE9F18B1C92}.Release|x86.Build.0 = Release|x86
 		{BE1911B7-9DDA-4F5C-8B55-ED05673B4429}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BE1911B7-9DDA-4F5C-8B55-ED05673B4429}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE1911B7-9DDA-4F5C-8B55-ED05673B4429}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
