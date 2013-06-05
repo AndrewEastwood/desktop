@@ -3139,7 +3139,7 @@ namespace IKC_OP2
                 // components.Components.WinApi.Com_WinApi.OutputDebugString("WRITE");
 
                 int attemptsGeneral = 20;
-                int attemptsToResend = 2;
+                int attemptsToResend = 5;
                 int attemptsOnBusy = 40;
                 int attemptsToRead = 5;
 

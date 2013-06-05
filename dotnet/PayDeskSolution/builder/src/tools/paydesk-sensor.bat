@@ -1,4 +1,5 @@
 @echo off
 start PayDesk.exe
-start tools\VirtualKeyboard\VirtualKeyboard.bat
+cd tools\VirtualKeyboard\
+start VirtualKeyboard.bat
 exit

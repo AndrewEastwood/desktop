@@ -47,7 +47,7 @@ namespace components.Components.XmlDocumentParser
             {
                 string appPath = ConfigDirectoryNameApplication;
                 if (UseVersionForConfiguration)
-                    appPath = string.Format(VersionDirectoryFormat, DS,  appPath, DocumentVersion.ToString());
+                    appPath = string.Format(VersionDirectoryFormat, DS, appPath, DocumentVersion.ToString());
                 if (ConfigDirectoryNameApplication.Length != 0)
                     appPath = DS + appPath;
                 return ConfigDirectoryPathGeneral + appPath;

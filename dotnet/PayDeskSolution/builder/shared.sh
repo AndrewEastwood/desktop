@@ -153,7 +153,7 @@ function _copyTools() {
     #
     start "copying tools"
 
-    TOOLCFG='<?xml version="1.0" encoding="utf-8" ?>
+    TOOL_CFG='<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
@@ -167,19 +167,22 @@ function _copyTools() {
     cp -rfv $PROJECT/../PayDeskTools/BillsToExcel/bin/Debug/*.dll ./bin/tools/BillsToExcel/bin/
     cp -rfv $PROJECT/../PayDeskTools/BillsToExcel/bin/Debug/*.exe ./bin/tools/BillsToExcel/
     cp -rfv $PROJECT/../PayDeskTools/BillsToExcel/bin/Debug/*.bat ./bin/tools/BillsToExcel/
-    echo $TOOLCFG > ./bin/tools/BillsToExcel/BillsToExcel.exe.config
+    cp -rfv $PROJECT/../PayDeskTools/BillsToExcel/bin/Debug/config/ ./bin/tools/BillsToExcel/
+    echo $TOOL_CFG > ./bin/tools/BillsToExcel/BillsToExcel.exe.config
     # ProductCategoryManager
     mkdir -pv ./bin/tools/ProductCategoryManager/bin/
     cp -rfv $PROJECT/../PayDeskTools/ProductCategoryManager/bin/Debug/*.dll ./bin/tools/ProductCategoryManager/bin/
     cp -rfv $PROJECT/../PayDeskTools/ProductCategoryManager/bin/Debug/*.exe ./bin/tools/ProductCategoryManager/
     cp -rfv $PROJECT/../PayDeskTools/ProductCategoryManager/bin/Debug/*.bat ./bin/tools/ProductCategoryManager/
-    echo $TOOLCFG > ./bin/tools/ProductCategoryManager/ProductCategoryManager.exe.config
+    cp -rfv $PROJECT/../PayDeskTools/ProductCategoryManager/bin/Debug/config ./bin/tools/ProductCategoryManager/
+    echo $TOOL_CFG > ./bin/tools/ProductCategoryManager/ProductCategoryManager.exe.config
     # VirtualKeyboard
     mkdir -pv ./bin/tools/VirtualKeyboard/bin/
     cp -rfv $PROJECT/../PayDeskTools/VirtualKeyboard/bin/Debug/*.dll ./bin/tools/VirtualKeyboard/bin/
     cp -rfv $PROJECT/../PayDeskTools/VirtualKeyboard/bin/Debug/*.exe ./bin/tools/VirtualKeyboard/
     cp -rfv $PROJECT/../PayDeskTools/VirtualKeyboard/bin/Debug/*.bat ./bin/tools/VirtualKeyboard/
-    echo $TOOLCFG > ./bin/tools/VirtualKeyboard/VirtualKeyboard.exe.config
+    cp -rfv $PROJECT/../PayDeskTools/VirtualKeyboard/bin/Debug/config ./bin/tools/VirtualKeyboard/
+    echo $TOOL_CFG > ./bin/tools/VirtualKeyboard/VirtualKeyboard.exe.config
 
     end "copying tools"
 }

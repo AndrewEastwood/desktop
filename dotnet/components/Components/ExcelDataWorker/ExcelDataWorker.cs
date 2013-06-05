@@ -19,7 +19,7 @@ namespace components.Components.ExcelDataWorker
             FileInfo objFileInfo = new FileInfo(filePath);
             using (ExcelPackage pck = new ExcelPackage(objFileInfo))
             {
-                ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Accounts");
+                ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Bills_" + DateTime.Today.ToShortDateString());
                 ws.Cells["A1"].LoadFromDataTable(dataTable, true);
                 pck.Save();
             }
