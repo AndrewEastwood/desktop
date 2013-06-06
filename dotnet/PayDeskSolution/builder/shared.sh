@@ -129,6 +129,10 @@ function _setBuildVersion() {
     VER="`getVersion`"
     chat "$VER"
     echo "$VER" > ./bin/VERSION.txt
+    # generate github readme.md file
+    echo "=== PayDesk Solution" > ./bin/README.md
+    echo "" >> ./bin/README.md
+    echo "==== $VER" >> ./bin/README.md
 }
 
 function _createAppPatch() {
