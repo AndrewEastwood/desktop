@@ -70,6 +70,7 @@ function build() {
     _updatePlugins
     _copyTools
     _setBuildVersion
+    _cleanGeneratedData
     _createAppPatch
 }
 

@@ -11,10 +11,6 @@ function main() {
         start PayDesk.exe
         ./PayDesk.exe &
     fi
-    if [ "$1" = "clean" ]
-    then
-        _cleanGeneratedData
-    fi
 }
 
 time main $@
