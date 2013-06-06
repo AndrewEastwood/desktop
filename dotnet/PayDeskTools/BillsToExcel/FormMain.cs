@@ -26,6 +26,7 @@ namespace BillsToExcel
         {
             InitializeComponent();
             // xmlParser.Settings.ConfigDirectoryNameDefault = string.Empty;
+            uploadControl1.initSelectedPath(ApplicationConfiguration.Instance.GetValueByPath<string>("General.Paths.pathToBills"));
         }
 
         private void uploadControl1_OnFilePathChanged(string path)
@@ -129,9 +130,33 @@ namespace BillsToExcel
             // set checked columns
             foreach (ListViewItem item in this.listView1.CheckedItems)
             {
-                DataColumn dCol = new DataColumn(item.Name);
-                dCol.Caption = getItemHumanFrendlyLabel(item.Name);
-                billsInfo.Columns.Add(dCol);
+                switch (item.Name)
+                {
+                    case "BILL_COMMENT":
+                        {
+                            string caption = getItemHumanFrendlyLabel(item.Name);
+                            string[] fieldsToInclude = caption.Split(';');
+                            int idx = 0;
+                            foreach (string fldCap in fieldsToInclude)
+                            {
+                                DataColumn dCol = new DataColumn(item.Name + "_" + (idx));
+                                dCol.Caption = fldCap.Trim();
+                                billsInfo.Columns.Add(dCol);
+                                dCol.ExtendedProperties.Add("PARENT", item.Name);
+                                dCol.ExtendedProperties.Add("DATA_INDEX", idx);
+                                idx++;
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            DataColumn dCol = new DataColumn(item.Name);
+                            dCol.Caption = getItemHumanFrendlyLabel(item.Name);
+                            billsInfo.Columns.Add(dCol);
+                            dCol.ExtendedProperties.Add("PARENT", item.Name);
+                            break;
+                        }
+                }
             }
 
             if (billsInfo.Columns.Count == 0)
@@ -141,8 +166,42 @@ namespace BillsToExcel
             {
                 DataRow dRow = billsInfo.NewRow();
                 foreach (DataColumn column in billsInfo.Columns)
-                    switch (column.ColumnName)
+                {
+                    string parentName = column.ColumnName;
+                    if (column.ExtendedProperties.ContainsKey("PARENT"))
+                        parentName = column.ExtendedProperties["PARENT"].ToString();
+                    switch (parentName)
                     {
+                        case "DISCOUNT":
+                            {
+                                string disc = string.Empty;
+                                try
+                                {
+                                    Hashtable discount = (Hashtable)billentry["DISCOUNT"];
+                                    
+                                    // add discount in the percnete
+                                    if (discount.ContainsKey("DISC_FINAL_PERCENT"))
+                                        disc += discount["DISC_FINAL_PERCENT"] + "%";
+
+                                    // add discount in cash value
+                                    if (discount.ContainsKey("DISC_FINAL_CASH"))
+                                        disc += " (" + discount["DISC_FINAL_CASH"] + "грн.)";
+                                }
+                                catch { }
+                                dRow[column.ColumnName] = disc;
+                                break;
+                            }
+                        case "BILL_COMMENT":
+                            {
+                                string fullComment = billentry[parentName].ToString();
+                                string[] exploded = fullComment.Split(' ');
+                                int dataIndex = 0;
+                                if (column.ExtendedProperties.ContainsKey("DATA_INDEX"))
+                                    dataIndex = int.Parse(column.ExtendedProperties["DATA_INDEX"].ToString());
+                                if (exploded.Length > dataIndex && exploded[dataIndex] != null)
+                                    dRow[column.ColumnName] = exploded[dataIndex].Replace("%20", "");
+                                break;
+                            }
                         case "BILL_DELETED_ROWS":
                             {
                                 int deletedRowsCounter = 0;
@@ -161,6 +220,7 @@ namespace BillsToExcel
                                 break;
                             }
                     }
+                }
                 billsInfo.Rows.Add(dRow);
             }
 
@@ -170,6 +230,7 @@ namespace BillsToExcel
         private void saveSettings()
         {
             // ConfigurationManager.AppSettings.Clear();
+            Hashtable path = new Hashtable() { { "pathToBills", uploadControl1.FilePath } };
             Hashtable configTitles = new Hashtable();
             Hashtable configStates = new Hashtable();
 
@@ -183,6 +244,7 @@ namespace BillsToExcel
             }
 
             Hashtable config = new Hashtable() { 
+                {"Paths", path},
                 {"Titles", configTitles},
                 {"States", configStates}
             };

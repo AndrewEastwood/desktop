@@ -2,7 +2,7 @@
 
 # DATAROOT="$( cd $( dirname "$0" ) && pwd )"
 COLORSENABLED=true
-PROJECT=./..
+PROJECT=./../
 DEBUG=./../Engine/bin/Debug
 
 HR="|---------------------------------------------------------------------"
@@ -97,6 +97,18 @@ function _updateStatic() {
     done
     # cp -rv ./src/* ./bin/
     end "copy source"
+}
+
+function _cleanGeneratedData() {
+    #
+    # clean generated data
+    #
+    start "clean generated data"
+    rm -rfv ./bin/articles/*
+    rm -rfv ./bin/bills/*
+    rm -rfv ./bin/cheques/*
+    rm -rfv ./bin/reports/*
+    end "clean generated data"
 }
 
 function _updatePlugins() {

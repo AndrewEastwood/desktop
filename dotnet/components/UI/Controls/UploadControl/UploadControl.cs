@@ -52,11 +52,15 @@ namespace components.UI.Controls.UploadControl
             }
         }
 
-
         void UploadControl_OnFilePathChanged(string file)
         {
             if (string.IsNullOrEmpty(file))
                 MessageBox.Show("Select a valid file.");
+        }
+
+        public void initSelectedPath(string path)
+        {
+            this.textBox1.Text = path;
         }
 
         public delegate void FilePathChangedDelegate(string file);

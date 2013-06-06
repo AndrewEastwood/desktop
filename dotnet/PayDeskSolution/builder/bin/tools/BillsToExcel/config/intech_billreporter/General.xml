@@ -5,13 +5,21 @@ do not modity anything inside the document section
 geretated by XmlDocumentParser v1.6
 -->
 <document name="General" version="1.0.0.0">
+    <section name="Paths">
+        <property name="pathToBills" value="d:\My Development\GitHub\desktop\dotnet\PayDeskSolution\builder\bin\bills\" />
+    </section>
     <section name="States">
+        <property name="BILL_COMMENT" value="True" />
         <property name="BILL_DELETED_ROWS" value="True" />
+        <property name="DISCOUNT" value="True" />
+        <property name="ORDER_SUMA" value="True" />
+        <property name="PAYMENT" value="True" />
         <property name="STORE_NO" value="True" />
+        <property name="TAX_BILL" value="True" />
     </section>
     <section name="Titles">
         <property name="BILL_BILL_NO" value="Номер Рахунку" />
-        <property name="BILL_COMMENT" value="Коментар" />
+        <property name="BILL_COMMENT" value="Столик; Офіціант" />
         <property name="BILL_DATETIME" value="Дата" />
         <property name="BILL_DATETIME_LOCK" value="Дата Блокування" />
         <property name="BILL_DATETIMEEDIT" value="Дата Рахунку" />
@@ -29,7 +37,7 @@ geretated by XmlDocumentParser v1.6
         <property name="ORDER_SUMA" value="Сума" />
         <property name="PAYMENT" value="Оплата" />
         <property name="STORE_NO" value="Номер Каси" />
-        <property name="TAX_BILL" value="TAX_BILL" />
+        <property name="TAX_BILL" value="Накладна" />
         <property name="TAX_SUMA" value="Сума ПДВ" />
     </section>
 </document>
