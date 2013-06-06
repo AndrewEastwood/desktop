@@ -53,6 +53,10 @@ function getVersion() {
     echo "Build Version: `date +%y.%m%d.%H%M`"
 }
 
+function getVersionNumber() {
+    echo "`date +%y.%m%d.%H%M`"
+}
+
 function build() {
 
     chat "build"
@@ -130,9 +134,10 @@ function _setBuildVersion() {
     chat "$VER"
     echo "$VER" > ./bin/VERSION.txt
     # generate github readme.md file
-    echo "=== PayDesk Solution" > ./bin/README.md
-    echo "" >> ./bin/README.md
-    echo "==== $VER" >> ./bin/README.md
+    echo "### PayDesk Solution" > ./bin/README.md
+    echo "-" >> ./bin/README.md
+    echo "##### Build Version: \`\`\` `getVersionNumber` \`\`\`" >> ./bin/README.md
+
 }
 
 function _createAppPatch() {
