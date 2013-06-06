@@ -57,6 +57,10 @@ function getVersionNumber() {
     echo "`date +%y.%m%d.%H%M`"
 }
 
+function getVersionNumberFile() {
+    echo "`date +%y-%m%d-%H%M`"
+}
+
 function build() {
 
     chat "build"
@@ -145,25 +149,28 @@ function _createAppPatch() {
     # creating app patch archive
     #
     start "creating app patch archive"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/*.bat"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/*.cfg"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/*.dll"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/*.DLL"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/*.exe"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/*.ico"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/*.ini"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/*.lic"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/*.txt"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/*.xml"
+    
+    ZIPNAME="AppUpdate_`getVersionNumberFile`.zip"
+    
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.bat"
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.cfg"
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.dll"
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.DLL"
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.exe"
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.ico"
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.ini"
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.lic"
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.txt"
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.xml"
 
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/display"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/manuals"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/Plugins"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/reports"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/schemes"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/templates"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/tools"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/________.zip "./bin/users"
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/display"
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/manuals"
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/Plugins"
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/reports"
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/schemes"
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/templates"
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/tools"
+    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/users"
     
     end "creating app patch archive"
 }
