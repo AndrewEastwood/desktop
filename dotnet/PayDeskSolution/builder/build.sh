@@ -4,8 +4,15 @@
 
 function main() {
     cleanup
-    build
-    if [ "$1" = "start" ]
+    if [ "$1" = "test" ]
+    then
+        buildTest
+    fi
+    if [ "$1" = "prod" ]
+    then
+        buildProduction
+    fi
+    if [ "$2" = "start" ]
     then
         cd ./bin/
         start PayDesk.exe

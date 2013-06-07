@@ -61,9 +61,19 @@ function getVersionNumberFile() {
     echo "`date +%y-%m%d-%H%M`"
 }
 
-function build() {
+function buildTest() {
 
-    chat "build"
+    chat "Test Build Started"
+
+    _updateLibs
+    _updateStatic
+    _updatePlugins
+    _copyTools
+}
+
+function buildProduction() {
+
+    chat "Production Build Started"
 
     _updateLibs
     _updateStatic
