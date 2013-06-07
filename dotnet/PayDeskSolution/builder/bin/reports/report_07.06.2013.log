@@ -1,0 +1,10 @@
+07.06.2013 9:35
+at Method : LoadData
+Object reference not set to an instance of an object.
+   at driver.Config.ConfigManager._loadNormalConfig()
+
+driver
+
+******************************************************************
+
+

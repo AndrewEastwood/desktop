@@ -8,10 +8,13 @@
     <section name="Waiters">
         <property name="active" value="true"/>
         <section name="items">
-            <property name="1" value="1 Леся"/>
-            <property name="2" value="2 Галя"/>
-            <property name="3" value="БАНКЕТ"/>
-           
+            <property name="1" value="0 Бармен"/>
+            <property name="2" value="1 Ірина"/>
+            <property name="3" value="2 Світлана"/>
+            <property name="4" value="3 Марта"/>
+            <property name="5" value="4 Іра"/>
+            <property name="6" value="5 Настя"/>
+            <property name="7" value="99 БАНКЕТ"/>
         </section>
     </section>
 
@@ -22,14 +25,16 @@
     <section name="DeskNumbers">
         <property name="active" value="true"/>
         <section name="items">
-            <property name="1" value="01 ст."/>
-            <property name="2" value="02 ст."/>
-            <property name="3" value="03 ст."/>
-            <property name="4" value="04 ст."/>
-            <property name="5" value="05 ст."/>
-            <property name="6" value="06 ст."/>
-            <property name="7" value="07 ст."/>
-            <property name="8" value="БАНКЕТ"/>
+            <property name="1" value="00 Бар"/>
+            <property name="2" value="01 ст."/>
+            <property name="3" value="02 ст."/>
+            <property name="4" value="03 ст."/>
+            <property name="5" value="04 ст."/>
+            <property name="6" value="05 ст."/>
+            <property name="7" value="06 ст."/>
+            <property name="8" value="07 ст."/>
+            <property name="9" value="08 ст."/>
+            <property name="10" value="99 БАНКЕТ"/>
             
         </section>
     </section>
@@ -39,16 +44,30 @@
          <property name="active" value="false"/>
     -->
     <section name="OrderNumbers">
-        <property name="active" value="false"/>
+        <property name="active" value="true"/>
         <section name="items">
-            <property name="1" value="(фішка.1)"/>
-            <property name="2" value="(фішка.2)"/>
-            <property name="3" value="(фішка.3)"/>
-            <property name="4" value="(фішка.4)"/>
-            <property name="5" value="(фішка.5)"/>
-            <property name="6" value="(фішка.6)"/>
-            <property name="7" value="(фішка.7)"/>
-            <property name="8" value="(фішка.8)"/>
+            <property name="1" value="(Без фішки)"/>
+            <property name="2" value="(фішка.01)"/>
+            <property name="3" value="(фішка.02)"/>
+            <property name="4" value="(фішка.03)"/>
+            <property name="5" value="(фішка.04)"/>
+            <property name="6" value="(фішка.05)"/>
+            <property name="7" value="(фішка.06)"/>
+            <property name="8" value="(фішка.07)"/>
+            <property name="9" value="(фішка.08)"/>
+            <property name="10" value="(фішка.09)"/>
+            <property name="11" value="(фішка.10)"/>
+            <property name="12" value="(фішка.11)"/>
+            <property name="13" value="(фішка.12)"/>
+            <property name="14" value="(фішка.13)"/>
+            <property name="15" value="(фішка.14)"/>
+            <property name="16" value="(фішка.15)"/>
+            <property name="17" value="(фішка.16)"/>
+            <property name="18" value="(фішка.17)"/>
+            <property name="19" value="(фішка.18)"/>
+            <property name="20" value="(фішка.19)"/>
+            <property name="21" value="(фішка.20)"/>
+
         </section>
     </section>
 
