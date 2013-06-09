@@ -34,7 +34,7 @@
             this.label_count = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.listViewGeneral = new System.Windows.Forms.ListView();
             this.Active = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Field = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Title = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -42,8 +42,18 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.uploadControl1 = new components.UI.Controls.UploadControl.UploadControl();
+            this.listViewProducts = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -54,7 +64,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(608, 23);
             this.button1.TabIndex = 0;
-            this.button1.Text = "Export Bills To Excel";
+            this.button1.Text = "Export Bills";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -98,30 +108,28 @@
             this.saveFileDialog1.FileName = "export.xlsx";
             this.saveFileDialog1.Filter = "Excel File|*.xlsx";
             // 
-            // listView1
+            // listViewGeneral
             // 
-            this.listView1.Activation = System.Windows.Forms.ItemActivation.OneClick;
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.CheckBoxes = true;
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.listViewGeneral.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            this.listViewGeneral.CheckBoxes = true;
+            this.listViewGeneral.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Active,
             this.Field,
             this.Title});
-            this.listView1.FullRowSelect = true;
-            this.listView1.GridLines = true;
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(12, 101);
-            this.listView1.MultiSelect = false;
-            this.listView1.Name = "listView1";
-            this.listView1.ShowGroups = false;
-            this.listView1.Size = new System.Drawing.Size(608, 280);
-            this.listView1.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.listView1.TabIndex = 4;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            this.listViewGeneral.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewGeneral.FullRowSelect = true;
+            this.listViewGeneral.GridLines = true;
+            this.listViewGeneral.HideSelection = false;
+            this.listViewGeneral.Location = new System.Drawing.Point(0, 13);
+            this.listViewGeneral.MultiSelect = false;
+            this.listViewGeneral.Name = "listViewGeneral";
+            this.listViewGeneral.ShowGroups = false;
+            this.listViewGeneral.Size = new System.Drawing.Size(292, 274);
+            this.listViewGeneral.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.listViewGeneral.TabIndex = 4;
+            this.listViewGeneral.UseCompatibleStateImageBehavior = false;
+            this.listViewGeneral.View = System.Windows.Forms.View.Details;
+            this.listViewGeneral.SelectedIndexChanged += new System.EventHandler(this.listView_SelectedIndexChanged);
             // 
             // Active
             // 
@@ -131,7 +139,7 @@
             // Field
             // 
             this.Field.Text = "Source Filed Name";
-            this.Field.Width = 212;
+            this.Field.Width = 136;
             // 
             // Title
             // 
@@ -183,23 +191,108 @@
             this.uploadControl1.TabIndex = 1;
             this.uploadControl1.OnFilePathChanged += new components.UI.Controls.UploadControl.UploadControl.FilePathChangedDelegate(this.uploadControl1_OnFilePathChanged);
             // 
-            // Form1
+            // listViewProducts
+            // 
+            this.listViewProducts.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            this.listViewProducts.CheckBoxes = true;
+            this.listViewProducts.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3});
+            this.listViewProducts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewProducts.FullRowSelect = true;
+            this.listViewProducts.GridLines = true;
+            this.listViewProducts.HideSelection = false;
+            this.listViewProducts.Location = new System.Drawing.Point(0, 13);
+            this.listViewProducts.MultiSelect = false;
+            this.listViewProducts.Name = "listViewProducts";
+            this.listViewProducts.ShowGroups = false;
+            this.listViewProducts.Size = new System.Drawing.Size(312, 274);
+            this.listViewProducts.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.listViewProducts.TabIndex = 6;
+            this.listViewProducts.UseCompatibleStateImageBehavior = false;
+            this.listViewProducts.View = System.Windows.Forms.View.Details;
+            this.listViewProducts.SelectedIndexChanged += new System.EventHandler(this.listView_SelectedIndexChanged);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Include";
+            this.columnHeader1.Width = 52;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Source Filed Name";
+            this.columnHeader2.Width = 126;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Excel Column Title";
+            this.columnHeader3.Width = 238;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label3.Location = new System.Drawing.Point(0, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(99, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "General Information";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label4.Location = new System.Drawing.Point(0, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(49, 13);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Products";
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Location = new System.Drawing.Point(12, 97);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.listViewGeneral);
+            this.splitContainer1.Panel1.Controls.Add(this.label3);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.listViewProducts);
+            this.splitContainer1.Panel2.Controls.Add(this.label4);
+            this.splitContainer1.Size = new System.Drawing.Size(608, 287);
+            this.splitContainer1.SplitterDistance = 292;
+            this.splitContainer1.TabIndex = 9;
+            // 
+            // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(632, 453);
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.listView1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.uploadControl1);
             this.Controls.Add(this.button1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(640, 480);
-            this.Name = "Form1";
+            this.Name = "FormMain";
             this.Text = "Bill Report Manager";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -212,13 +305,20 @@
         private System.Windows.Forms.Label label_count;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView listViewGeneral;
         private System.Windows.Forms.ColumnHeader Active;
         private System.Windows.Forms.ColumnHeader Field;
         private System.Windows.Forms.ColumnHeader Title;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ListView listViewProducts;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }
 

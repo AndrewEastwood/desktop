@@ -61,47 +61,91 @@ namespace BillsToExcel
                 using (FileStream stream = new FileStream(pathToBillFile, FileMode.Open, FileAccess.Read))
                 {
                     object[] billObj = (object[])binF.Deserialize(stream);
-                    try
-                    {
-                        if (billObj[1] != null)
+                    if (billObj.Length == 2 && billObj[0] != null && billObj[1] != null)
+                        try
                         {
                             Hashtable billAllProps = (Hashtable)billObj[1];
-                            Hashtable cleanProps = (Hashtable)billAllProps.Clone();
+                            Hashtable info = (Hashtable)billAllProps.Clone();
+                            Hashtable deletedData = new Hashtable();
+
                             if (billAllProps.ContainsKey("BILL"))
                             {
                                 Dictionary<string, object> billEntryProps = (Dictionary<string, object>)billAllProps["BILL"];
                                 foreach (KeyValuePair<string, object> billEntryPropItem in billEntryProps)
-                                    cleanProps["BILL_" + billEntryPropItem.Key] = billEntryPropItem.Value;
+                                    info["BILL_" + billEntryPropItem.Key] = billEntryPropItem.Value;
                                 // remove dictionary
-                                cleanProps.Remove("BILL");
+                                info.Remove("BILL");
                             }
-                            billData.Add(cleanProps);
+
+                            if (info.ContainsKey("BILL_DELETED_ROWS"))
+                            {
+                                int delCount = 0;
+                                try
+                                {
+                                    Dictionary<string, object[]> deletedRows = (Dictionary<string, object[]>)info["BILL_DELETED_ROWS"];
+                                    delCount = deletedRows.Count;
+                                    if (delCount > 0)
+                                    {
+                                        foreach (KeyValuePair<string, object[]> deletedRow in deletedRows)
+                                            deletedData[deletedRow.Key] = deletedRow.Value;
+                                    }
+                                }
+                                catch { }
+                                finally
+                                {
+                                    info.Remove("BILL_DELETED_ROWS");
+                                    info["BILL_DELETED_ROWS"] = delCount;
+                                }
+                            }
+
+                            Hashtable transformBillData = new Hashtable()
+                            {
+                                {"DATA", (DataTable)billObj[0]},
+                                {"INFO", info},
+                                {"DELETED", deletedData}
+                            };
+
+                            billData.Add(transformBillData);
                         }
-                    }
-                    catch { }
+                        catch { }
                 }
             }
 
             this.label_count.Text = billData.Count.ToString();
 
             // step 2. extract bill fileds
-            this.listView1.Items.Clear();
-            this.listView1.Sort();
+            this.listViewGeneral.Items.Clear();
+            this.listViewGeneral.Sort();
+            this.listViewProducts.Items.Clear();
+            this.listViewProducts.Sort();
 
             if (billData.Count > 0)
             {
                 Hashtable billFirstEntry = billData[0];
-                IEnumerator billKeysEnumerator = billFirstEntry.Keys.GetEnumerator();
+
+                IEnumerator billKeysEnumerator = ((Hashtable)billFirstEntry["INFO"]).Keys.GetEnumerator();
                 while (billKeysEnumerator.MoveNext())
                 {
                     ListViewItem item = new ListViewItem();
                     item.Name = billKeysEnumerator.Current.ToString();
                     // item.SubItems.Add("");
                     item.SubItems.Add(item.Name);
-                    item.SubItems.Add(getItemHumanFrendlyLabel(item.Name));
-                    item.Checked = getItemCheckedState(item.Name);
+                    item.SubItems.Add(getItemHumanFrendlyLabel("Info." + item.Name));
+                    item.Checked = getItemCheckedState("Info." + item.Name);
 
-                    this.listView1.Items.Add(item);
+                    this.listViewGeneral.Items.Add(item);
+                }
+
+                foreach (DataColumn dCol in ((DataTable)billFirstEntry["DATA"]).Columns)
+                {
+                    ListViewItem item = new ListViewItem();
+                    item.Name = dCol.ColumnName;
+                    // item.SubItems.Add("");
+                    item.SubItems.Add(dCol.ColumnName);
+                    item.SubItems.Add(getItemHumanFrendlyLabel("Product." + dCol.ColumnName));
+                    item.Checked = getItemCheckedState("Product." + dCol.ColumnName);
+
+                    this.listViewProducts.Items.Add(item);
                 }
             }
 
@@ -125,10 +169,12 @@ namespace BillsToExcel
 
         private DataTable billsToExcel()
         {
+            DataTable productSold = new DataTable();
+            DataTable productRemoved = new DataTable();
             DataTable billsInfo = new DataTable();
 
-            // set checked columns
-            foreach (ListViewItem item in this.listView1.CheckedItems)
+            // add info columns
+            foreach (ListViewItem item in this.listViewGeneral.CheckedItems)
             {
                 switch (item.Name)
                 {
@@ -159,12 +205,39 @@ namespace BillsToExcel
                 }
             }
 
+            // add product columns
+            foreach (ListViewItem item in this.listViewProducts.CheckedItems)
+            {
+                DataColumn dColS = new DataColumn(item.Name);
+                dColS.Caption = getItemHumanFrendlyLabel("Product." + item.Name);
+                productSold.Columns.Add(dColS);
+
+                DataColumn dColD = new DataColumn(item.Name);
+                dColD.Caption = getItemHumanFrendlyLabel("Product." + item.Name);
+                productRemoved.Columns.Add(dColD);
+            }
+
+
             if (billsInfo.Columns.Count == 0)
                 return null;
 
+            // Add data relation column
+            billsInfo.Columns.Add("_ID");
+            productSold.Columns.Add("_BillID");
+            productRemoved.Columns.Add("_BillID");
+
+            // loop through bills
             foreach (Hashtable billentry in billData)
             {
+                int billFakeID = 0;
+
+                Hashtable billentryInfo = (Hashtable)billentry["INFO"];
+
+                // add bill info row
                 DataRow dRow = billsInfo.NewRow();
+                // add relation index
+                dRow["_ID"] = billFakeID;
+
                 foreach (DataColumn column in billsInfo.Columns)
                 {
                     string parentName = column.ColumnName;
@@ -172,13 +245,17 @@ namespace BillsToExcel
                         parentName = column.ExtendedProperties["PARENT"].ToString();
                     switch (parentName)
                     {
+                        case "_ID":
+                            {
+                                break;
+                            }
                         case "DISCOUNT":
                             {
                                 string disc = string.Empty;
                                 try
                                 {
-                                    Hashtable discount = (Hashtable)billentry["DISCOUNT"];
-                                    
+                                    Hashtable discount = (Hashtable)billentryInfo["DISCOUNT"];
+
                                     // add discount in the percnete
                                     if (discount.ContainsKey("DISC_FINAL_PERCENT"))
                                         disc += discount["DISC_FINAL_PERCENT"] + "%";
@@ -193,7 +270,7 @@ namespace BillsToExcel
                             }
                         case "BILL_COMMENT":
                             {
-                                string fullComment = billentry[parentName].ToString();
+                                string fullComment = billentryInfo[parentName].ToString();
                                 string[] exploded = fullComment.Split(' ');
                                 int dataIndex = 0;
                                 if (column.ExtendedProperties.ContainsKey("DATA_INDEX"))
@@ -202,26 +279,55 @@ namespace BillsToExcel
                                     dRow[column.ColumnName] = exploded[dataIndex].Replace("%20", "");
                                 break;
                             }
-                        case "BILL_DELETED_ROWS":
-                            {
-                                int deletedRowsCounter = 0;
-                                try
-                                {
-                                    Dictionary<string, object[]> deletedRows = (Dictionary<string, object[]>)billentry[column.ColumnName];
-                                    deletedRowsCounter = deletedRows.Count;
-                                }
-                                catch { }
-                                dRow[column.ColumnName] = deletedRowsCounter;
-                                break;
-                            }
                         default:
                             {
-                                dRow[column.ColumnName] = billentry[column.ColumnName];
+                                dRow[column.ColumnName] = billentryInfo[column.ColumnName];
                                 break;
                             }
                     }
                 }
                 billsInfo.Rows.Add(dRow);
+
+                // add sold products
+                DataTable content = (DataTable)billentry["DATA"];
+                foreach (DataRow dSoldSrcRow in content.Rows)
+                {
+                    DataRow dSoldDestRow = productSold.NewRow();
+                    // add relation index
+                    dSoldDestRow["_BillID"] = billFakeID;
+                    // loop through visible fileds
+                    foreach (DataColumn dColSold in productSold.Columns)
+                        if (dColSold.ColumnName != "_BillID")
+                            dSoldDestRow[dColSold.ColumnName] = dSoldSrcRow[dColSold.ColumnName];
+
+                    productSold.Rows.Add(dSoldDestRow);
+                }
+
+                // add removed products
+                try
+                {
+                    Hashtable deletedRows = (Hashtable)billentry["DELETED"];
+                    foreach (DictionaryEntry dDelSrcRow in deletedRows)
+                    {
+                        DataRow dDelDestRow = productRemoved.NewRow();
+                        object[] removedItemsArray = (object[])dDelSrcRow.Value;
+                        // we use different approach because we do not know column name, just item position
+                        // it is the same as column name position in the list
+                        foreach (ListViewItem listItemProd in listViewProducts.Items)
+                        {
+                            // use selected items only
+                            if (listItemProd.Checked && productRemoved.Columns.IndexOf(listItemProd.Name) >= 0 && removedItemsArray.Length > listItemProd.Index)
+                                dDelDestRow[listItemProd.Name] = removedItemsArray[listItemProd.Index];
+                        }
+                        // add relation index
+                        dDelDestRow["_BillID"] = billFakeID;
+
+                        productRemoved.Rows.Add(dDelDestRow);
+                    }
+                }
+                catch { }
+
+                billFakeID++;
             }
 
             return billsInfo;
@@ -231,13 +337,23 @@ namespace BillsToExcel
         {
             // ConfigurationManager.AppSettings.Clear();
             Hashtable path = new Hashtable() { { "pathToBills", uploadControl1.FilePath } };
-            Hashtable configTitles = new Hashtable();
+            Hashtable configInfoTitles = new Hashtable();
+            Hashtable configProductTitles = new Hashtable();
             Hashtable configStates = new Hashtable();
 
-            foreach (ListViewItem item in this.listView1.Items)
+            foreach (ListViewItem item in this.listViewGeneral.Items)
             {
                 // save titles
-                configTitles[item.Name] = item.SubItems[FIELD_KEY_TITLE].Text;
+                configInfoTitles[item.Name] = item.SubItems[FIELD_KEY_TITLE].Text;
+                // save states
+                if (item.Checked)
+                    configStates[item.Name] = true;
+            }
+
+            foreach (ListViewItem item in this.listViewProducts.Items)
+            {
+                // save titles
+                configProductTitles[item.Name] = item.SubItems[FIELD_KEY_TITLE].Text;
                 // save states
                 if (item.Checked)
                     configStates[item.Name] = true;
@@ -245,7 +361,12 @@ namespace BillsToExcel
 
             Hashtable config = new Hashtable() { 
                 {"Paths", path},
-                {"Titles", configTitles},
+                {"Titles", new Hashtable()
+                    {
+                        {"Info", configInfoTitles},
+                        {"Product", configProductTitles}
+                    }
+                },
                 {"States", configStates}
             };
 
@@ -253,22 +374,39 @@ namespace BillsToExcel
             ApplicationConfiguration.Instance.XmlParser.SetXmlData(new Hashtable() { { "General", config } });
         }
 
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        private void listView_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count > 0)
+            ListView list = (ListView)sender;
+
+            if (list.SelectedItems.Count > 0)
             {
                 textBox1.SuspendLayout();
-                textBox1.Text = listView1.SelectedItems[0].SubItems[FIELD_KEY_TITLE].Text;
+                textBox1.Tag = list.Name;
+                textBox1.Text = list.SelectedItems[0].SubItems[FIELD_KEY_TITLE].Text;
                 textBox1.ResumeLayout();
             }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count > 0)
+            Control[] controls = (Control[])Controls.Find(textBox1.Tag.ToString(), true);
+            if (controls.Length > 0)
             {
-                listView1.SelectedItems[0].SubItems[FIELD_KEY_TITLE].Text = textBox1.Text;
+                try
+                {
+                    ListView list = (ListView)controls[0];
+                    if (list != null && list.SelectedItems.Count > 0)
+                    {
+                        list.SelectedItems[0].SubItems[FIELD_KEY_TITLE].Text = textBox1.Text;
+                    }
+                }
+                catch { }
             }
+        }
+
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.saveSettings();
         }
 
     }
