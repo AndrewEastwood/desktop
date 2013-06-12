@@ -51,9 +51,22 @@ namespace driver.Lib
                 fileNamePatterns[2] = "Cli_BC.SDF";
             }
 
-            tmpFiles[0] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format(fileNamePatterns[0], driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit, int.Parse(profile.ToString()));
-            tmpFiles[1] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format(fileNamePatterns[1], driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit, int.Parse(profile.ToString()));
-            tmpFiles[2] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format(fileNamePatterns[2], driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit, int.Parse(profile.ToString()));
+            int subUnit = driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit;
+            // override subunit
+            if (ConfigManager.Instance.CommonConfiguration.PROFILES_Items.ContainsKey(profile))
+            {
+                Hashtable profileObj = (Hashtable)ConfigManager.Instance.CommonConfiguration.PROFILES_Items[profile];
+                if (profileObj.ContainsKey("SUBUNIT"))
+                    try
+                    {
+                        subUnit = int.Parse(profileObj["SUBUNIT"].ToString());
+                    }
+                    catch { }
+            }
+
+            tmpFiles[0] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format(fileNamePatterns[0], subUnit, int.Parse(profile.ToString()));
+            tmpFiles[1] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format(fileNamePatterns[1], subUnit, int.Parse(profile.ToString()));
+            tmpFiles[2] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format(fileNamePatterns[2], subUnit, int.Parse(profile.ToString()));
             
             bool fOK = false;
             string[] loadedFilesOnLoacal = new string[3] { "", "", "" };
@@ -103,8 +116,21 @@ namespace driver.Lib
             string[] artFiles = new string[3];
             if (driver.Config.ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
             {
-                artFiles[0] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Art_{1:D2}{0:D2}.xml", driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit, int.Parse(profile.ToString()));
-                artFiles[1] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Alt_{1:D2}{0:D2}.xml", driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit, int.Parse(profile.ToString()));
+                int subUnit = driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit;
+                // override subunit
+                if (ConfigManager.Instance.CommonConfiguration.PROFILES_Items.ContainsKey(profile))
+                {
+                    Hashtable profileObj = (Hashtable)ConfigManager.Instance.CommonConfiguration.PROFILES_Items[profile];
+                    if (profileObj.ContainsKey("SUBUNIT"))
+                        try
+                        {
+                            subUnit = int.Parse(profileObj["SUBUNIT"].ToString());
+                        }
+                        catch { }
+                }
+
+                artFiles[0] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Art_{1:D2}{0:D2}.xml", subUnit, int.Parse(profile.ToString()));
+                artFiles[1] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Alt_{1:D2}{0:D2}.xml", subUnit, int.Parse(profile.ToString()));
                 artFiles[2] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Cli_{0:D2}.xml", int.Parse(profile.ToString()));
             }
             else
@@ -165,7 +191,6 @@ namespace driver.Lib
             return rez;
         }//ok
 
-
         public static void CreateTables(ref DataTable chq, ref DataTable art, ref DataTable alt, ref DataTable cli, ref DataSet chqs)
         {
             CreateTables(ref chq, ref art, ref alt, ref cli);
@@ -215,14 +240,23 @@ namespace driver.Lib
                 if (sourceDir == string.Empty)
                     sourceDir = ConfigManager.Instance.CommonConfiguration.Path_Exchnage;
 
+                int subUnit = driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit;
+                // override subunit
+                if (profile.ContainsKey("SUBUNIT"))
+                    try
+                    {
+                        subUnit = int.Parse(profile["SUBUNIT"].ToString());
+                    }
+                    catch { }
+
                 exFiles = new string[3];
-                exFiles[0] = sourceDir + "\\" + string.Format("Art_{1:D2}{0:D2}", driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit, int.Parse(de.Key.ToString())) + ".SDF";
-                exFiles[1] = sourceDir + "\\" + string.Format("Alt_{1:D2}{0:D2}", driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit, int.Parse(de.Key.ToString())) + ".SDF";
+                exFiles[0] = sourceDir + "\\" + string.Format("Art_{1:D2}{0:D2}", subUnit, int.Parse(de.Key.ToString())) + ".SDF";
+                exFiles[1] = sourceDir + "\\" + string.Format("Alt_{1:D2}{0:D2}", subUnit, int.Parse(de.Key.ToString())) + ".SDF";
                 exFiles[2] = sourceDir + "\\" + string.Format("Cli_{0:D2}", int.Parse(de.Key.ToString())) + ".SDF";
 
                 localFiles = new string[3];
-                localFiles[0] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Art_{1:D2}{0:D2}", driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit, int.Parse(de.Key.ToString())) + ".xml";
-                localFiles[1] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Alt_{1:D2}{0:D2}", driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit, int.Parse(de.Key.ToString())) + ".xml";
+                localFiles[0] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Art_{1:D2}{0:D2}", subUnit, int.Parse(de.Key.ToString())) + ".xml";
+                localFiles[1] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Alt_{1:D2}{0:D2}", subUnit, int.Parse(de.Key.ToString())) + ".xml";
                 localFiles[2] = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Cli_{0:D2}", int.Parse(de.Key.ToString())) + ".xml";
 
                 /* ToDo
@@ -373,9 +407,6 @@ namespace driver.Lib
             //Com_WinApi.OutputDebugString("CheckUpdate_end");
             return load;
         }//ok
-
-
-
 
         /* PayDesk Source Structure v2.0 */
 

@@ -9,13 +9,15 @@ geretated by XmlDocumentParser v1.6
         <property name="pathToBills" value="d:\My Development\GitHub\desktop\dotnet\PayDeskSolution\builder\bin\bills\" />
     </section>
     <section name="States">
-        <property name="BILL_COMMENT" value="True" />
-        <property name="BILL_DELETED_ROWS" value="True" />
-        <property name="DISCOUNT" value="True" />
+        <property name="ASUM" value="True" />
+        <property name="BC" value="True" />
+        <property name="BILL_DATETIMEEDIT" value="True" />
+        <property name="NAME" value="True" />
+        <property name="ORDER_NO" value="True" />
         <property name="ORDER_SUMA" value="True" />
-        <property name="PAYMENT" value="True" />
-        <property name="STORE_NO" value="True" />
-        <property name="TAX_BILL" value="True" />
+        <property name="PRICE" value="True" />
+        <property name="SUM" value="True" />
+        <property name="TOT" value="True" />
     </section>
     <section name="Titles">
         <section name="Info">
@@ -41,7 +43,35 @@ geretated by XmlDocumentParser v1.6
             <property name="TAX_BILL" value="Накладна" />
             <property name="TAX_SUMA" value="Сума ПДВ" />
         </section>
-        <section name="Products">
+        <section name="Product">
+            <property name="ASUM" value="Сума до Оплати" />
+            <property name="BC" value="Штрихкод" />
+            <property name="C" value="Код" />
+            <property name="DESC" value="Опис" />
+            <property name="DISC" value="Знижка" />
+            <property name="F" value="Номер Профілю" />
+            <property name="ID" value="Маркет Код" />
+            <property name="NAME" value="Назва" />
+            <property name="ORIGPRICE" value="Основна Ціна" />
+            <property name="PACK" value="Product.PACK" />
+            <property name="PR1" value="Product.PR1" />
+            <property name="PR2" value="Product.PR2" />
+            <property name="PR3" value="Product.PR3" />
+            <property name="PRICE" value="Ціна" />
+            <property name="PRINTCOUNT" value="Надрукована К-сть" />
+            <property name="Q2" value="Product.Q2" />
+            <property name="Q3" value="Product.Q3" />
+            <property name="SUM" value="Сума без ЗН." />
+            <property name="TAX_MONEY" value="Сума ПДВ" />
+            <property name="TAX_VAL" value="Група ПДВ" />
+            <property name="TID" value="Product.TID" />
+            <property name="TMPTOT" value="Product.TMPTOT" />
+            <property name="TOT" value="К-сть" />
+            <property name="TQ" value="Product.TQ" />
+            <property name="UNIT" value="Одиниця" />
+            <property name="USEDDISC" value="Використання Зн." />
+            <property name="VG" value="Product.VG" />
+            <property name="WEIGHT" value="Product.WEIGHT" />
         </section>
     </section>
 </document>
