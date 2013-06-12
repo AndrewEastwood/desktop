@@ -1,0 +1,40 @@
+08.06.2013 19:42
+at Method : LoadData
+Object reference not set to an instance of an object.
+   at driver.Config.ConfigManager._loadNormalConfig()
+
+driver
+
+******************************************************************
+
+
+08.06.2013 19:44
+at Method : AppStartup (Main)
+Starting service mode for 
+
+
+
+
+******************************************************************
+
+
+08.06.2013 19:44
+at Method : AppStartup (Main)
+It is not an error. This message used for tracking of app's startup only.
+
+
+
+
+******************************************************************
+
+
+08.06.2013 21:42
+at Method : AppStartup (Main)
+It is not an error. This message used for tracking of app's exit only.
+
+
+
+
+******************************************************************
+
+

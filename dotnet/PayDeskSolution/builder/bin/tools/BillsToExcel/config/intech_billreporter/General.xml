@@ -18,26 +18,30 @@ geretated by XmlDocumentParser v1.6
         <property name="TAX_BILL" value="True" />
     </section>
     <section name="Titles">
-        <property name="BILL_BILL_NO" value="Номер Рахунку" />
-        <property name="BILL_COMMENT" value="Столик; Офіціант" />
-        <property name="BILL_DATETIME" value="Дата" />
-        <property name="BILL_DATETIME_LOCK" value="Дата Блокування" />
-        <property name="BILL_DATETIMEEDIT" value="Дата Рахунку" />
-        <property name="BILL_DELETED_ROWS" value="Видалені Рядки" />
-        <property name="BILL_IS_LOCKED" value="Блокування" />
-        <property name="BILL_OID" value="Код Рахунку" />
-        <property name="BILL_OWNER_NO" value="Номер Осн. Рах." />
-        <property name="BILL_PATH" value="Шлях до рахунку" />
-        <property name="CLIENT_ID" value="Код Клієнта" />
-        <property name="DISCOUNT" value="Знижка" />
-        <property name="IS_LEGAL" value="Легальний" />
-        <property name="IS_RET" value="Поверення" />
-        <property name="ORDER_NO" value="Номер Чеку" />
-        <property name="ORDER_REAL_SUMA" value="Сума без ЗН" />
-        <property name="ORDER_SUMA" value="Сума" />
-        <property name="PAYMENT" value="Оплата" />
-        <property name="STORE_NO" value="Номер Каси" />
-        <property name="TAX_BILL" value="Накладна" />
-        <property name="TAX_SUMA" value="Сума ПДВ" />
+        <section name="Info">
+            <property name="BILL_BILL_NO" value="Номер Рахунку" />
+            <property name="BILL_COMMENT" value="Столик; Офіціант" />
+            <property name="BILL_DATETIME" value="Дата" />
+            <property name="BILL_DATETIME_LOCK" value="Дата Блокування" />
+            <property name="BILL_DATETIMEEDIT" value="Дата Рахунку" />
+            <property name="BILL_DELETED_ROWS" value="Видалені Рядки" />
+            <property name="BILL_IS_LOCKED" value="Блокування" />
+            <property name="BILL_OID" value="Код Рахунку" />
+            <property name="BILL_OWNER_NO" value="Номер Осн. Рах." />
+            <property name="BILL_PATH" value="Шлях до рахунку" />
+            <property name="CLIENT_ID" value="Код Клієнта" />
+            <property name="DISCOUNT" value="Знижка" />
+            <property name="IS_LEGAL" value="Легальний" />
+            <property name="IS_RET" value="Поверення" />
+            <property name="ORDER_NO" value="Номер Чеку" />
+            <property name="ORDER_REAL_SUMA" value="Сума без ЗН" />
+            <property name="ORDER_SUMA" value="Сума" />
+            <property name="PAYMENT" value="Оплата" />
+            <property name="STORE_NO" value="Номер Каси" />
+            <property name="TAX_BILL" value="Накладна" />
+            <property name="TAX_SUMA" value="Сума ПДВ" />
+        </section>
+        <section name="Products">
+        </section>
     </section>
 </document>
