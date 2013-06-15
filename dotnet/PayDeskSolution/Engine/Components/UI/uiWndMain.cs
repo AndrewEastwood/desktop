@@ -3205,9 +3205,9 @@ namespace PayDesk.Components.UI
             //groshovuj koeficient
             _discCommonCash = _chqSUMA - _realSUMA;
             _discCommonCash = MathLib.GetRoundedMoney(_discCommonCash);
-
+            
             // calculating tax sum
-            taxSUMA = 0.0;
+            _taxSUMA = 0.0;
             for (i = 0; i < _cheque.Rows.Count; i++)
             {
                 try
@@ -3251,10 +3251,10 @@ namespace PayDesk.Components.UI
                 //else
                 //taxValue = AppFunc.GetRoundedMoney(taxValue);
                 _cheque.Rows[i]["TAX_MONEY"] = taxValue;
-                taxSUMA += taxValue;
+                _taxSUMA += taxValue;
             }
             //taxSUMA = (double)Cheque.Compute("sum(TAX_MONEY)", "");
-            taxSUMA = MathLib.GetRoundedMoney(taxSUMA);
+            _taxSUMA = MathLib.GetRoundedMoney(_taxSUMA);
 
 
             /* initializing discount values */

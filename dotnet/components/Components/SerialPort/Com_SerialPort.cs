@@ -189,7 +189,14 @@ namespace components.Components.SerialPort
         }
         public void LoadPortConfig(Hashtable config)
         {
-
+            // util profile2
+            _port.PortName = config["Port"].ToString();
+            _port.BaudRate = int.Parse(config["BaudRate"].ToString());
+            _port.Parity = (System.IO.Ports.Parity)int.Parse(config["Parity"].ToString());
+            _port.DataBits = int.Parse(config["DataBits"].ToString());
+            _port.StopBits = (System.IO.Ports.StopBits)int.Parse(config["StopBits"].ToString());
+            _port.ReadTimeout = int.Parse(config["ReadTimeout"].ToString());
+            _port.WriteTimeout = int.Parse(config["WriteTimeout"].ToString());
         }
         public bool Available(int portIndex)
         {
@@ -438,6 +445,11 @@ namespace components.Components.SerialPort
         }
 
         /* PRIVATE MEMBERS  */
+
+        // return control ui
+        // interact with controls (save/load conifg)
+        // update port config and init port
+
 
         private void LoadMembers(XmlTextReader xtr)
         {

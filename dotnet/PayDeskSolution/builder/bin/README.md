@@ -1,3 +1,3 @@
 ### PayDesk Solution
 -
-##### Build Version: ``` 13.0613.0117 ```
+##### Build Version: ``` 13.0615.0904 ```

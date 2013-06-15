@@ -3139,7 +3139,7 @@ namespace IKC_OP2
                 // components.Components.WinApi.Com_WinApi.OutputDebugString("WRITE");
 
                 int attemptsGeneral = 20;
-                int attemptsToResend = 5;
+                int attemptsToResend = 6;
                 int attemptsOnBusy = 40;
                 int attemptsToRead = 5;
 
@@ -3378,7 +3378,7 @@ namespace IKC_OP2
         }
         protected virtual void Hook_SendGetData_OnResend()
         {
-            Thread.Sleep(210);
+            Thread.Sleep(300);
             if (Params.Compatibility.ContainsKey("OP6"))
             {
                 ComPort.Write(InputData);
@@ -3387,7 +3387,7 @@ namespace IKC_OP2
         }
         protected virtual void Hook_SendGetData_OnReceiveFalse()
         {
-            Thread.Sleep(50);
+            Thread.Sleep(100);
         }
         protected virtual void Hook_SendGetData_OnReceiveTrue() { }
         protected virtual void Hook_SendGetData_OnReceiveFailed() { }
