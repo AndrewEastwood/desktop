@@ -375,3 +375,13 @@ IKC-OP2
 ******************************************************************
 
 
+16.06.2013 18:29
+at Method : AppStartup (Main)
+It is not an error. This message used for tracking of app's exit only.
+
+
+
+
+******************************************************************
+
+

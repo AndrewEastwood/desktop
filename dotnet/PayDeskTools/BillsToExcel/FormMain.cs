@@ -282,6 +282,50 @@ namespace BillsToExcel
                                     dRow[column.ColumnName] = exploded[dataIndex].Replace("%20", "");
                                 break;
                             }
+                        case "PAYMENT":
+                            {
+                                StringBuilder payment = new StringBuilder();
+                                try
+                                {
+                                    Dictionary<string, object> payInfo = (Dictionary<string, object>)billentryInfo["PAYMENT"];
+
+                                    try
+                                    {
+                                        payment.Append("Оплата: ");
+                                        if (payInfo.ContainsKey("TYPE"))
+                                            switch (((List<byte>)payInfo["TYPE"])[0])
+                                            {
+                                                case 0: { payment.Append("Картка"); break; }
+                                                case 1: { payment.Append("Кредит");  break; }
+                                                case 2: { payment.Append("Чек"); break; }
+                                                case 3: { payment.Append("Готівка"); break; }
+                                            }
+                                    }
+                                    catch { }
+
+                                    try
+                                    {
+                                        payment.Append(" ; ");
+                                        payment.Append("Гроші: ");
+                                        if (payInfo.ContainsKey("SUMA"))
+                                            payment.Append(payInfo["SUMA"]);
+                                    }
+                                    catch { }
+
+                                    try
+                                    {
+                                        payment.Append(" ; ");
+                                        payment.Append("Решта: ");
+                                        if (payInfo.ContainsKey("REST"))
+                                            payment.Append(payInfo["REST"]);
+                                    }
+                                    catch { }
+
+                                }
+                                catch { }
+                                dRow[column.ColumnName] = payment.ToString().Trim();
+                                break;
+                            }
                         default:
                             {
                                 dRow[column.ColumnName] = billentryInfo[column.ColumnName];

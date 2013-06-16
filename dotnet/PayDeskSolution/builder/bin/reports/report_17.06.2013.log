@@ -1,0 +1,58 @@
+17.06.2013 0:43
+at Method : AppStartup (Main)
+Starting service mode for 
+
+
+
+
+******************************************************************
+
+
+17.06.2013 0:43
+at Method : AppStartup (Main)
+It is not an error. This message used for tracking of app's startup only.
+
+
+
+
+******************************************************************
+
+
+17.06.2013 0:48
+at Method : CloseCheque_profile
+Помилка читання з фіскального принтера IKC-OP2
+   at IKC_OP2.Plugin_IKC_OP2.SendGetData(Int32 totRead, Boolean close)
+   at IKC_OP2.Plugin_IKC_OP2.ResetOrder()
+   at IKC_OP2.Plugin_IKC_OP2.FP_Sale(Object[] param)
+   at IKC_OP2.Plugin_IKC_OP2.CallFunction(String name, Object[] param)
+   at PayDesk.Components.UI.uiWndMain.CloseCheque_profile(Boolean isLegalMode) in D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\Components\UI\uiWndMain.cs:line 3891
+
+IKC-OP2
+
+******************************************************************
+
+
+17.06.2013 0:48
+at Method : CloseCheque_profile
+Помилка читання з фіскального принтера IKC-OP2
+   at IKC_OP2.Plugin_IKC_OP2.SendGetData(Int32 totRead, Boolean close)
+   at IKC_OP2.Plugin_IKC_OP2.OpenBox()
+   at IKC_OP2.Plugin_IKC_OP2.FP_OpenBox()
+   at IKC_OP2.Plugin_IKC_OP2.CallFunction(String name, Object[] param)
+   at PayDesk.Components.UI.uiWndMain.CloseCheque_profile(Boolean isLegalMode) in D:\My Development\GitHub\desktop\dotnet\PayDeskSolution\Engine\Components\UI\uiWndMain.cs:line 3942
+
+IKC-OP2
+
+******************************************************************
+
+
+17.06.2013 0:49
+at Method : AppStartup (Main)
+It is not an error. This message used for tracking of app's exit only.
+
+
+
+
+******************************************************************
+
+

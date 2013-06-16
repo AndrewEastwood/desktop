@@ -20,6 +20,7 @@ geretated by XmlDocumentParser v1.6
         <property name="NAME" value="True" />
         <property name="ORDER_NO" value="True" />
         <property name="ORDER_SUMA" value="True" />
+        <property name="PAYMENT" value="True" />
         <property name="PRICE" value="True" />
         <property name="SUM" value="True" />
         <property name="TOT" value="True" />
