@@ -955,9 +955,8 @@ namespace PayDesk.Components.UI
                             //launch article property
                             if (chequeDGV.Focused && chequeDGV.RowCount != 0)
                             {
-                                if (!(ADMIN_STATE || UserConfig.Properties[24]) && (DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.OWNER_NO, string.Empty).ToString() == string.Empty))
-                                    if (admin.ShowDialog(this) != DialogResult.OK)
-                                        return;
+                                if (!getAdminAccess(24))
+                                    return;
 
                                 DataRow dRow = Cheque.Rows.Find(chequeDGV.CurrentRow.Cells["C"].Value);
                                 Request req = new Request(dRow, MathLib.GetDouble(dRow["TOT"]));
@@ -1151,11 +1150,11 @@ namespace PayDesk.Components.UI
                         {
                             if (inventChq || Cheque.Rows.Count == 0)
                                 break;//r
-                            
-                            if (!(ADMIN_STATE || UserConfig.Properties[23]))
+
+                            if (!getAdminAccess(23))
                             {
                                 //if (admin.ShowDialog() != DialogResult.OK)
-                                MMessageBoxEx.Show(this.chequeDGV, "Закриття чеку заблоковано", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                // MMessageBoxEx.Show(this.chequeDGV, "Закриття чеку заблоковано", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 break;//r
                             }
 
@@ -1535,12 +1534,12 @@ namespace PayDesk.Components.UI
             перезавантажитиРахунокToolStripMenuItem.Enabled = isBill;
             змінитиКоментарToolStripMenuItem.Enabled = isBill;
             
-            змінитиКстьТоваруToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && (ADMIN_STATE || UserConfig.Properties[24]);
-            видалитиВибранийТоварToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && (ADMIN_STATE || UserConfig.Properties[24]);
-            видалитиВсіТовариToolStripMenuItem.Enabled = Cheque.Rows.Count != 0 && (ADMIN_STATE || UserConfig.Properties[24]);                
-            здійснитиОплатуToolStripMenuItem.Enabled = !inventChq && Cheque.Rows.Count != 0 && (ADMIN_STATE || UserConfig.Properties[23]);
-            задатиЗнижкаToolStripMenuItem.Enabled = !inventChq && Cheque.Rows.Count != 0 && (ADMIN_STATE || UserConfig.Properties[3]);
-            задатиНадбавкуToolStripMenuItem1.Enabled = !inventChq && Cheque.Rows.Count != 0 && (ADMIN_STATE || UserConfig.Properties[3]);
+            змінитиКстьТоваруToolStripMenuItem.Enabled = Cheque.Rows.Count != 0;
+            видалитиВибранийТоварToolStripMenuItem.Enabled = Cheque.Rows.Count != 0;
+            видалитиВсіТовариToolStripMenuItem.Enabled = Cheque.Rows.Count != 0;
+            здійснитиОплатуToolStripMenuItem.Enabled = !inventChq && Cheque.Rows.Count != 0;
+            задатиЗнижкаToolStripMenuItem.Enabled = !inventChq && Cheque.Rows.Count != 0;
+            задатиНадбавкуToolStripMenuItem1.Enabled = !inventChq && Cheque.Rows.Count != 0;
 
         }//ok
         private void RefreshWindowMenu()
