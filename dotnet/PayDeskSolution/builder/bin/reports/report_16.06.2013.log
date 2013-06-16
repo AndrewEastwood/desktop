@@ -1,0 +1,377 @@
+16.06.2013 15:15
+at Method : LoadData
+Object reference not set to an instance of an object.
+   at driver.Config.ConfigManager._loadNormalConfig()
+
+driver
+
+******************************************************************
+
+
+16.06.2013 15:22
+at Method : AppStartup (Main)
+Starting service mode for 
+
+
+
+
+******************************************************************
+
+
+16.06.2013 15:22
+at Method : AppStartup (Main)
+It is not an error. This message used for tracking of app's startup only.
+
+
+
+
+******************************************************************
+
+
+16.06.2013 15:42
+at Method : AppStartup (Main)
+It is not an error. This message used for tracking of app's exit only.
+
+
+
+
+******************************************************************
+
+
+16.06.2013 15:59
+at Method : AppStartup (Main)
+Starting service mode for 
+
+
+
+
+******************************************************************
+
+
+16.06.2013 15:59
+at Method : AppStartup (Main)
+It is not an error. This message used for tracking of app's startup only.
+
+
+
+
+******************************************************************
+
+
+16.06.2013 16:19
+at Method : AppStartup (Main)
+It is not an error. This message used for tracking of app's exit only.
+
+
+
+
+******************************************************************
+
+
+16.06.2013 16:22
+at Method : AppStartup (Main)
+Starting service mode for 
+
+
+
+
+******************************************************************
+
+
+16.06.2013 16:22
+at Method : AppStartup (Main)
+It is not an error. This message used for tracking of app's startup only.
+
+
+
+
+******************************************************************
+
+
+16.06.2013 16:29
+at Method : CloseCheque_profile
+Помилка читання з фіскального принтера IKC-OP2
+   at IKC_OP2.Plugin_IKC_OP2.FP_Sale(Object[] param)
+   at IKC_OP2.Plugin_IKC_OP2.CallFunction(String name, Object[] param)
+   at PayDesk.Components.UI.uiWndMain.CloseCheque_profile(Boolean isLegalMode)
+System.Exception: Помилка читання з фіскального принтера IKC-OP2
+   at IKC_OP2.Plugin_IKC_OP2.SendGetData(Int32 totRead, Boolean close)
+   at IKC_OP2.Plugin_IKC_OP2.GetMemory(String adrBlock, Byte pageNo, Byte blockSize)
+   at IKC_OP2.Plugin_IKC_OP2.FP_Sale(Object[] param)
+IKC-OP2
+
+******************************************************************
+
+
+16.06.2013 16:29
+at Method : CloseCheque_profile
+Помилка читання з фіскального принтера IKC-OP2
+   at IKC_OP2.Plugin_IKC_OP2.SendGetData(Int32 totRead, Boolean close)
+   at IKC_OP2.Plugin_IKC_OP2.OpenBox()
+   at IKC_OP2.Plugin_IKC_OP2.FP_OpenBox()
+   at IKC_OP2.Plugin_IKC_OP2.CallFunction(String name, Object[] param)
+   at PayDesk.Components.UI.uiWndMain.CloseCheque_profile(Boolean isLegalMode)
+
+IKC-OP2
+
+******************************************************************
+
+
+16.06.2013 16:30
+at Method : CloseCheque_profile
+Помилка читання з фіскального принтера IKC-OP2
+   at IKC_OP2.Plugin_IKC_OP2.SendGetData(Int32 totRead, Boolean close)
+   at IKC_OP2.Plugin_IKC_OP2.ResetOrder()
+   at IKC_OP2.Plugin_IKC_OP2.FP_Sale(Object[] param)
+   at IKC_OP2.Plugin_IKC_OP2.CallFunction(String name, Object[] param)
+   at PayDesk.Components.UI.uiWndMain.CloseCheque_profile(Boolean isLegalMode)
+
+IKC-OP2
+
+******************************************************************
+
+
+16.06.2013 16:30
+at Method : CloseCheque_profile
+Помилка читання з фіскального принтера IKC-OP2
+   at IKC_OP2.Plugin_IKC_OP2.SendGetData(Int32 totRead, Boolean close)
+   at IKC_OP2.Plugin_IKC_OP2.OpenBox()
+   at IKC_OP2.Plugin_IKC_OP2.FP_OpenBox()
+   at IKC_OP2.Plugin_IKC_OP2.CallFunction(String name, Object[] param)
+   at PayDesk.Components.UI.uiWndMain.CloseCheque_profile(Boolean isLegalMode)
+
+IKC-OP2
+
+******************************************************************
+
+
+16.06.2013 16:31
+at Method : CloseCheque_profile
+Помилка читання з фіскального принтера IKC-OP2
+   at IKC_OP2.Plugin_IKC_OP2.SendGetData(Int32 totRead, Boolean close)
+   at IKC_OP2.Plugin_IKC_OP2.ResetOrder()
+   at IKC_OP2.Plugin_IKC_OP2.FP_Sale(Object[] param)
+   at IKC_OP2.Plugin_IKC_OP2.CallFunction(String name, Object[] param)
+   at PayDesk.Components.UI.uiWndMain.CloseCheque_profile(Boolean isLegalMode)
+
+IKC-OP2
+
+******************************************************************
+
+
+16.06.2013 16:31
+at Method : CloseCheque_profile
+Помилка читання з фіскального принтера IKC-OP2
+   at IKC_OP2.Plugin_IKC_OP2.SendGetData(Int32 totRead, Boolean close)
+   at IKC_OP2.Plugin_IKC_OP2.OpenBox()
+   at IKC_OP2.Plugin_IKC_OP2.FP_OpenBox()
+   at IKC_OP2.Plugin_IKC_OP2.CallFunction(String name, Object[] param)
+   at PayDesk.Components.UI.uiWndMain.CloseCheque_profile(Boolean isLegalMode)
+
+IKC-OP2
+
+******************************************************************
+
+
+16.06.2013 16:39
+at Method : CloseCheque_profile
+Помилка читання з фіскального принтера IKC-OP2
+   at IKC_OP2.Plugin_IKC_OP2.SendGetData(Int32 totRead, Boolean close)
+   at IKC_OP2.Plugin_IKC_OP2.ResetOrder()
+   at IKC_OP2.Plugin_IKC_OP2.FP_Sale(Object[] param)
+   at IKC_OP2.Plugin_IKC_OP2.CallFunction(String name, Object[] param)
+   at PayDesk.Components.UI.uiWndMain.CloseCheque_profile(Boolean isLegalMode)
+
+IKC-OP2
+
+******************************************************************
+
+
+16.06.2013 16:39
+at Method : CloseCheque_profile
+Помилка читання з фіскального принтера IKC-OP2
+   at IKC_OP2.Plugin_IKC_OP2.SendGetData(Int32 totRead, Boolean close)
+   at IKC_OP2.Plugin_IKC_OP2.OpenBox()
+   at IKC_OP2.Plugin_IKC_OP2.FP_OpenBox()
+   at IKC_OP2.Plugin_IKC_OP2.CallFunction(String name, Object[] param)
+   at PayDesk.Components.UI.uiWndMain.CloseCheque_profile(Boolean isLegalMode)
+
+IKC-OP2
+
+******************************************************************
+
+
+16.06.2013 16:41
+at Method : AppStartup (Main)
+It is not an error. This message used for tracking of app's exit only.
+
+
+
+
+******************************************************************
+
+
+16.06.2013 16:53
+at Method : AppStartup (Main)
+Starting service mode for 
+
+
+
+
+******************************************************************
+
+
+16.06.2013 16:53
+at Method : AppStartup (Main)
+It is not an error. This message used for tracking of app's startup only.
+
+
+
+
+******************************************************************
+
+
+16.06.2013 16:56
+at Method : AppStartup (Main)
+It is not an error. This message used for tracking of app's exit only.
+
+
+
+
+******************************************************************
+
+
+16.06.2013 16:56
+at Method : AppStartup (Main)
+Starting service mode for 
+
+
+
+
+******************************************************************
+
+
+16.06.2013 16:56
+at Method : AppStartup (Main)
+It is not an error. This message used for tracking of app's startup only.
+
+
+
+
+******************************************************************
+
+
+16.06.2013 17:13
+at Method : CloseCheque_profile
+Помилка читання з фіскального принтера IKC-OP2
+   at IKC_OP2.Plugin_IKC_OP2.SendGetData(Int32 totRead, Boolean close)
+   at IKC_OP2.Plugin_IKC_OP2.ResetOrder()
+   at IKC_OP2.Plugin_IKC_OP2.FP_Sale(Object[] param)
+   at IKC_OP2.Plugin_IKC_OP2.CallFunction(String name, Object[] param)
+   at PayDesk.Components.UI.uiWndMain.CloseCheque_profile(Boolean isLegalMode)
+
+IKC-OP2
+
+******************************************************************
+
+
+16.06.2013 17:13
+at Method : CloseCheque_profile
+Помилка читання з фіскального принтера IKC-OP2
+   at IKC_OP2.Plugin_IKC_OP2.SendGetData(Int32 totRead, Boolean close)
+   at IKC_OP2.Plugin_IKC_OP2.OpenBox()
+   at IKC_OP2.Plugin_IKC_OP2.FP_OpenBox()
+   at IKC_OP2.Plugin_IKC_OP2.CallFunction(String name, Object[] param)
+   at PayDesk.Components.UI.uiWndMain.CloseCheque_profile(Boolean isLegalMode)
+
+IKC-OP2
+
+******************************************************************
+
+
+16.06.2013 17:26
+at Method : AppStartup (Main)
+It is not an error. This message used for tracking of app's exit only.
+
+
+
+
+******************************************************************
+
+
+16.06.2013 17:40
+at Method : AppStartup (Main)
+Starting service mode for 
+
+
+
+
+******************************************************************
+
+
+16.06.2013 17:40
+at Method : AppStartup (Main)
+It is not an error. This message used for tracking of app's startup only.
+
+
+
+
+******************************************************************
+
+
+16.06.2013 18:19
+at Method : CloseCheque_profile
+Помилка читання з фіскального принтера IKC-OP2
+   at IKC_OP2.Plugin_IKC_OP2.SendGetData(Int32 totRead, Boolean close)
+   at IKC_OP2.Plugin_IKC_OP2.ResetOrder()
+   at IKC_OP2.Plugin_IKC_OP2.FP_Sale(Object[] param)
+   at IKC_OP2.Plugin_IKC_OP2.CallFunction(String name, Object[] param)
+   at PayDesk.Components.UI.uiWndMain.CloseCheque_profile(Boolean isLegalMode)
+
+IKC-OP2
+
+******************************************************************
+
+
+16.06.2013 18:19
+at Method : CloseCheque_profile
+Помилка читання з фіскального принтера IKC-OP2
+   at IKC_OP2.Plugin_IKC_OP2.SendGetData(Int32 totRead, Boolean close)
+   at IKC_OP2.Plugin_IKC_OP2.OpenBox()
+   at IKC_OP2.Plugin_IKC_OP2.FP_OpenBox()
+   at IKC_OP2.Plugin_IKC_OP2.CallFunction(String name, Object[] param)
+   at PayDesk.Components.UI.uiWndMain.CloseCheque_profile(Boolean isLegalMode)
+
+IKC-OP2
+
+******************************************************************
+
+
+16.06.2013 18:21
+at Method : CloseCheque_profile
+Помилка читання з фіскального принтера IKC-OP2
+   at IKC_OP2.Plugin_IKC_OP2.SendGetData(Int32 totRead, Boolean close)
+   at IKC_OP2.Plugin_IKC_OP2.ResetOrder()
+   at IKC_OP2.Plugin_IKC_OP2.FP_Sale(Object[] param)
+   at IKC_OP2.Plugin_IKC_OP2.CallFunction(String name, Object[] param)
+   at PayDesk.Components.UI.uiWndMain.CloseCheque_profile(Boolean isLegalMode)
+
+IKC-OP2
+
+******************************************************************
+
+
+16.06.2013 18:21
+at Method : CloseCheque_profile
+Помилка читання з фіскального принтера IKC-OP2
+   at IKC_OP2.Plugin_IKC_OP2.SendGetData(Int32 totRead, Boolean close)
+   at IKC_OP2.Plugin_IKC_OP2.OpenBox()
+   at IKC_OP2.Plugin_IKC_OP2.FP_OpenBox()
+   at IKC_OP2.Plugin_IKC_OP2.CallFunction(String name, Object[] param)
+   at PayDesk.Components.UI.uiWndMain.CloseCheque_profile(Boolean isLegalMode)
+
+IKC-OP2
+
+******************************************************************
+
+

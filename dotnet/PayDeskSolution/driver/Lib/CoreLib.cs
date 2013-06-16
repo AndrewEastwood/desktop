@@ -254,6 +254,35 @@ namespace driver.Lib
                 return;
             }
 
+            if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
+            {
+                List<string> allowedProductIDs = new List<string>();
+                
+                try
+                {
+                    Hashtable activeProfile = (Hashtable)ConfigManager.Instance.CommonConfiguration.PROFILES_Items[article["F"]];
+                    string[] filterProductIDs = activeProfile["FILTER"].ToString().Split(' ', ',', ';');
+                    allowedProductIDs.AddRange(filterProductIDs);
+                }
+                catch { }
+                
+                if (allowedProductIDs.Count > 0)
+                {
+                    bool isAllowedToSell = false;
+                    foreach (string allowedID in allowedProductIDs)
+                        if (article["ID"].ToString().StartsWith(allowedID))
+                        {
+                            isAllowedToSell = true;
+                            break;
+                        }
+
+                    if (!isAllowedToSell)
+                    {
+                        MMessageBox.Show(chqDGW, "Товар не дозволений для продажу фільтрами профілів", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+            }
             /*
              * 1) If article exist
              *  a) CTOT=TOT
@@ -390,8 +419,11 @@ namespace driver.Lib
 
             if (rowIsUpdated)
                 index = dRow.Table.Rows.IndexOf(dRow);
-            chqDGW.CurrentCell = chqDGW.Rows[index].Cells["TOT"];
-
+            try
+            {
+                chqDGW.CurrentCell = chqDGW.Rows[index].Cells["TOT"];
+            }
+            catch { }
             try
             {
                 object uniqueKey = article["C"];

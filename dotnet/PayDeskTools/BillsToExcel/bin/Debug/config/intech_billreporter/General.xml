@@ -10,24 +10,30 @@ geretated by XmlDocumentParser v1.6
     </section>
     <section name="States">
         <property name="ASUM" value="True" />
-        <property name="BC" value="True" />
+        <property name="BILL_DATETIME" value="True" />
+        <property name="BILL_DATETIME_LOCK" value="True" />
         <property name="BILL_DATETIMEEDIT" value="True" />
+        <property name="BILL_IS_LOCKED" value="True" />
+        <property name="DISCOUNT" value="True" />
+        <property name="IS_LEGAL" value="True" />
+        <property name="IS_RET" value="True" />
         <property name="NAME" value="True" />
         <property name="ORDER_NO" value="True" />
         <property name="ORDER_SUMA" value="True" />
         <property name="PRICE" value="True" />
         <property name="SUM" value="True" />
         <property name="TOT" value="True" />
+        <property name="UNIT" value="True" />
     </section>
     <section name="Titles">
         <section name="Info">
             <property name="BILL_BILL_NO" value="Номер Рахунку" />
             <property name="BILL_COMMENT" value="Столик; Офіціант" />
-            <property name="BILL_DATETIME" value="Дата" />
-            <property name="BILL_DATETIME_LOCK" value="Дата Блокування" />
-            <property name="BILL_DATETIMEEDIT" value="Дата Рахунку" />
+            <property name="BILL_DATETIME" value="Дата Створення" />
+            <property name="BILL_DATETIME_LOCK" value="Дата Закриття" />
+            <property name="BILL_DATETIMEEDIT" value="Дата Ост. Редагування" />
             <property name="BILL_DELETED_ROWS" value="Видалені Рядки" />
-            <property name="BILL_IS_LOCKED" value="Блокування" />
+            <property name="BILL_IS_LOCKED" value="Стан Блокування" />
             <property name="BILL_OID" value="Код Рахунку" />
             <property name="BILL_OWNER_NO" value="Номер Осн. Рах." />
             <property name="BILL_PATH" value="Шлях до рахунку" />

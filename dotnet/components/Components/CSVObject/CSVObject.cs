@@ -9,6 +9,7 @@ namespace components.Components.CSVObject
 {
     public class CSVObject
     {
+        public const string Delimiter = ",";
 
         public List<DataTable> GetObjectsByPath(string reportDirectory)
         {
@@ -83,24 +84,50 @@ namespace components.Components.CSVObject
             
         }
 
-        public void ExportToFile(DataTable table, string filePath)
+        public void Export(DataTable table, string filePath)
+        {
+            Export(table, filePath, Delimiter);
+        }
+
+        public void Export(DataTable table, string filePath, string delim)
         {
             var result = new StringBuilder();
             for (int i = 0; i < table.Columns.Count; i++)
             {
-                result.Append("\"" + table.Columns[i].ColumnName + "\"");
-                result.Append(i == table.Columns.Count - 1 ? "\n" : ",");
+                result.Append("\"" + escapeStringQuotes(table.Columns[i].Caption) + "\"");
+                result.Append(i == table.Columns.Count - 1 ? "\n" : delim);
             }
 
             foreach (DataRow row in table.Rows)
             {
                 for (int i = 0; i < table.Columns.Count; i++)
                 {
-                    result.Append("\"" + row[i].ToString() + "\"");
-                    result.Append(i == table.Columns.Count - 1 ? "\n" : ",");
+                    result.Append("\"" + escapeStringQuotes(row[i].ToString()) + "\"");
+                    result.Append(i == table.Columns.Count - 1 ? "\n" : delim);
                 }
             }
+
             System.IO.File.WriteAllText(filePath, result.ToString());
+        }
+
+
+        public void Export(DataSet ds, string dirPath)
+        {
+            Export(ds, dirPath, Delimiter);
+        }
+
+        public void Export(DataSet ds, string dirPath, string delim)
+        {
+            if (!System.IO.Directory.Exists(dirPath))
+                System.IO.Directory.CreateDirectory(dirPath);
+
+            for (int i = 0; i < ds.Tables.Count; i++)
+                Export(ds.Tables[i], dirPath + "\\" + ds.Tables[i].TableName + ".csv", delim);
+        }
+
+        private string escapeStringQuotes(string value)
+        {
+            return value.Replace("\"", "\\\"");
         }
     }
 }

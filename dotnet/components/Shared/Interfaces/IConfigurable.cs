@@ -10,6 +10,7 @@ namespace components.Shared.Interfaces
         #region Data Load
         bool LoadConfigurationData();
         bool SaveConfigurationData();
+        bool ReloadConfigurationData();
         #endregion
         #region Value Selector
         object GetValueByKey(string key);

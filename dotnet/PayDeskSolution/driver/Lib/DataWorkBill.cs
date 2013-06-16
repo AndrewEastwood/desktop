@@ -111,7 +111,7 @@ namespace driver.Lib
 
                         //dTable.ExtendedProperties.Clear();
 
-                        billInfo["DATETIME"] = DateTime.Now.ToShortDateString();
+                        billInfo["DATETIME"] = DateTime.Now;
                         billInfo["COMMENT"] = comment;
                         billInfo["PATH"] = path;
                         billInfo["OID"] = BillNewUID(nom);
@@ -198,7 +198,7 @@ namespace driver.Lib
             if (fxNo != string.Empty)
             {
                 DataWorkShared.SetOrderProperty(dtBill, driver.Common.CoreConst.ORDER_NO, fxNo);
-                DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.DATETIME_LOCK, DateTime.Now.ToString("MM-dd-yy H:mm:ss"));
+                DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.DATETIME_LOCK, DateTime.Now);
             }
             SaveBillToFile(dtBill);
         }

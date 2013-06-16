@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using components.Components.ExcelDataWorker;
+using components.Components.CSVObject;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections;
 using System.Configuration;
@@ -42,10 +42,11 @@ namespace BillsToExcel
         private void button1_Click(object sender, EventArgs e)
         {
             // open save dialog here
-            if (saveFileDialog1.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
+            if (folderBrowserDialog1.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
             {
                 saveSettings();
-                new ExcelDataWorker().FileWrite(saveFileDialog1.FileName, billsToExcel());
+                ApplicationConfiguration.Instance.ReloadConfigurationData();
+                new CSVObject().Export(billsToExcel(), folderBrowserDialog1.SelectedPath, "\t");
                 MessageBox.Show("Completed! Bills are saved");
             }
         }
@@ -131,7 +132,7 @@ namespace BillsToExcel
                     // item.SubItems.Add("");
                     item.SubItems.Add(item.Name);
                     item.SubItems.Add(getItemHumanFrendlyLabel("Info." + item.Name));
-                    item.Checked = getItemCheckedState("Info." + item.Name);
+                    item.Checked = getItemCheckedState(item.Name);
 
                     this.listViewGeneral.Items.Add(item);
                 }
@@ -143,7 +144,7 @@ namespace BillsToExcel
                     // item.SubItems.Add("");
                     item.SubItems.Add(dCol.ColumnName);
                     item.SubItems.Add(getItemHumanFrendlyLabel("Product." + dCol.ColumnName));
-                    item.Checked = getItemCheckedState("Product." + dCol.ColumnName);
+                    item.Checked = getItemCheckedState(dCol.ColumnName);
 
                     this.listViewProducts.Items.Add(item);
                 }
@@ -167,11 +168,11 @@ namespace BillsToExcel
             return friendlyName;
         }
 
-        private DataTable billsToExcel()
+        private DataSet billsToExcel()
         {
-            DataTable productSold = new DataTable();
-            DataTable productRemoved = new DataTable();
-            DataTable billsInfo = new DataTable();
+            DataTable productSold = new DataTable("Sold");
+            DataTable productRemoved = new DataTable("Removed");
+            DataTable billsInfo = new DataTable("Info");
 
             // add info columns
             foreach (ListViewItem item in this.listViewGeneral.CheckedItems)
@@ -180,7 +181,7 @@ namespace BillsToExcel
                 {
                     case "BILL_COMMENT":
                         {
-                            string caption = getItemHumanFrendlyLabel(item.Name);
+                            string caption = getItemHumanFrendlyLabel("Info." + item.Name);
                             string[] fieldsToInclude = caption.Split(';');
                             int idx = 0;
                             foreach (string fldCap in fieldsToInclude)
@@ -197,7 +198,7 @@ namespace BillsToExcel
                     default:
                         {
                             DataColumn dCol = new DataColumn(item.Name);
-                            dCol.Caption = getItemHumanFrendlyLabel(item.Name);
+                            dCol.Caption = getItemHumanFrendlyLabel("Info." + item.Name);
                             billsInfo.Columns.Add(dCol);
                             dCol.ExtendedProperties.Add("PARENT", item.Name);
                             break;
@@ -226,10 +227,12 @@ namespace BillsToExcel
             productSold.Columns.Add("_BillID");
             productRemoved.Columns.Add("_BillID");
 
+
+            int billFakeID = 0;
+
             // loop through bills
             foreach (Hashtable billentry in billData)
             {
-                int billFakeID = 0;
 
                 Hashtable billentryInfo = (Hashtable)billentry["INFO"];
 
@@ -330,7 +333,13 @@ namespace BillsToExcel
                 billFakeID++;
             }
 
-            return billsInfo;
+            DataSet ds = new DataSet();
+
+            ds.Tables.Add(productSold);
+            ds.Tables.Add(productRemoved);
+            ds.Tables.Add(billsInfo);
+
+            return ds;
         }
 
         private void saveSettings()

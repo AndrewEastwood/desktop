@@ -183,9 +183,9 @@ namespace PayDesk.Components.UI
             
             // tax
 
-            Settings_Tax_Grid(CoreConst.KEY_DEFAULT_PROFILE_ID);
             this.tax_profile_cBox.SelectedIndex = 0;
-
+            // Settings_Tax_Grid(CoreConst.KEY_DEFAULT_PROFILE_ID);
+            
             //Navigator
             treeView1.Select();
             treeView1.SelectedNode = treeView1.Nodes[0];
@@ -1026,8 +1026,11 @@ namespace PayDesk.Components.UI
 
             if (e.X - r.X < 20 && e.Y - r.Y < 20)
             {
-                profiles_tab_profiles.TabPages.Remove(profiles_tab_profiles.SelectedTab);
-                profiles_tab_profiles.Visible = !(profiles_tab_profiles.TabPages.Count == 0);
+                if (MessageBox.Show("Видалити профіль [" + profiles_tab_profiles.SelectedTab.Text + "] ?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
+                {
+                    profiles_tab_profiles.TabPages.Remove(profiles_tab_profiles.SelectedTab);
+                    profiles_tab_profiles.Visible = !(profiles_tab_profiles.TabPages.Count == 0);
+                }
             }
         }
 

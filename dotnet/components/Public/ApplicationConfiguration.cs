@@ -112,6 +112,10 @@ namespace components.Public
             else*/
             return XmlParser.SetXmlData(this.xmlHt);
         }
+        public bool ReloadConfigurationData()
+        {
+            return LoadConfigurationData();
+        }
         #endregion
         #region Value Selector
         public object GetValueByKey(string key)
