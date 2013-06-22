@@ -31,6 +31,9 @@ namespace BillsToExcel
 
         private void uploadControl1_OnFilePathChanged(string path)
         {
+            if (path == "")
+                return;
+
             // read bill files here
             billFiles.Clear();
             billFiles.AddRange(Directory.GetFiles(path, "*.bill"));

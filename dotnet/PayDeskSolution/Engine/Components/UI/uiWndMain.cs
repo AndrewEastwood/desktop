@@ -1168,7 +1168,7 @@ namespace PayDesk.Components.UI
                             {
                                 // if we don't use legal printer and
                                 // if we allow to close normal cheque or admin mode is active
-                                if (UserConfig.Properties[6])
+                                if (getAdminAccess(6))
                                 {
                                     // we close normal cheque
                                     CloseCheque(false);
@@ -1186,7 +1186,7 @@ namespace PayDesk.Components.UI
                             if (inventChq)
                                 break;//r
 
-                            if (Cheque.Rows.Count == 0 && UserConfig.Properties[12])
+                            if (Cheque.Rows.Count == 0 && getAdminAccess(12, false)) //  UserConfig.Properties[12]
                             {
                                 string nextChqNom = string.Empty;
                                 object[] localData = new object[0];
@@ -1211,11 +1211,14 @@ namespace PayDesk.Components.UI
                             if (Cheque.Rows.Count == 0)// || !Program.Service.UseEKKR)
                                 break;//r
 
-                            if (!(ADMIN_STATE || (UserConfig.Properties[23] && UserConfig.Properties[6]) ))
-                            {
-                                MMessageBoxEx.Show(this.chequeDGV, "Закриття чеку заблоковано", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            if (getAdminAccess(6, 23))
                                 break;
-                            }
+
+                            //if (!(ADMIN_STATE || (UserConfig.Properties[23] && UserConfig.Properties[6]) ))
+                            //{
+                            //    MMessageBoxEx.Show(this.chequeDGV, "Закриття чеку заблоковано", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            //    break;
+                            //}
 
                             if (ConfigManager.Instance.CommonConfiguration.Content_Common_PromptMsgOnIllegal &&
                                 DialogResult.Yes != MMessageBoxEx.Show(this.chequeDGV, "Закрити чек без фіксації оплати",
@@ -2756,7 +2759,7 @@ namespace PayDesk.Components.UI
                 object[] loadResult = DataWorkSource.LoadData(localFiles, _fl_onlyUpdate, de.Key, startupIndex);
 
 
-                ConfigManager.SaveConfiguration();
+                // ConfigManager.SaveConfiguration();
 
                 /* adding data */
 
@@ -2797,6 +2800,9 @@ namespace PayDesk.Components.UI
                 currentProfileIndex++;
 
             }
+
+
+            ConfigManager.SaveConfiguration();
 
             //MessageBox.Show("done 6");
             /* Removing unused rows */
@@ -5045,7 +5051,20 @@ namespace PayDesk.Components.UI
             }
         }
 
+        private bool getAdminAccess(params int[] userAccessFnIndex)
+        {
+            bool generalResult = true;
+            for (int i = 0, len = userAccessFnIndex.Length; i < len; i++)
+                generalResult &= getAdminAccess(userAccessFnIndex[i], false);
+            return generalResult;
+        }
+
         private bool getAdminAccess(int userAccessFnIndex)
+        {
+            return getAdminAccess(userAccessFnIndex, true);
+        }
+
+        private bool getAdminAccess(int userAccessFnIndex, bool requestAdminWindow)
         {
             // admin has access to all settings
             if (ADMIN_STATE)
@@ -5060,7 +5079,10 @@ namespace PayDesk.Components.UI
             }
 
             // show admin window to unlock requested function
-            return admin.ShowDialog() == DialogResult.OK;
+            if (requestAdminWindow)
+                return admin.ShowDialog() == DialogResult.OK;
+
+            return false;
         }
 
     }

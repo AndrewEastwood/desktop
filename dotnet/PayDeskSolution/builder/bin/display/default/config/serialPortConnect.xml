@@ -12,11 +12,11 @@
             <property name="PARITY" value="0"/>
             <property name="DBITS" value="8"/>
             <property name="SBITS" value="0"/>
-            <property name="RT" value="-1"/>
-            <property name="RM" value="0"/>
-            <property name="RC" value="0"/>
-            <property name="WM" value="0"/>
-            <property name="WC" value="0"/>
+            <property name="RT" value="1000"/>
+            <property name="RM" value="1000"/>
+            <property name="RC" value="1000"/>
+            <property name="WM" value="1000"/>
+            <property name="WC" value="1000"/>
         </section>
     </section>
 
@@ -27,11 +27,11 @@
             <property name="PARITY" value="0"/>
             <property name="DBITS" value="8"/>
             <property name="SBITS" value="0"/>
-            <property name="RT" value="-1"/>
-            <property name="RM" value="0"/>
-            <property name="RC" value="0"/>
-            <property name="WM" value="0"/>
-            <property name="WC" value="0"/>
+            <property name="RT" value="1000"/>
+            <property name="RM" value="1000"/>
+            <property name="RC" value="1000"/>
+            <property name="WM" value="1000"/>
+            <property name="WC" value="1000"/>
         </section>
         <section name="magstripe">
             <property name="PORT" value="COM1"/>
@@ -39,11 +39,11 @@
             <property name="PARITY" value="0"/>
             <property name="DBITS" value="8"/>
             <property name="SBITS" value="1"/>
-            <property name="RT" value="-1"/>
-            <property name="RM" value="0"/>
-            <property name="RC" value="0"/>
-            <property name="WM" value="0"/>
-            <property name="WC" value="0"/>
+            <property name="RT" value="1000"/>
+            <property name="RM" value="1000"/>
+            <property name="RC" value="1000"/>
+            <property name="WM" value="1000"/>
+            <property name="WC" value="1000"/>
         </section>
     </section>
 
@@ -54,11 +54,11 @@
             <property name="PARITY" value="0"/>
             <property name="DBITS" value="8"/>
             <property name="SBITS" value="0"/>
-            <property name="RT" value="-1"/>
-            <property name="RM" value="0"/>
-            <property name="RC" value="0"/>
-            <property name="WM" value="0"/>
-            <property name="WC" value="0"/>
+            <property name="RT" value="1000"/>
+            <property name="RM" value="1000"/>
+            <property name="RC" value="1000"/>
+            <property name="WM" value="1000"/>
+            <property name="WC" value="1000"/>
         </section>
         <section name="datecsFP3530T">
             <property name="PORT" value="COM1"/>
@@ -66,11 +66,11 @@
             <property name="PARITY" value="0"/>
             <property name="DBITS" value="8"/>
             <property name="SBITS" value="0"/>
-            <property name="RT" value="-1"/>
-            <property name="RM" value="0"/>
-            <property name="RC" value="0"/>
-            <property name="WM" value="0"/>
-            <property name="WC" value="0"/>
+            <property name="RT" value="1000"/>
+            <property name="RM" value="1000"/>
+            <property name="RC" value="1000"/>
+            <property name="WM" value="1000"/>
+            <property name="WC" value="1000"/>
         </section>
         <section name="icsE260T">
             <property name="PORT" value="COM1"/>
@@ -78,11 +78,11 @@
             <property name="PARITY" value="0"/>
             <property name="DBITS" value="8"/>
             <property name="SBITS" value="0"/>
-            <property name="RT" value="-1"/>
-            <property name="RM" value="0"/>
-            <property name="RC" value="0"/>
-            <property name="WM" value="0"/>
-            <property name="WC" value="0"/>
+            <property name="RT" value="1000"/>
+            <property name="RM" value="1000"/>
+            <property name="RC" value="1000"/>
+            <property name="WM" value="1000"/>
+            <property name="WC" value="1000"/>
         </section>
     </section>
 

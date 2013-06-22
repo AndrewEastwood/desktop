@@ -6,12 +6,11 @@ geretated by XmlDocumentParser v1.6
 -->
 <document name="General" version="1.0.0.0">
     <section name="Paths">
-        <property name="pathToBills" value="d:\My Development\GitHub\desktop\dotnet\PayDeskSolution\builder\bin\bills\" />
+        <property name="pathToBills" value="C:\Users\Andrew\Desktop\test" />
     </section>
     <section name="States">
         <property name="ASUM" value="True" />
         <property name="BILL_DATETIME" value="True" />
-        <property name="BILL_DATETIME_LOCK" value="True" />
         <property name="BILL_DATETIMEEDIT" value="True" />
         <property name="BILL_IS_LOCKED" value="True" />
         <property name="DISCOUNT" value="True" />
@@ -31,7 +30,6 @@ geretated by XmlDocumentParser v1.6
             <property name="BILL_BILL_NO" value="Номер Рахунку" />
             <property name="BILL_COMMENT" value="Столик; Офіціант" />
             <property name="BILL_DATETIME" value="Дата Створення" />
-            <property name="BILL_DATETIME_LOCK" value="Дата Закриття" />
             <property name="BILL_DATETIMEEDIT" value="Дата Ост. Редагування" />
             <property name="BILL_DELETED_ROWS" value="Видалені Рядки" />
             <property name="BILL_IS_LOCKED" value="Стан Блокування" />
