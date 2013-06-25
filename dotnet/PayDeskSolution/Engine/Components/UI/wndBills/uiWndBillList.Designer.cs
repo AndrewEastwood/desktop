@@ -87,7 +87,7 @@
             this.textBox_billsList_billNoSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.textBox_billsList_billNoSearch.Location = new System.Drawing.Point(12, 12);
             this.textBox_billsList_billNoSearch.Name = "textBox_billsList_billNoSearch";
-            this.textBox_billsList_billNoSearch.Size = new System.Drawing.Size(356, 30);
+            this.textBox_billsList_billNoSearch.Size = new System.Drawing.Size(405, 30);
             this.textBox_billsList_billNoSearch.TabIndex = 3;
             this.textBox_billsList_billNoSearch.Tag = "введіть номер рахунку";
             this.textBox_billsList_billNoSearch.Text = "введіть номер рахунку";
@@ -117,7 +117,7 @@
             this.billGrid.ReadOnly = true;
             this.billGrid.RowHeadersVisible = false;
             this.billGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.billGrid.Size = new System.Drawing.Size(324, 243);
+            this.billGrid.Size = new System.Drawing.Size(323, 243);
             this.billGrid.StandardTab = true;
             this.billGrid.TabIndex = 11;
             this.billGrid.TabStop = false;
@@ -164,7 +164,7 @@
             this.listGrid.RowHeadersVisible = false;
             this.listGrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.listGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.listGrid.Size = new System.Drawing.Size(383, 278);
+            this.listGrid.Size = new System.Drawing.Size(433, 278);
             this.listGrid.StandardTab = true;
             this.listGrid.TabIndex = 1;
             this.listGrid.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.listGrid_CellMouseClick);
@@ -246,9 +246,9 @@
             // 
             this.label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(12, 440);
+            this.label2.Location = new System.Drawing.Point(12, 441);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(770, 25);
+            this.label2.Size = new System.Drawing.Size(820, 25);
             this.label2.TabIndex = 30;
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -256,7 +256,7 @@
             // 
             this.button_billsList_Delete.Enabled = false;
             this.button_billsList_Delete.ForeColor = System.Drawing.Color.Red;
-            this.button_billsList_Delete.Location = new System.Drawing.Point(456, 401);
+            this.button_billsList_Delete.Location = new System.Drawing.Point(507, 404);
             this.button_billsList_Delete.Name = "button_billsList_Delete";
             this.button_billsList_Delete.Size = new System.Drawing.Size(75, 23);
             this.button_billsList_Delete.TabIndex = 5;
@@ -272,7 +272,7 @@
             this.button_billsList_Print.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button_billsList_Print.Location = new System.Drawing.Point(0, 0);
             this.button_billsList_Print.Name = "button_billsList_Print";
-            this.button_billsList_Print.Size = new System.Drawing.Size(320, 35);
+            this.button_billsList_Print.Size = new System.Drawing.Size(319, 35);
             this.button_billsList_Print.TabIndex = 2;
             this.button_billsList_Print.Text = "Друкувати Цей Рахунок";
             this.button_billsList_Print.UseVisualStyleBackColor = true;
@@ -284,7 +284,7 @@
             this.button_billsList_Open.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button_billsList_Open.Location = new System.Drawing.Point(0, 286);
             this.button_billsList_Open.Name = "button_billsList_Open";
-            this.button_billsList_Open.Size = new System.Drawing.Size(436, 45);
+            this.button_billsList_Open.Size = new System.Drawing.Size(486, 45);
             this.button_billsList_Open.TabIndex = 8;
             this.button_billsList_Open.Text = "Відкрити позначений рахунок в основне вікно";
             this.button_billsList_Open.UseVisualStyleBackColor = true;
@@ -297,7 +297,7 @@
             this.button_billsList_ShowAllBills.Location = new System.Drawing.Point(66, 0);
             this.button_billsList_ShowAllBills.Margin = new System.Windows.Forms.Padding(0);
             this.button_billsList_ShowAllBills.Name = "button_billsList_ShowAllBills";
-            this.button_billsList_ShowAllBills.Size = new System.Drawing.Size(370, 23);
+            this.button_billsList_ShowAllBills.Size = new System.Drawing.Size(420, 23);
             this.button_billsList_ShowAllBills.TabIndex = 10;
             this.button_billsList_ShowAllBills.Text = "Завантажити Рахунки";
             this.button_billsList_ShowAllBills.UseVisualStyleBackColor = true;
@@ -312,7 +312,7 @@
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Location = new System.Drawing.Point(12, 48);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(438, 379);
+            this.panel1.Size = new System.Drawing.Size(488, 379);
             this.panel1.TabIndex = 20;
             // 
             // panel6
@@ -324,13 +324,13 @@
             this.panel6.Margin = new System.Windows.Forms.Padding(0);
             this.panel6.Name = "panel6";
             this.panel6.Padding = new System.Windows.Forms.Padding(3, 3, 3, 5);
-            this.panel6.Size = new System.Drawing.Size(436, 286);
+            this.panel6.Size = new System.Drawing.Size(486, 286);
             this.panel6.TabIndex = 24;
             // 
             // vScrollBar1
             // 
             this.vScrollBar1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.vScrollBar1.Location = new System.Drawing.Point(386, 3);
+            this.vScrollBar1.Location = new System.Drawing.Point(436, 3);
             this.vScrollBar1.Name = "vScrollBar1";
             this.vScrollBar1.Size = new System.Drawing.Size(47, 278);
             this.vScrollBar1.TabIndex = 23;
@@ -346,7 +346,7 @@
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 331);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(436, 23);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(486, 23);
             this.flowLayoutPanel1.TabIndex = 22;
             // 
             // label_billsList_listInfoPrefix
@@ -401,7 +401,7 @@
             this.panel2.Location = new System.Drawing.Point(0, 354);
             this.panel2.Margin = new System.Windows.Forms.Padding(0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(436, 23);
+            this.panel2.Size = new System.Drawing.Size(486, 23);
             this.panel2.TabIndex = 21;
             // 
             // button_billsList_Refresh
@@ -423,7 +423,7 @@
             this.button_billsList_madecopy.Enabled = false;
             this.button_billsList_madecopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button_billsList_madecopy.ForeColor = System.Drawing.Color.Black;
-            this.button_billsList_madecopy.Location = new System.Drawing.Point(537, 401);
+            this.button_billsList_madecopy.Location = new System.Drawing.Point(599, 404);
             this.button_billsList_madecopy.Name = "button_billsList_madecopy";
             this.button_billsList_madecopy.Size = new System.Drawing.Size(114, 23);
             this.button_billsList_madecopy.TabIndex = 6;
@@ -435,7 +435,7 @@
             // 
             this.button_billsList_unlock.Enabled = false;
             this.button_billsList_unlock.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.button_billsList_unlock.Location = new System.Drawing.Point(657, 401);
+            this.button_billsList_unlock.Location = new System.Drawing.Point(719, 404);
             this.button_billsList_unlock.Name = "button_billsList_unlock";
             this.button_billsList_unlock.Size = new System.Drawing.Size(113, 23);
             this.button_billsList_unlock.TabIndex = 7;
@@ -450,9 +450,9 @@
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel3.Controls.Add(this.billGrid);
             this.panel3.Controls.Add(this.panel4);
-            this.panel3.Location = new System.Drawing.Point(456, 12);
+            this.panel3.Location = new System.Drawing.Point(507, 12);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(326, 386);
+            this.panel3.Size = new System.Drawing.Size(325, 386);
             this.panel3.TabIndex = 21;
             // 
             // panel4
@@ -464,7 +464,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel4.Location = new System.Drawing.Point(0, 243);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(324, 141);
+            this.panel4.Size = new System.Drawing.Size(323, 141);
             this.panel4.TabIndex = 22;
             // 
             // panel5
@@ -477,7 +477,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel5.Location = new System.Drawing.Point(0, 35);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(320, 102);
+            this.panel5.Size = new System.Drawing.Size(319, 102);
             this.panel5.TabIndex = 13;
             // 
             // label_orderInfo_orderNo
@@ -523,7 +523,7 @@
             this.label_orderInfo_realSuma.Location = new System.Drawing.Point(0, 23);
             this.label_orderInfo_realSuma.Name = "label_orderInfo_realSuma";
             this.label_orderInfo_realSuma.Padding = new System.Windows.Forms.Padding(20, 2, 0, 0);
-            this.label_orderInfo_realSuma.Size = new System.Drawing.Size(320, 19);
+            this.label_orderInfo_realSuma.Size = new System.Drawing.Size(319, 19);
             this.label_orderInfo_realSuma.TabIndex = 22;
             this.label_orderInfo_realSuma.Text = "label9";
             // 
@@ -533,7 +533,7 @@
             this.label7.Location = new System.Drawing.Point(0, 0);
             this.label7.Name = "label7";
             this.label7.Padding = new System.Windows.Forms.Padding(5);
-            this.label7.Size = new System.Drawing.Size(320, 23);
+            this.label7.Size = new System.Drawing.Size(319, 23);
             this.label7.TabIndex = 21;
             this.label7.Text = "Загальна Інформація:";
             // 
@@ -541,7 +541,7 @@
             // 
             this.button_billsList_Search.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button_billsList_Search.ForeColor = System.Drawing.Color.Green;
-            this.button_billsList_Search.Location = new System.Drawing.Point(374, 13);
+            this.button_billsList_Search.Location = new System.Drawing.Point(424, 12);
             this.button_billsList_Search.Name = "button_billsList_Search";
             this.button_billsList_Search.Size = new System.Drawing.Size(77, 29);
             this.button_billsList_Search.TabIndex = 4;
@@ -560,7 +560,7 @@
             this.AcceptButton = this.button_billsList_Open;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(794, 474);
+            this.ClientSize = new System.Drawing.Size(844, 475);
             this.Controls.Add(this.button_billsList_unlock);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button_billsList_Search);

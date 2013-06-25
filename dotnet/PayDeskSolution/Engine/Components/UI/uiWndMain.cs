@@ -1211,7 +1211,7 @@ namespace PayDesk.Components.UI
                             if (Cheque.Rows.Count == 0)// || !Program.Service.UseEKKR)
                                 break;//r
 
-                            if (getAdminAccess(6, 23))
+                            if (!getAdminAccess(6, 23))
                                 break;
 
                             //if (!(ADMIN_STATE || (UserConfig.Properties[23] && UserConfig.Properties[6]) ))
@@ -1626,7 +1626,7 @@ namespace PayDesk.Components.UI
                         uiWndFiscalFunctions ff = new uiWndFiscalFunctions(Program.AppPlugins.GetActive<ILegalPrinterDriver>().Name, Program.AppPlugins.GetActive<ILegalPrinterDriver>().AllowedMethods);
                         try
                         {
-                            if (ff.ShowDialog(this) == DialogResult.OK)
+                            if (ff.ShowDialog(this) == DialogResult.Yes)
                                 Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction(ff.Function);
                         }
                         catch (Exception ex)

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualKeyboard", "VirtualK
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BillsToExcel", "BillsToExcel\BillsToExcel.csproj", "{0778CAD9-3946-40FD-AB1F-E42FFD6FB285}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configurator", "Configurator\Configurator.csproj", "{A68E0DFA-BD99-4417-83F7-D0E156F595AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,16 @@ Global
 		{0778CAD9-3946-40FD-AB1F-E42FFD6FB285}.Release|Mixed Platforms.Build.0 = Release|x86
 		{0778CAD9-3946-40FD-AB1F-E42FFD6FB285}.Release|x86.ActiveCfg = Release|x86
 		{0778CAD9-3946-40FD-AB1F-E42FFD6FB285}.Release|x86.Build.0 = Release|x86
+		{A68E0DFA-BD99-4417-83F7-D0E156F595AD}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{A68E0DFA-BD99-4417-83F7-D0E156F595AD}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{A68E0DFA-BD99-4417-83F7-D0E156F595AD}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{A68E0DFA-BD99-4417-83F7-D0E156F595AD}.Debug|x86.ActiveCfg = Debug|x86
+		{A68E0DFA-BD99-4417-83F7-D0E156F595AD}.Debug|x86.Build.0 = Debug|x86
+		{A68E0DFA-BD99-4417-83F7-D0E156F595AD}.Release|Any CPU.ActiveCfg = Release|x86
+		{A68E0DFA-BD99-4417-83F7-D0E156F595AD}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{A68E0DFA-BD99-4417-83F7-D0E156F595AD}.Release|Mixed Platforms.Build.0 = Release|x86
+		{A68E0DFA-BD99-4417-83F7-D0E156F595AD}.Release|x86.ActiveCfg = Release|x86
+		{A68E0DFA-BD99-4417-83F7-D0E156F595AD}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

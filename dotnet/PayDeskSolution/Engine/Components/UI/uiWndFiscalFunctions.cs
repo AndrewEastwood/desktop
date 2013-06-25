@@ -50,8 +50,14 @@ namespace PayDesk.Components.UI
                 idx = (byte)listBox1.SelectedIndex;
             }
             catch { return; }
-            DialogResult = DialogResult.OK;
-            Close();
+
+            DialogResult dlgRez = MessageBox.Show("Виконати ф-цію ЕККР [" + Descriprion + "] ? ", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (dlgRez == System.Windows.Forms.DialogResult.Yes)
+            {
+                DialogResult = dlgRez;
+                Close();
+            }
         }
 
         private void FiscalFunctions_KeyDown(object sender, KeyEventArgs e)
