@@ -12,8 +12,56 @@ geretated by XmlDocumentParser v1.6
     </section>
     <section name="Titles">
         <section name="Info">
+            <property name="BILL_BILL_NO" value="Info.BILL_BILL_NO" />
+            <property name="BILL_COMMENT" value="Info.BILL_COMMENT" />
+            <property name="BILL_DATETIME" value="Info.BILL_DATETIME" />
+            <property name="BILL_DATETIMEEDIT" value="Info.BILL_DATETIMEEDIT" />
+            <property name="BILL_DELETED_ROWS" value="Info.BILL_DELETED_ROWS" />
+            <property name="BILL_IS_LOCKED" value="Info.BILL_IS_LOCKED" />
+            <property name="BILL_OID" value="Info.BILL_OID" />
+            <property name="BILL_OWNER_NO" value="Info.BILL_OWNER_NO" />
+            <property name="BILL_PATH" value="Info.BILL_PATH" />
+            <property name="CLIENT_ID" value="Info.CLIENT_ID" />
+            <property name="DISCOUNT" value="Info.DISCOUNT" />
+            <property name="IS_LEGAL" value="Info.IS_LEGAL" />
+            <property name="IS_RET" value="Info.IS_RET" />
+            <property name="ORDER_NO" value="Info.ORDER_NO" />
+            <property name="ORDER_REAL_SUMA" value="Info.ORDER_REAL_SUMA" />
+            <property name="ORDER_SUMA" value="Info.ORDER_SUMA" />
+            <property name="PAYMENT" value="Info.PAYMENT" />
+            <property name="STORE_NO" value="Info.STORE_NO" />
+            <property name="TAX_BILL" value="Info.TAX_BILL" />
+            <property name="TAX_SUMA" value="Info.TAX_SUMA" />
         </section>
         <section name="Product">
+            <property name="ASUM" value="Product.ASUM" />
+            <property name="BC" value="Product.BC" />
+            <property name="C" value="Product.C" />
+            <property name="DESC" value="Product.DESC" />
+            <property name="DISC" value="Product.DISC" />
+            <property name="F" value="Product.F" />
+            <property name="ID" value="Product.ID" />
+            <property name="NAME" value="Product.NAME" />
+            <property name="ORIGPRICE" value="Product.ORIGPRICE" />
+            <property name="PACK" value="Product.PACK" />
+            <property name="PR1" value="Product.PR1" />
+            <property name="PR2" value="Product.PR2" />
+            <property name="PR3" value="Product.PR3" />
+            <property name="PRICE" value="Product.PRICE" />
+            <property name="PRINTCOUNT" value="Product.PRINTCOUNT" />
+            <property name="Q2" value="Product.Q2" />
+            <property name="Q3" value="Product.Q3" />
+            <property name="SUM" value="Product.SUM" />
+            <property name="TAX_MONEY" value="Product.TAX_MONEY" />
+            <property name="TAX_VAL" value="Product.TAX_VAL" />
+            <property name="TID" value="Product.TID" />
+            <property name="TMPTOT" value="Product.TMPTOT" />
+            <property name="TOT" value="Product.TOT" />
+            <property name="TQ" value="Product.TQ" />
+            <property name="UNIT" value="Product.UNIT" />
+            <property name="USEDDISC" value="Product.USEDDISC" />
+            <property name="VG" value="Product.VG" />
+            <property name="WEIGHT" value="Product.WEIGHT" />
         </section>
     </section>
 </document>

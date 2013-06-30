@@ -26,7 +26,7 @@ namespace BillsToExcel
         {
             InitializeComponent();
             // xmlParser.Settings.ConfigDirectoryNameDefault = string.Empty;
-            uploadControl1.initSelectedPath(ApplicationConfiguration.Instance.GetValueByPath<string>("General.Paths.pathToBills"));
+            this.uploadControl1.initSelectedPath(ApplicationConfiguration.Instance.GetValueByPath<string>("General.Paths.pathToBills"));
         }
 
         private void uploadControl1_OnFilePathChanged(string path)
@@ -35,11 +35,19 @@ namespace BillsToExcel
                 return;
 
             // read bill files here
-            billFiles.Clear();
-            billFiles.AddRange(Directory.GetFiles(path, "*.bill"));
-            billFiles.Sort();
+            this.billFiles.Clear();
+            this.billFiles.AddRange(Directory.GetFiles(path, "*.bill"));
+            this.billFiles.Sort();
 
-            loadBillsAndGetFiledNames();
+            this.progressBar1.Value = 0;
+            this.label_count.Text = "0";
+            this.progressBar1.Maximum = billFiles.Count;
+            this.button1.Visible = false;
+            this.progressBar1.Visible = true;
+            this.listViewGeneral.Items.Clear();
+            this.listViewProducts.Items.Clear();
+
+            this.backgroundWorker1.RunWorkerAsync();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -54,14 +62,24 @@ namespace BillsToExcel
             }
         }
 
-        private List<string> loadBillsAndGetFiledNames()
+        private void loadBillsAndGetFiledNames(BackgroundWorker worker)
         {
             // step 1. load all bills
             BinaryFormatter binF = new BinaryFormatter();
-            billData.Clear();
+            this.billData.Clear();
+            int processedIndex = 0;
 
             foreach (string pathToBillFile in billFiles)
             {
+                processedIndex++;
+                // System.Threading.Thread.Sleep(500);
+
+                if ((worker.CancellationPending == true))
+                {
+                    this.billData.Clear();
+                    break;
+                }
+
                 using (FileStream stream = new FileStream(pathToBillFile, FileMode.Open, FileAccess.Read))
                 {
                     object[] billObj = (object[])binF.Deserialize(stream);
@@ -113,49 +131,9 @@ namespace BillsToExcel
                         }
                         catch { }
                 }
+                worker.ReportProgress(processedIndex);
             }
 
-            this.label_count.Text = billData.Count.ToString();
-
-            // step 2. extract bill fileds
-            this.listViewGeneral.Items.Clear();
-            this.listViewGeneral.Sort();
-            this.listViewProducts.Items.Clear();
-            this.listViewProducts.Sort();
-
-            if (billData.Count > 0)
-            {
-                Hashtable billFirstEntry = billData[0];
-
-                IEnumerator billKeysEnumerator = ((Hashtable)billFirstEntry["INFO"]).Keys.GetEnumerator();
-                while (billKeysEnumerator.MoveNext())
-                {
-                    ListViewItem item = new ListViewItem();
-                    item.Name = billKeysEnumerator.Current.ToString();
-                    // item.SubItems.Add("");
-                    item.SubItems.Add(item.Name);
-                    item.SubItems.Add(getItemHumanFrendlyLabel("Info." + item.Name));
-                    item.Checked = getItemCheckedState(item.Name);
-
-                    this.listViewGeneral.Items.Add(item);
-                }
-
-                foreach (DataColumn dCol in ((DataTable)billFirstEntry["DATA"]).Columns)
-                {
-                    ListViewItem item = new ListViewItem();
-                    item.Name = dCol.ColumnName;
-                    // item.SubItems.Add("");
-                    item.SubItems.Add(dCol.ColumnName);
-                    item.SubItems.Add(getItemHumanFrendlyLabel("Product." + dCol.ColumnName));
-                    item.Checked = getItemCheckedState(dCol.ColumnName);
-
-                    this.listViewProducts.Items.Add(item);
-                }
-            }
-
-
-            List<string> fields = new List<string>();
-            return fields;
         }
 
         private bool getItemCheckedState(string itemName)
@@ -436,10 +414,10 @@ namespace BillsToExcel
 
             if (list.SelectedItems.Count > 0)
             {
-                textBox1.SuspendLayout();
-                textBox1.Tag = list.Name;
-                textBox1.Text = list.SelectedItems[0].SubItems[FIELD_KEY_TITLE].Text;
-                textBox1.ResumeLayout();
+                this.textBox1.SuspendLayout();
+                this.textBox1.Tag = list.Name;
+                this.textBox1.Text = list.SelectedItems[0].SubItems[FIELD_KEY_TITLE].Text;
+                this.textBox1.ResumeLayout();
             }
         }
 
@@ -463,6 +441,61 @@ namespace BillsToExcel
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             this.saveSettings();
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            this.loadBillsAndGetFiledNames(sender as BackgroundWorker);
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            this.label_count.Text = e.ProgressPercentage.ToString();
+            this.progressBar1.Value++;
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            this.progressBar1.Visible = false;
+            this.button1.Visible = true;
+
+            this.label_count.Text = billData.Count.ToString();
+
+            // step 2. extract bill fileds
+            this.listViewGeneral.Items.Clear();
+            this.listViewGeneral.Sort();
+            this.listViewProducts.Items.Clear();
+            this.listViewProducts.Sort();
+
+            if (billData.Count > 0)
+            {
+                Hashtable billFirstEntry = billData[0];
+
+                IEnumerator billKeysEnumerator = ((Hashtable)billFirstEntry["INFO"]).Keys.GetEnumerator();
+                while (billKeysEnumerator.MoveNext())
+                {
+                    ListViewItem item = new ListViewItem();
+                    item.Name = billKeysEnumerator.Current.ToString();
+                    // item.SubItems.Add("");
+                    item.SubItems.Add(item.Name);
+                    item.SubItems.Add(getItemHumanFrendlyLabel("Info." + item.Name));
+                    item.Checked = getItemCheckedState(item.Name);
+
+                    this.listViewGeneral.Items.Add(item);
+                }
+
+                foreach (DataColumn dCol in ((DataTable)billFirstEntry["DATA"]).Columns)
+                {
+                    ListViewItem item = new ListViewItem();
+                    item.Name = dCol.ColumnName;
+                    // item.SubItems.Add("");
+                    item.SubItems.Add(dCol.ColumnName);
+                    item.SubItems.Add(getItemHumanFrendlyLabel("Product." + dCol.ColumnName));
+                    item.Checked = getItemCheckedState(dCol.ColumnName);
+
+                    this.listViewProducts.Items.Add(item);
+                }
+            }
         }
 
     }

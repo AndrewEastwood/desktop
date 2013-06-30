@@ -22,7 +22,7 @@ namespace Configurator
     {
         public MainWindow()
         {
-            InitializeComponent();`
+            InitializeComponent();
 
             ApplicationConfiguration.CustomConfigurationMethod = App.ConfigurationSettingsContext;
             ApplicationConfiguration.Instance.LoadConfigurationData();
