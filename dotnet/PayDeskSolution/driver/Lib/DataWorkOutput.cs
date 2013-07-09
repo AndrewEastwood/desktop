@@ -181,7 +181,7 @@ namespace driver.Lib
             //18 - discCommonCash (double)
             //19 - billNumber (string)
             //20 - billComment (string)
-            object[] simpleData = new object[23];
+            object[] simpleData = new object[25];
             PropertyCollection data = order.ExtendedProperties;
             
             try
@@ -277,6 +277,8 @@ namespace driver.Lib
                         simpleData[20] = billInfo["COMMENT"];
                     if (billInfo.ContainsKey("DATETIME"))
                         simpleData[21] = billInfo["DATETIME"];
+                    if (billInfo.ContainsKey(driver.Common.CoreConst.DATETIME_LOCK))
+                        simpleData[22] = billInfo[driver.Common.CoreConst.DATETIME_LOCK];
                 }
                 catch (Exception e) { CoreLib.WriteLog(e, "driver.Lib.DataWorkOutput.FeetchTemplate(string tplFile, Dictionary<string, object> data) Attempt to initialize: Bill Information"); }
             
@@ -359,6 +361,8 @@ namespace driver.Lib
             //18 - discCommonCash (double)
             //19 - billNumber (string)
             //20 - billComment (string)
+            //21 - billDateTimeOpen (DateTime)
+            //22 - billDateTimeLock (DateTime)
 
             string SiMask = "{0:0." + dCor + ";0." + dCor + ";0." + dCor + "}";
             string DiMask = "{0:0." + dCor + ";0." + dCor + ";!ZeRo!}";
@@ -423,8 +427,8 @@ namespace driver.Lib
             sValues[26] = data[12] != null && ((double[])data[12])[1] != null ? ((double[])data[12])[1] : 0.0; ;//26
             //27 - discountConstPercent (double)
             sValues[27] = data[13] != null ? data[13] : 0.0;//27
-            //28 - -
-            sValues[28] = null;//28
+            //28 - bill date time open
+            sValues[28] = data[21];//28
             //29 - E_discountPercent[] (double)
             sValues[29] = data[15] != null ? data[15] : 0.0;//29
             //30 - E_discountCash[] (double)
@@ -439,8 +443,8 @@ namespace driver.Lib
             sValues[34] = null;//34
             //35 - true or false to detect bill type
             sValues[35] = (data[19] != null || data[20] != null) ? 1 : 0;//35
-            //36 - -
-            sValues[36] = null;//36
+            //36 - bill date time lock
+            sValues[36] = data[22];//36
             //37 - -
             sValues[37] = null;//37
             //38 - -

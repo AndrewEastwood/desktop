@@ -39,15 +39,32 @@ namespace BillsToExcel
             this.billFiles.AddRange(Directory.GetFiles(path, "*.bill"));
             this.billFiles.Sort();
 
-            this.progressBar1.Value = 0;
-            this.label_count.Text = "0";
-            this.progressBar1.Maximum = billFiles.Count;
-            this.button1.Visible = false;
-            this.progressBar1.Visible = true;
-            this.listViewGeneral.Items.Clear();
-            this.listViewProducts.Items.Clear();
+            this.setImportUIState(true);
 
             this.backgroundWorker1.RunWorkerAsync();
+        }
+
+        private void setImportUIState(bool isImport)
+        {
+            if (isImport)
+            {
+                this.listViewGeneral.Items.Clear();
+                this.listViewProducts.Items.Clear();
+                this.progressBar1.Value = 0;
+                this.label_count.Text = "0";
+                this.progressBar1.Maximum = billFiles.Count;
+                this.buttonExport.Enabled = false;
+                this.panel3.Visible = true;
+                this.uploadControl1.Visible = false;
+            }
+            else
+            {
+                if (this.listViewGeneral.Items.Count > 0)
+                    this.buttonExport.Enabled = true;
+                this.uploadControl1.Visible = true;
+                this.panel3.Visible = false;
+            }
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -456,9 +473,6 @@ namespace BillsToExcel
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            this.progressBar1.Visible = false;
-            this.button1.Visible = true;
-
             this.label_count.Text = billData.Count.ToString();
 
             // step 2. extract bill fileds
@@ -496,6 +510,13 @@ namespace BillsToExcel
                     this.listViewProducts.Items.Add(item);
                 }
             }
+            this.setImportUIState(false);
+        }
+
+        private void butStopImport_Click(object sender, EventArgs e)
+        {
+            this.backgroundWorker1.CancelAsync();
+            this.setImportUIState(false);
         }
 
     }

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonExport = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label_count = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -52,25 +52,28 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.butStopImport = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
-            // button1
+            // buttonExport
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.buttonExport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(12, 418);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(608, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Export Bills";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Visible = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.buttonExport.Enabled = false;
+            this.buttonExport.Location = new System.Drawing.Point(12, 418);
+            this.buttonExport.Name = "buttonExport";
+            this.buttonExport.Size = new System.Drawing.Size(608, 23);
+            this.buttonExport.TabIndex = 0;
+            this.buttonExport.Text = "Export Bills";
+            this.buttonExport.UseVisualStyleBackColor = true;
+            this.buttonExport.Click += new System.EventHandler(this.button1_Click);
             // 
             // panel1
             // 
@@ -276,13 +279,11 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(12, 418);
+            this.progressBar1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.progressBar1.Location = new System.Drawing.Point(0, 0);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(608, 23);
+            this.progressBar1.Size = new System.Drawing.Size(530, 27);
             this.progressBar1.TabIndex = 2;
-            this.progressBar1.Visible = false;
             // 
             // backgroundWorker1
             // 
@@ -292,17 +293,39 @@
             this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
+            // panel3
+            // 
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.butStopImport);
+            this.panel3.Controls.Add(this.progressBar1);
+            this.panel3.Location = new System.Drawing.Point(12, 21);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(608, 29);
+            this.panel3.TabIndex = 10;
+            this.panel3.Visible = false;
+            // 
+            // butStopImport
+            // 
+            this.butStopImport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.butStopImport.Location = new System.Drawing.Point(530, 0);
+            this.butStopImport.Name = "butStopImport";
+            this.butStopImport.Size = new System.Drawing.Size(76, 27);
+            this.butStopImport.TabIndex = 3;
+            this.butStopImport.Text = "Stop Import";
+            this.butStopImport.UseVisualStyleBackColor = true;
+            this.butStopImport.Click += new System.EventHandler(this.butStopImport_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(632, 453);
+            this.Controls.Add(this.panel3);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.uploadControl1);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.buttonExport);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(640, 480);
             this.Name = "FormMain";
@@ -316,13 +339,14 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
             this.splitContainer1.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonExport;
         private components.UI.Controls.UploadControl.UploadControl uploadControl1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label_count;
@@ -345,6 +369,8 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Button butStopImport;
     }
 }
 
