@@ -900,6 +900,32 @@ namespace PayDesk.Components.UI
                             //for (int i = 0x10; i < 0x20; i++)
                             //AppFunc.UnregisterHotKey(this, i);
 
+                            int changeState = DataWorkBill.BillWasChanged(ConfigManager.Instance.CommonConfiguration.Path_Bills, this.PD_Order);
+                            switch (changeState)
+                            {
+                                case 1:
+                                    {
+                                        MMessageBoxEx.Show(this.chequeDGV, "Були внесені змінити в поточний рахунок\r\nПерезавантажте рахунок за допомогою меню або натисніть ALT+R", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        break;
+                                    }
+                                case 2:
+                                    {
+                                        MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок вже закритий\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        _fl_menuIsActive = false;
+                                        this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
+                                        break;
+                                    }
+                                case -1:
+                                    {
+                                        MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок видалений з бази\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        _fl_menuIsActive = false;
+                                        this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
+                                        break;
+                                    }
+                            }
+                            if (changeState != 0)
+                                break;
+
                             bool editWasClosed = false;
 
                             //winapi.WinAPI.OutputDebugString("Enter");
@@ -1151,10 +1177,10 @@ namespace PayDesk.Components.UI
                             if (inventChq || Cheque.Rows.Count == 0)
                                 break;//r
 
-                            if (!getAdminAccess(23))
+                            if (!getAdminAccess(23, false))
                             {
                                 //if (admin.ShowDialog() != DialogResult.OK)
-                                // MMessageBoxEx.Show(this.chequeDGV, "Закриття чеку заблоковано", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MMessageBoxEx.Show(this.chequeDGV, "Закриття чеку заблоковано", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 break;//r
                             }
 
@@ -1168,13 +1194,13 @@ namespace PayDesk.Components.UI
                             {
                                 // if we don't use legal printer and
                                 // if we allow to close normal cheque or admin mode is active
-                                if (getAdminAccess(6))
+                                if (getAdminAccess(6, false))
                                 {
                                     // we close normal cheque
                                     CloseCheque(false);
                                 }
                                 else
-                                    MMessageBoxEx.Show(this.chequeDGV, "Закриття чеку заблоковано", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    MMessageBoxEx.Show(this.chequeDGV, "Не встановлено фіскальний принтер.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
 
                             break;
@@ -1211,8 +1237,17 @@ namespace PayDesk.Components.UI
                             if (Cheque.Rows.Count == 0)// || !Program.Service.UseEKKR)
                                 break;//r
 
-                            if (!getAdminAccess(6, 23))
+                            if (!getAdminAccess(6, false))
+                            {
+                                MMessageBoxEx.Show(this.chequeDGV, "Закриття нефіксованого чеку заблоковано", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 break;
+                            }
+
+                            if (!getAdminAccess(23, false))
+                            {
+                                MMessageBoxEx.Show(this.chequeDGV, "Функція закриття чеку заблоковано", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                break;
+                            }
 
                             //if (!(ADMIN_STATE || (UserConfig.Properties[23] && UserConfig.Properties[6]) ))
                             //{
@@ -5067,7 +5102,7 @@ namespace PayDesk.Components.UI
         private bool getAdminAccess(int userAccessFnIndex, bool requestAdminWindow)
         {
             // admin has access to all settings
-            if (ADMIN_STATE)
+            if (requestAdminWindow && ADMIN_STATE)
                 return true;
 
             // check whether user has access
