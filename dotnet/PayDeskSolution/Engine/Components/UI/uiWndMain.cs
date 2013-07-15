@@ -3261,10 +3261,10 @@ namespace PayDesk.Components.UI
                         artSum = (discCommonPercent * (double)_cheque.Rows[i]["SUM"]) / 100;
                         artSum = (double)_cheque.Rows[i]["SUM"] - artSum;
                         artSum = MathLib.GetRoundedMoney(artSum);
-                        taxValue = (artSum * taxValue) / 100;
+                        taxValue = (artSum * taxValue) / (taxValue + 100);
                     }
                     else
-                        taxValue = (((double)_cheque.Rows[i]["ASUM"]) * taxValue) / 100;
+                        taxValue = (((double)_cheque.Rows[i]["ASUM"]) * taxValue) / (taxValue + 100);
                 }
                 catch
                 {
@@ -3599,10 +3599,10 @@ namespace PayDesk.Components.UI
                         artSum = (discCommonPercent * (double)Cheque.Rows[i]["SUM"]) / 100;
                         artSum = (double)Cheque.Rows[i]["SUM"] - artSum;
                         artSum = MathLib.GetRoundedMoney(artSum);
-                        taxValue = (artSum * taxValue) / 100;
+                        taxValue = (artSum * taxValue) / (taxValue + 100);
                     }
                     else
-                        taxValue = (((double)Cheque.Rows[i]["ASUM"]) * taxValue) / 100;
+                        taxValue = (((double)Cheque.Rows[i]["ASUM"]) * taxValue) / (taxValue + 100);
                 }
                 catch
                 {
@@ -3918,7 +3918,7 @@ namespace PayDesk.Components.UI
                     localData[4] = nakladna;
                     localData[5] = retriveChq;
                     localData[6] = _fl_useTotDisc;
-
+                    
                     //winapi.Funcs.OutputDebugString("B");
                     if (appIsLegal)
                     {
