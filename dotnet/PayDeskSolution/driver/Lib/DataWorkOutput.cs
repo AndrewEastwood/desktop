@@ -278,7 +278,7 @@ namespace driver.Lib
                     if (billInfo.ContainsKey("DATETIME"))
                         simpleData[21] = billInfo["DATETIME"];
                     if (billInfo.ContainsKey(driver.Common.CoreConst.DATETIME_LOCK))
-                        simpleData[22] = billInfo[driver.Common.CoreConst.DATETIME_LOCK];
+                        simpleData[23] = billInfo[driver.Common.CoreConst.DATETIME_LOCK];
                 }
                 catch (Exception e) { CoreLib.WriteLog(e, "driver.Lib.DataWorkOutput.FeetchTemplate(string tplFile, Dictionary<string, object> data) Attempt to initialize: Bill Information"); }
             
@@ -444,7 +444,7 @@ namespace driver.Lib
             //35 - true or false to detect bill type
             sValues[35] = (data[19] != null || data[20] != null) ? 1 : 0;//35
             //36 - bill date time lock
-            sValues[36] = data[22];//36
+            sValues[36] = data[23];//36
             //37 - -
             sValues[37] = null;//37
             //38 - -
