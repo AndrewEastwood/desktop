@@ -3854,6 +3854,8 @@ namespace PayDesk.Components.UI
                     if (_cheque.Rows.Count == 0)
                     {
                         skippedProfiles++;
+                        chqNumbers.Add(" ");
+                        chqNumbersFull.Add(" ");
                         continue;
                     }
 
