@@ -3109,6 +3109,8 @@ namespace PayDesk.Components.UI
             //DataRow[] artRecord = null;
             double newPrice = 0.0;
             double newTmpPrice = 0.0; //bool isSet = false;
+            Hashtable profileDefinedTaxGrid = new Hashtable();
+            Hashtable profileCompatibleTaxGrid = new Hashtable();
             
             /*  */
             bool useConstDisc = _discArrPercent[0] == 0.0 && _discArrPercent[1] == 0.0 &&
@@ -3146,19 +3148,74 @@ namespace PayDesk.Components.UI
             // and set price acording to client's discount card
             for (i = 0; i < _cheque.Rows.Count; i++)
             {
-                newPrice = MathLib.GetDouble(_cheque.Rows[i]["ORIGPRICE"]);
+                //newPrice = MathLib.GetDouble(_cheque.Rows[i]["ORIGPRICE"]);
 
+                ////isSet = false;
+                //if (this.clientPriceNo != 0)
+                //{
+                //    newTmpPrice = MathLib.GetDouble(_cheque.Rows[i]["PR" + this.clientPriceNo].ToString());
+                //    if (newTmpPrice != 0.0) newPrice = newTmpPrice;
+                //}
+                //else if (UserConfig.Properties[8])
+                //{
+                //    //DataRow dRow = Cheque.Rows.Find(chequeDGV.CurrentRow.Cells["C"].Value);
+                //    //price = AppFunc.AutomaticPrice(thisTot, dRow);
+                //    newPrice = CoreLib.AutomaticPrice(MathLib.GetDouble(_cheque.Rows[i]["TOT"].ToString()), _cheque.Rows[i]);
+                //}
                 //isSet = false;
                 if (this.clientPriceNo != 0)
                 {
-                    newTmpPrice = MathLib.GetDouble(_cheque.Rows[i]["PR" + this.clientPriceNo].ToString());
+                    newTmpPrice = MathLib.GetDouble(Cheque.Rows[i]["PR" + this.clientPriceNo].ToString());
                     if (newTmpPrice != 0.0) newPrice = newTmpPrice;
                 }
                 else if (UserConfig.Properties[8])
                 {
                     //DataRow dRow = Cheque.Rows.Find(chequeDGV.CurrentRow.Cells["C"].Value);
                     //price = AppFunc.AutomaticPrice(thisTot, dRow);
-                    newPrice = CoreLib.AutomaticPrice(MathLib.GetDouble(_cheque.Rows[i]["TOT"].ToString()), _cheque.Rows[i]);
+                    double _newPrice = CoreLib.AutomaticPrice(MathLib.GetDouble(Cheque.Rows[i]["TOT"].ToString()), Cheque.Rows[i]);
+                    try
+                    {
+                        profileDefinedTaxGrid = (Hashtable)driver.Config.ConfigManager.Instance.CommonConfiguration.TAX_DefinedRates[Cheque.Rows[i]["F"]];
+                    }
+                    catch { }
+                    // new tax mode
+                    bool _thisRowCanUseDiscount = true;
+                    try
+                    {
+                        // get application tax char with compatible tax grid
+                        string[] definedTaxData = profileDefinedTaxGrid[Cheque.Rows[i]["VG"].ToString()].ToString().Split(';');
+                        _thisRowCanUseDiscount = Boolean.Parse(definedTaxData[1]);
+                    }
+                    catch { }
+
+                    if (_thisRowCanUseDiscount)
+                    {
+
+                        double _discountPrices = 0.0;
+                        //for (int ii = 0; ii < Cheque.Rows.Count; ii++)
+                        //{
+                        if (_newPrice != (double)Cheque.Rows[i]["ORIGPRICE"])
+                        {
+                            _discountPrices = 100 - _newPrice * 100 / (double)Cheque.Rows[i]["ORIGPRICE"];
+                            if (_discountPrices > discCommonPercent)
+                            {
+                                Cheque.Rows[i]["USEDDISC"] = Boolean.FalseString;
+                                newPrice = _newPrice;
+                            }
+                            else
+                            {
+                                Cheque.Rows[i]["USEDDISC"] = Boolean.TrueString;
+                                newPrice = MathLib.GetDouble(Cheque.Rows[i]["ORIGPRICE"]);
+                            }
+                        }
+                        else newPrice = _newPrice;
+                        //}
+                    }
+                    else newPrice = _newPrice;
+                }
+                else if (UserConfig.Properties[1] || UserConfig.Properties[2])
+                {
+                    newPrice = MathLib.GetDouble(Cheque.Rows[i]["PRICE"]);
                 }
                 _cheque.Rows[i]["PRICE"] = newPrice;
                 _cheque.Rows[i]["ASUM"] = _cheque.Rows[i]["SUM"] = MathLib.GetRoundedMoney(MathLib.GetDouble(_cheque.Rows[i]["TOT"].ToString()) * newPrice);
@@ -4047,7 +4104,6 @@ namespace PayDesk.Components.UI
                     DataTable billData = dtCopy.Copy();
                     DataWorkShared.SetOrderProperty(billData, CoreConst.PAYMENT, _orgPaymanet);
                     DataWorkBill.LockBill(billData, string.Join(" | ", chqNumbersFull.ToArray()));
-
                 }
                 else
                     DataWorkBill.BillDelete(dtCopy);

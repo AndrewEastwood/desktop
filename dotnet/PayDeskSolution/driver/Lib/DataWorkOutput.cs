@@ -362,7 +362,8 @@ namespace driver.Lib
             //19 - billNumber (string)
             //20 - billComment (string)
             //21 - billDateTimeOpen (DateTime)
-            //22 - billDateTimeLock (DateTime)
+            //22 - discount is applied
+            //23 - billDateTimeLock (DateTime)
 
             string SiMask = "{0:0." + dCor + ";0." + dCor + ";0." + dCor + "}";
             string DiMask = "{0:0." + dCor + ";0." + dCor + ";!ZeRo!}";
