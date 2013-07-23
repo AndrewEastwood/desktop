@@ -2988,6 +2988,7 @@ namespace IKC_OP2
         protected virtual uint FP_LastChqNo(object[] param)
         {
             uint cfnom = 0;
+            byte[] mem = null;
             try
             {
                 bool isRetrive = (bool)param[0];
@@ -2995,16 +2996,24 @@ namespace IKC_OP2
                 {
                     string memoryAddr = "30AB";
                     if (Params.Compatibility.ContainsKey("OP6")) memoryAddr = "3077";
-                    byte[] mem = GetMemory(memoryAddr, (byte)16, (byte)2);
+                    mem = GetMemory(memoryAddr, (byte)16, (byte)2);
                     Params.DriverData["LastFOrderNo"] = cfnom = uint.Parse(mem[1].ToString("X") + mem[0].ToString("X"));
                 }
                 else
                 {
-                    byte[] mem = GetMemory("301B", (byte)16, (byte)2);
+                    mem = GetMemory("301B", (byte)16, (byte)2);
                     Params.DriverData["LastROrderNo"] = cfnom = uint.Parse(mem[1].ToString("X") + mem[0].ToString("X"));
+                }
+
+                using (System.IO.StreamWriter sWr = System.IO.File.AppendText(string.Format("reports\\report_sale_{0}.txt", DateTime.Now.ToShortDateString())))
+                {
+                    sWr.WriteLine(":] closed cheque: " + mem[0] + "|" + mem[1]);
+                    sWr.WriteLine("----->>>");
+                    sWr.Close();
                 }
             }
             catch { }
+
 
             return cfnom;
             //return (uint)Params.DriverData["LastFOrderNo"]; and LastROrderNo
