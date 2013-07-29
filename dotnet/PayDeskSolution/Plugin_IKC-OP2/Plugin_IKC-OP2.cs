@@ -2997,12 +2997,12 @@ namespace IKC_OP2
                     string memoryAddr = "30AB";
                     if (Params.Compatibility.ContainsKey("OP6")) memoryAddr = "3077";
                     mem = GetMemory(memoryAddr, (byte)16, (byte)2);
-                    Params.DriverData["LastFOrderNo"] = cfnom = uint.Parse(mem[1].ToString("X") + mem[0].ToString("X"));
+                    Params.DriverData["LastFOrderNo"] = cfnom = uint.Parse(mem[1].ToString("X") + mem[0].ToString("X2"));
                 }
                 else
                 {
                     mem = GetMemory("301B", (byte)16, (byte)2);
-                    Params.DriverData["LastROrderNo"] = cfnom = uint.Parse(mem[1].ToString("X") + mem[0].ToString("X"));
+                    Params.DriverData["LastROrderNo"] = cfnom = uint.Parse(mem[1].ToString("X") + mem[0].ToString("X2"));
                 }
 
                 using (System.IO.StreamWriter sWr = System.IO.File.AppendText(string.Format("reports\\report_sale_{0}.txt", DateTime.Now.ToShortDateString())))
