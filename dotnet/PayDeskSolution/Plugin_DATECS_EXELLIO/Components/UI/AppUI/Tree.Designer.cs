@@ -172,7 +172,10 @@ namespace DATECS_EXELLIO.UI.AppUI
             treeNode73,
             treeNode74,
             treeNode75});
-            System.Windows.Forms.TreeNode treeNode77 = new System.Windows.Forms.TreeNode("DATECS_EXELLIO       ", 2, 2, new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode77 = new System.Windows.Forms.TreeNode("Отримати суму в грошовій скринці");
+            System.Windows.Forms.TreeNode treeNode78 = new System.Windows.Forms.TreeNode("Модифіковані", new System.Windows.Forms.TreeNode[] {
+            treeNode77});
+            System.Windows.Forms.TreeNode treeNode79 = new System.Windows.Forms.TreeNode("DATECS_EXELLIO       ", 2, 2, new System.Windows.Forms.TreeNode[] {
             treeNode16,
             treeNode32,
             treeNode36,
@@ -180,7 +183,8 @@ namespace DATECS_EXELLIO.UI.AppUI
             treeNode61,
             treeNode64,
             treeNode70,
-            treeNode76});
+            treeNode76,
+            treeNode78});
             this.functionsTree = new System.Windows.Forms.TreeView();
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -368,14 +372,18 @@ namespace DATECS_EXELLIO.UI.AppUI
             treeNode76.Name = "Node4";
             treeNode76.NodeFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             treeNode76.Text = "Інше";
-            treeNode77.ImageIndex = 2;
-            treeNode77.Name = "Node0";
-            treeNode77.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode77.SelectedImageIndex = 2;
-            treeNode77.Tag = "fp";
-            treeNode77.Text = "DATECS_EXELLIO       ";
+            treeNode77.Name = "CustomGetBoxMoney";
+            treeNode77.Text = "Отримати суму в грошовій скринці";
+            treeNode78.Name = "Node0";
+            treeNode78.Text = "Модифіковані";
+            treeNode79.ImageIndex = 2;
+            treeNode79.Name = "Node0";
+            treeNode79.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            treeNode79.SelectedImageIndex = 2;
+            treeNode79.Tag = "fp";
+            treeNode79.Text = "DATECS_EXELLIO       ";
             this.functionsTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode77});
+            treeNode79});
             this.functionsTree.ShowNodeToolTips = true;
             this.functionsTree.Size = new System.Drawing.Size(414, 354);
             this.functionsTree.TabIndex = 0;

@@ -300,19 +300,35 @@ namespace components.Components.SerialPort
 
             bool fOK = false;
             count = 0;
-           
-            try
+            int attempts = 5;
+            int i = 0;
+
+            do
             {
-                count = (uint)_port.BytesToRead;
+                count += (uint)_port.BytesToRead;
                 if (count > 0)
                 {
-                    for (int i = 0; i < count; i++)
+                    for (; i < count; i++)
                         buffer[i] = (byte)_port.ReadByte();
                     fOK = true;
+                    //break;
                 }
+                else
+                    System.Threading.Thread.Sleep(100);
+            } while (--attempts > 0);
 
-            }
-            catch { }
+            //try
+            //{
+            //    count = (uint)_port.BytesToRead;
+            //    if (count > 0)
+            //    {
+            //        for (int i = 0; i < count; i++)
+            //            buffer[i] = (byte)_port.ReadByte();
+            //        fOK = true;
+            //    }
+
+            //}
+            //catch { }
 
             return fOK;
         }

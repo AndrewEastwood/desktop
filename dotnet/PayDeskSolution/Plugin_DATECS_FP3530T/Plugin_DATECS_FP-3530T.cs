@@ -1074,11 +1074,11 @@ namespace DATECS_FP3530T
                         {
                             object[] xzInfo = ReportXZ(rxz.Password, rxz.ReportType, new bool[] { rxz.ClearUserSumm, rxz.ClearArtsSumm });
                             value = xzInfo.Clone();
+                            SetGetArticle('D', "A,0000");
+                            Params.DriverData["LastArtNo"] = (uint)1;
+                            this.param.Save();
                         }
                         rxz.Dispose();
-                        SetGetArticle('D', "A,0000");
-                        Params.DriverData["LastArtNo"] = (uint)1;
-                        this.param.Save();
                         break;
                     }
                 #endregion

@@ -1015,6 +1015,28 @@ namespace DATECS_EXELLIO
                         break;
                     }
                 #endregion
+
+                /*
+                 * Custom Methods
+                 * 
+                 */
+                #region Custom Methods
+
+                case "CustomGetBoxMoney":
+                    {
+                        double[] money = SetGetMoney(0.0);
+                        string _infotext = string.Format("{0}\r\n\r\n{1}: {2:0.00}\r\n{3}: {4:0.00}\r\n{5}: {6:0.00}",
+                            "Фінансова звітнсть",
+                            "Загальна сума внеску за день", money[2],
+                            "Загальна сума вилучення за день", money[3],
+                            "Сума в касі", money[1]);
+                        System.Windows.Forms.MessageBox.Show(_infotext, Name,
+                            System.Windows.Forms.MessageBoxButtons.OK,
+                            System.Windows.Forms.MessageBoxIcon.Information);
+                        break;
+                    }
+                #endregion
+
                 /*
                  * There are special methods for accessing from main app and
                  * custom methods without custom their implementation. (using built-in parameters)
@@ -1085,11 +1107,11 @@ namespace DATECS_EXELLIO
                         {
                             object[] xzInfo = ReportXZ(rxz.Password, rxz.ReportType, new bool[] { rxz.ClearUserSumm, rxz.ClearArtsSumm });
                             value = xzInfo.Clone();
+                            SetGetArticle('D', "A,0000");
+                            Params.DriverData["LastArtNo"] = (uint)1;
+                            this.param.Save();
                         }
                         rxz.Dispose();
-                        SetGetArticle('D', "A,0000");
-                        Params.DriverData["LastArtNo"] = (uint)1;
-                        this.param.Save();
                         break;
                     }
                 #endregion
@@ -1467,7 +1489,8 @@ namespace DATECS_EXELLIO
             if (_trez.Length != 0)
             {
                 _tinfo[0] = _trez[0];
-                _tinfo[1] = double.Parse(_trez.Substring(1), Params.NumberFormat) / 100;
+                if (_trez.Length > 2)
+                    _tinfo[1] = double.Parse(_trez.Substring(1), Params.NumberFormat) / 100;
             }
 
             return _tinfo;
@@ -2282,10 +2305,10 @@ namespace DATECS_EXELLIO
             if (_paymentInfo.Length != 0)
             {
                 string[] _paymentItems = _paymentInfo.Split(new char[1] { ',' });
-                _payment[0] = double.Parse(_paymentItems[0], Params.NumberFormat);
-                _payment[1] = double.Parse(_paymentItems[1], Params.NumberFormat);
-                _payment[2] = double.Parse(_paymentItems[2], Params.NumberFormat);
-                _payment[3] = double.Parse(_paymentItems[3], Params.NumberFormat);
+                _payment[0] = double.Parse(_paymentItems[0], Params.NumberFormat) / 100;
+                _payment[1] = double.Parse(_paymentItems[1], Params.NumberFormat) / 100;
+                _payment[2] = double.Parse(_paymentItems[2], Params.NumberFormat) / 100;
+                _payment[3] = double.Parse(_paymentItems[3], Params.NumberFormat) / 100;
                 _payment[4] = uint.Parse(_paymentItems[_paymentItems.Length - 3]);
                 _payment[5] = uint.Parse(_paymentItems[_paymentItems.Length - 2]);
                 _payment[6] = uint.Parse(_paymentItems[_paymentItems.Length - 1]);
@@ -2601,6 +2624,9 @@ namespace DATECS_EXELLIO
         #endregion
         #endregion
 
+        #region Custom Methods
+        #endregion
+
         // Driver's Application Interface (Access Methods)
         // Need for access to FP from main program
         private void FP_Sale(object[] param)
@@ -2722,20 +2748,36 @@ namespace DATECS_EXELLIO
                 Params.ErrorFlags["FP_PayMoney"] = false;
                 this.param.Save();
             }
-
+            bool storeErrorState = false;
             Exception ex = null;
             // Try to perform commands
             try
             {
-                // Local varibles
                 System.Data.DataTable dTable = (System.Data.DataTable)param[0];
+                double suma = 0;
+                for (int i = 0; i < dTable.Rows.Count; i++)
+                {
+                    suma += double.Parse(dTable.Rows[i]["ASUM"].ToString());
+                }
+
+                double[] cashBoxInfo = SetGetMoney(0.0);
+
+                if (cashBoxInfo == null)
+                    throw new Exception("Неможливо отримати суму в грошовій скринці");
+                else
+                {
+                    if (cashBoxInfo.Length >= 3 && cashBoxInfo[1] < suma)
+                        throw new Exception("Недостатньо коштів для закриття видаткового чеку");
+                }
+                storeErrorState = true;
+                // Local varibles
                 byte ppt = Convert.ToByte(param[1]);
                 bool useTotDisc = (bool)param[2];
                 byte ppm = Convert.ToByte(param[3]);
                 object[] article = new object[4];
                 uint nexArticleNo = (uint)Params.DriverData["LastArtNo"];
                 string[] _propArtStatus = new string[0];
-                
+
                 // Get last article id
                 string[] _ainfo = SetGetArticle('L');
                 if (!func.IsEmpty(_ainfo) && _ainfo[0] != "F")
@@ -2779,7 +2821,7 @@ namespace DATECS_EXELLIO
                         article[2] = article[2].ToString().Substring(0, 24);
 
                     _propArtStatus = SetGetArticle('P', article[0], nexArticleNo, ',', 1, ',', article[1], ',', "0000", ',', article[2]);
-                    
+
                     if (_propArtStatus[0] == "F")
                         throw new Exception("Помилка програмування товару");
 
@@ -2800,7 +2842,8 @@ namespace DATECS_EXELLIO
             }
             catch (Exception _ex)
             {
-                Params.ErrorFlags["FP_PayMoney"] = true;
+                if (storeErrorState)
+                    Params.ErrorFlags["FP_PayMoney"] = true;
                 ex = _ex;
             }
 
@@ -2829,7 +2872,10 @@ namespace DATECS_EXELLIO
             Exception ex = null;
             try
             {
-
+                // check if we have money to return
+                //if ((bool)param[3])
+                //{
+                //}
 
                 // Indicate payment type
                 char pmode = 'P';
@@ -2869,9 +2915,40 @@ namespace DATECS_EXELLIO
                 if (!_canClose)
                 {
                     object[] _pdata = Total("", pmode, (double)param[1]);
-                    if (!func.IsEmpty(_pdata) && (_pdata[0].ToString() == "R" ||
-                        (_pdata[0].ToString() == "D" && (double)_pdata[1] == 0.0)))
-                        _canClose = true;
+                        if (!func.IsEmpty(_pdata))
+                        {
+                            switch (_pdata[0].ToString())
+                            {
+                                case "F":
+                                    {
+                                        throw new Exception("Помилка під час закриття чеку [F]");
+                                    }
+                                case "E":
+                                    {
+                                        throw new Exception("Обрахована сума меньше 0.00. Закриття чеку не можливе. [E]");
+                                    }
+                                case "R":
+                                    {
+                                        _canClose = true;
+                                        break;
+                                    }
+                                case "D":
+                                    {
+                                        if (_pdata[1] != null && (double)_pdata[1] == 0.0)
+                                            _canClose = true;
+                                        else
+                                            throw new Exception("Сума чеку більша за внесені кошти. [D]");
+                                        break;
+                                    }
+                                default:
+                                    throw new Exception("Невизначена помилка під час закриття чеку.");
+                            }
+                        }
+                        else
+                            throw new Exception("Принтер не відповідає.");
+                        //if (_pdata[0].ToString() == "R" ||
+                        //    (_pdata[0].ToString() == "D" && (double)_pdata[1] == 0.0))
+                        //        _canClose = true;
                 }
                 
                 if (_canClose)
@@ -2967,8 +3044,8 @@ namespace DATECS_EXELLIO
             // Try to perform commands
             try
             {
-                byte _pdId = (byte)param[0];
-                byte _userNo = (byte)param[1];
+                byte _pdId = byte.Parse(param[0].ToString());
+                byte _userNo = byte.Parse(param[1].ToString());
                 string _userPwd = param[2].ToString();
                 string _userId = param[3].ToString();
 
@@ -2978,7 +3055,7 @@ namespace DATECS_EXELLIO
                 Params.DriverData["DeskNo"] = _pdId;
                 Params.DriverData["UserNo"] = _userNo;
                 Params.DriverData["UserPwd"] = _userPwd;
-
+                SetUserName(_userPwd, _pdId, _userId);
                 rez = true;
             }
             catch { rez = false; }
