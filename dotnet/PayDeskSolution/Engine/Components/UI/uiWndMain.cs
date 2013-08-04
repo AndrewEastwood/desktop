@@ -4002,6 +4002,24 @@ namespace PayDesk.Components.UI
                                 );
                             }
 
+                        }
+                        catch (Exception ex)
+                        {
+                            try
+                            {
+                                Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_ResetOrder");
+                            }
+                            catch { }
+
+                            CoreLib.WriteLog(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name);
+                            MMessageBoxEx.Show(this.chequeDGV, "Помилка під час продажу товарів" + "\r\n" + ex.Message,
+                                Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        // try to close cheque
+                        try
+                        {
                             if (lastPayment >= pMethod.Type.Count)
                                 lastPayment = 0;
 
@@ -4010,17 +4028,30 @@ namespace PayDesk.Components.UI
                                 Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_Payment", pMethod.Type[i], ((List<double>)_tmpPaymanet["CASHLIST"])[i], true, retriveChq);
                                 lastPayment++;
                             }
+                        }
+                        catch (Exception ex)
+                        {
+                            try
+                            {
+                                Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_ResetOrder");
+                            }
+                            catch { }
 
+                            CoreLib.WriteLog(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name);
+                            MMessageBoxEx.Show(this.chequeDGV, "Помилка під час закриття чеку" + "\r\n" + ex.Message,
+                                Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+
+                        // try to get last colsed order number
+                        try
+                        {
                             chqNom = Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_LastChqNo", retriveChq).ToString();
-                            localData[7] = Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_LastZRepNo", retriveChq);
                         }
                         catch (Exception ex)
                         {
                             CoreLib.WriteLog(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name);
-
-                            MMessageBoxEx.Show(this.chequeDGV, "Помилка під час закриття чеку" + "\r\n" + ex.Message,
-                                Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-
                             uiWndChqNomRequest chqR = new uiWndChqNomRequest();
 
                             bool customOrderNo = false;
@@ -4036,6 +4067,18 @@ namespace PayDesk.Components.UI
                                 return;
                         }
 
+                        // try to get Z-report number
+                        try
+                        {
+                            localData[7] = Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_LastZRepNo", retriveChq);
+                        }
+                        catch (Exception ex)
+                        {
+                            MMessageBoxEx.Show(this.chequeDGV, "Не вдається отримати номер Z-звіту" + "\r\n" + ex.Message,
+                                Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            CoreLib.WriteLog(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name);
+                        }
+                       
                         try
                         {
                             Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_OpenBox");

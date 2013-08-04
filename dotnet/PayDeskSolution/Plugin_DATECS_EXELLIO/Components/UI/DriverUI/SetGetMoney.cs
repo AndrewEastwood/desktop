@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using components.Lib;
 
 namespace DATECS_EXELLIO.DriverUI
 {
@@ -44,7 +45,8 @@ namespace DATECS_EXELLIO.DriverUI
         {
             try
             {
-                _money = double.Parse(textBox1.Text);
+                CoreLib fn = new CoreLib();
+                _money = fn.GetDouble(textBox1.Text);
                 DialogResult = DialogResult.OK;
                 Close();
             }

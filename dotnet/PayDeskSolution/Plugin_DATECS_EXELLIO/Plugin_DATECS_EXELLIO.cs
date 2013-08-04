@@ -250,7 +250,7 @@ namespace DATECS_EXELLIO
                             object[] taxData = SetTaxRate(str.Password, str.DecimalPoint, str.UseRates, str.Rates);
                             string _infotext = string.Empty;
 
-                            if (func.IsEmpty(taxData))
+                            if (!func.IsEmpty(taxData))
                             {
                                 _infotext = string.Format("{0}\r\n\r\n{1} - {2}\r\n{3}: {4:0.00} [{5}]\r\n{6}: {7:0.00} [{8}]\r\n{9}: {10:0.00} [{11}]\r\n{12}: {13:0.00} [{14}]",
                                     "Податкові ставки",
@@ -263,7 +263,7 @@ namespace DATECS_EXELLIO
                                 value = taxData;
                             }
                             else
-                                _infotext = "Нема даних";
+                                _infotext = "Принтер не відповів";
 
                             System.Windows.Forms.MessageBox.Show(_infotext, Name,
                                 System.Windows.Forms.MessageBoxButtons.OK,
@@ -1021,7 +1021,6 @@ namespace DATECS_EXELLIO
                  * 
                  */
                 #region Custom Methods
-
                 case "CustomGetBoxMoney":
                     {
                         double[] money = SetGetMoney(0.0);
@@ -1033,6 +1032,32 @@ namespace DATECS_EXELLIO
                         System.Windows.Forms.MessageBox.Show(_infotext, Name,
                             System.Windows.Forms.MessageBoxButtons.OK,
                             System.Windows.Forms.MessageBoxIcon.Information);
+                        break;
+                    }
+                case "Custom_ReportX":
+                    {
+                        // ReportX rxz = new ReportX(Name, description);
+                        // if (rxz.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                        // {
+                            object[] xzInfo = ReportXZ("0000", 2, new bool[] { false, false });
+                            value = xzInfo.Clone();
+                        // }
+                        // rxz.Dispose();
+                        break;
+                    }
+                case "Custom_ReportZ":
+                    {
+                        // ReportZ rxz = new ReportZ(Name, description);
+                        // if (rxz.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                        // {
+                            object[] xzInfo = ReportXZ("0000", 0, new bool[] { false, false });
+                            value = xzInfo.Clone();
+                        // remove all products
+                            SetGetArticle('D', "A,0000");
+                            Params.DriverData["LastArtNo"] = (uint)1;
+                            this.param.Save();
+                        // }
+                        // rxz.Dispose();
                         break;
                     }
                 #endregion
@@ -1087,34 +1112,17 @@ namespace DATECS_EXELLIO
                         FP_SendCustomer(param);
                         break;
                     }
-                #endregion
-                #region Custom methods
-                case "Custom_ReportX":
+                case "FP_ResetOrder":
                     {
-                        ReportX rxz = new ReportX(Name, description);
-                        if (rxz.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                        {
-                            object[] xzInfo = ReportXZ(rxz.Password, rxz.ReportType, new bool[] { rxz.ClearUserSumm, rxz.ClearArtsSumm });
-                            value = xzInfo.Clone();
-                        }
-                        rxz.Dispose();
-                        break;
-                    }
-                case "Custom_ReportZ":
-                    {
-                        ReportZ rxz = new ReportZ(Name, description);
-                        if (rxz.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                        {
-                            object[] xzInfo = ReportXZ(rxz.Password, rxz.ReportType, new bool[] { rxz.ClearUserSumm, rxz.ClearArtsSumm });
-                            value = xzInfo.Clone();
-                            SetGetArticle('D', "A,0000");
-                            Params.DriverData["LastArtNo"] = (uint)1;
-                            this.param.Save();
-                        }
-                        rxz.Dispose();
+                        ResetOrder();
+                        Params.ErrorFlags["FP_Discount"] = false;
+                        Params.ErrorFlags["FP_Sale"] = false;
+                        Params.ErrorFlags["FP_PayMoney"] = false;
+                        Params.ErrorFlags["FP_Payment"] = false;
                         break;
                     }
                 #endregion
+
             }
             return value;
         }
@@ -1565,14 +1573,14 @@ namespace DATECS_EXELLIO
         {
             Params.DriverData["LastFunc"] = "SaleArt";
             CMD = 58;
-
+            
             //Creating data
             string sdata = artno.ToString();
             sdata += string.Format(Params.NumberFormat, "*{0:0.000}", tot);
             if (disc != 0.0)
             {
-                sdata += discmode ? ',' : ';';
-                sdata += ',' + string.Format("{0;+00.00;-00.00;0.0}", disc);
+                sdata += discmode ? ';' : ',';
+                sdata += string.Format(Config.Params.NumberFormat, "{0:-00.00;+00.00;0.0}", disc);
             }
 
             DataForSend = Encoding.GetEncoding(1251).GetBytes(sdata);

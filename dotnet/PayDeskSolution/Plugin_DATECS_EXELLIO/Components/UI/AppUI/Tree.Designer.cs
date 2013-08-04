@@ -91,44 +91,42 @@ namespace DATECS_EXELLIO.UI.AppUI
             treeNode30,
             treeNode31});
             System.Windows.Forms.TreeNode treeNode33 = new System.Windows.Forms.TreeNode("Друк X або Z звіту");
-            System.Windows.Forms.TreeNode treeNode34 = new System.Windows.Forms.TreeNode("Друк X звіту (касир)");
-            System.Windows.Forms.TreeNode treeNode35 = new System.Windows.Forms.TreeNode("Друк Z звіту (касир)");
-            System.Windows.Forms.TreeNode treeNode36 = new System.Windows.Forms.TreeNode("Денний звіт", new System.Windows.Forms.TreeNode[] {
-            treeNode33,
-            treeNode34,
-            treeNode35});
-            System.Windows.Forms.TreeNode treeNode37 = new System.Windows.Forms.TreeNode("Звіт податкових ставки за вказаний період");
-            System.Windows.Forms.TreeNode treeNode38 = new System.Windows.Forms.TreeNode("Повний періодичний звіт (по номеру)");
-            System.Windows.Forms.TreeNode treeNode39 = new System.Windows.Forms.TreeNode("Повний періодичний звіт (по даті)");
-            System.Windows.Forms.TreeNode treeNode40 = new System.Windows.Forms.TreeNode("Скорочений періодичний звіт (по даті)");
-            System.Windows.Forms.TreeNode treeNode41 = new System.Windows.Forms.TreeNode("Скорочений періодичний звіт (по даті)");
-            System.Windows.Forms.TreeNode treeNode42 = new System.Windows.Forms.TreeNode("Звіт операторів");
-            System.Windows.Forms.TreeNode treeNode43 = new System.Windows.Forms.TreeNode("Звіт товарів");
-            System.Windows.Forms.TreeNode treeNode44 = new System.Windows.Forms.TreeNode("Звіти", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode34 = new System.Windows.Forms.TreeNode("Денний звіт", new System.Windows.Forms.TreeNode[] {
+            treeNode33});
+            System.Windows.Forms.TreeNode treeNode35 = new System.Windows.Forms.TreeNode("Звіт податкових ставки за вказаний період");
+            System.Windows.Forms.TreeNode treeNode36 = new System.Windows.Forms.TreeNode("Повний періодичний звіт (по номеру)");
+            System.Windows.Forms.TreeNode treeNode37 = new System.Windows.Forms.TreeNode("Повний періодичний звіт (по даті)");
+            System.Windows.Forms.TreeNode treeNode38 = new System.Windows.Forms.TreeNode("Скорочений періодичний звіт (по даті)");
+            System.Windows.Forms.TreeNode treeNode39 = new System.Windows.Forms.TreeNode("Скорочений періодичний звіт (по даті)");
+            System.Windows.Forms.TreeNode treeNode40 = new System.Windows.Forms.TreeNode("Звіт операторів");
+            System.Windows.Forms.TreeNode treeNode41 = new System.Windows.Forms.TreeNode("Звіт товарів");
+            System.Windows.Forms.TreeNode treeNode42 = new System.Windows.Forms.TreeNode("Звіти", new System.Windows.Forms.TreeNode[] {
+            treeNode35,
+            treeNode36,
             treeNode37,
             treeNode38,
             treeNode39,
             treeNode40,
-            treeNode41,
-            treeNode42,
-            treeNode43});
-            System.Windows.Forms.TreeNode treeNode45 = new System.Windows.Forms.TreeNode("Отрмати дату і час");
-            System.Windows.Forms.TreeNode treeNode46 = new System.Windows.Forms.TreeNode("Інформація останнього Z-звіту");
-            System.Windows.Forms.TreeNode treeNode47 = new System.Windows.Forms.TreeNode("Сумми за день");
-            System.Windows.Forms.TreeNode treeNode48 = new System.Windows.Forms.TreeNode("Сумми поправок за день");
-            System.Windows.Forms.TreeNode treeNode49 = new System.Windows.Forms.TreeNode("Розмір вільної пам\'яті");
-            System.Windows.Forms.TreeNode treeNode50 = new System.Windows.Forms.TreeNode("Стан реєстратора");
-            System.Windows.Forms.TreeNode treeNode51 = new System.Windows.Forms.TreeNode("Стан фіскальної транзакції");
-            System.Windows.Forms.TreeNode treeNode52 = new System.Windows.Forms.TreeNode("Діагностична інформація");
-            System.Windows.Forms.TreeNode treeNode53 = new System.Windows.Forms.TreeNode("Податкові ставки");
-            System.Windows.Forms.TreeNode treeNode54 = new System.Windows.Forms.TreeNode("Податковий/ідентифікаційний номер");
-            System.Windows.Forms.TreeNode treeNode55 = new System.Windows.Forms.TreeNode("Інформація про чек");
-            System.Windows.Forms.TreeNode treeNode56 = new System.Windows.Forms.TreeNode("Додаткова інформація по типах оплати");
-            System.Windows.Forms.TreeNode treeNode57 = new System.Windows.Forms.TreeNode("Інформація про оператора");
-            System.Windows.Forms.TreeNode treeNode58 = new System.Windows.Forms.TreeNode("Номер останнього фіскального чеку");
-            System.Windows.Forms.TreeNode treeNode59 = new System.Windows.Forms.TreeNode("Отриманні інформації з фіскальної пам\'яті");
-            System.Windows.Forms.TreeNode treeNode60 = new System.Windows.Forms.TreeNode("Час до завершення зміни");
-            System.Windows.Forms.TreeNode treeNode61 = new System.Windows.Forms.TreeNode("Отримання інформації", new System.Windows.Forms.TreeNode[] {
+            treeNode41});
+            System.Windows.Forms.TreeNode treeNode43 = new System.Windows.Forms.TreeNode("Отрмати дату і час");
+            System.Windows.Forms.TreeNode treeNode44 = new System.Windows.Forms.TreeNode("Інформація останнього Z-звіту");
+            System.Windows.Forms.TreeNode treeNode45 = new System.Windows.Forms.TreeNode("Сумми за день");
+            System.Windows.Forms.TreeNode treeNode46 = new System.Windows.Forms.TreeNode("Сумми поправок за день");
+            System.Windows.Forms.TreeNode treeNode47 = new System.Windows.Forms.TreeNode("Розмір вільної пам\'яті");
+            System.Windows.Forms.TreeNode treeNode48 = new System.Windows.Forms.TreeNode("Стан реєстратора");
+            System.Windows.Forms.TreeNode treeNode49 = new System.Windows.Forms.TreeNode("Стан фіскальної транзакції");
+            System.Windows.Forms.TreeNode treeNode50 = new System.Windows.Forms.TreeNode("Діагностична інформація");
+            System.Windows.Forms.TreeNode treeNode51 = new System.Windows.Forms.TreeNode("Податкові ставки");
+            System.Windows.Forms.TreeNode treeNode52 = new System.Windows.Forms.TreeNode("Податковий/ідентифікаційний номер");
+            System.Windows.Forms.TreeNode treeNode53 = new System.Windows.Forms.TreeNode("Інформація про чек");
+            System.Windows.Forms.TreeNode treeNode54 = new System.Windows.Forms.TreeNode("Додаткова інформація по типах оплати");
+            System.Windows.Forms.TreeNode treeNode55 = new System.Windows.Forms.TreeNode("Інформація про оператора");
+            System.Windows.Forms.TreeNode treeNode56 = new System.Windows.Forms.TreeNode("Номер останнього фіскального чеку");
+            System.Windows.Forms.TreeNode treeNode57 = new System.Windows.Forms.TreeNode("Отриманні інформації з фіскальної пам\'яті");
+            System.Windows.Forms.TreeNode treeNode58 = new System.Windows.Forms.TreeNode("Час до завершення зміни");
+            System.Windows.Forms.TreeNode treeNode59 = new System.Windows.Forms.TreeNode("Отримання інформації", new System.Windows.Forms.TreeNode[] {
+            treeNode43,
+            treeNode44,
             treeNode45,
             treeNode46,
             treeNode47,
@@ -142,48 +140,50 @@ namespace DATECS_EXELLIO.UI.AppUI
             treeNode55,
             treeNode56,
             treeNode57,
-            treeNode58,
-            treeNode59,
-            treeNode60});
-            System.Windows.Forms.TreeNode treeNode62 = new System.Windows.Forms.TreeNode("Пропустити рядок");
-            System.Windows.Forms.TreeNode treeNode63 = new System.Windows.Forms.TreeNode("Обрізати чек");
-            System.Windows.Forms.TreeNode treeNode64 = new System.Windows.Forms.TreeNode("Команди принтера", new System.Windows.Forms.TreeNode[] {
-            treeNode62,
-            treeNode63});
-            System.Windows.Forms.TreeNode treeNode65 = new System.Windows.Forms.TreeNode("Очистка дисплею");
-            System.Windows.Forms.TreeNode treeNode66 = new System.Windows.Forms.TreeNode("Вивід тексту (нижній рядок)");
-            System.Windows.Forms.TreeNode treeNode67 = new System.Windows.Forms.TreeNode("Вивід тексту (верхній рядок)");
-            System.Windows.Forms.TreeNode treeNode68 = new System.Windows.Forms.TreeNode("Вивід дати і часу");
-            System.Windows.Forms.TreeNode treeNode69 = new System.Windows.Forms.TreeNode("Безпосередній вивід");
-            System.Windows.Forms.TreeNode treeNode70 = new System.Windows.Forms.TreeNode("Дисплей", new System.Windows.Forms.TreeNode[] {
+            treeNode58});
+            System.Windows.Forms.TreeNode treeNode60 = new System.Windows.Forms.TreeNode("Пропустити рядок");
+            System.Windows.Forms.TreeNode treeNode61 = new System.Windows.Forms.TreeNode("Обрізати чек");
+            System.Windows.Forms.TreeNode treeNode62 = new System.Windows.Forms.TreeNode("Команди принтера", new System.Windows.Forms.TreeNode[] {
+            treeNode60,
+            treeNode61});
+            System.Windows.Forms.TreeNode treeNode63 = new System.Windows.Forms.TreeNode("Очистка дисплею");
+            System.Windows.Forms.TreeNode treeNode64 = new System.Windows.Forms.TreeNode("Вивід тексту (нижній рядок)");
+            System.Windows.Forms.TreeNode treeNode65 = new System.Windows.Forms.TreeNode("Вивід тексту (верхній рядок)");
+            System.Windows.Forms.TreeNode treeNode66 = new System.Windows.Forms.TreeNode("Вивід дати і часу");
+            System.Windows.Forms.TreeNode treeNode67 = new System.Windows.Forms.TreeNode("Безпосередній вивід");
+            System.Windows.Forms.TreeNode treeNode68 = new System.Windows.Forms.TreeNode("Дисплей", new System.Windows.Forms.TreeNode[] {
+            treeNode63,
+            treeNode64,
             treeNode65,
             treeNode66,
-            treeNode67,
-            treeNode68,
-            treeNode69});
-            System.Windows.Forms.TreeNode treeNode71 = new System.Windows.Forms.TreeNode("Службове венсення/вилучення");
-            System.Windows.Forms.TreeNode treeNode72 = new System.Windows.Forms.TreeNode("Друк діагностичної інформації");
-            System.Windows.Forms.TreeNode treeNode73 = new System.Windows.Forms.TreeNode("Звуковий сигнал");
-            System.Windows.Forms.TreeNode treeNode74 = new System.Windows.Forms.TreeNode("Програмування текстової області");
-            System.Windows.Forms.TreeNode treeNode75 = new System.Windows.Forms.TreeNode("Відкрити грошовий ящик");
-            System.Windows.Forms.TreeNode treeNode76 = new System.Windows.Forms.TreeNode("Інше", new System.Windows.Forms.TreeNode[] {
+            treeNode67});
+            System.Windows.Forms.TreeNode treeNode69 = new System.Windows.Forms.TreeNode("Службове венсення/вилучення");
+            System.Windows.Forms.TreeNode treeNode70 = new System.Windows.Forms.TreeNode("Друк діагностичної інформації");
+            System.Windows.Forms.TreeNode treeNode71 = new System.Windows.Forms.TreeNode("Звуковий сигнал");
+            System.Windows.Forms.TreeNode treeNode72 = new System.Windows.Forms.TreeNode("Програмування текстової області");
+            System.Windows.Forms.TreeNode treeNode73 = new System.Windows.Forms.TreeNode("Відкрити грошовий ящик");
+            System.Windows.Forms.TreeNode treeNode74 = new System.Windows.Forms.TreeNode("Інше", new System.Windows.Forms.TreeNode[] {
+            treeNode69,
+            treeNode70,
             treeNode71,
             treeNode72,
-            treeNode73,
-            treeNode74,
-            treeNode75});
-            System.Windows.Forms.TreeNode treeNode77 = new System.Windows.Forms.TreeNode("Отримати суму в грошовій скринці");
+            treeNode73});
+            System.Windows.Forms.TreeNode treeNode75 = new System.Windows.Forms.TreeNode("Отримати суму в грошовій скринці");
+            System.Windows.Forms.TreeNode treeNode76 = new System.Windows.Forms.TreeNode("Друк Z звіту (касир)");
+            System.Windows.Forms.TreeNode treeNode77 = new System.Windows.Forms.TreeNode("Друк X звіту (касир)");
             System.Windows.Forms.TreeNode treeNode78 = new System.Windows.Forms.TreeNode("Модифіковані", new System.Windows.Forms.TreeNode[] {
+            treeNode75,
+            treeNode76,
             treeNode77});
             System.Windows.Forms.TreeNode treeNode79 = new System.Windows.Forms.TreeNode("DATECS_EXELLIO       ", 2, 2, new System.Windows.Forms.TreeNode[] {
             treeNode16,
             treeNode32,
-            treeNode36,
-            treeNode44,
-            treeNode61,
-            treeNode64,
-            treeNode70,
-            treeNode76,
+            treeNode34,
+            treeNode42,
+            treeNode59,
+            treeNode62,
+            treeNode68,
+            treeNode74,
             treeNode78});
             this.functionsTree = new System.Windows.Forms.TreeView();
             this.button1 = new System.Windows.Forms.Button();
@@ -278,102 +278,102 @@ namespace DATECS_EXELLIO.UI.AppUI
             treeNode33.Name = "ReportXZ";
             treeNode33.Tag = "31";
             treeNode33.Text = "Друк X або Z звіту";
-            treeNode34.Name = "Custom_ReportX";
-            treeNode34.Text = "Друк X звіту (касир)";
-            treeNode35.Name = "Custom_ReportZ";
-            treeNode35.Text = "Друк Z звіту (касир)";
-            treeNode36.Name = "Node2";
-            treeNode36.NodeFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode36.Text = "Денний звіт";
-            treeNode37.Name = "ReportByTax";
-            treeNode37.Text = "Звіт податкових ставки за вказаний період";
-            treeNode38.Name = "ReportByNoFull";
-            treeNode38.Text = "Повний періодичний звіт (по номеру)";
-            treeNode39.Name = "ReportByDateFull";
-            treeNode39.Text = "Повний періодичний звіт (по даті)";
-            treeNode40.Name = "ReportByDateShort";
-            treeNode40.Text = "Скорочений періодичний звіт (по даті)";
-            treeNode41.Name = "ReportByNoShort";
-            treeNode41.Text = "Скорочений періодичний звіт (по даті)";
-            treeNode42.Name = "ReportByUsers";
-            treeNode42.Text = "Звіт операторів";
-            treeNode43.Name = "ReportByArts";
-            treeNode43.Text = "Звіт товарів";
-            treeNode44.Name = "Node0";
-            treeNode44.NodeFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            treeNode44.Text = "Звіти";
-            treeNode45.Name = "GetDateTime";
-            treeNode45.Text = "Отрмати дату і час";
-            treeNode46.Name = "GetLastZReport";
-            treeNode46.Text = "Інформація останнього Z-звіту";
-            treeNode47.Name = "GetSummsByDay";
-            treeNode47.Text = "Сумми за день";
-            treeNode48.Name = "GetSumCorByDay";
-            treeNode48.Text = "Сумми поправок за день";
-            treeNode49.Name = "GetFreeMem";
-            treeNode49.Text = "Розмір вільної пам\'яті";
-            treeNode50.Name = "GetState";
-            treeNode50.Text = "Стан реєстратора";
-            treeNode51.Name = "GetFixTransState";
-            treeNode51.Text = "Стан фіскальної транзакції";
-            treeNode52.Name = "GetDiagInfo";
-            treeNode52.Text = "Діагностична інформація";
-            treeNode53.Name = "GetTaxRates";
-            treeNode53.Text = "Податкові ставки";
-            treeNode54.Name = "GetTaxID";
-            treeNode54.Text = "Податковий/ідентифікаційний номер";
-            treeNode55.Name = "GetChqInfo";
-            treeNode55.Text = "Інформація про чек";
-            treeNode56.Name = "GetPaymentInfo";
-            treeNode56.Text = "Додаткова інформація по типах оплати";
-            treeNode57.Name = "GetUserInfo";
-            treeNode57.Text = "Інформація про оператора";
-            treeNode58.Name = "GetLastFChqNo";
-            treeNode58.Text = "Номер останнього фіскального чеку";
-            treeNode59.Name = "GetFixMem";
-            treeNode59.Text = "Отриманні інформації з фіскальної пам\'яті";
-            treeNode60.Name = "GetRemTime";
-            treeNode60.Text = "Час до завершення зміни";
-            treeNode61.Name = "Node1";
-            treeNode61.NodeFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            treeNode61.Text = "Отримання інформації";
-            treeNode62.Name = "LineFeed";
-            treeNode62.Text = "Пропустити рядок";
-            treeNode63.Name = "CutChq";
-            treeNode63.Text = "Обрізати чек";
-            treeNode64.Name = "Node2";
-            treeNode64.NodeFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            treeNode64.Text = "Команди принтера";
-            treeNode65.Name = "ClrDispl";
-            treeNode65.Text = "Очистка дисплею";
-            treeNode66.Name = "DisplBotLine";
-            treeNode66.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            treeNode66.Text = "Вивід тексту (нижній рядок)";
-            treeNode67.Name = "DisplTopLine";
-            treeNode67.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            treeNode67.Text = "Вивід тексту (верхній рядок)";
-            treeNode68.Name = "DisplayDateTime";
-            treeNode68.Text = "Вивід дати і часу";
-            treeNode69.Name = "DisplText";
-            treeNode69.Text = "Безпосередній вивід";
-            treeNode70.Name = "Node3";
-            treeNode70.NodeFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            treeNode70.Text = "Дисплей";
-            treeNode71.Name = "SetGetMoney";
-            treeNode71.Text = "Службове венсення/вилучення";
-            treeNode72.Name = "PrintDiagInfo";
-            treeNode72.Text = "Друк діагностичної інформації";
-            treeNode73.Name = "Beep";
-            treeNode73.Text = "Звуковий сигнал";
-            treeNode74.Name = "Node66";
-            treeNode74.Text = "Програмування текстової області";
-            treeNode75.Name = "OpenBox";
-            treeNode75.Text = "Відкрити грошовий ящик";
-            treeNode76.Name = "Node4";
-            treeNode76.NodeFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            treeNode76.Text = "Інше";
-            treeNode77.Name = "CustomGetBoxMoney";
-            treeNode77.Text = "Отримати суму в грошовій скринці";
+            treeNode34.Name = "Node2";
+            treeNode34.NodeFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            treeNode34.Text = "Денний звіт";
+            treeNode35.Name = "ReportByTax";
+            treeNode35.Text = "Звіт податкових ставки за вказаний період";
+            treeNode36.Name = "ReportByNoFull";
+            treeNode36.Text = "Повний періодичний звіт (по номеру)";
+            treeNode37.Name = "ReportByDateFull";
+            treeNode37.Text = "Повний періодичний звіт (по даті)";
+            treeNode38.Name = "ReportByDateShort";
+            treeNode38.Text = "Скорочений періодичний звіт (по даті)";
+            treeNode39.Name = "ReportByNoShort";
+            treeNode39.Text = "Скорочений періодичний звіт (по даті)";
+            treeNode40.Name = "ReportByUsers";
+            treeNode40.Text = "Звіт операторів";
+            treeNode41.Name = "ReportByArts";
+            treeNode41.Text = "Звіт товарів";
+            treeNode42.Name = "Node0";
+            treeNode42.NodeFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            treeNode42.Text = "Звіти";
+            treeNode43.Name = "GetDateTime";
+            treeNode43.Text = "Отрмати дату і час";
+            treeNode44.Name = "GetLastZReport";
+            treeNode44.Text = "Інформація останнього Z-звіту";
+            treeNode45.Name = "GetSummsByDay";
+            treeNode45.Text = "Сумми за день";
+            treeNode46.Name = "GetSumCorByDay";
+            treeNode46.Text = "Сумми поправок за день";
+            treeNode47.Name = "GetFreeMem";
+            treeNode47.Text = "Розмір вільної пам\'яті";
+            treeNode48.Name = "GetState";
+            treeNode48.Text = "Стан реєстратора";
+            treeNode49.Name = "GetFixTransState";
+            treeNode49.Text = "Стан фіскальної транзакції";
+            treeNode50.Name = "GetDiagInfo";
+            treeNode50.Text = "Діагностична інформація";
+            treeNode51.Name = "GetTaxRates";
+            treeNode51.Text = "Податкові ставки";
+            treeNode52.Name = "GetTaxID";
+            treeNode52.Text = "Податковий/ідентифікаційний номер";
+            treeNode53.Name = "GetChqInfo";
+            treeNode53.Text = "Інформація про чек";
+            treeNode54.Name = "GetPaymentInfo";
+            treeNode54.Text = "Додаткова інформація по типах оплати";
+            treeNode55.Name = "GetUserInfo";
+            treeNode55.Text = "Інформація про оператора";
+            treeNode56.Name = "GetLastFChqNo";
+            treeNode56.Text = "Номер останнього фіскального чеку";
+            treeNode57.Name = "GetFixMem";
+            treeNode57.Text = "Отриманні інформації з фіскальної пам\'яті";
+            treeNode58.Name = "GetRemTime";
+            treeNode58.Text = "Час до завершення зміни";
+            treeNode59.Name = "Node1";
+            treeNode59.NodeFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            treeNode59.Text = "Отримання інформації";
+            treeNode60.Name = "LineFeed";
+            treeNode60.Text = "Пропустити рядок";
+            treeNode61.Name = "CutChq";
+            treeNode61.Text = "Обрізати чек";
+            treeNode62.Name = "Node2";
+            treeNode62.NodeFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            treeNode62.Text = "Команди принтера";
+            treeNode63.Name = "ClrDispl";
+            treeNode63.Text = "Очистка дисплею";
+            treeNode64.Name = "DisplBotLine";
+            treeNode64.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            treeNode64.Text = "Вивід тексту (нижній рядок)";
+            treeNode65.Name = "DisplTopLine";
+            treeNode65.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            treeNode65.Text = "Вивід тексту (верхній рядок)";
+            treeNode66.Name = "DisplayDateTime";
+            treeNode66.Text = "Вивід дати і часу";
+            treeNode67.Name = "DisplText";
+            treeNode67.Text = "Безпосередній вивід";
+            treeNode68.Name = "Node3";
+            treeNode68.NodeFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            treeNode68.Text = "Дисплей";
+            treeNode69.Name = "SetGetMoney";
+            treeNode69.Text = "Службове венсення/вилучення";
+            treeNode70.Name = "PrintDiagInfo";
+            treeNode70.Text = "Друк діагностичної інформації";
+            treeNode71.Name = "Beep";
+            treeNode71.Text = "Звуковий сигнал";
+            treeNode72.Name = "Node66";
+            treeNode72.Text = "Програмування текстової області";
+            treeNode73.Name = "OpenBox";
+            treeNode73.Text = "Відкрити грошовий ящик";
+            treeNode74.Name = "Node4";
+            treeNode74.NodeFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            treeNode74.Text = "Інше";
+            treeNode75.Name = "CustomGetBoxMoney";
+            treeNode75.Text = "Отримати суму в грошовій скринці";
+            treeNode76.Name = "Custom_ReportZ";
+            treeNode76.Text = "Друк Z звіту (касир)";
+            treeNode77.Name = "Custom_ReportX";
+            treeNode77.Text = "Друк X звіту (касир)";
             treeNode78.Name = "Node0";
             treeNode78.Text = "Модифіковані";
             treeNode79.ImageIndex = 2;
