@@ -1062,6 +1062,26 @@ namespace DATECS_EXELLIO
                         // rxz.Dispose();
                         break;
                     }
+                case "CustomGetMoney":
+                    {
+                        CustomGetMoney rxz = new CustomGetMoney(Name, description);
+                        if (rxz.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                        {
+                            SetGetMoney(rxz.Money);
+                        }
+                        rxz.Dispose();
+                        break;
+                    }
+                case "CustomSetMoney":
+                    {
+                        CustomSetMoney rxz = new CustomSetMoney(Name, description);
+                        if (rxz.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                        {
+                            SetGetMoney(rxz.Money);
+                        }
+                        rxz.Dispose();
+                        break;
+                    }
                 #endregion
 
                 /*

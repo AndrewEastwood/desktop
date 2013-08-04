@@ -45,7 +45,7 @@ namespace components.Components.szStorage
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append("a");
-                sb.AppendFormat(" {0}", pathZip);
+                sb.AppendFormat(" {0}", "\"" + pathZip + "\"");
                 sb.Append(" -t7z");
                 sb.Append(" -mhe=on");
                 sb.AppendFormat(" -p{0}", pwd);

@@ -45,8 +45,18 @@ namespace DATECS_EXELLIO.DriverUI
         {
             try
             {
+                string moneyText = textBox1.Text;
+                bool isNegative = moneyText[0] == '-';
                 CoreLib fn = new CoreLib();
-                _money = fn.GetDouble(textBox1.Text);
+
+                if (!Char.IsDigit(moneyText[0]))
+                    moneyText = moneyText.Substring(1);
+
+                _money = fn.GetDouble(moneyText);
+
+                if (isNegative)
+                    _money = -_money;
+
                 DialogResult = DialogResult.OK;
                 Close();
             }

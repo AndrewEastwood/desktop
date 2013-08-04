@@ -171,11 +171,15 @@ namespace DATECS_EXELLIO.UI.AppUI
             System.Windows.Forms.TreeNode treeNode75 = new System.Windows.Forms.TreeNode("Отримати суму в грошовій скринці");
             System.Windows.Forms.TreeNode treeNode76 = new System.Windows.Forms.TreeNode("Друк Z звіту (касир)");
             System.Windows.Forms.TreeNode treeNode77 = new System.Windows.Forms.TreeNode("Друк X звіту (касир)");
-            System.Windows.Forms.TreeNode treeNode78 = new System.Windows.Forms.TreeNode("Модифіковані", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode78 = new System.Windows.Forms.TreeNode("Внесення готівки");
+            System.Windows.Forms.TreeNode treeNode79 = new System.Windows.Forms.TreeNode("Вилучення готівки");
+            System.Windows.Forms.TreeNode treeNode80 = new System.Windows.Forms.TreeNode("Модифіковані", new System.Windows.Forms.TreeNode[] {
             treeNode75,
             treeNode76,
-            treeNode77});
-            System.Windows.Forms.TreeNode treeNode79 = new System.Windows.Forms.TreeNode("DATECS_EXELLIO       ", 2, 2, new System.Windows.Forms.TreeNode[] {
+            treeNode77,
+            treeNode78,
+            treeNode79});
+            System.Windows.Forms.TreeNode treeNode81 = new System.Windows.Forms.TreeNode("DATECS_EXELLIO       ", 2, 2, new System.Windows.Forms.TreeNode[] {
             treeNode16,
             treeNode32,
             treeNode34,
@@ -184,7 +188,7 @@ namespace DATECS_EXELLIO.UI.AppUI
             treeNode62,
             treeNode68,
             treeNode74,
-            treeNode78});
+            treeNode80});
             this.functionsTree = new System.Windows.Forms.TreeView();
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -374,16 +378,20 @@ namespace DATECS_EXELLIO.UI.AppUI
             treeNode76.Text = "Друк Z звіту (касир)";
             treeNode77.Name = "Custom_ReportX";
             treeNode77.Text = "Друк X звіту (касир)";
-            treeNode78.Name = "Node0";
-            treeNode78.Text = "Модифіковані";
-            treeNode79.ImageIndex = 2;
-            treeNode79.Name = "Node0";
-            treeNode79.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode79.SelectedImageIndex = 2;
-            treeNode79.Tag = "fp";
-            treeNode79.Text = "DATECS_EXELLIO       ";
+            treeNode78.Name = "CustomSetMoney";
+            treeNode78.Text = "Внесення готівки";
+            treeNode79.Name = "CustomGetMoney";
+            treeNode79.Text = "Вилучення готівки";
+            treeNode80.Name = "Node0";
+            treeNode80.Text = "Модифіковані";
+            treeNode81.ImageIndex = 2;
+            treeNode81.Name = "Node0";
+            treeNode81.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            treeNode81.SelectedImageIndex = 2;
+            treeNode81.Tag = "fp";
+            treeNode81.Text = "DATECS_EXELLIO       ";
             this.functionsTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode79});
+            treeNode81});
             this.functionsTree.ShowNodeToolTips = true;
             this.functionsTree.Size = new System.Drawing.Size(414, 354);
             this.functionsTree.TabIndex = 0;
