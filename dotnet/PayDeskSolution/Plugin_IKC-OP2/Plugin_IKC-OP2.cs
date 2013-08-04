@@ -966,6 +966,15 @@ namespace IKC_OP2
                         FP_SendCustomer(param);
                         break;
                     }
+                case "FP_ResetOrder":
+                    {
+                        ResetOrder();
+                        Params.ErrorFlags["FP_Discount"] = false;
+                        Params.ErrorFlags["FP_Sale"] = false;
+                        Params.ErrorFlags["FP_PayMoney"] = false;
+                        Params.ErrorFlags["FP_Payment"] = false;
+                        break;
+                    }
                 #endregion
                 #region Custom methods
                 
@@ -2771,6 +2780,9 @@ namespace IKC_OP2
                 Params.ErrorFlags["FP_Sale"] = false;
                 this._param.Save();
             }
+
+            // check if we have open order
+
 
             Exception ex = null;
 

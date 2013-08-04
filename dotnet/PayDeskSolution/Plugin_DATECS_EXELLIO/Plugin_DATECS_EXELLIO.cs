@@ -175,11 +175,13 @@ namespace DATECS_EXELLIO
             ((TreeView)driverui.Controls["functionsTree"]).NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(this.NodeMouseDoubleClick);
         }
 
+        // Perform activation current instance
         public bool Activate()
         {
             return port.Open();
         }
 
+        // Perform deactivation current instance
         public bool Deactivate()
         {
             return port.Close();
@@ -2747,13 +2749,12 @@ namespace DATECS_EXELLIO
                 return;
 
             // Check last executed function for error
-            if ((bool)Params.ErrorFlags["FP_Payment"])
-                return;
-
-            if ((bool)Params.ErrorFlags["FP_PayMoney"])
+            if ((bool)Params.ErrorFlags["FP_PayMoney"] ||
+                (bool)Params.ErrorFlags["FP_Payment"])
             {
                 ResetOrder();
                 Params.ErrorFlags["FP_PayMoney"] = false;
+                Params.ErrorFlags["FP_Payment"] = false;
                 this.param.Save();
             }
             bool storeErrorState = false;
@@ -2761,6 +2762,7 @@ namespace DATECS_EXELLIO
             // Try to perform commands
             try
             {
+                // Local varibles
                 System.Data.DataTable dTable = (System.Data.DataTable)param[0];
                 double suma = 0;
                 for (int i = 0; i < dTable.Rows.Count; i++)
@@ -2880,11 +2882,6 @@ namespace DATECS_EXELLIO
             Exception ex = null;
             try
             {
-                // check if we have money to return
-                //if ((bool)param[3])
-                //{
-                //}
-
                 // Indicate payment type
                 char pmode = 'P';
                 switch ((byte)param[0])

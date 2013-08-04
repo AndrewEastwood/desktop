@@ -240,7 +240,7 @@ namespace DATECS_FP3530T
                             object[] taxData = SetTaxRate(str.Password, str.DecimalPoint, str.UseRates, str.Rates);
                             string _infotext = string.Empty;
 
-                            if (func.IsEmpty(taxData))
+                            if (!func.IsEmpty(taxData))
                             {
                                 _infotext = string.Format("{0}\r\n\r\n{1} - {2}\r\n{3}: {4:0.00} [{5}]\r\n{6}: {7:0.00} [{8}]\r\n{9}: {10:0.00} [{11}]\r\n{12}: {13:0.00} [{14}]",
                                     "Податкові ставки",
@@ -253,7 +253,7 @@ namespace DATECS_FP3530T
                                 value = taxData;
                             }
                             else
-                                _infotext = "Нема даних";
+                                _infotext = "Принтер не відповів";
 
                             System.Windows.Forms.MessageBox.Show(_infotext, Name,
                                 System.Windows.Forms.MessageBoxButtons.OK,
@@ -423,6 +423,7 @@ namespace DATECS_FP3530T
                     }
                 case "LoadLogo":
                     {
+                        //LoadLogo("0000", new byte[96][]);
                         LoadLogo ll = new LoadLogo(Name, description);
                         if (ll.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                             LoadLogo(ll.Password, ll.Logo);
@@ -1004,6 +1005,53 @@ namespace DATECS_FP3530T
                         break;
                     }
                 #endregion
+
+                /*
+                 * Custom Methods
+                 * 
+                 */
+                #region Custom Methods
+                case "CustomGetBoxMoney":
+                    {
+                        double[] money = SetGetMoney(0.0);
+                        string _infotext = string.Format("{0}\r\n\r\n{1}: {2:0.00}\r\n{3}: {4:0.00}\r\n{5}: {6:0.00}",
+                            "Фінансова звітнсть",
+                            "Загальна сума внеску за день", money[2],
+                            "Загальна сума вилучення за день", money[3],
+                            "Сума в касі", money[1]);
+                        System.Windows.Forms.MessageBox.Show(_infotext, Name,
+                            System.Windows.Forms.MessageBoxButtons.OK,
+                            System.Windows.Forms.MessageBoxIcon.Information);
+                        break;
+                    }
+                case "Custom_ReportX":
+                    {
+                        // ReportX rxz = new ReportX(Name, description);
+                        // if (rxz.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                        // {
+                            object[] xzInfo = ReportXZ("0000", 2, new bool[] { false, false });
+                            value = xzInfo.Clone();
+                        // }
+                        // rxz.Dispose();
+                        break;
+                    }
+                case "Custom_ReportZ":
+                    {
+                        // ReportZ rxz = new ReportZ(Name, description);
+                        // if (rxz.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                        // {
+                            object[] xzInfo = ReportXZ("0000", 0, new bool[] { false, false });
+                            value = xzInfo.Clone();
+                        // remove all products
+                            SetGetArticle('D', "A,0000");
+                            Params.DriverData["LastArtNo"] = (uint)1;
+                            this.param.Save();
+                        // }
+                        // rxz.Dispose();
+                        break;
+                    }
+                #endregion
+
                 /*
                  * There are special methods for accessing from main app and
                  * custom methods without custom their implementation. (using built-in parameters)
@@ -1054,34 +1102,17 @@ namespace DATECS_FP3530T
                         FP_SendCustomer(param);
                         break;
                     }
-                #endregion
-                #region Custom methods
-                case "Custom_ReportX":
+                case "FP_ResetOrder":
                     {
-                        ReportX rxz = new ReportX(Name, description);
-                        if (rxz.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                        {
-                            object[] xzInfo = ReportXZ(rxz.Password, rxz.ReportType, new bool[] { rxz.ClearUserSumm, rxz.ClearArtsSumm });
-                            value = xzInfo.Clone();
-                        }
-                        rxz.Dispose();
-                        break;
-                    }
-                case "Custom_ReportZ":
-                    {
-                        ReportZ rxz = new ReportZ(Name, description);
-                        if (rxz.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                        {
-                            object[] xzInfo = ReportXZ(rxz.Password, rxz.ReportType, new bool[] { rxz.ClearUserSumm, rxz.ClearArtsSumm });
-                            value = xzInfo.Clone();
-                            SetGetArticle('D', "A,0000");
-                            Params.DriverData["LastArtNo"] = (uint)1;
-                            this.param.Save();
-                        }
-                        rxz.Dispose();
+                        ResetOrder();
+                        Params.ErrorFlags["FP_Discount"] = false;
+                        Params.ErrorFlags["FP_Sale"] = false;
+                        Params.ErrorFlags["FP_PayMoney"] = false;
+                        Params.ErrorFlags["FP_Payment"] = false;
                         break;
                     }
                 #endregion
+
             }
             return value;
         }
@@ -1456,7 +1487,8 @@ namespace DATECS_FP3530T
             if (_trez.Length != 0)
             {
                 _tinfo[0] = _trez[0];
-                _tinfo[1] = double.Parse(_trez.Substring(1), Params.NumberFormat) / 100;
+                if (_trez.Length > 2)
+                    _tinfo[1] = double.Parse(_trez.Substring(1), Params.NumberFormat) / 100;
             }
 
             return _tinfo;
@@ -1531,14 +1563,14 @@ namespace DATECS_FP3530T
         {
             Params.DriverData["LastFunc"] = "SaleArt";
             CMD = 58;
-
+            
             //Creating data
             string sdata = artno.ToString();
             sdata += string.Format(Params.NumberFormat, "*{0:0.000}", tot);
             if (disc != 0.0)
             {
-                sdata += discmode ? ',' : ';';
-                sdata += ',' + string.Format("{0;+00.00;-00.00;0.0}", disc);
+                sdata += discmode ? ';' : ',';
+                sdata += string.Format(Config.Params.NumberFormat, "{0:-00.00;+00.00;0.0}", disc);
             }
 
             DataForSend = Encoding.GetEncoding(1251).GetBytes(sdata);
@@ -2237,10 +2269,10 @@ namespace DATECS_FP3530T
             if (_paymentInfo.Length != 0)
             {
                 string[] _paymentItems = _paymentInfo.Split(new char[1] { ',' });
-                _payment[0] = double.Parse(_paymentItems[0], Params.NumberFormat);
-                _payment[1] = double.Parse(_paymentItems[1], Params.NumberFormat);
-                _payment[2] = double.Parse(_paymentItems[2], Params.NumberFormat);
-                _payment[3] = double.Parse(_paymentItems[3], Params.NumberFormat);
+                _payment[0] = double.Parse(_paymentItems[0], Params.NumberFormat) / 100;
+                _payment[1] = double.Parse(_paymentItems[1], Params.NumberFormat) / 100;
+                _payment[2] = double.Parse(_paymentItems[2], Params.NumberFormat) / 100;
+                _payment[3] = double.Parse(_paymentItems[3], Params.NumberFormat) / 100;
                 _payment[4] = uint.Parse(_paymentItems[_paymentItems.Length - 3]);
                 _payment[5] = uint.Parse(_paymentItems[_paymentItems.Length - 2]);
                 _payment[6] = uint.Parse(_paymentItems[_paymentItems.Length - 1]);
@@ -2556,11 +2588,13 @@ namespace DATECS_FP3530T
         #endregion
         #endregion
 
-        // Driver's Application Interface (Custom Access Methods)
-        // Need for user access to FP from main program
+        #region Custom Methods
+        #endregion
+
+        // Driver's Application Interface (Access Methods)
+        // Need for access to FP from main program
         private void FP_Sale(object[] param)
         {
-            
             // Return if parameters are empty
             if (func.IsEmpty(param))
                 return;
@@ -2588,26 +2622,26 @@ namespace DATECS_FP3530T
                 bool useTotDisc = (bool)param[2];
                 byte ppm = Convert.ToByte(param[3]);
                 object[] article = new object[4];
-                uint nexArticleNo = (uint)Params.DriverData["LastArtNo"];
+                uint nextArticleNo = (uint)Params.DriverData["LastArtNo"];
                 string[] _propArtStatus = new string[0];
 
                 // Get last article id
                 string[] _ainfo = SetGetArticle('L');
                 if (!func.IsEmpty(_ainfo) && _ainfo[0] != "F")
                 {
-                    nexArticleNo = uint.Parse(_ainfo[1]);
-                    nexArticleNo++;
+                    nextArticleNo = uint.Parse(_ainfo[1]);
+                    nextArticleNo++;
                 }
                 else
-                    for (; nexArticleNo < (uint)Params.DriverData["ArtMemorySize"]; nexArticleNo++)
+                    for (; nextArticleNo < (uint)Params.DriverData["ArtMemorySize"]; nextArticleNo++)
                     {
-                        _ainfo = SetGetArticle('R', nexArticleNo);
+                        _ainfo = SetGetArticle('R', nextArticleNo);
                         if (func.IsEmpty(_ainfo) || _ainfo[0] == "F")
                             break;
                     }
 
                 // Check free memory for current sale
-                if (nexArticleNo + dTable.Rows.Count >= (uint)Params.DriverData["ArtMemorySize"])
+                if (nextArticleNo + dTable.Rows.Count >= (uint)Params.DriverData["ArtMemorySize"])
                 {
                     System.Windows.Forms.MessageBox.Show("Немає вільної пам'яті для здійснення продажу\r\nНеохідно зробити Z-звіт для наступного продажу",
                         Name, System.Windows.Forms.MessageBoxButtons.OK,
@@ -2633,22 +2667,22 @@ namespace DATECS_FP3530T
                     if (article[2].ToString().Length > 24)
                         article[2] = article[2].ToString().Substring(0, 24);
 
-                    _propArtStatus = SetGetArticle('P', article[0], nexArticleNo, ',', 1, ',', article[1], ',', "0000", ',', article[2]);
+                    _propArtStatus = SetGetArticle('P', article[0], nextArticleNo, ',', 1, ',', article[1], ',', "0000", ',', article[2]);
 
                     if (_propArtStatus[0] == "F")
                         throw new Exception("Помилка програмування товару");
 
                     if (useTotDisc)
-                        SaleArt('\0', nexArticleNo, (double)article[3], double.Parse(article[1].ToString(), Params.NumberFormat), 0.0, false);
+                        SaleArt('\0', nextArticleNo, (double)article[3], double.Parse(article[1].ToString(), Params.NumberFormat), 0.0, false);
                     else
-                        SaleArt('\0', nexArticleNo, (double)article[3], double.Parse(article[1].ToString(), Params.NumberFormat), (double)dTable.Rows[i]["DISC"], false);
+                        SaleArt('\0', nextArticleNo, (double)article[3], double.Parse(article[1].ToString(), Params.NumberFormat), (double)dTable.Rows[i]["DISC"], false);
 
-                    nexArticleNo++;
+                    nextArticleNo++;
                     //if (!useTotDisc && (bool)dTable.Rows[i]["USEDDISC"] && (double)dTable.Rows[i]["DISC"] != 0)
                     //FP_Discount((byte)0, (double)dTable.Rows[i]["DISC"], ppt, "");
                 }
 
-                Params.DriverData["LastArtNo"] = nexArticleNo;
+                Params.DriverData["LastArtNo"] = nextArticleNo;
                 Params.ErrorFlags["FP_Sale"] = false;
                 this.param.Save();
                 return;
@@ -2669,22 +2703,38 @@ namespace DATECS_FP3530T
                 return;
 
             // Check last executed function for error
-            if ((bool)Params.ErrorFlags["FP_Payment"])
-                return;
-
-            if ((bool)Params.ErrorFlags["FP_PayMoney"])
+            if ((bool)Params.ErrorFlags["FP_PayMoney"] ||
+                (bool)Params.ErrorFlags["FP_Payment"])
             {
                 ResetOrder();
                 Params.ErrorFlags["FP_PayMoney"] = false;
+                Params.ErrorFlags["FP_Payment"] = false;
                 this.param.Save();
             }
-
+            bool storeErrorState = false;
             Exception ex = null;
             // Try to perform commands
             try
             {
                 // Local varibles
                 System.Data.DataTable dTable = (System.Data.DataTable)param[0];
+                double suma = 0;
+                for (int i = 0; i < dTable.Rows.Count; i++)
+                {
+                    suma += double.Parse(dTable.Rows[i]["ASUM"].ToString());
+                }
+
+                double[] cashBoxInfo = SetGetMoney(0.0);
+
+                if (cashBoxInfo == null)
+                    throw new Exception("Неможливо отримати суму в грошовій скринці");
+                else
+                {
+                    if (cashBoxInfo.Length >= 3 && cashBoxInfo[1] < suma)
+                        throw new Exception("Недостатньо коштів для закриття видаткового чеку");
+                }
+                storeErrorState = true;
+                // Local varibles
                 byte ppt = Convert.ToByte(param[1]);
                 bool useTotDisc = (bool)param[2];
                 byte ppm = Convert.ToByte(param[3]);
@@ -2695,7 +2745,10 @@ namespace DATECS_FP3530T
                 // Get last article id
                 string[] _ainfo = SetGetArticle('L');
                 if (!func.IsEmpty(_ainfo) && _ainfo[0] != "F")
+                {
                     nexArticleNo = uint.Parse(_ainfo[1]);
+                    nexArticleNo++;
+                }
                 else
                     for (; nexArticleNo < (uint)Params.DriverData["ArtMemorySize"]; nexArticleNo++)
                     {
@@ -2732,7 +2785,7 @@ namespace DATECS_FP3530T
                         article[2] = article[2].ToString().Substring(0, 24);
 
                     _propArtStatus = SetGetArticle('P', article[0], nexArticleNo, ',', 1, ',', article[1], ',', "0000", ',', article[2]);
-                    
+
                     if (_propArtStatus[0] == "F")
                         throw new Exception("Помилка програмування товару");
 
@@ -2753,7 +2806,8 @@ namespace DATECS_FP3530T
             }
             catch (Exception _ex)
             {
-                Params.ErrorFlags["FP_PayMoney"] = true;
+                if (storeErrorState)
+                    Params.ErrorFlags["FP_PayMoney"] = true;
                 ex = _ex;
             }
 
@@ -2820,9 +2874,40 @@ namespace DATECS_FP3530T
                 if (!_canClose)
                 {
                     object[] _pdata = Total("", pmode, (double)param[1]);
-                    if (!func.IsEmpty(_pdata) && (_pdata[0].ToString() == "R" ||
-                        (_pdata[0].ToString() == "D" && (double)_pdata[1] == 0.0)))
-                        _canClose = true;
+                        if (!func.IsEmpty(_pdata))
+                        {
+                            switch (_pdata[0].ToString())
+                            {
+                                case "F":
+                                    {
+                                        throw new Exception("Помилка під час закриття чеку [F]");
+                                    }
+                                case "E":
+                                    {
+                                        throw new Exception("Обрахована сума меньше 0.00. Закриття чеку не можливе. [E]");
+                                    }
+                                case "R":
+                                    {
+                                        _canClose = true;
+                                        break;
+                                    }
+                                case "D":
+                                    {
+                                        if (_pdata[1] != null && (double)_pdata[1] == 0.0)
+                                            _canClose = true;
+                                        else
+                                            throw new Exception("Сума чеку більша за внесені кошти. [D]");
+                                        break;
+                                    }
+                                default:
+                                    throw new Exception("Невизначена помилка під час закриття чеку.");
+                            }
+                        }
+                        else
+                            throw new Exception("Принтер не відповідає.");
+                        //if (_pdata[0].ToString() == "R" ||
+                        //    (_pdata[0].ToString() == "D" && (double)_pdata[1] == 0.0))
+                        //        _canClose = true;
                 }
                 
                 if (_canClose)
@@ -2918,8 +3003,8 @@ namespace DATECS_FP3530T
             // Try to perform commands
             try
             {
-                byte _pdId = (byte)param[0];
-                byte _userNo = (byte)param[1];
+                byte _pdId = byte.Parse(param[0].ToString());
+                byte _userNo = byte.Parse(param[1].ToString());
                 string _userPwd = param[2].ToString();
                 string _userId = param[3].ToString();
 
@@ -2929,7 +3014,7 @@ namespace DATECS_FP3530T
                 Params.DriverData["DeskNo"] = _pdId;
                 Params.DriverData["UserNo"] = _userNo;
                 Params.DriverData["UserPwd"] = _userPwd;
-
+                SetUserName(_userPwd, _pdId, _userId);
                 rez = true;
             }
             catch { rez = false; }
@@ -3010,6 +3095,7 @@ namespace DATECS_FP3530T
                 //WinAPI.OutputDebugString("W");
 
                 int t = totRead;
+                int b = totRead * 2;
                 byte[] buffer = new byte[512];
                 OutputData = new byte[0];
                 do
@@ -3028,6 +3114,9 @@ namespace DATECS_FP3530T
                                 case "busy":
                                     {
                                         //WinAPI.OutputDebugString("S");
+                                        if (b < 0)
+                                            throw new Exception("Помилка виконання команди \"" + Params.DriverData["LastFunc"] + "\"");
+                                        b--;
                                         Thread.Sleep(200);
                                         break;
                                     }
