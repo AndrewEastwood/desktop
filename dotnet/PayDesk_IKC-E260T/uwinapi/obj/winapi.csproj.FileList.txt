@@ -1,5 +1,0 @@
-bin\Debug\winapi.dll
-bin\Debug\winapi.pdb
-obj\Debug\ResolveAssemblyReference.cache
-obj\Debug\winapi.dll
-obj\Debug\winapi.pdb

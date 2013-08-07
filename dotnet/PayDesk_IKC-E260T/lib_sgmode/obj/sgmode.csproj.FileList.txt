@@ -1,5 +1,0 @@
-obj\Debug\ResolveAssemblyReference.cache
-bin\Debug\sgmode.dll
-bin\Debug\sgmode.pdb
-obj\Debug\sgmode.dll
-obj\Debug\sgmode.pdb
