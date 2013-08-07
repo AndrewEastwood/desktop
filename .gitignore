@@ -4,7 +4,6 @@ __temp__
 src
 bin
 builder
-dotnet/*
 #dotnet/components/bin
 #dotnet/PayDeskSolution/Com_VirualKeyboard/bin
 #dotnet/PayDeskSolution/ProductCategoryManager/bin/
