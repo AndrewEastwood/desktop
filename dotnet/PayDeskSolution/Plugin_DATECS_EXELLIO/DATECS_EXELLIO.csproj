@@ -92,6 +92,10 @@
     <Compile Include="Components\UI\DriverUI\Customs\CustomGetMoney.Designer.cs">
       <DependentUpon>CustomGetMoney.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\UI\DriverUI\Customs\CustomSetTime.cs" />
+    <Compile Include="Components\UI\DriverUI\Customs\CustomSetTime.Designer.cs">
+      <DependentUpon>CustomSetTime.cs</DependentUpon>
+    </Compile>
     <Compile Include="Components\UI\DriverUI\Customs\ReportX.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -350,6 +354,9 @@
     <EmbeddedResource Include="Components\UI\DriverUI\Customs\CustomGetMoney.resx">
       <DependentUpon>CustomGetMoney.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\UI\DriverUI\Customs\CustomSetTime.resx">
+      <DependentUpon>CustomSetTime.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Components\UI\DriverUI\Customs\ReportX.resx">
       <DependentUpon>ReportX.cs</DependentUpon>
