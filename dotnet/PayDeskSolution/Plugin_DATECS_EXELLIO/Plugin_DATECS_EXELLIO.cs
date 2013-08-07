@@ -864,13 +864,13 @@ namespace DATECS_EXELLIO
                         _infoFormat += "\r\n{9} - {10}\r\n{11}: {12}\r\n{13}: {14}";
                         string _infotext = string.Format(_infoFormat,
                             "Діагностична інформація",
-                            "Версія ПЗ", dinfo[0],
-                            "Дата час", DateTime.Parse(dinfo[1] + " " + dinfo[2].Insert(2, ":")).ToString("dd/MM/yyyy HH:mm"),
-                            "Контрольна сума", dinfo[3],
-                            "Перемикачі Sw", dinfo[4],
-                            "Код країни", dinfo[5],
-                            "Серійний номер", dinfo[6],
-                            "Фіскальний номер", dinfo[7]);
+                            "Версія ПЗ", dinfo[0] + dinfo[1],
+                            "Дата час", DateTime.Parse(dinfo[2] + " " + dinfo[3].Insert(2, ":")).ToString("dd/MM/yyyy HH:mm"),
+                            "Контрольна сума", dinfo[4],
+                            "Перемикачі Sw", dinfo[5],
+                            "Код країни", dinfo[6],
+                            "Серійний номер", dinfo[7],
+                            "Фіскальний номер", dinfo[8]);
                         System.Windows.Forms.MessageBox.Show(_infotext, Name,
                             System.Windows.Forms.MessageBoxButtons.OK,
                             System.Windows.Forms.MessageBoxIcon.Information);
@@ -1080,6 +1080,18 @@ namespace DATECS_EXELLIO
                             SetGetMoney(rxz.Money);
                         }
                         rxz.Dispose();
+                        break;
+                    }
+                case "CustomSetTime":
+                    {
+                        CustomSetTime sdt = new CustomSetTime(Name, description);
+                        if (sdt.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                            SetDateTime(sdt.NewDateTime);
+                        break;
+                    }
+                case "CustomPrintLastOrderCopy":
+                    {
+                        PrintCopy(1);
                         break;
                     }
                 #endregion
@@ -2673,7 +2685,14 @@ namespace DATECS_EXELLIO
 
             if ((bool)Params.ErrorFlags["FP_Sale"])
             {
-                ResetOrder();
+                try
+                {
+                    byte[] state = GetState();
+                    for (int stIdx = 0; stIdx < state.Length; stIdx++)
+                        if (state[stIdx] == (byte)18 || state[stIdx] == (byte)20)
+                            ResetOrder();
+                }
+                catch { }
                 Params.ErrorFlags["FP_Sale"] = false;
                 this.param.Save();
             }
@@ -3040,7 +3059,7 @@ namespace DATECS_EXELLIO
         }
         private uint FP_LastChqNo(object[] param)
         {
-            return (uint)Params.DriverData["LastFOrderNo"];
+            return uint.Parse(Params.DriverData["LastFOrderNo"].ToString());
         }
         private uint FP_LastZRepNo(object[] param)
         {

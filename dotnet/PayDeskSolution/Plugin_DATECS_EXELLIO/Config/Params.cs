@@ -79,7 +79,7 @@ namespace DATECS_EXELLIO.Config
                 "",//45
                 "Фіскальна память сформатована",//46
                 "Фіскальна память встановлена в режим Read Only."};
-            int[] _errorStates = new int[] { 3, 4, 6, 11, 13, 21, 23, 34, 47 };
+            int[] _errorStates = new int[] { 3, 4, 6, 10, 11, 13, 14, 15, 21, 23, 34, 35, 39, 47 };
 
             // perform configuration number format
             _numberFormat.CurrencyDecimalSeparator = ".";
