@@ -163,6 +163,8 @@ function _createAppPatch() {
     
     ZIPNAME="../../AppUpdate_`getVersionNumberFile`.zip"
     
+    rm -rfv "./bin/../../*.zip"
+    
     ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.bat"
     ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.cfg"
     ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.dll"
