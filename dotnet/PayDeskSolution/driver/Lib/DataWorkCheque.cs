@@ -621,6 +621,14 @@ namespace driver.Lib
             if (dTable != null)
                 values[3] = string.Format("{0:X2}", int.Parse(dTable.TableName));
 
+            if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
+            {
+                // override subunit
+                Hashtable profile = (Hashtable)ConfigManager.Instance.CommonConfiguration.PROFILES_Items[dTable.TableName];
+                int profileSubunit = 0;
+                if (profile.ContainsKey("SUBUNIT") && int.TryParse(profile["SUBUNIT"].ToString(), out profileSubunit))
+                    values[0] = string.Format("{0:X2}", profileSubunit);
+            }
             //string NamebyFormat = "%0%1_%2";
 
             string NamebyFormat = string.Format("{3}{0}{1}_{2}", values);

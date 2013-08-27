@@ -92,7 +92,9 @@
     <Compile Include="Components\UI\DriverUI\Customs\CustomGetMoney.Designer.cs">
       <DependentUpon>CustomGetMoney.cs</DependentUpon>
     </Compile>
-    <Compile Include="Components\UI\DriverUI\Customs\CustomSetTime.cs" />
+    <Compile Include="Components\UI\DriverUI\Customs\CustomSetTime.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Components\UI\DriverUI\Customs\CustomSetTime.Designer.cs">
       <DependentUpon>CustomSetTime.cs</DependentUpon>
     </Compile>
