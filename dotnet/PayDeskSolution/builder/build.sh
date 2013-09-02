@@ -8,6 +8,10 @@ function main() {
     then
         buildTest
     fi
+    if [ "$1" = "patch" ]
+    then
+        buildPatch
+    fi
     if [ "$1" = "prod" ]
     then
         buildProduction

@@ -71,6 +71,15 @@ function buildTest() {
     _copyTools
 }
 
+function buildPatch() {
+
+    chat "Patch Build Started"
+
+    _updateLibs
+    _updatePlugins
+    _createAppPatch "patch"
+}
+
 function buildProduction() {
 
     chat "Production Build Started"
@@ -81,7 +90,7 @@ function buildProduction() {
     _copyTools
     _setBuildVersion
     _cleanGeneratedData
-    _createAppPatch
+    _createAppPatch "prod"
 }
 
 function _updateLibs() {
@@ -134,10 +143,14 @@ function _updatePlugins() {
     #
     # copy (with overwrite) plugins
     #
+    PLUGINS_HOME=./bin/Plugins
     start "copy (with overwrite) plugins"
-    cp -v $PROJECT/Plugin_DATECS_EXELLIO/bin/Debug/DATECS_EXELLIO.dll ./bin/Plugins/DATECS_EXELLIO/
-    cp -v $PROJECT/Plugin_DATECS_FP3530T/bin/Debug/DATECS_FP3530T.dll ./bin/Plugins/DATECS_FP3530T/
-    cp -v $PROJECT/Plugin_IKC-OP2/bin/Debug/IKC-OP2.dll ./bin/Plugins/IKC-OP2/
+    mkdir -p $PLUGINS_HOME/DATECS_EXELLIO
+    cp -fv $PROJECT/Plugin_DATECS_EXELLIO/bin/Debug/DATECS_EXELLIO.dll $PLUGINS_HOME/DATECS_EXELLIO/
+    mkdir -p $PLUGINS_HOME/DATECS_FP3530T
+    cp -fv $PROJECT/Plugin_DATECS_FP3530T/bin/Debug/DATECS_FP3530T.dll $PLUGINS_HOME/DATECS_FP3530T/
+    mkdir -p $PLUGINS_HOME/IKC-OP2
+    cp -fv $PROJECT/Plugin_IKC-OP2/bin/Debug/IKC-OP2.dll $PLUGINS_HOME/IKC-OP2/
     end "copy (with overwrite) plugins"
 }
 
@@ -160,30 +173,40 @@ function _createAppPatch() {
     # creating app patch archive
     #
     start "creating app patch archive"
-    
-    ZIPNAME="../../AppUpdate_`getVersionNumberFile`.zip"
-    
-    rm -rfv "./bin/../../*.zip"
-    
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.bat"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.cfg"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.dll"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.DLL"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.exe"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.ico"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.ini"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.lic"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.txt"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/*.xml"
+    # echo arg is $1
+    if ! "$1"=""
+    then
+        TYPE="$1_"
+    fi
 
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/display"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/manuals"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/Plugins"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/reports"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/schemes"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/templates"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/tools"
-    ./bin/tools/compressor/7z.exe a -tzip ./bin/$ZIPNAME "./bin/users"
+
+    ZIPNAME="../../AppUpdate_$TYPE`getVersionNumberFile`.7z"
+    PASS=12345
+    COMPRESSOR=./src/tools/compressor/7z.exe
+    CARGS="a -t7z -p$PASS -mhe=on ./bin/$ZIPNAME"
+    CCMD="$COMPRESSOR $CARGS"
+
+    (cd ./bin/../../ && rm -rfv *{$1}*.7z)
+    
+    $CCMD "./bin/*.bat"
+    $CCMD "./bin/*.cfg"
+    $CCMD "./bin/*.dll"
+    $CCMD "./bin/*.DLL"
+    $CCMD "./bin/*.exe"
+    $CCMD "./bin/*.ico"
+    $CCMD "./bin/*.ini"
+    $CCMD "./bin/*.lic"
+    $CCMD "./bin/*.txt"
+    $CCMD "./bin/*.xml"
+
+    $CCMD "./bin/display"
+    $CCMD "./bin/manuals"
+    $CCMD "./bin/Plugins"
+    $CCMD "./bin/reports"
+    $CCMD "./bin/schemes"
+    $CCMD "./bin/templates"
+    $CCMD "./bin/tools"
+    $CCMD "./bin/users"
     
     end "creating app patch archive"
 }

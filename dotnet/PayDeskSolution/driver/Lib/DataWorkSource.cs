@@ -904,10 +904,9 @@ namespace driver.Lib
                     catch { }
                 }
 
-                dTable.Columns["C"].AutoIncrementSeed = startupIndex + 10 * int.Parse(firmId);
+                dTable.Columns["C"].AutoIncrementSeed = startupIndex + 1000000 * int.Parse(firmId);
                 if (dTable.Columns["C"].AutoIncrementSeed == 0)
                     dTable.Columns["C"].AutoIncrementSeed = 1;
-
 
                 Com_WinApi.OutputDebugString("ReadArtSDF_begin");
                 while ((line = strRd.ReadLine()) != null)

@@ -2802,7 +2802,8 @@ namespace PayDesk.Components.UI
                 //MessageBox.Show("done 4");
 
                 DataTable[] tables = (DataTable[])loadResult[0];
-                _fl_artUpdated = (bool)loadResult[1];
+                if (!_fl_artUpdated)
+                    _fl_artUpdated = (bool)loadResult[1];
 
                 if (tables[0] != null)
                 {

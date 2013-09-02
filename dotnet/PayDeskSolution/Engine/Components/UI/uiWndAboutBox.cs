@@ -19,9 +19,17 @@ namespace PayDesk.Components.UI
             //  - Project->Properties->Application->Assembly Information
             //  - AssemblyInfo.cs
 
+            string _ver = AssemblyVersion;
+            string _verFormat = "Версія {0}";
+            if (System.IO.File.Exists("VERSION.txt"))
+            {
+                _ver = System.IO.File.ReadAllText("VERSION.txt");
+                _verFormat = "{0}";
+            }
+
             this.Text = String.Format("{0}", AssemblyTitle);
             this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = String.Format("Версія {0}", AssemblyVersion);
+            this.labelVersion.Text = String.Format(_verFormat, _ver);
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
             //this.textBoxDescription.Text = AssemblyDescription;

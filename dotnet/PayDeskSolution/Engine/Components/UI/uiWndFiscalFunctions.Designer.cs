@@ -43,6 +43,7 @@ namespace PayDesk.Components.UI
             this.listBox1.Location = new System.Drawing.Point(0, 0);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(579, 361);
+            this.listBox1.Sorted = true;
             this.listBox1.TabIndex = 0;
             this.listBox1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDoubleClick);
             // 
@@ -57,7 +58,7 @@ namespace PayDesk.Components.UI
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // FiscalFunctions
+            // uiWndFiscalFunctions
             // 
             this.AcceptButton = this.button1;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -68,10 +69,10 @@ namespace PayDesk.Components.UI
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
-            this.Name = "FiscalFunctions";
-            this.Text = "Функції фіскального апарату";
+            this.Name = "uiWndFiscalFunctions";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Функції фіскального апарату";
             this.TopMost = true;
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FiscalFunctions_KeyDown);
             this.ResumeLayout(false);

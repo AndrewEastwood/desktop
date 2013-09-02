@@ -139,7 +139,8 @@
             this.textBoxDescription.TabIndex = 23;
             this.textBoxDescription.TabStop = false;
             this.textBoxDescription.Text = "Товариство з обмеженою відповідальністю\r\nУкраїна 79057 м. Львів  вул.І.Труша,4\r\n\r" +
-                "\nТел.: +38 (032) 238-38-83\r\nE-mail: intech@mail.lviv.ua\r\nhttp://intech.in.ua\r\n";
+                "\nТел.: +38 (032) 238-38-83\r\n\r\nE-mail: intech.in.ua@gmail.com\r\n\r\nhttp://www.intec" +
+                "h.in.ua\r\n";
             // 
             // okButton
             // 
@@ -151,7 +152,7 @@
             this.okButton.TabIndex = 24;
             this.okButton.Text = "&OK";
             // 
-            // AboutBox
+            // uiWndAboutBox
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -162,7 +163,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "AboutBox";
+            this.Name = "uiWndAboutBox";
             this.Padding = new System.Windows.Forms.Padding(9);
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
