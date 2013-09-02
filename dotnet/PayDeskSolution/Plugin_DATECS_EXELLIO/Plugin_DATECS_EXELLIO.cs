@@ -1277,6 +1277,9 @@ namespace DATECS_EXELLIO
             _data += endDate.ToString("ddMMyy");
             DataForSend = Encoding.GetEncoding(1251).GetBytes(_data);
 
+            // Converting data to specific format
+            InputData = CreateInputData(CMD, DataForSend);
+            
             // Sending and reciving data
             SendGetData(20, true);
 

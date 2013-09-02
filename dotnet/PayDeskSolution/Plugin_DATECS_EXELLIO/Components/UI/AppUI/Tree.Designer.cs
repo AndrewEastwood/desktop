@@ -97,7 +97,7 @@ namespace DATECS_EXELLIO.UI.AppUI
             System.Windows.Forms.TreeNode treeNode36 = new System.Windows.Forms.TreeNode("Повний періодичний звіт (по номеру)");
             System.Windows.Forms.TreeNode treeNode37 = new System.Windows.Forms.TreeNode("Повний періодичний звіт (по даті)");
             System.Windows.Forms.TreeNode treeNode38 = new System.Windows.Forms.TreeNode("Скорочений періодичний звіт (по даті)");
-            System.Windows.Forms.TreeNode treeNode39 = new System.Windows.Forms.TreeNode("Скорочений періодичний звіт (по даті)");
+            System.Windows.Forms.TreeNode treeNode39 = new System.Windows.Forms.TreeNode("Скорочений періодичний звіт (по номеру)");
             System.Windows.Forms.TreeNode treeNode40 = new System.Windows.Forms.TreeNode("Звіт операторів");
             System.Windows.Forms.TreeNode treeNode41 = new System.Windows.Forms.TreeNode("Звіт товарів");
             System.Windows.Forms.TreeNode treeNode42 = new System.Windows.Forms.TreeNode("Звіти", new System.Windows.Forms.TreeNode[] {
@@ -298,7 +298,7 @@ namespace DATECS_EXELLIO.UI.AppUI
             treeNode38.Name = "ReportByDateShort";
             treeNode38.Text = "Скорочений періодичний звіт (по даті)";
             treeNode39.Name = "ReportByNoShort";
-            treeNode39.Text = "Скорочений періодичний звіт (по даті)";
+            treeNode39.Text = "Скорочений періодичний звіт (по номеру)";
             treeNode40.Name = "ReportByUsers";
             treeNode40.Text = "Звіт операторів";
             treeNode41.Name = "ReportByArts";
