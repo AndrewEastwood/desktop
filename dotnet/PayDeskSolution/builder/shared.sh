@@ -151,6 +151,8 @@ function _updatePlugins() {
     cp -fv $PROJECT/Plugin_DATECS_FP3530T/bin/Debug/DATECS_FP3530T.dll $PLUGINS_HOME/DATECS_FP3530T/
     mkdir -p $PLUGINS_HOME/IKC-OP2
     cp -fv $PROJECT/Plugin_IKC-OP2/bin/Debug/IKC-OP2.dll $PLUGINS_HOME/IKC-OP2/
+    mkdir -p $PLUGINS_HOME/MINI-FP6
+    cp -fv $PROJECT/Plugin_MINI-FP6/bin/Debug/MINI-FP6.dll $PLUGINS_HOME/MINI-FP6/
     end "copy (with overwrite) plugins"
 }
 

@@ -24,3 +24,5 @@ obj
 *.force
 *.cache
 *.tlog
+*.7z
+*.zip

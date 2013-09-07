@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "components", "..\components
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLoader", "MyLoader\MyLoader.csproj", "{2B47D429-6AA1-46BB-8EEC-9AEDBF721305}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MINI-FP6", "Plugin_MINI-FP6\MINI-FP6.csproj", "{1AB35CB6-0FEE-4F97-94E1-41E87C0B45A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,16 @@ Global
 		{2B47D429-6AA1-46BB-8EEC-9AEDBF721305}.Release|Mixed Platforms.Build.0 = Release|x86
 		{2B47D429-6AA1-46BB-8EEC-9AEDBF721305}.Release|x86.ActiveCfg = Release|x86
 		{2B47D429-6AA1-46BB-8EEC-9AEDBF721305}.Release|x86.Build.0 = Release|x86
+		{1AB35CB6-0FEE-4F97-94E1-41E87C0B45A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AB35CB6-0FEE-4F97-94E1-41E87C0B45A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AB35CB6-0FEE-4F97-94E1-41E87C0B45A5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1AB35CB6-0FEE-4F97-94E1-41E87C0B45A5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1AB35CB6-0FEE-4F97-94E1-41E87C0B45A5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1AB35CB6-0FEE-4F97-94E1-41E87C0B45A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AB35CB6-0FEE-4F97-94E1-41E87C0B45A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AB35CB6-0FEE-4F97-94E1-41E87C0B45A5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1AB35CB6-0FEE-4F97-94E1-41E87C0B45A5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1AB35CB6-0FEE-4F97-94E1-41E87C0B45A5}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
