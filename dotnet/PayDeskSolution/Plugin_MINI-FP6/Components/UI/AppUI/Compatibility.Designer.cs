@@ -49,7 +49,7 @@
             this.checkBox_runAsOP6.Name = "checkBox_runAsOP6";
             this.checkBox_runAsOP6.Size = new System.Drawing.Size(156, 17);
             this.checkBox_runAsOP6.TabIndex = 0;
-            this.checkBox_runAsOP6.Text = "Сумісність з версією ОП6";
+            this.checkBox_runAsOP6.Text = "Використовувати модем";
             this.checkBox_runAsOP6.UseVisualStyleBackColor = true;
             this.checkBox_runAsOP6.CheckedChanged += new System.EventHandler(this.checkBox_runAsOP6_CheckedChanged);
             // 

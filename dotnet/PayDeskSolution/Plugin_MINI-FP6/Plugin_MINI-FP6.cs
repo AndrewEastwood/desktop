@@ -2437,6 +2437,15 @@ namespace MINI_FP6
             throw new Exception(ex.Message, ex);
 
         }
+        /// <summary>
+        /// Pay and close order
+        /// </summary>
+        /// <param name="param">
+        /// 0 - payment type
+        /// 1 - money
+        /// 2 - autoclose
+        /// 3 - is retrieve
+        /// </param>
         protected virtual void FP_Payment(object[] param)
         {
             // Return if parameters are empty
@@ -2458,6 +2467,15 @@ namespace MINI_FP6
             Exception ex = null;
             try
             {
+                // check wehter we have anough money to pay buyer
+                if ((bool)param[3])
+                {
+                    uint vm = GetBox();
+                    double ourMoney = _func.GetDouble(vm / 100.0);
+
+                    if (ourMoney < _func.GetDouble(param[1]))
+                        throw new Exception("Недостатньо коштів для видачі");
+                }
                 // Indicate payment type
                 Payment((byte)param[0], false, (double)param[1], (bool)param[2], string.Empty);
                 // Set current order number

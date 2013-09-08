@@ -2740,7 +2740,7 @@ namespace DATECS_EXELLIO
                 // Open fiscal order
                 ushort[] _ofoRez = OpenFOrder((byte)Params.DriverData["UserNo"], Params.DriverData["UserPwd"].ToString(), (byte)Params.DriverData["DeskNo"], true);
                 if (_ofoRez == null)
-                    throw new Exception("Помилка відкриття чеку");
+                    throw new Exception("Помилка відкриття чеку\r\nМожливо логін або пароль касира не встановлені");
                 
                 // Program and sale each articles
                 for (int i = 0; i < dTable.Rows.Count; i++)

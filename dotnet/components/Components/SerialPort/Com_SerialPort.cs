@@ -306,7 +306,7 @@ namespace components.Components.SerialPort
             do
             {
                 count += (uint)_port.BytesToRead;
-                if (count > 0)
+                if (count > 0 && buffer.Length > count)
                 {
                     for (; i < count; i++)
                         buffer[i] = (byte)_port.ReadByte();

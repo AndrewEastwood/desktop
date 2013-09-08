@@ -4,6 +4,7 @@
 COLORSENABLED=true
 PROJECT=./../
 DEBUG=./../Engine/bin/Debug
+APP_HOME=./bin
 
 HR="|---------------------------------------------------------------------"
 
@@ -46,7 +47,7 @@ function end()
 
 function cleanup() {
     chat "cleanup"
-    rm -rf ./bin/*
+    rm -rf $APP_HOME/*
 }
 
 function getVersion() {
@@ -65,6 +66,10 @@ function buildTest() {
 
     chat "Test Build Started"
 
+    APP_HOME=./test
+
+    mkdir $APP_HOME
+    
     _updateLibs
     _updateStatic
     _updatePlugins
@@ -84,6 +89,8 @@ function buildProduction() {
 
     chat "Production Build Started"
 
+    mkdir $APP_HOME
+
     _updateLibs
     _updateStatic
     _updatePlugins
@@ -98,13 +105,13 @@ function _updateLibs() {
     # copy libraries
     #
     start "copy libraries"
-    cp -v $DEBUG/PayDesk.exe ./bin/
-    cp -v $DEBUG/driver.dll ./bin/
-    cp -v $DEBUG/components.dll ./bin/
-    cp -v $DEBUG/HtmlAgilityPack.dll ./bin/
-    cp -v $DEBUG/Ionic.Zip.dll ./bin/
-    cp -v $DEBUG/Mono.Security.dll ./bin/
-    cp -v $DEBUG/Npgsql.dll ./bin/
+    cp -v $DEBUG/PayDesk.exe $APP_HOME/
+    cp -v $DEBUG/driver.dll $APP_HOME/
+    cp -v $DEBUG/components.dll $APP_HOME/
+    cp -v $DEBUG/HtmlAgilityPack.dll $APP_HOME/
+    cp -v $DEBUG/Ionic.Zip.dll $APP_HOME/
+    cp -v $DEBUG/Mono.Security.dll $APP_HOME/
+    cp -v $DEBUG/Npgsql.dll $APP_HOME/
     end "copy libraries"
 }
 
@@ -117,13 +124,13 @@ function _updateStatic() {
     do
         if [ -d "$f" ]
         then
-            cp -rf "$f" ./bin/
+            cp -rf "$f" $APP_HOME/
         elif [ -f "$f" ]
         then
-            cp -rfv "$f" ./bin/
+            cp -rfv "$f" $APP_HOME/
         fi
     done
-    # cp -rv ./src/* ./bin/
+    # cp -rv ./src/* $APP_HOME/
     end "copy source"
 }
 
@@ -132,10 +139,10 @@ function _cleanGeneratedData() {
     # clean generated data
     #
     start "clean generated data"
-    rm -rfv ./bin/articles/*
-    rm -rfv ./bin/bills/*
-    rm -rfv ./bin/cheques/*
-    rm -rfv ./bin/reports/*
+    rm -rfv $APP_HOME/articles/*
+    rm -rfv $APP_HOME/bills/*
+    rm -rfv $APP_HOME/cheques/*
+    rm -rfv $APP_HOME/reports/*
     end "clean generated data"
 }
 
@@ -143,7 +150,7 @@ function _updatePlugins() {
     #
     # copy (with overwrite) plugins
     #
-    PLUGINS_HOME=./bin/Plugins
+    PLUGINS_HOME=$APP_HOME/Plugins
     start "copy (with overwrite) plugins"
     mkdir -p $PLUGINS_HOME/DATECS_EXELLIO
     cp -fv $PROJECT/Plugin_DATECS_EXELLIO/bin/Debug/DATECS_EXELLIO.dll $PLUGINS_HOME/DATECS_EXELLIO/
@@ -162,11 +169,11 @@ function _setBuildVersion() {
     #
     VER="`getVersion`"
     chat "$VER"
-    echo "$VER" > ./bin/VERSION.txt
+    echo "$VER" > $APP_HOME/VERSION.txt
     # generate github readme.md file
-    echo "### PayDesk Solution" > ./bin/README.md
-    echo "-" >> ./bin/README.md
-    echo "##### Build Version: \`\`\` `getVersionNumber` \`\`\`" >> ./bin/README.md
+    echo "### PayDesk Solution" > $APP_HOME/README.md
+    echo "-" >> $APP_HOME/README.md
+    echo "##### Build Version: \`\`\` `getVersionNumber` \`\`\`" >> $APP_HOME/README.md
 
 }
 
@@ -176,7 +183,7 @@ function _createAppPatch() {
     #
     start "creating app patch archive"
     # echo arg is $1
-    if ! "$1"=""
+    if ! [ "$1"="" ]
     then
         TYPE="$1_"
     fi
@@ -185,30 +192,30 @@ function _createAppPatch() {
     ZIPNAME="../../AppUpdate_$TYPE`getVersionNumberFile`.7z"
     PASS=12345
     COMPRESSOR=./src/tools/compressor/7z.exe
-    CARGS="a -t7z -p$PASS -mhe=on ./bin/$ZIPNAME"
+    CARGS="a -t7z -p$PASS -mhe=on $APP_HOME/$ZIPNAME"
     CCMD="$COMPRESSOR $CARGS"
 
-    (cd ./bin/../../ && rm -rfv *{$1}*.7z)
+    (cd $APP_HOME/../../ && rm -rfv *{$1}*\.7z)
     
-    $CCMD "./bin/*.bat"
-    $CCMD "./bin/*.cfg"
-    $CCMD "./bin/*.dll"
-    $CCMD "./bin/*.DLL"
-    $CCMD "./bin/*.exe"
-    $CCMD "./bin/*.ico"
-    $CCMD "./bin/*.ini"
-    $CCMD "./bin/*.lic"
-    $CCMD "./bin/*.txt"
-    $CCMD "./bin/*.xml"
+    $CCMD "$APP_HOME/*.bat"
+    $CCMD "$APP_HOME/*.cfg"
+    $CCMD "$APP_HOME/*.dll"
+    $CCMD "$APP_HOME/*.DLL"
+    $CCMD "$APP_HOME/*.exe"
+    $CCMD "$APP_HOME/*.ico"
+    $CCMD "$APP_HOME/*.ini"
+    $CCMD "$APP_HOME/*.lic"
+    $CCMD "$APP_HOME/*.txt"
+    $CCMD "$APP_HOME/*.xml"
 
-    $CCMD "./bin/display"
-    $CCMD "./bin/manuals"
-    $CCMD "./bin/Plugins"
-    $CCMD "./bin/reports"
-    $CCMD "./bin/schemes"
-    $CCMD "./bin/templates"
-    $CCMD "./bin/tools"
-    $CCMD "./bin/users"
+    $CCMD "$APP_HOME/display"
+    $CCMD "$APP_HOME/manuals"
+    $CCMD "$APP_HOME/Plugins"
+    $CCMD "$APP_HOME/reports"
+    $CCMD "$APP_HOME/schemes"
+    $CCMD "$APP_HOME/templates"
+    $CCMD "$APP_HOME/tools"
+    $CCMD "$APP_HOME/users"
     
     end "creating app patch archive"
 }
@@ -229,26 +236,26 @@ function _copyTools() {
 </configuration>'
 
     # BillsToExcel
-    mkdir -pv ./bin/tools/BillsToExcel/bin/
-    cp -rfv $PROJECT/../PayDeskTools/BillsToExcel/bin/Debug/*.dll ./bin/tools/BillsToExcel/bin/
-    cp -rfv $PROJECT/../PayDeskTools/BillsToExcel/bin/Debug/*.exe ./bin/tools/BillsToExcel/
-    cp -rfv $PROJECT/../PayDeskTools/BillsToExcel/bin/Debug/*.bat ./bin/tools/BillsToExcel/
-    cp -rfv $PROJECT/../PayDeskTools/BillsToExcel/bin/Debug/config/ ./bin/tools/BillsToExcel/
-    echo $TOOL_CFG > ./bin/tools/BillsToExcel/BillsToExcel.exe.config
+    mkdir -pv $APP_HOME/tools/BillsToExcel/bin/
+    cp -rfv $PROJECT/../PayDeskTools/BillsToExcel/bin/Debug/*.dll $APP_HOME/tools/BillsToExcel/bin/
+    cp -rfv $PROJECT/../PayDeskTools/BillsToExcel/bin/Debug/*.exe $APP_HOME/tools/BillsToExcel/
+    cp -rfv $PROJECT/../PayDeskTools/BillsToExcel/bin/Debug/*.bat $APP_HOME/tools/BillsToExcel/
+    cp -rfv $PROJECT/../PayDeskTools/BillsToExcel/bin/Debug/config/ $APP_HOME/tools/BillsToExcel/
+    echo $TOOL_CFG > $APP_HOME/tools/BillsToExcel/BillsToExcel.exe.config
     # ProductCategoryManager
-    mkdir -pv ./bin/tools/ProductCategoryManager/bin/
-    cp -rfv $PROJECT/../PayDeskTools/ProductCategoryManager/bin/Debug/*.dll ./bin/tools/ProductCategoryManager/bin/
-    cp -rfv $PROJECT/../PayDeskTools/ProductCategoryManager/bin/Debug/*.exe ./bin/tools/ProductCategoryManager/
-    cp -rfv $PROJECT/../PayDeskTools/ProductCategoryManager/bin/Debug/*.bat ./bin/tools/ProductCategoryManager/
-    cp -rfv $PROJECT/../PayDeskTools/ProductCategoryManager/bin/Debug/config ./bin/tools/ProductCategoryManager/
-    echo $TOOL_CFG > ./bin/tools/ProductCategoryManager/ProductCategoryManager.exe.config
+    mkdir -pv $APP_HOME/tools/ProductCategoryManager/bin/
+    cp -rfv $PROJECT/../PayDeskTools/ProductCategoryManager/bin/Debug/*.dll $APP_HOME/tools/ProductCategoryManager/bin/
+    cp -rfv $PROJECT/../PayDeskTools/ProductCategoryManager/bin/Debug/*.exe $APP_HOME/tools/ProductCategoryManager/
+    cp -rfv $PROJECT/../PayDeskTools/ProductCategoryManager/bin/Debug/*.bat $APP_HOME/tools/ProductCategoryManager/
+    cp -rfv $PROJECT/../PayDeskTools/ProductCategoryManager/bin/Debug/config $APP_HOME/tools/ProductCategoryManager/
+    echo $TOOL_CFG > $APP_HOME/tools/ProductCategoryManager/ProductCategoryManager.exe.config
     # VirtualKeyboard
-    mkdir -pv ./bin/tools/VirtualKeyboard/bin/
-    cp -rfv $PROJECT/../PayDeskTools/VirtualKeyboard/bin/Debug/*.dll ./bin/tools/VirtualKeyboard/bin/
-    cp -rfv $PROJECT/../PayDeskTools/VirtualKeyboard/bin/Debug/*.exe ./bin/tools/VirtualKeyboard/
-    cp -rfv $PROJECT/../PayDeskTools/VirtualKeyboard/bin/Debug/*.bat ./bin/tools/VirtualKeyboard/
-    cp -rfv $PROJECT/../PayDeskTools/VirtualKeyboard/bin/Debug/config ./bin/tools/VirtualKeyboard/
-    echo $TOOL_CFG > ./bin/tools/VirtualKeyboard/VirtualKeyboard.exe.config
+    mkdir -pv $APP_HOME/tools/VirtualKeyboard/bin/
+    cp -rfv $PROJECT/../PayDeskTools/VirtualKeyboard/bin/Debug/*.dll $APP_HOME/tools/VirtualKeyboard/bin/
+    cp -rfv $PROJECT/../PayDeskTools/VirtualKeyboard/bin/Debug/*.exe $APP_HOME/tools/VirtualKeyboard/
+    cp -rfv $PROJECT/../PayDeskTools/VirtualKeyboard/bin/Debug/*.bat $APP_HOME/tools/VirtualKeyboard/
+    cp -rfv $PROJECT/../PayDeskTools/VirtualKeyboard/bin/Debug/config $APP_HOME/tools/VirtualKeyboard/
+    echo $TOOL_CFG > $APP_HOME/tools/VirtualKeyboard/VirtualKeyboard.exe.config
 
     end "copying tools"
 }

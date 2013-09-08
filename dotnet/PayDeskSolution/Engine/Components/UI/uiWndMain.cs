@@ -3952,7 +3952,9 @@ namespace PayDesk.Components.UI
                     _tmpPaymanet["CASHLIST"] = new List<double>((List<double>)_tmpPaymanet["CASHLIST"]);
                     _tmpPaymanet["TYPE"] = new List<byte>((List<byte>)_tmpPaymanet["TYPE"]);
 
-                    if (_allProfiles.IndexOf(profileKey) + 1 < _allProfiles.Count)
+                    bool overrideBuyerCash = !(_allProfiles.Count == 1 && appIsLegal && !pMethod.Autoclose);
+
+                    if (overrideBuyerCash && _allProfiles.IndexOf(profileKey) + 1 < _allProfiles.Count)
                     {
                         _tmpPaymanet["SUMA"] = _realSUMA;
                         ((List<double>)_tmpPaymanet["CASHLIST"])[0] = _realSUMA;
@@ -4026,7 +4028,7 @@ namespace PayDesk.Components.UI
 
                             for (int i = lastPayment; i < pMethod.Type.Count; i++)
                             {
-                                Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_Payment", pMethod.Type[i], ((List<double>)_tmpPaymanet["CASHLIST"])[i], true, retriveChq);
+                                Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_Payment", pMethod.Type[i], ((List<double>)_tmpPaymanet["CASHLIST"])[i], overrideBuyerCash, retriveChq);
                                 lastPayment++;
                             }
                         }
