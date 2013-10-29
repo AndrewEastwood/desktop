@@ -289,6 +289,18 @@ namespace driver.Lib
                                 if (!driver.Config.ConfigManager.Instance.CommonConfiguration.PROFILES_updateDateTime.ContainsKey(de.Key.ToString()))
                                     driver.Config.ConfigManager.Instance.CommonConfiguration.PROFILES_updateDateTime.Add(de.Key.ToString(), new DateTime[3]);
 
+                                // skip miliseconds
+                                //DateTime lastFileDateTime = ((DateTime[])driver.Config.ConfigManager.Instance.CommonConfiguration.PROFILES_updateDateTime[de.Key.ToString()])[i];
+
+
+                                //bool year = dTime.Year >= lastFileDateTime.Year;
+                                //bool month = year || dTime.Month >= lastFileDateTime.Month;
+                                //bool day = month || dTime.Day >= lastFileDateTime.Day;
+                                //bool hour = day || dTime.Hour >= lastFileDateTime.Hour;
+                                //bool min = hour || dTime.Minute >= lastFileDateTime.Minute;
+                                //bool sec = min || dTime.Second > lastFileDateTime.Second;
+
+                                // if (hasUpdates || (year && month && day && hour && min && sec))
                                 if (hasUpdates || dTime > ((DateTime[])driver.Config.ConfigManager.Instance.CommonConfiguration.PROFILES_updateDateTime[de.Key.ToString()])[i])
                                 {
                                     hasUpdates = true;
@@ -868,7 +880,7 @@ namespace driver.Lib
                     try
                     {
                         //sr = new StreamReader(path, Encoding.Default);
-                        sr = new FileStream(path, FileMode.Open);
+                        sr = File.OpenRead(path);
                         break;
                     }
                     catch
@@ -882,11 +894,10 @@ namespace driver.Lib
                 if (sr == null)
                     return;
 
-                BufferedStream buff = new BufferedStream(sr, 131072);
-                StreamReader reader = new StreamReader(buff, Encoding.Default);
-                StringReader strRd = new StringReader(reader.ReadToEnd());
-                sr.Close();
-                sr.Dispose();
+
+                // StringReader strRd = new StringReader(reader.ReadToEnd());
+                // sr.Close();
+                // sr.Dispose();
                 string line = string.Empty;
                 DataRow dRow = dTable.NewRow();
                 int sc = 0;
@@ -909,52 +920,53 @@ namespace driver.Lib
                     dTable.Columns["C"].AutoIncrementSeed = 1;
 
                 Com_WinApi.OutputDebugString("ReadArtSDF_begin");
-                while ((line = strRd.ReadLine()) != null)
+                using (StreamReader reader = new StreamReader(new BufferedStream(sr, 131072), Encoding.Default))
                 {
-                    if (line == string.Empty)
-                        continue;
-                    
-                    if (!isfull && sc >= 10)
-                        break;
-                    /*
-                    if (isfull && (sc + 1) % 100 == 0)
-                        isfull = new sgmode.ClassMode().FullLoader();
-                    */
-                    //dRow["C"] = index++;
-                    line = line.Replace("\\\\", "\\");
-                    dRow = dTable.NewRow();
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        if (line == string.Empty)
+                            continue;
 
-                    dRow["F"] = firmId;
-                    dRow["ID"] = line.Substring(0, 10).Trim();//id
-                    dRow["BC"] = line.Substring(10, 14).Trim();//skod
-                    dRow["NAME"] = line.Substring(24, 35).Trim().Replace('i', 'і').Replace('I', 'І');//name
-                    dRow["DESC"] = line.Substring(59, 60).Trim().Replace('i', 'і').Replace('I', 'І');//desc
-                    dRow["UNIT"] = line.Substring(119, 15).Trim();//unit
-                    dRow["VG"] = line.Substring(134, 1).Trim();//vg
-                    if (dRow["VG"].ToString() == "")
-                        dRow["VG"] = " ";
-                    dRow["TID"] = line.Substring(135, 11).Trim();//tid
+                        if (!isfull && sc >= 10)
+                            break;
+                        /*
+                        if (isfull && (sc + 1) % 100 == 0)
+                            isfull = new sgmode.ClassMode().FullLoader();
+                        */
+                        //dRow["C"] = index++;
+                        line = line.Replace("\\\\", "\\");
+                        dRow = dTable.NewRow();
 
-                    dRow["TQ"] = MathLib.GetDouble(line.Substring(146, 12).Trim());//tq
-                    dRow["PACK"] = MathLib.GetDouble(line.Substring(158, 18).Trim());//pack
-                    dRow["WEIGHT"] = MathLib.GetDouble(line.Substring(176, 18).Trim());//weight
-                    dRow["PRICE"] = MathLib.GetDouble(line.Substring(194, 12).Trim());//price
-                    dRow["PR1"] = MathLib.GetDouble(line.Substring(206, 12).Trim());//pr1
-                    dRow["PR2"] = MathLib.GetDouble(line.Substring(218, 12).Trim());//pr2
-                    dRow["PR3"] = MathLib.GetDouble(line.Substring(230, 12).Trim());//pr3
-                    dRow["Q2"] = MathLib.GetDouble(line.Substring(242, 12).Trim());//q2
-                    dRow["Q3"] = MathLib.GetDouble(line.Substring(254, 10).Trim());//q3
+                        dRow["F"] = firmId;
+                        dRow["ID"] = line.Substring(0, 10).Trim();//id
+                        dRow["BC"] = line.Substring(10, 14).Trim();//skod
+                        dRow["NAME"] = line.Substring(24, 35).Trim().Replace('i', 'і').Replace('I', 'І');//name
+                        dRow["DESC"] = line.Substring(59, 60).Trim().Replace('i', 'і').Replace('I', 'І');//desc
+                        dRow["UNIT"] = line.Substring(119, 15).Trim();//unit
+                        dRow["VG"] = line.Substring(134, 1).Trim();//vg
+                        if (dRow["VG"].ToString() == "")
+                            dRow["VG"] = " ";
+                        dRow["TID"] = line.Substring(135, 11).Trim();//tid
+
+                        dRow["TQ"] = MathLib.GetDouble(line.Substring(146, 12).Trim());//tq
+                        dRow["PACK"] = MathLib.GetDouble(line.Substring(158, 18).Trim());//pack
+                        dRow["WEIGHT"] = MathLib.GetDouble(line.Substring(176, 18).Trim());//weight
+                        dRow["PRICE"] = MathLib.GetDouble(line.Substring(194, 12).Trim());//price
+                        dRow["PR1"] = MathLib.GetDouble(line.Substring(206, 12).Trim());//pr1
+                        dRow["PR2"] = MathLib.GetDouble(line.Substring(218, 12).Trim());//pr2
+                        dRow["PR3"] = MathLib.GetDouble(line.Substring(230, 12).Trim());//pr3
+                        dRow["Q2"] = MathLib.GetDouble(line.Substring(242, 12).Trim());//q2
+                        dRow["Q3"] = MathLib.GetDouble(line.Substring(254, 10).Trim());//q3
 
 
-                    //dRow["C"] = dRow["ID"];
-                    dTable.Rows.Add(dRow);
-                    //dRow = dTable.NewRow();
+                        //dRow["C"] = dRow["ID"];
+                        dTable.Rows.Add(dRow);
+                        //dRow = dTable.NewRow();
 
-                    sc++;
+                        sc++;
+                    }
+                    Com_WinApi.OutputDebugString("ReadArtSDF_end");
                 }
-                Com_WinApi.OutputDebugString("ReadArtSDF_end");
-
-
             }
         }//ok
         private static void ReadAlternative(string path, ref DataTable dTable, int startupIndex)

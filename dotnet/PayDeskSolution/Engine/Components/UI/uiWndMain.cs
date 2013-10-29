@@ -1350,6 +1350,8 @@ namespace PayDesk.Components.UI
                             infoText += "\r\n\r\n--------------------------------------------------\r\n\r\n";
                             for (int i = 0; i < UserSchema.ITEMS_COUNT; i++)
                                 infoText += us.SchemaItems[i] + " : " + (UserConfig.Properties[i] ? "Так" : "Ні") + "\r\n";
+                            infoText += "\r\n\r\n--------------------------------------------------\r\n\r\n";
+                            infoText +=  "К-сть товарів: " + Articles.Rows.Count.ToString() + "\r\n";
                             MMessageBoxEx.Show(infoText, UserConfig.UserID);
                             break;
                         } 
