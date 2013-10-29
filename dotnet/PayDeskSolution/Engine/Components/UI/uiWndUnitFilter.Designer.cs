@@ -34,6 +34,8 @@
             this.saveButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.checkedListBox2 = new System.Windows.Forms.CheckedListBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -44,14 +46,15 @@
             this.checkedListBox1.Dock = System.Windows.Forms.DockStyle.Right;
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.IntegralHeight = false;
-            this.checkedListBox1.Location = new System.Drawing.Point(16, 0);
+            this.checkedListBox1.Location = new System.Drawing.Point(35, 0);
             this.checkedListBox1.Margin = new System.Windows.Forms.Padding(5);
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.checkedListBox1.Size = new System.Drawing.Size(223, 273);
+            this.checkedListBox1.SelectionMode = System.Windows.Forms.SelectionMode.None;
+            this.checkedListBox1.Size = new System.Drawing.Size(204, 260);
             this.checkedListBox1.Sorted = true;
             this.checkedListBox1.TabIndex = 0;
-            this.checkedListBox1.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
+            this.checkedListBox1.Click += new System.EventHandler(this.checkedListBox_Click);
             // 
             // updateValuesButton
             // 
@@ -78,9 +81,9 @@
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Controls.Add(this.checkedListBox2);
             this.panel1.Controls.Add(this.checkedListBox1);
-            this.panel1.Location = new System.Drawing.Point(14, 12);
+            this.panel1.Location = new System.Drawing.Point(14, 25);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(243, 277);
+            this.panel1.Size = new System.Drawing.Size(243, 264);
             this.panel1.TabIndex = 3;
             // 
             // checkedListBox2
@@ -92,8 +95,28 @@
             this.checkedListBox2.IntegralHeight = false;
             this.checkedListBox2.Location = new System.Drawing.Point(0, 0);
             this.checkedListBox2.Name = "checkedListBox2";
-            this.checkedListBox2.Size = new System.Drawing.Size(16, 273);
+            this.checkedListBox2.SelectionMode = System.Windows.Forms.SelectionMode.None;
+            this.checkedListBox2.Size = new System.Drawing.Size(35, 260);
             this.checkedListBox2.TabIndex = 1;
+            this.checkedListBox2.Click += new System.EventHandler(this.checkedListBox_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(11, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(31, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Вага";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(48, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(62, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Запит к-сті";
             // 
             // uiWndUnitFilter
             // 
@@ -101,6 +124,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(271, 371);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.updateValuesButton);
@@ -116,6 +141,7 @@
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Filter_KeyDown);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -126,6 +152,8 @@
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.CheckedListBox checkedListBox2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
 
     }
 }

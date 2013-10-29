@@ -26,6 +26,7 @@ using components.Shared.Attributes;
 using components.Shared.Interfaces;
 using components.Components.SerialPort;
 using components.Lib;
+using components.Components.pdLogger;
 
 namespace DATECS_EXELLIO
 {
@@ -1062,6 +1063,42 @@ namespace DATECS_EXELLIO
                         // rxz.Dispose();
                         break;
                     }
+                case "CustomReportByDateFull":
+                    {
+                        ReportByDateFull rbdf = new ReportByDateFull(Name, description);
+                        rbdf.SetPassword("0000");
+                        if (rbdf.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                            ReportByDateFull(rbdf.Password, rbdf.StartDate, rbdf.EndDate);
+                        rbdf.Dispose();
+                        break;
+                    }
+                case "CustomReportByDateShort":
+                    {
+                        ReportByDateShort rbds = new ReportByDateShort(Name, description);
+                        rbds.SetPassword("0000");
+                        if (rbds.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                            ReportByDateShort(rbds.Password, rbds.StartDate, rbds.EndDate);
+                        rbds.Dispose();
+                        break;
+                    }
+                case "CustomReportByNoFull":
+                    {
+                        ReportByNoFull rbnf = new ReportByNoFull(Name, description);
+                        rbnf.SetPassword("0000");
+                        if (rbnf.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                            ReportByNoFull(rbnf.Password, rbnf.StartNo, rbnf.EndNo);
+                        rbnf.Dispose();
+                        break;
+                    }
+                case "CustomReportByNoShort":
+                    {
+                        ReportByNoShort rbns = new ReportByNoShort(Name, description);
+                        rbns.SetPassword("0000");
+                        if (rbns.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                            ReportByNoShort(rbns.Password, rbns.StartNo, rbns.EndNo);
+                        rbns.Dispose();
+                        break;
+                    }
                 case "CustomGetMoney":
                     {
                         CustomGetMoney rxz = new CustomGetMoney(Name, description);
@@ -1092,6 +1129,11 @@ namespace DATECS_EXELLIO
                 case "CustomPrintLastOrderCopy":
                     {
                         PrintCopy(1);
+                        break;
+                    }
+                case "CustomOpenBox":
+                    {
+                        OpenBox(20);
                         break;
                     }
                 #endregion
@@ -2682,23 +2724,36 @@ namespace DATECS_EXELLIO
 
             ClrDispl();
 
-            // Check if function has errors
-            if ((bool)Params.ErrorFlags["FP_Payment"])
-                return;
-
-            if ((bool)Params.ErrorFlags["FP_Sale"])
+            if ((bool)Params.ErrorFlags["FP_Sale"] ||
+                (bool)Params.ErrorFlags["FP_Payment"])
             {
-                try
-                {
-                    byte[] state = GetState();
-                    for (int stIdx = 0; stIdx < state.Length; stIdx++)
-                        if (state[stIdx] == (byte)18 || state[stIdx] == (byte)20)
-                            ResetOrder();
-                }
-                catch { }
+                ResetOrder();
+                pdLogger.Logme("FP_Sale at ResetOrder", Config.Assembly.NAME);
                 Params.ErrorFlags["FP_Sale"] = false;
+                Params.ErrorFlags["FP_Payment"] = false;
                 this.param.Save();
             }
+
+            // Check if function has errors
+            //if ((bool)Params.ErrorFlags["FP_Payment"])
+            //    return;
+
+            //if ((bool)Params.ErrorFlags["FP_Sale"])
+            //{
+            //    try
+            //    {
+            //        byte[] state = GetState();
+            //        for (int stIdx = 0; stIdx < state.Length; stIdx++)
+            //            if (state[stIdx] == (byte)18 || state[stIdx] == (byte)20)
+            //            {
+            //                pdLogger.Logme("FP_Sale at GetState: Returned 18 or 20 \r\n" + func.ArrayByteToString(OutputData), Config.Assembly.TITLE);
+            //                ResetOrder();
+            //            }
+            //    }
+            //    catch { }
+            //    Params.ErrorFlags["FP_Sale"] = false;
+            //    this.param.Save();
+            //}
 
             Exception ex = null;
             // Try to perform commands
@@ -2740,8 +2795,12 @@ namespace DATECS_EXELLIO
                 // Open fiscal order
                 ushort[] _ofoRez = OpenFOrder((byte)Params.DriverData["UserNo"], Params.DriverData["UserPwd"].ToString(), (byte)Params.DriverData["DeskNo"], true);
                 if (_ofoRez == null)
+                {
+                    pdLogger.Logme("FP_Sale at OpenFOrder: returned null \r\nPortData: " + func.ArrayByteToString(OutputData), Config.Assembly.NAME);
                     throw new Exception("Помилка відкриття чеку\r\nМожливо логін або пароль касира не встановлені");
-                
+                }
+
+                // pdLogger.Logme("FP_Sale at OpenFOrder: success", Config.Assembly.TITLE);
                 // Program and sale each articles
                 for (int i = 0; i < dTable.Rows.Count; i++)
                 {
@@ -2779,6 +2838,7 @@ namespace DATECS_EXELLIO
             {
                 Params.ErrorFlags["FP_Sale"] = true;
                 ex = _ex;
+                pdLogger.Logme(_ex, "FP_Sale Exception \r\nPortData: " + func.ArrayByteToString(OutputData), Config.Assembly.NAME);
             }
 
             this.param.Save();
@@ -2795,6 +2855,7 @@ namespace DATECS_EXELLIO
                 (bool)Params.ErrorFlags["FP_Payment"])
             {
                 ResetOrder();
+                pdLogger.Logme("FP_PayMoney at ResetOrder", Config.Assembly.NAME);
                 Params.ErrorFlags["FP_PayMoney"] = false;
                 Params.ErrorFlags["FP_Payment"] = false;
                 this.param.Save();
@@ -2857,8 +2918,10 @@ namespace DATECS_EXELLIO
                 // Open fiscal order
                 ushort[] _ofoRez = OpenROrder((byte)Params.DriverData["UserNo"], Params.DriverData["UserPwd"].ToString(), (byte)Params.DriverData["DeskNo"], true);
                 if (_ofoRez == null)
+                {
+                    pdLogger.Logme("FP_PayMoney at OpenROrder: returned null \r\nPortData: " + func.ArrayByteToString(OutputData), Config.Assembly.NAME);
                     throw new Exception("Помилка відкриття чеку");
-
+                }
                 // Program and sale each articles
                 for (int i = 0; i < dTable.Rows.Count; i++)
                 {
@@ -2883,6 +2946,7 @@ namespace DATECS_EXELLIO
                         SaleArt('\0', nexArticleNo, (double)article[3], double.Parse(article[1].ToString(), Params.NumberFormat), (double)dTable.Rows[i]["DISC"], false);
 
                     nexArticleNo++;
+
                     //if (!useTotDisc && (bool)dTable.Rows[i]["USEDDISC"] && (double)dTable.Rows[i]["DISC"] != 0)
                     //FP_Discount((byte)0, (double)dTable.Rows[i]["DISC"], ppt, "");
                 }
@@ -2897,6 +2961,7 @@ namespace DATECS_EXELLIO
                 if (storeErrorState)
                     Params.ErrorFlags["FP_PayMoney"] = true;
                 ex = _ex;
+                pdLogger.Logme(_ex, "FP_PayMoney Exception \r\nPortData: " + func.ArrayByteToString(OutputData), Config.Assembly.NAME);
             }
 
             this.param.Save();
@@ -2914,6 +2979,7 @@ namespace DATECS_EXELLIO
                 (bool)Params.ErrorFlags["FP_PayMoney"])
             {
                 ResetOrder();
+                pdLogger.Logme("FP_Payment at ResetOrder", Config.Assembly.NAME);
                 Params.ErrorFlags["FP_Sale"] = false;
                 Params.ErrorFlags["FP_PayMoney"] = false;
                 this.param.Save();
@@ -3002,8 +3068,7 @@ namespace DATECS_EXELLIO
                 {
                     // Perform closing order
                     ushort[] order = CloseFOrder();
-                    // Get current order number
-                    Params.DriverData["LastFOrderNo"] = GetLastFChqNo();
+                    pdLogger.Logme("FP_Payment at CloseFOrder \r\nPortData: " + func.ArrayByteToString(OutputData), Config.Assembly.NAME);
                 }
 
                 // Set current order number
@@ -3015,6 +3080,7 @@ namespace DATECS_EXELLIO
             {
                 Params.ErrorFlags["FP_Payment"] = true;
                 ex = _ex;
+                pdLogger.Logme(_ex, "FP_Payment Exception \r\nPortData: " + func.ArrayByteToString(OutputData), Config.Assembly.NAME);
             }
 
             this.param.Save();
@@ -3062,7 +3128,12 @@ namespace DATECS_EXELLIO
         }
         private uint FP_LastChqNo(object[] param)
         {
-            return uint.Parse(Params.DriverData["LastFOrderNo"].ToString());
+            // Get current order number
+            uint cfnom = GetLastFChqNo();
+            Params.DriverData["LastFOrderNo"] = cfnom;
+            pdLogger.Logme("FP_Payment at GetLastFChqNo \r\nPortData: " + func.ArrayByteToString(OutputData), Config.Assembly.NAME);
+            // return uint.Parse(Params.DriverData["LastFOrderNo"].ToString());
+            return cfnom;
         }
         private uint FP_LastZRepNo(object[] param)
         {

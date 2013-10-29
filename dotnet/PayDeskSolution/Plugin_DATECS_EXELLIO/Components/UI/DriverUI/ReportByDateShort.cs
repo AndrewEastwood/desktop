@@ -58,6 +58,12 @@ namespace DATECS_EXELLIO.DriverUI
             Close();
         }
 
+        public void SetPassword(string password)
+        {
+            this.textBox1.Enabled = !(password != null && password.Length > 0);
+            this.textBox1.Text = password;
+        }
+
         //Properties
         public string Password { get { return _pwd; } }
         public DateTime StartDate { get { return _startDate; } }

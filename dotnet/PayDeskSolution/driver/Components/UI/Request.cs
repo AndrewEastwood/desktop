@@ -349,14 +349,13 @@ namespace driver.Components.UI
                 List<byte> cleanReceivedData = new List<byte>();
 
                 byte[] buffer = new byte[512];
-                int attempts = 30;
-                int attemptsRead = 30;
+                int attempts = 2;
+                int attemptsRead = 3;
                 bool weightReceived = false;
 
                 //WinAPI.OutputDebugString("R");
                 // send BNQ (05)
                 comP.Write(new byte[] { 0x05 });
-                
 
                 do
                 {
@@ -392,51 +391,54 @@ namespace driver.Components.UI
                                                 if (cleanReceivedData[i] == 0x02 && cleanReceivedData[i - 1] == 0x01)
                                                 {
                                                     // get status
-                                                    bool unstable = false;
-                                                    bool minus = false;
+                                                    //bool unstable = false;
+                                                    //bool minus = false;
                                                     if (cleanReceivedData[i + 1] == 'U')
                                                     {
-                                                        if (attemptsRead == 1)
-                                                            MMessageBox.Show("Вага не зафіксована.", Application.ProductName);
-                                                        unstable = true;
-                                                        break;
+                                                        throw new Exception("Вага не зафіксована. Після стабілізації ваги повторіть команду");
+                                                        //if (attemptsRead == 1)
+                                                        //    MMessageBox.Show("Вага не зафіксована.", Application.ProductName);
+                                                        //unstable = true;
+                                                        //break;
                                                     }
 
                                                     // get sign
                                                     if (cleanReceivedData[i + 2] == '-')
                                                     {
-                                                        minus = true;
-                                                        if (attemptsRead == 1)
-                                                            MMessageBox.Show("Відємне значення ваги.", Application.ProductName);
-                                                        break;
+                                                        throw new Exception("Відємне значення ваги");
+                                                        // minus = true;
+                                                        //if (attemptsRead == 1)
+                                                        //    MMessageBox.Show("Відємне значення ваги.", Application.ProductName);
+                                                        //break;
                                                     }
                                                     if (cleanReceivedData[i + 2] == 'F')
                                                     {
-                                                        minus = true;
-                                                        if (attemptsRead == 1)
-                                                            MMessageBox.Show("Вага перевантажена.", Application.ProductName);
-                                                        break;
+                                                        throw new Exception("Вага перевантажена");
+                                                        //minus = true;
+                                                        //if (attemptsRead == 1)
+                                                        //    MMessageBox.Show("Вага перевантажена.", Application.ProductName);
+                                                        //break;
                                                     }
 
                                                     // get weight
-                                                    if (unstable)
-                                                        MMessageBox.Show("Вага не зафіксована.", Application.ProductName);
+                                                    //if (unstable)
+                                                    //    MMessageBox.Show("Вага не зафіксована.", Application.ProductName);
 
-                                                    if (minus)
-                                                        MMessageBox.Show("Відємне значення ваги.", Application.ProductName);
+                                                    //if (minus)
+                                                    //    MMessageBox.Show("Відємне значення ваги.", Application.ProductName);
 
-                                                    if (!unstable && !minus)
-                                                    {
+                                                    //if (!unstable && !minus)
+                                                    //{
                                                         byte[] __weightValue = new byte[6];
                                                         Array.Copy(cleanReceivedData.ToArray(), (i + 3), __weightValue, 0, __weightValue.Length);
 
                                                         textBox1.Text = Encoding.Default.GetString(__weightValue);
                                                         weightReceived = true;
-                                                    }
+                                                    //}
 
                                                     break;
                                                 } // answer ok
-                                            } // loof for detecting answer
+                                            } // loop for detecting answer
 
 
                                         } // port reading
@@ -452,7 +454,8 @@ namespace driver.Components.UI
                             case 0x15:
                                 {
                                     if (attempts == 1)
-                                        MMessageBox.Show("Вага недоступна.", Application.ProductName);
+                                        throw new Exception("Вага недоступна");
+                                        // MMessageBox.Show("Вага недоступна.", Application.ProductName);
                                     break;
                                 }
                         }
@@ -465,14 +468,13 @@ namespace driver.Components.UI
 
                 } while (!weightReceived && attempts > 0);
 
-
-
             }
             catch (Exception ex)
             {
                 // show exception
                 driver.Lib.CoreLib.WriteLog(ex, "handler button_scale_value_Click");
-                MMessageBox.Show("Сталася помилка під час отримання значення ваги\r\nПеревірте справність та наявність підключення ваги до компютера\r\nПісля виключеня несправностей повторіть дію ще раз.", Application.ProductName);
+                MMessageBox.Show(ex.Message, Application.ProductName,  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // MMessageBox.Show("Сталася помилка під час отримання значення ваги\r\nПеревірте справність та наявність підключення ваги до компютера\r\nПісля виключеня несправностей повторіть дію ще раз.", Application.ProductName);
             }
 
             comP.PortClear();

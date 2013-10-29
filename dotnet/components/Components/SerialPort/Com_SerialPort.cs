@@ -366,8 +366,12 @@ namespace components.Components.SerialPort
             Marshal.GetLastWin32Error();
             GC.SuppressFinalize(this);
 
-            _port.DiscardOutBuffer();
-            _port.DiscardInBuffer();
+            try
+            {
+                _port.DiscardOutBuffer();
+                _port.DiscardInBuffer();
+            }
+            catch { }
 
             Marshal.GetLastWin32Error();
 

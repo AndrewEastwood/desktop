@@ -101,9 +101,16 @@ namespace PayDesk.Components.UI
             Close();
         }
 
-        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void checkedListBox_Click(object sender, EventArgs e)
         {
-            checkedListBox2.SelectedIndex = checkedListBox1.SelectedIndex;
+            try
+            {
+                CheckedListBox _ctrl = (CheckedListBox)sender;
+                MouseEventArgs _me = (MouseEventArgs)e;
+                int idx = _ctrl.IndexFromPoint(_me.Location);
+                _ctrl.SetItemChecked(idx, !_ctrl.GetItemChecked(idx));
+            }
+            catch { }
         }
     }
 }

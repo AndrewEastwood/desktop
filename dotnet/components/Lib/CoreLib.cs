@@ -429,6 +429,24 @@ namespace components.Lib
 
             return sortedObj;
         }
+
+        public string ArrayByteToString(byte[] arr) { return this.ArrayByteToString(";", arr); }
+        public string ArrayByteToString(string delimiter, byte[] arr)
+        {
+            List<string> strList = new List<string>();
+            for (int i = 0; i < arr.Length; i++)
+                strList.Add(arr[i].ToString());
+            return String.Join(delimiter, strList.ToArray());
+        }
+
+        public string ArrayIntToString(int[] arr) { return this.ArrayIntToString(";", arr); }
+        public string ArrayIntToString(string delimiter, int[] arr)
+        {
+            List<string> strList = new List<string>();
+            for (int i = 0; i < arr.Length; i++)
+                strList.Add(arr[i].ToString());
+            return String.Join(delimiter, strList.ToArray());
+        }
     
     }
 }

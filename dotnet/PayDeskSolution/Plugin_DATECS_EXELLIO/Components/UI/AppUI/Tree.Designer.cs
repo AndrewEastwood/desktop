@@ -175,15 +175,25 @@ namespace DATECS_EXELLIO.UI.AppUI
             System.Windows.Forms.TreeNode treeNode79 = new System.Windows.Forms.TreeNode("Вилучення готівки");
             System.Windows.Forms.TreeNode treeNode80 = new System.Windows.Forms.TreeNode("Встановити час");
             System.Windows.Forms.TreeNode treeNode81 = new System.Windows.Forms.TreeNode("Друк копії останнього чеку");
-            System.Windows.Forms.TreeNode treeNode82 = new System.Windows.Forms.TreeNode("Модифіковані", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode82 = new System.Windows.Forms.TreeNode("Відкрити грошову скриньку");
+            System.Windows.Forms.TreeNode treeNode83 = new System.Windows.Forms.TreeNode("Звіт по-даті короткий");
+            System.Windows.Forms.TreeNode treeNode84 = new System.Windows.Forms.TreeNode("Звіт по-даті повний");
+            System.Windows.Forms.TreeNode treeNode85 = new System.Windows.Forms.TreeNode("Звіт по номеру z-звіту короткий");
+            System.Windows.Forms.TreeNode treeNode86 = new System.Windows.Forms.TreeNode("Звіт по номеру z-звіту повний");
+            System.Windows.Forms.TreeNode treeNode87 = new System.Windows.Forms.TreeNode("Модифіковані", new System.Windows.Forms.TreeNode[] {
             treeNode75,
             treeNode76,
             treeNode77,
             treeNode78,
             treeNode79,
             treeNode80,
-            treeNode81});
-            System.Windows.Forms.TreeNode treeNode83 = new System.Windows.Forms.TreeNode("DATECS_EXELLIO       ", 2, 2, new System.Windows.Forms.TreeNode[] {
+            treeNode81,
+            treeNode82,
+            treeNode83,
+            treeNode84,
+            treeNode85,
+            treeNode86});
+            System.Windows.Forms.TreeNode treeNode88 = new System.Windows.Forms.TreeNode("DATECS_EXELLIO       ", 2, 2, new System.Windows.Forms.TreeNode[] {
             treeNode16,
             treeNode32,
             treeNode34,
@@ -192,7 +202,7 @@ namespace DATECS_EXELLIO.UI.AppUI
             treeNode62,
             treeNode68,
             treeNode74,
-            treeNode82});
+            treeNode87});
             this.functionsTree = new System.Windows.Forms.TreeView();
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -390,16 +400,26 @@ namespace DATECS_EXELLIO.UI.AppUI
             treeNode80.Text = "Встановити час";
             treeNode81.Name = "CustomPrintLastOrderCopy";
             treeNode81.Text = "Друк копії останнього чеку";
-            treeNode82.Name = "Node0";
-            treeNode82.Text = "Модифіковані";
-            treeNode83.ImageIndex = 2;
-            treeNode83.Name = "Node0";
-            treeNode83.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            treeNode83.SelectedImageIndex = 2;
-            treeNode83.Tag = "fp";
-            treeNode83.Text = "DATECS_EXELLIO       ";
+            treeNode82.Name = "CustomOpenBox";
+            treeNode82.Text = "Відкрити грошову скриньку";
+            treeNode83.Name = "CustomReportByDateShort";
+            treeNode83.Text = "Звіт по-даті короткий";
+            treeNode84.Name = "CustomReportByDateFull";
+            treeNode84.Text = "Звіт по-даті повний";
+            treeNode85.Name = "CustomReportByNoShort";
+            treeNode85.Text = "Звіт по номеру z-звіту короткий";
+            treeNode86.Name = "CustomReportByNoFull";
+            treeNode86.Text = "Звіт по номеру z-звіту повний";
+            treeNode87.Name = "Node0";
+            treeNode87.Text = "Модифіковані";
+            treeNode88.ImageIndex = 2;
+            treeNode88.Name = "Node0";
+            treeNode88.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            treeNode88.SelectedImageIndex = 2;
+            treeNode88.Tag = "fp";
+            treeNode88.Text = "DATECS_EXELLIO       ";
             this.functionsTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode83});
+            treeNode88});
             this.functionsTree.ShowNodeToolTips = true;
             this.functionsTree.Size = new System.Drawing.Size(414, 354);
             this.functionsTree.TabIndex = 0;

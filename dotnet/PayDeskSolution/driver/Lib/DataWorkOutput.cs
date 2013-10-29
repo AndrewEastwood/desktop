@@ -8,6 +8,9 @@ using driver.Lib;
 using driver.Common;
 using components.Components.MMessageBox;
 using System.Collections;
+using System.Drawing;
+using System.Drawing.Printing;
+using System.Diagnostics;
 
 
 namespace driver.Lib
@@ -83,13 +86,112 @@ namespace driver.Lib
                 int timeout = 1000;
                 bool timeoutIs = false;
                 int steps = ConfigManager.Instance.CommonConfiguration.Content_Common_PrinterDelaySec;
-                if (fPath != string.Empty && printer.Value["PRN"] != string.Empty)
+                if (fPath != string.Empty)
                 {
-                    string appName = System.IO.Path.GetFileNameWithoutExtension(printer.Value["PRN"].ToString());
-
-                    for (int i = 0; i < steps; i++)
+                    // send data to system (default) printer
+                    if (printer.Value["PRN"] == string.Empty)
                     {
-                        isBusy = false;
+                        try
+                        {
+                            StreamReader streamToPrint = new StreamReader(fPath, Encoding.Default);
+                            try
+                            {
+                                Font printFont = new Font("Lucida Console", 8);
+                                PrintDocument pd = new PrintDocument();
+                                pd.PrintPage += new PrintPageEventHandler(delegate(object sender, PrintPageEventArgs ev)
+                                {
+                                    float linesPerPage = 0;
+                                    float yPos = 0;
+                                    int count = 0;
+                                    float leftMargin = 0;
+                                    float topMargin = 0;
+                                    string line = null;
+
+                                    // Calculate the number of lines per page.
+                                    linesPerPage = ev.MarginBounds.Height /
+                                       printFont.GetHeight(ev.Graphics);
+
+                                    // Print each line of the file.
+                                    while (count < linesPerPage &&
+                                       ((line = streamToPrint.ReadLine()) != null))
+                                    {
+                                        yPos = topMargin + (count *
+                                           printFont.GetHeight(ev.Graphics));
+                                        ev.Graphics.DrawString(line, printFont, Brushes.Black,
+                                           leftMargin, yPos, new StringFormat());
+                                        count++;
+                                    }
+
+                                    // If more lines exist, print another page.
+                                    if (line != null)
+                                        ev.HasMorePages = true;
+                                    else
+                                        ev.HasMorePages = false;
+                                });
+                                pd.Print();
+                            }
+                            finally
+                            {
+                                streamToPrint.Close();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            CoreLib.WriteLog(ex, "driver.Lib.DataWorkOutput.PrintThrowPrinter: system printing");
+                        }
+                    }
+                    else
+                    {
+                        string appName = System.IO.Path.GetFileNameWithoutExtension(printer.Value["PRN"].ToString());
+
+                        for (int i = 0; i < steps; i++)
+                        {
+                            isBusy = false;
+                            System.Diagnostics.Process[] prc = System.Diagnostics.Process.GetProcesses();
+                            foreach (System.Diagnostics.Process p in prc)
+                            {
+                                if (p.ProcessName == appName || p.ProcessName == appName + ".exe" ||
+                                    p.ProcessName.ToLower() == appName.ToLower() || p.ProcessName.ToLower() == appName.ToLower() + ".exe")
+                                {
+                                    isBusy = true;
+                                    break;
+                                }
+                            }
+                            if (isBusy)
+                            {
+                                System.Threading.Thread.Sleep(timeout);
+                                if (i + 1 == steps)
+                                    timeoutIs = true;
+                            }
+                            else
+                                break;
+
+                        }
+                        if (timeoutIs)
+                        {
+                            //mdcore.Components.UI.MMessageBox.Show("Закрийте попереднє вікно друку і потім натисніть кнопку ОК для продовження наступного роздруку.", System.Windows.Forms.Application.ProductName);
+
+                            System.Diagnostics.Process[] pp = System.Diagnostics.Process.GetProcessesByName(appName);
+
+                            if (pp.Length > 0 && pp[0] != null)
+                            //foreach (System.Diagnostics.Process sp in pp)
+                            {
+
+                                //Dictionary<int, string> windowsV = winapi.WApi.GetTaskWindows();
+                                //int iHandle = winapi.WApi.FindWindow(null, windowsV[1]);
+
+                                components.Components.WinApi.Com_WinApi.SetForegroundWindow((int)(pp[0].MainWindowHandle));
+                                System.Drawing.Rectangle msgRect = new System.Drawing.Rectangle();
+                                components.Components.WinApi.Com_WinApi.GetWindowRect(pp[0].MainWindowHandle, ref msgRect);
+
+                                components.Components.MMessageBox.MMessageBox.StartPoint = new System.Drawing.Point(msgRect.Location.X - 50, msgRect.Location.Y - 150);
+                                components.Components.MMessageBox.MMessageBox.Show("Закрийте попереднє вікно друку, якщо таке є.\r\nПотім закрийте це повідомлення для нового друку.", System.Windows.Forms.Application.ProductName);
+
+                            }
+
+
+                        }
+                        /*
                         System.Diagnostics.Process[] prc = System.Diagnostics.Process.GetProcesses();
                         foreach (System.Diagnostics.Process p in prc)
                         {
@@ -100,57 +202,13 @@ namespace driver.Lib
                                 break;
                             }
                         }
+
                         if (isBusy)
-                        {
-                            System.Threading.Thread.Sleep(timeout);
-                            if (i + 1 == steps)
-                                timeoutIs = true;
-                        }
-                        else
-                            break;
-
+                            driver.Components.UI.MMessageBox.Show("Закрийте попереднє вікно програми друку для наступного друкування документу", "Додатковий друк - InTech PayDesk");
+                        */
+                        System.Diagnostics.Process.Start(printer.Value["PRN"], fPath);
+                        fRez = true;
                     }
-                    if (timeoutIs)
-                    {
-                        //mdcore.Components.UI.MMessageBox.Show("Закрийте попереднє вікно друку і потім натисніть кнопку ОК для продовження наступного роздруку.", System.Windows.Forms.Application.ProductName);
-
-                        System.Diagnostics.Process[] pp = System.Diagnostics.Process.GetProcessesByName(appName);
-
-                        if (pp.Length > 0 && pp[0] != null)
-                        //foreach (System.Diagnostics.Process sp in pp)
-                        {
-
-                            //Dictionary<int, string> windowsV = winapi.WApi.GetTaskWindows();
-                            //int iHandle = winapi.WApi.FindWindow(null, windowsV[1]);
-
-                            components.Components.WinApi.Com_WinApi.SetForegroundWindow((int)(pp[0].MainWindowHandle));
-                            System.Drawing.Rectangle msgRect = new System.Drawing.Rectangle();
-                            components.Components.WinApi.Com_WinApi.GetWindowRect(pp[0].MainWindowHandle, ref msgRect);
-
-                            components.Components.MMessageBox.MMessageBox.StartPoint = new System.Drawing.Point(msgRect.Location.X - 50, msgRect.Location.Y - 150);
-                            components.Components.MMessageBox.MMessageBox.Show("Закрийте попереднє вікно друку, якщо таке є.\r\nПотім закрийте це повідомлення для нового друку.", System.Windows.Forms.Application.ProductName);
-
-                        }
-
-
-                    }
-                    /*
-                    System.Diagnostics.Process[] prc = System.Diagnostics.Process.GetProcesses();
-                    foreach (System.Diagnostics.Process p in prc)
-                    {
-                        if (p.ProcessName == appName || p.ProcessName == appName + ".exe" ||
-                            p.ProcessName.ToLower() == appName.ToLower() || p.ProcessName.ToLower() == appName.ToLower() + ".exe")
-                        {
-                            isBusy = true;
-                            break;
-                        }
-                    }
-
-                    if (isBusy)
-                        driver.Components.UI.MMessageBox.Show("Закрийте попереднє вікно програми друку для наступного друкування документу", "Додатковий друк - InTech PayDesk");
-                    */
-                    System.Diagnostics.Process.Start(printer.Value["PRN"], fPath);
-                    fRez = true;
                 }
             }
             catch (Exception ex) { CoreLib.WriteLog(ex, "driver.Lib.DataWorkOutput.PrintThrowPrinter(object printerConfig, DataTable order);"); }
