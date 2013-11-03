@@ -256,6 +256,9 @@ function _copyTools() {
     cp -rfv $PROJECT/../PayDeskTools/VirtualKeyboard/bin/Debug/*.bat $APP_HOME/tools/VirtualKeyboard/
     cp -rfv $PROJECT/../PayDeskTools/VirtualKeyboard/bin/Debug/config $APP_HOME/tools/VirtualKeyboard/
     echo $TOOL_CFG > $APP_HOME/tools/VirtualKeyboard/VirtualKeyboard.exe.config
+    # Data Updater
+    cp -rfv $PROJECT/../PayDeskTools/Updater/bin/Debug/Updater.exe $APP_HOME/
+    cp -rfv $PROJECT/../PayDeskTools/Updater/bin/Debug/display/ $APP_HOME/
 
     end "copying tools"
 }

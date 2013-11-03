@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using System.Diagnostics;
@@ -2746,7 +2747,6 @@ namespace PayDesk.Components.UI
 
                 /* detectiong for updates */
 
-
                 // server status
                 if (files[0] == CoreConst.STATE_LAN_ERROR && hfiles.Count == 1)
                     DDM_UpdateStatus.Image = Properties.Resources.ExNotOk;
@@ -2787,13 +2787,13 @@ namespace PayDesk.Components.UI
                 /* loading */
 
                 //MessageBox.Show("done 3");
-                string[] localFiles = DataWorkSource.LoadFilesOnLocalTempFolder(files, de.Key);
+                // string[] localFiles = DataWorkSource.LoadFilesOnLocalTempFolder(files, de.Key);
 
                 if (currentProfileIndex == 0)
                     startupIndex = 0;
                 else
                     startupIndex = Articles.Rows.Count;
-                object[] loadResult = DataWorkSource.LoadData(localFiles, _fl_onlyUpdate, de.Key, startupIndex);
+                object[] loadResult = DataWorkSource.LoadData(files, _fl_onlyUpdate, de.Key, startupIndex);
 
 
                 // ConfigManager.SaveConfiguration();
@@ -2810,9 +2810,27 @@ namespace PayDesk.Components.UI
                 if (tables[0] != null)
                 {
                     //Articles = tables[0].Copy();
-                    DataRow[] dRows = Articles.Select("F = " + de.Key);
-                    foreach (DataRow dr in dRows)
-                        dr.Delete();
+                    // var remainRows = from myRow in Articles.AsEnumerable() where myRow["F"] != de.Key select myRow;
+                    DataTable table = Articles.Clone();
+                    try
+                    {
+                        if (Articles.Rows.Count > 0)
+                            table = Articles.AsEnumerable().Where(r => r.Field<string>("F") != de.Key.ToString()).CopyToDataTable();
+                    }
+                    catch { }
+
+                    Articles.Rows.Clear();
+
+                    if (table.Rows.Count > 0)
+                        Articles.Merge(table);
+
+                    //foreach (DataRow dr in remainRows)
+                    //    Articles.ImportRow(dr);
+
+
+                    //DataRow[] dRows = Articles.Select("F = " + de.Key);
+                    //foreach (DataRow dr in dRows)
+                    //    dr.Delete();
                     Articles.Merge(tables[0]);
                     //wasUpdatedAtLeastOneSource = true;
                 }
