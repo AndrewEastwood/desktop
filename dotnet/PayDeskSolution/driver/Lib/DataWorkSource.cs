@@ -55,15 +55,25 @@ namespace driver.Lib
 
                 int profileID = int.Parse(de.Key.ToString());
 
+                //sourceFiles = new FileInfo[] {
+                //    new FileInfo(sourceDir + "\\" + string.Format("Art_{1:D2}{0:D2}", subUnit, profileID) + "_raw.xml"),
+                //    new FileInfo(sourceDir + "\\" + string.Format("Alt_{1:D2}{0:D2}", subUnit, profileID) + "_raw.xml"),
+                //    new FileInfo(sourceDir + "\\" + string.Format("Cli_{0:D2}", profileID) + "_raw.xml")
+                //};
+                //destinationFiles = new FileInfo[] {
+                //    new FileInfo(destDir + "\\" + string.Format("Art_{1:D2}{0:D2}", subUnit, profileID) + ".xml"),
+                //    new FileInfo(destDir + "\\" + string.Format("Alt_{1:D2}{0:D2}", subUnit, profileID) + ".xml"),
+                //    new FileInfo(destDir + "\\" + string.Format("Cli_{0:D2}", profileID) + ".xml")
+                //};
                 sourceFiles = new FileInfo[] {
-                    new FileInfo(sourceDir + "\\" + string.Format("Art_{1:D2}{0:D2}", subUnit, profileID) + "_raw.xml"),
-                    new FileInfo(sourceDir + "\\" + string.Format("Alt_{1:D2}{0:D2}", subUnit, profileID) + "_raw.xml"),
-                    new FileInfo(sourceDir + "\\" + string.Format("Cli_{0:D2}", profileID) + "_raw.xml")
+                    new FileInfo(sourceDir + "\\" + string.Format("Products_{0:D2}.xml", subUnit)),
+                    new FileInfo(sourceDir + "\\" + string.Format("Alternatives_{0:D2}.xml", subUnit)),
+                    new FileInfo(sourceDir + "\\" + string.Format("ClientCards_{0:D2}.xml", subUnit))
                 };
                 destinationFiles = new FileInfo[] {
-                    new FileInfo(destDir + "\\" + string.Format("Art_{1:D2}{0:D2}", subUnit, profileID) + ".xml"),
-                    new FileInfo(destDir + "\\" + string.Format("Alt_{1:D2}{0:D2}", subUnit, profileID) + ".xml"),
-                    new FileInfo(destDir + "\\" + string.Format("Cli_{0:D2}", profileID) + ".xml")
+                    new FileInfo(destDir + "\\" + string.Format("Products_{0:D2}.xml", subUnit)),
+                    new FileInfo(destDir + "\\" + string.Format("Alternatives_{0:D2}.xml", subUnit)),
+                    new FileInfo(destDir + "\\" + string.Format("ClientCards_{0:D2}.xml", subUnit))
                 };
                 /* ToDo
                  * 
@@ -143,9 +153,12 @@ namespace driver.Lib
                 CreateDataTableForCard
             };
             FileInfo[] artFiles = new FileInfo[] {
-                new FileInfo(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Art_{1:D2}{0:D2}.xml", subUnit, profileID)),
-                new FileInfo(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Alt_{1:D2}{0:D2}.xml", subUnit, profileID)),
-                new FileInfo(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Cli_{0:D2}.xml", profileID))
+                //new FileInfo(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Art_{1:D2}{0:D2}.xml", subUnit, profileID)),
+                //new FileInfo(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Alt_{1:D2}{0:D2}.xml", subUnit, profileID)),
+                //new FileInfo(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Cli_{0:D2}.xml", profileID))
+                new FileInfo(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Products_{0:D2}.xml", subUnit)),
+                new FileInfo(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("Alternatives_{0:D2}.xml", subUnit)),
+                new FileInfo(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + "\\" + string.Format("ClientCards_{0:D2}.xml", subUnit))
             };
 
             if (!Directory.Exists(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles))
@@ -174,12 +187,12 @@ namespace driver.Lib
                     dTables[i].ReadXml(localLoadedTempFiles[i]);
 
                     // apply startup index
-                    int AutoIncrementSeed = startupIndex + 1000000 * profileID;
-                    dTables[i].Columns["C"].AutoIncrementSeed = AutoIncrementSeed;
-                    for (int rowIdx = 0, rowCount = dTables[i].Rows.Count; rowIdx < rowCount; rowIdx++)
-                    {
-                        dTables[i].Rows[rowIdx]["C"] = AutoIncrementSeed + rowIdx;
-                    }
+                    //int AutoIncrementSeed = startupIndex + 1000000 * profileID;
+                    //dTables[i].Columns["C"].AutoIncrementSeed = AutoIncrementSeed;
+                    //for (int rowIdx = 0, rowCount = dTables[i].Rows.Count; rowIdx < rowCount; rowIdx++)
+                    //{
+                    //    dTables[i].Rows[rowIdx]["C"] = AutoIncrementSeed + rowIdx;
+                    //}
 
                     // and save to our storgae
                     dTables[i].WriteXml(artFiles[i].FullName, true);

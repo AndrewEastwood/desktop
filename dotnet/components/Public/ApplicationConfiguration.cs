@@ -545,6 +545,33 @@ namespace components.Public
                     }
             }
         }
+        
+        /* set control profile name */
+        public void CollectAndSetProfileName(System.Windows.Forms.Control container, string profile)
+        {
+            foreach (Control ctrl in container.Controls)
+            {
+                CollectAndSetProfileName(ctrl, profile);
+                if (ctrl.Name.Length != 0)
+                {
+                    string _ctrlPrevProfile = ctrl.Tag == null ? "" : ctrl.Tag.ToString();
+                    int _ctrlPrevProfileLen = _ctrlPrevProfile.Length;
+
+                    // replace existed profile
+                    if (_ctrlPrevProfileLen > 0) {
+                        // make sure that we have it at the beginning
+                        if (ctrl.Name.StartsWith(_ctrlPrevProfile))
+                            ctrl.Name = profile + '_' + ctrl.Name.Substring(_ctrlPrevProfileLen + 1);
+                        else
+                            ctrl.Name = profile + '_' + ctrl.Name;
+                    } else {
+                        ctrl.Name = profile + '_' + ctrl.Name;
+                    }
+                    
+                    ctrl.Tag = profile;
+                }
+            }
+        }
         #endregion
 
         public void ResetInstance()

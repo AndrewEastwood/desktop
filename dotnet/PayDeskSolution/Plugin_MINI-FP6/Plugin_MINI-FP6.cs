@@ -2539,7 +2539,7 @@ namespace MINI_FP6
                 bool isRetrive = (bool)param[0];
                 if (isRetrive)
                 {
-                    string memoryAddr = "30AB";
+                    string memoryAddr = "305E";
                     if (Params.Compatibility.ContainsKey("OP6")) memoryAddr = "3077";
                     mem = GetMemory(memoryAddr, (byte)16, (byte)2);
                     Params.DriverData["LastFOrderNo"] = cfnom = uint.Parse(mem[1].ToString("X") + mem[0].ToString("X2"));
@@ -2694,7 +2694,7 @@ namespace MINI_FP6
 
                 int attemptsGeneral = 20;
                 int attemptsToResend = 6;
-                int attemptsOnBusy = 40;
+                int attemptsOnBusy = 100;
                 int attemptsToRead = 5;
 
                 byte[] buffer = new byte[512];
@@ -2793,8 +2793,17 @@ namespace MINI_FP6
             if (_outputData.Length == 0)
                 return "false";
 
-            if (_outputData[0] == ACK)
+            // remove all SYN symbols
+            bool _isBusy = _outputData[0] == SYN;
+            List<byte> _withoutSYN = new List<byte>();
+            for (int i = 0, len = _outputData.Length; i < len; i++)
+                if (_outputData[i] != SYN)
+                    _withoutSYN.Add(_outputData[i]);
+            _outputData = _withoutSYN.ToArray();
+
+            if (_outputData.Length > 0 && _outputData[0] == ACK)
             {
+                _isBusy = false;
                 byte i = 0;
                 byte symbol = 0x00;
 
@@ -2906,16 +2915,18 @@ namespace MINI_FP6
                         return "true";
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     components.Components.WinApi.Com_WinApi.OutputDebugString(ex.Message);
                 }
             }//if ACK
 
-            if (Params.Compatibility.ContainsKey("OP6") && OutputData[0] == SYN)
-            {
-                return "resend";
-            }
+            if (_isBusy)
+                return "busy";
+            //if (Params.Compatibility.ContainsKey("OP6") && OutputData[0] == SYN)
+            //{
+            //    return "resend";
+            //}
 
             return "false";
         }

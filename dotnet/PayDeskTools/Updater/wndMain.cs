@@ -27,6 +27,11 @@ namespace Updater
             this.timer1.Start();
         }
 
+        ~wndMain()
+        {
+            this.unlockDestinationFolder();
+        }
+
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -49,13 +54,67 @@ namespace Updater
             ApplicationConfiguration.Instance.ReloadConfigurationData();
         }
 
+        public void lockDestinationFolder()
+        {
+            string localPathBase = ApplicationConfiguration.Instance["sync.localPath"].ToString();
+            FileInfo localLockFile = new FileInfo(localPathBase + @"\.lock");
+            FileInfo localStorageInfo = new FileInfo(localPathBase);
+            // create loca dir when it does not exsist
+            if (!System.IO.Directory.Exists(localStorageInfo.FullName))
+                System.IO.Directory.CreateDirectory(localStorageInfo.FullName);
+            // add lock file
+            File.CreateText(localLockFile.FullName).Close();
+        }
+
+        public void unlockDestinationFolder()
+        {
+            string localPathBase = ApplicationConfiguration.Instance["sync.localPath"].ToString();
+            FileInfo localLockFile = new FileInfo(localPathBase + @"\.lock");
+            FileInfo localStorageInfo = new FileInfo(localPathBase);
+            // create loca dir when it does not exsist
+            if (!System.IO.Directory.Exists(localStorageInfo.FullName))
+                System.IO.Directory.CreateDirectory(localStorageInfo.FullName);
+            // remove lock file
+            File.Delete(localLockFile.FullName);
+        }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             timer1.Stop();
 
-            // add .lock file into local dir
+            string _statusMessage = "";
 
+            Hashtable dataSyncProfiles = (Hashtable)ApplicationConfiguration.Instance.Configuration["datasync"];
+            if (dataSyncProfiles != null)
+                foreach (DictionaryEntry de in dataSyncProfiles)
+                {
+                    string _statusMessageProfile = perfromDataSync((Hashtable)de.Value);
+                    if (_statusMessageProfile.Length > 0)
+                        _statusMessage += "\r\n" + de.Key.ToString() + ":\r\n" + "".PadRight(de.Key.ToString().Length, '-') +_statusMessageProfile + "\r\n" + "".PadRight(15, '=');
+                }
+            
+            timer1.Start();
 
+            if (_statusMessage.Length > 0)
+                notifyIcon1.ShowBalloonTip(1, "Синхронізація завершена", _statusMessage, ToolTipIcon.Info);
+        }
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.timer1.Stop();
+            new wndSettings().ShowDialog();
+            ApplicationConfiguration.Instance.ReloadConfigurationData();
+            try
+            {
+                this.timer1.Interval = ApplicationConfiguration.Instance.GetValueByPath<int>("sync.fetchTimer");
+            }
+            catch { }
+            this.timer1.Start();
+        }
+
+        /* datasync profile */
+        private string perfromDataSync(Hashtable config)
+        {
             // notifyIcon1.ShowBalloonTip(500, Application.ProductName, "Data Sync Started", ToolTipIcon.Info);
 
             // loop through remote files
@@ -69,7 +128,7 @@ namespace Updater
             Dictionary<string, DateTime> _filenNameToDatNew = new Dictionary<string, DateTime>();
             bool copyAllFiles = false;
 
-            
+
             // create loca dir when it does not exsist
             if (!System.IO.Directory.Exists(localStorageInfo.FullName))
                 System.IO.Directory.CreateDirectory(localStorageInfo.FullName);
@@ -78,17 +137,18 @@ namespace Updater
             {
                 notifyIcon1.ShowBalloonTip(1, "Помилка синхронізації", "Немає звязку з сервером", ToolTipIcon.Error);
                 timer1.Start();
-                return;
+                return "";
             }
 
             if (files.Length == 0)
             {
                 timer1.Start();
-                return;
+                return "";
             }
 
             // add lock file
-            File.CreateText(localLockFile.FullName).Close();
+            // File.CreateText(localLockFile.FullName).Close();
+            this.lockDestinationFolder();
 
             if (localRemoteFileInfo.Exists)
             {
@@ -130,7 +190,7 @@ namespace Updater
                     System.IO.File.Copy(remoteFileInfo.FullName, localFileInfo.FullName, true);
                     _filenNameToDatNew[files[i]] = remoteFileInfo.LastWriteTimeUtc;
                     // do file data tarnsformations
-                    dataReaderAndTransformation(localFileInfo);
+                    dataReader(localFileInfo);
                     downloadedFiles++;
                     continue;
                 }
@@ -141,7 +201,7 @@ namespace Updater
                     System.IO.File.Copy(remoteFileInfo.FullName, localFileInfo.FullName, true);
                     _filenNameToDatNew[files[i]] = remoteFileInfo.LastWriteTimeUtc;
                     // do file data tarnsformations
-                    dataReaderAndTransformation(localFileInfo);
+                    dataReader(localFileInfo);
                     downloadedFiles++;
                     continue;
                 }
@@ -151,7 +211,7 @@ namespace Updater
                     System.IO.File.Copy(remoteFileInfo.FullName, localFileInfo.FullName, true);
                     _filenNameToDatNew[files[i]] = remoteFileInfo.LastWriteTimeUtc;
                     // do file data tarnsformations
-                    dataReaderAndTransformation(localFileInfo);
+                    dataReader(localFileInfo);
                     downloadedFiles++;
                     continue;
                 }
@@ -162,7 +222,7 @@ namespace Updater
                     System.IO.File.Copy(remoteFileInfo.FullName, localFileInfo.FullName, true);
                     _filenNameToDatNew[files[i]] = remoteFileInfo.LastWriteTimeUtc;
                     // do file data tarnsformations
-                    dataReaderAndTransformation(localFileInfo);
+                    dataReader(localFileInfo);
                     downloadedFiles++;
                     continue;
                 }
@@ -175,41 +235,28 @@ namespace Updater
             }
 
             // save remote file list
-            List<string> _info = new List<string> ();
+            List<string> _info = new List<string>();
             foreach (KeyValuePair<string, DateTime> remoteOnLocalInfoEntry in _filenNameToDatNew)
             {
                 // save remote file info
                 _info.Add(remoteOnLocalInfoEntry.Key + "#" + remoteOnLocalInfoEntry.Value.Ticks.ToString());
             }
-            System.IO.File.WriteAllLines(localRemoteFileInfo.FullName,  _info.ToArray());
+            System.IO.File.WriteAllLines(localRemoteFileInfo.FullName, _info.ToArray());
 
 
             // System.Threading.Thread.Sleep(3000);
 
+            this.dataTransformation();
+
             // remove lock file
-            File.Delete(localLockFile.FullName);
+            // File.Delete(localLockFile.FullName);
+            this.unlockDestinationFolder();
 
-            timer1.Start();
-
-            string _baloonInfo = string.Format("Нових: {0}\nВидалено: {1}\nБез змін: {2}", downloadedFiles, removedFiles, unchangedFiles);
-            notifyIcon1.ShowBalloonTip(1, "Синхронізація завершена", _baloonInfo, ToolTipIcon.Info);
-        }
-
-        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.timer1.Stop();
-            new wndSettings().ShowDialog();
-            ApplicationConfiguration.Instance.ReloadConfigurationData();
-            try
-            {
-                this.timer1.Interval = ApplicationConfiguration.Instance.GetValueByPath<int>("sync.fetchTimer");
-            }
-            catch { }
-            this.timer1.Start();
+            return string.Format("Нових: {0}\nВидалено: {1}\nБез змін: {2}", downloadedFiles, removedFiles, unchangedFiles);
         }
 
         /* data readers  */
-        private void dataReaderAndTransformation(FileInfo file)
+        private void dataReader(FileInfo file)
         {
             Hashtable mapToReaders = ApplicationConfiguration.Instance.GetValueByPath<Hashtable>("sync.dataReaders");
 
@@ -230,26 +277,113 @@ namespace Updater
                         case "Products":
                             data = ReadProduct(file.FullName);
                             data.TableName = Path.GetFileNameWithoutExtension(file.Name);
-                            data.WriteXml(file.FullName.Replace(file.Extension, "_raw.xml"), true);
+                            data.ExtendedProperties["NAME"] = data.TableName;
+                            data.WriteXml(file.FullName.Replace(file.Extension, ".xml"), true);
                             break;
                         case "AlternativeBarCodes":
                             data = ReadAlternative(file.FullName);
                             data.TableName = Path.GetFileNameWithoutExtension(file.Name);
-                            data.WriteXml(file.FullName.Replace(file.Extension, "_raw.xml"), true);
+                            data.ExtendedProperties["NAME"] = data.TableName;
+                            data.WriteXml(file.FullName.Replace(file.Extension, ".xml"), true);
                             break;
                         case "ClientCards":
                             data = ReadCard(file.FullName);
                             data.TableName = Path.GetFileNameWithoutExtension(file.Name);
-                            data.WriteXml(file.FullName.Replace(file.Extension, "_raw.xml"), true);
+                            data.ExtendedProperties["NAME"] = data.TableName;
+                            data.WriteXml(file.FullName.Replace(file.Extension, ".xml"), true);
                             break;
                     }
                 }
             }
+
         }
 
-        private static DataTable CreateDataTableForProduct()
+        private void dataTransformation()
         {
-            DataTable dTable = new DataTable();
+            Hashtable mapToTransform = ApplicationConfiguration.Instance.GetValueByPath<Hashtable>("sync.dataTransform");
+            string localPathBase = ApplicationConfiguration.Instance["sync.localPath"].ToString();
+            FileInfo localStorageInfo = new FileInfo(localPathBase);
+
+            foreach (DictionaryEntry de in mapToTransform)
+            {
+                Hashtable entry = (Hashtable)de.Value;
+                List<string> _sourceList = new List<string>(entry["SourceList"].ToString().Split(new char[] { ';', ' ', ',' }, StringSplitOptions.RemoveEmptyEntries));
+
+
+                //if (entry["SourceList"].ToString().Equals(file.Name))
+                //{
+                if (_sourceList.Count == 0)
+                    continue;
+
+                // do data transformatios
+                switch (entry["Function"].ToString())
+                {
+                    case "JoinedProducts":
+                        {
+                            // source list
+                            string _mergedSourceName = entry["DestinationName"] != null ? entry["DestinationName"].ToString() : "DefaultProducts.xml";
+                            DataTable _mergedSources = CreateDataTableForProduct(Path.GetFileNameWithoutExtension(_mergedSourceName));
+                            DataTable _runningSource = null;
+                            foreach (string _sourceName in _sourceList)
+                            {
+                                // read source
+                                _runningSource = CreateDataTableForProduct(Path.GetFileNameWithoutExtension(_sourceName));
+                                _runningSource.ReadXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName);
+                                // do merge
+                                _mergedSources.Merge(_runningSource);
+                            }
+
+                            // save merged data
+                            _mergedSources.WriteXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _mergedSourceName);
+                            break;
+                        }
+                    case "JoinedAlternativeBC":
+                        {
+                            // source list
+                            string _mergedSourceName = entry["DestinationName"] != null ? entry["DestinationName"].ToString() : "DefaultAlternatives.xml";
+                            DataTable _mergedSources = CreateDataTableForProduct(Path.GetFileNameWithoutExtension(_mergedSourceName));
+                            DataTable _runningSource = null;
+                            foreach (string _sourceName in _sourceList)
+                            {
+                                // read source
+                                _runningSource = CreateDataTableForProduct(Path.GetFileNameWithoutExtension(_sourceName));
+                                _runningSource.ReadXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName);
+                                // do merge
+                                _mergedSources.Merge(_runningSource);
+                            }
+
+                            // save merged data
+                            _mergedSources.WriteXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _mergedSourceName);
+                            break;
+                        }
+                    case "JoinedClientCards":
+                        {
+                            // source list
+                            string _mergedSourceName = entry["DestinationName"] != null ? entry["DestinationName"].ToString() : "DefaultClientCards.xml";
+                            DataTable _mergedSources = CreateDataTableForProduct(Path.GetFileNameWithoutExtension(_mergedSourceName));
+                            DataTable _runningSource = null;
+                            foreach (string _sourceName in _sourceList)
+                            {
+                                // read source
+                                _runningSource = CreateDataTableForProduct(Path.GetFileNameWithoutExtension(_sourceName));
+                                _runningSource.ReadXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName);
+                                // do merge
+                                _mergedSources.Merge(_runningSource);
+                            }
+
+                            // save merged data
+                            _mergedSources.WriteXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _mergedSourceName);
+                            break;
+                        }
+                }
+
+
+            }
+        }
+
+        private static DataTable CreateDataTableForProduct(string name)
+        {
+            DataTable dTable = new DataTable(name);
             Type[] cTypes = {
                 typeof(string),
                 typeof(string),
@@ -283,9 +417,9 @@ namespace Updater
 
             return dTable;
         }//ok
-        private static DataTable CreateDataTableForAlternative()
+        private static DataTable CreateDataTableForAlternative(string name)
         {
-            DataTable dTable = new DataTable();
+            DataTable dTable = new DataTable(name);
             Type[] cTypes = {
                 typeof(string),
                 typeof(string)};
@@ -305,9 +439,9 @@ namespace Updater
 
             return dTable;
         }//ok
-        private static DataTable CreateDataTableForCard()
+        private static DataTable CreateDataTableForCard(string name)
         {
-            DataTable dTable = new DataTable();
+            DataTable dTable = new DataTable(name);
             Type[] cTypes = {
                 typeof(string),
                 typeof(string),
@@ -332,7 +466,7 @@ namespace Updater
         }//ok
         private static DataTable ReadProduct(string path)
         {
-            DataTable dTable = CreateDataTableForProduct();
+            DataTable dTable = CreateDataTableForProduct(Path.GetFileNameWithoutExtension(path));
             CoreLib coreLib = new CoreLib();
             byte err_cnt = 0;
             int startupIndex = 0;
@@ -430,7 +564,7 @@ namespace Updater
         }//ok
         private static DataTable ReadAlternative(string path)
         {
-            DataTable dTable = CreateDataTableForAlternative();
+            DataTable dTable = CreateDataTableForAlternative(Path.GetFileNameWithoutExtension(path));
             int startupIndex = 0;
             CoreLib coreLib = new CoreLib();
             byte err_cnt = 0;
@@ -509,7 +643,7 @@ namespace Updater
         }//ok
         private static DataTable ReadCard(string path)
         {
-            DataTable dTable = CreateDataTableForCard();
+            DataTable dTable = CreateDataTableForCard(Path.GetFileNameWithoutExtension(path));
             int startupIndex = 0;
             CoreLib coreLib = new CoreLib();
             byte err_cnt = 0;
