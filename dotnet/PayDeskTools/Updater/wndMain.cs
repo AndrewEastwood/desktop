@@ -21,7 +21,7 @@ namespace Updater
             InitializeComponent();
             try
             {
-                this.timer1.Interval = ApplicationConfiguration.Instance.GetValueByPath<int>("sync.fetchTimer");
+                this.timer1.Interval = ApplicationConfiguration.Instance.GetValueByPath<int>("general.fetchTimeout");
             }
             catch { }
             this.timer1.Start();
@@ -29,7 +29,19 @@ namespace Updater
 
         ~wndMain()
         {
-            this.unlockDestinationFolder();
+            Hashtable dataSyncProfiles = (Hashtable)ApplicationConfiguration.Instance.Configuration["datasync"];
+            if (dataSyncProfiles != null)
+                foreach (DictionaryEntry de in dataSyncProfiles)
+                {
+                    Hashtable _syncConfig = (Hashtable)de.Value;
+                    if (!_syncConfig.ContainsKey("sync"))
+                        continue;
+                    try
+                    {
+                        this.unlockDestinationFolder((Hashtable)_syncConfig["sync"]);
+                    }
+                    catch { }
+                }
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -54,30 +66,6 @@ namespace Updater
             ApplicationConfiguration.Instance.ReloadConfigurationData();
         }
 
-        public void lockDestinationFolder()
-        {
-            string localPathBase = ApplicationConfiguration.Instance["sync.localPath"].ToString();
-            FileInfo localLockFile = new FileInfo(localPathBase + @"\.lock");
-            FileInfo localStorageInfo = new FileInfo(localPathBase);
-            // create loca dir when it does not exsist
-            if (!System.IO.Directory.Exists(localStorageInfo.FullName))
-                System.IO.Directory.CreateDirectory(localStorageInfo.FullName);
-            // add lock file
-            File.CreateText(localLockFile.FullName).Close();
-        }
-
-        public void unlockDestinationFolder()
-        {
-            string localPathBase = ApplicationConfiguration.Instance["sync.localPath"].ToString();
-            FileInfo localLockFile = new FileInfo(localPathBase + @"\.lock");
-            FileInfo localStorageInfo = new FileInfo(localPathBase);
-            // create loca dir when it does not exsist
-            if (!System.IO.Directory.Exists(localStorageInfo.FullName))
-                System.IO.Directory.CreateDirectory(localStorageInfo.FullName);
-            // remove lock file
-            File.Delete(localLockFile.FullName);
-        }
-
         private void timer1_Tick(object sender, EventArgs e)
         {
             timer1.Stop();
@@ -88,9 +76,16 @@ namespace Updater
             if (dataSyncProfiles != null)
                 foreach (DictionaryEntry de in dataSyncProfiles)
                 {
-                    string _statusMessageProfile = perfromDataSync((Hashtable)de.Value);
-                    if (_statusMessageProfile.Length > 0)
-                        _statusMessage += "\r\n" + de.Key.ToString() + ":\r\n" + "".PadRight(de.Key.ToString().Length, '-') +_statusMessageProfile + "\r\n" + "".PadRight(15, '=');
+                    Hashtable _syncConfig = (Hashtable)de.Value;
+                    if (!_syncConfig.ContainsKey("sync"))
+                        continue;
+                    try
+                    {
+                        string _statusMessageProfile = perfromDataSync(de.Key.ToString(), (Hashtable)_syncConfig["sync"]);
+                        if (_statusMessageProfile.Length > 0)
+                            _statusMessage += "\r\n" + de.Key.ToString() + ":\r\n" + "\r\n".PadLeft(de.Key.ToString().Length, '-') + _statusMessageProfile + "\r\n" + "".PadRight(15, '=');
+                    }
+                    catch { }
                 }
             
             timer1.Start();
@@ -106,22 +101,22 @@ namespace Updater
             ApplicationConfiguration.Instance.ReloadConfigurationData();
             try
             {
-                this.timer1.Interval = ApplicationConfiguration.Instance.GetValueByPath<int>("sync.fetchTimer");
+                this.timer1.Interval = ApplicationConfiguration.Instance.GetValueByPath<int>("general.fetchTimeout");
             }
             catch { }
             this.timer1.Start();
         }
 
         /* datasync profile */
-        private string perfromDataSync(Hashtable config)
+        private string perfromDataSync(string profileName, Hashtable config)
         {
             // notifyIcon1.ShowBalloonTip(500, Application.ProductName, "Data Sync Started", ToolTipIcon.Info);
 
             // loop through remote files
-            string[] files = ApplicationConfiguration.Instance["sync.monitorFiles"].ToString().Split('\n');
-            string remotePathBase = ApplicationConfiguration.Instance["sync.remotePath"].ToString();
-            string localPathBase = ApplicationConfiguration.Instance["sync.localPath"].ToString();
-            FileInfo localRemoteFileInfo = new FileInfo(localPathBase + @"\info.txt");
+            string[] files = config["monitorFiles"].ToString().Split('\n');
+            string remotePathBase = config["remotePath"].ToString();
+            string localPathBase = config["localPath"].ToString();
+            FileInfo localRemoteFileInfo = new FileInfo(localPathBase + @"\info_" + profileName + ".txt");
             FileInfo localLockFile = new FileInfo(localPathBase + @"\.lock");
             FileInfo localStorageInfo = new FileInfo(localPathBase);
             Dictionary<string, DateTime> _filenNameToDate = new Dictionary<string, DateTime>();
@@ -148,7 +143,7 @@ namespace Updater
 
             // add lock file
             // File.CreateText(localLockFile.FullName).Close();
-            this.lockDestinationFolder();
+            this.lockDestinationFolder(config);
 
             if (localRemoteFileInfo.Exists)
             {
@@ -190,7 +185,7 @@ namespace Updater
                     System.IO.File.Copy(remoteFileInfo.FullName, localFileInfo.FullName, true);
                     _filenNameToDatNew[files[i]] = remoteFileInfo.LastWriteTimeUtc;
                     // do file data tarnsformations
-                    dataReader(localFileInfo);
+                    dataReader(localFileInfo, config);
                     downloadedFiles++;
                     continue;
                 }
@@ -201,7 +196,7 @@ namespace Updater
                     System.IO.File.Copy(remoteFileInfo.FullName, localFileInfo.FullName, true);
                     _filenNameToDatNew[files[i]] = remoteFileInfo.LastWriteTimeUtc;
                     // do file data tarnsformations
-                    dataReader(localFileInfo);
+                    dataReader(localFileInfo, config);
                     downloadedFiles++;
                     continue;
                 }
@@ -211,7 +206,7 @@ namespace Updater
                     System.IO.File.Copy(remoteFileInfo.FullName, localFileInfo.FullName, true);
                     _filenNameToDatNew[files[i]] = remoteFileInfo.LastWriteTimeUtc;
                     // do file data tarnsformations
-                    dataReader(localFileInfo);
+                    dataReader(localFileInfo, config);
                     downloadedFiles++;
                     continue;
                 }
@@ -222,7 +217,7 @@ namespace Updater
                     System.IO.File.Copy(remoteFileInfo.FullName, localFileInfo.FullName, true);
                     _filenNameToDatNew[files[i]] = remoteFileInfo.LastWriteTimeUtc;
                     // do file data tarnsformations
-                    dataReader(localFileInfo);
+                    dataReader(localFileInfo, config);
                     downloadedFiles++;
                     continue;
                 }
@@ -245,20 +240,46 @@ namespace Updater
 
 
             // System.Threading.Thread.Sleep(3000);
-
-            this.dataTransformation();
-
+            try
+            {
+                this.dataTransformation(config);
+            }
+            catch { }
             // remove lock file
             // File.Delete(localLockFile.FullName);
-            this.unlockDestinationFolder();
+            this.unlockDestinationFolder(config);
 
-            return string.Format("Нових: {0}\nВидалено: {1}\nБез змін: {2}", downloadedFiles, removedFiles, unchangedFiles);
+            return string.Format("Нових: {0}\r\nВидалено: {1}\r\nБез змін: {2}", downloadedFiles, removedFiles, unchangedFiles);
         }
 
-        /* data readers  */
-        private void dataReader(FileInfo file)
+        public void lockDestinationFolder(Hashtable config)
         {
-            Hashtable mapToReaders = ApplicationConfiguration.Instance.GetValueByPath<Hashtable>("sync.dataReaders");
+            string localPathBase = config["localPath"].ToString();
+            FileInfo localLockFile = new FileInfo(localPathBase + @"\.lock");
+            FileInfo localStorageInfo = new FileInfo(localPathBase);
+            // create loca dir when it does not exsist
+            if (!System.IO.Directory.Exists(localStorageInfo.FullName))
+                System.IO.Directory.CreateDirectory(localStorageInfo.FullName);
+            // add lock file
+            File.CreateText(localLockFile.FullName).Close();
+        }
+
+        public void unlockDestinationFolder(Hashtable config)
+        {
+            string localPathBase = config["localPath"].ToString();
+            FileInfo localLockFile = new FileInfo(localPathBase + @"\.lock");
+            FileInfo localStorageInfo = new FileInfo(localPathBase);
+            // create loca dir when it does not exsist
+            if (!System.IO.Directory.Exists(localStorageInfo.FullName))
+                System.IO.Directory.CreateDirectory(localStorageInfo.FullName);
+            // remove lock file
+            File.Delete(localLockFile.FullName);
+        }
+        
+        /* data readers  */
+        private void dataReader(FileInfo file, Hashtable config)
+        {
+            Hashtable mapToReaders = (Hashtable)config["dataReaders"];
 
             foreach (DictionaryEntry de in mapToReaders)
             {
@@ -298,10 +319,10 @@ namespace Updater
 
         }
 
-        private void dataTransformation()
+        private void dataTransformation(Hashtable config)
         {
-            Hashtable mapToTransform = ApplicationConfiguration.Instance.GetValueByPath<Hashtable>("sync.dataTransform");
-            string localPathBase = ApplicationConfiguration.Instance["sync.localPath"].ToString();
+            Hashtable mapToTransform = (Hashtable)config["dataTransform"];
+            string localPathBase = config["localPath"].ToString();
             FileInfo localStorageInfo = new FileInfo(localPathBase);
 
             foreach (DictionaryEntry de in mapToTransform)

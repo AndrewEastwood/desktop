@@ -2674,8 +2674,10 @@ namespace PayDesk.Components.UI
             timer1.Stop();
             this.Update();
 
+            // check for opened oreder
             if (Cheque.Rows.Count != 0)
             {
+                // so we want to come back here immediately once order is empty
                 _fl_canUpdate = true;
                 timer1.Start();
                 return;
@@ -2683,30 +2685,13 @@ namespace PayDesk.Components.UI
 
             _fl_canUpdate = false;
 
-            //string[] files = DataWorkSource.CheckForUpdate();
-
-            if (_fl_SubUnitChanged)
-            {
-                Articles.Rows.Clear();
-                AltBC.Rows.Clear();
-            }
-
-            Hashtable hfiles = DataWorkSource.CheckForUpdate();
+            // clear all data
+            Articles.Rows.Clear();
+            AltBC.Rows.Clear();
+            Cards.Rows.Clear();
 
             Com_WinApi.OutputDebugString("MainWnd --- AddingData Begin");
 
-            /* notification */
-            /*
-            */
-            int currentProfileIndex = 0;
-            int startupIndex = 0;
-            bool notificationIsActive = false;
-            uiWndUpdateWnd uw = new uiWndUpdateWnd(_fl_onlyUpdate);
-
-
-            /* Data Loader v2.0 */
-            // Com_HashObject newFiles = DataWorkSource.CheckGetDataSource(dataContainer2.Structures[CoreConst.CONTAINER_STATE].GetTypedProperty<bool>(CoreConst.STATE_DATA_UPDATE_ONLY));
-            // DataWorkSource.UpdateSource(newFiles, ref this.dataContainer2);
 
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles && this.Cheques.Tables.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
             {
@@ -2731,180 +2716,33 @@ namespace PayDesk.Components.UI
                 }
             }
 
+            // show notification window
+            //uiWndUpdateWnd uw = new uiWndUpdateWnd();
+            //uw.ShowUpdate(this);
+            //uw.Update();
+            //uw.Refresh();
 
+            // download new sources
+            Dictionary<string, DataTable> newSources = DataWorkSource.DownloadSource();
+            Articles.Merge(newSources[CoreConst.DATA_CONTAINER_PRODUCT]);
+            AltBC.Merge(newSources[CoreConst.DATA_CONTAINER_ALTERNATIVE]);
+            Cards.Merge(newSources[CoreConst.DATA_CONTAINER_CLIENT]);
 
-            //MessageBox.Show("done 1");
+            // close notification window
+            //uw.Close();
+            //uw.Dispose();
 
-            List<string> allProfiles = new List<string>();
-            //bool wasUpdatedAtLeastOneSource = false;
-            _fl_artUpdated = false;
-            foreach (DictionaryEntry de in hfiles)
-            {
-
-                string[] files = (string[])de.Value;
-
-                allProfiles.Add(de.Key.ToString());
-
-                /* detectiong for updates */
-
-                // server status
-                if (files[0] == CoreConst.STATE_LAN_ERROR && hfiles.Count == 1)
-                    DDM_UpdateStatus.Image = Properties.Resources.ExNotOk;
-                else
-                    DDM_UpdateStatus.Image = Properties.Resources.ok;
-
-                if ((files[0] == CoreConst.STATE_LAN_ERROR || files[0] == "") && files[1] == "" && files[2] == "" && _fl_onlyUpdate)
-                {
-                    /* if only one profile */
-                    if (hfiles.Count == 1)
-                    //if (!_fl_artUpdated && (hfiles.Count == 1 || currentProfileIndex + 1 == hfiles.Count))
-                    {
-                        timer1.Start();
-                        GC.Collect();
-                        /* close notification */
-                        if (notificationIsActive)
-                        {
-                            uw.Close();
-                            uw.Dispose();
-                        }
-                        return;
-                    }
-
-                    /* next turn */
-                    currentProfileIndex++;
-                    continue;
-                }
-                //MessageBox.Show("done 2");
-
-                if (!notificationIsActive)
-                {
-                    uw.ShowUpdate(this);
-                    uw.Update();
-                    uw.Refresh();
-                    notificationIsActive = true;
-                }
-
-                /* loading */
-
-                //MessageBox.Show("done 3");
-                // string[] localFiles = DataWorkSource.LoadFilesOnLocalTempFolder(files, de.Key);
-
-                if (currentProfileIndex == 0)
-                    startupIndex = 0;
-                else
-                    startupIndex = Articles.Rows.Count;
-                object[] loadResult = DataWorkSource.LoadData(files, _fl_onlyUpdate, de.Key, startupIndex);
-
-
-                // ConfigManager.SaveConfiguration();
-
-                /* adding data */
-
-
-                //MessageBox.Show("done 4");
-
-                DataTable[] tables = (DataTable[])loadResult[0];
-                if (!_fl_artUpdated)
-                    _fl_artUpdated = (bool)loadResult[1];
-
-                if (tables[0] != null)
-                {
-                    //Articles = tables[0].Copy();
-                    // var remainRows = from myRow in Articles.AsEnumerable() where myRow["F"] != de.Key select myRow;
-                    DataTable table = Articles.Clone();
-                    try
-                    {
-                        if (Articles.Rows.Count > 0)
-                            table = Articles.AsEnumerable().Where(r => r.Field<string>("F") != de.Key.ToString()).CopyToDataTable();
-                    }
-                    catch { }
-
-                    Articles.Rows.Clear();
-
-                    if (table.Rows.Count > 0)
-                        Articles.Merge(table);
-
-                    //foreach (DataRow dr in remainRows)
-                    //    Articles.ImportRow(dr);
-
-
-                    //DataRow[] dRows = Articles.Select("F = " + de.Key);
-                    //foreach (DataRow dr in dRows)
-                    //    dr.Delete();
-                    Articles.Merge(tables[0]);
-                    //wasUpdatedAtLeastOneSource = true;
-                }
-                if (tables[1] != null)
-                {
-                    //AltBC = tables[1].Copy();
-                    DataRow[] dRows = AltBC.Select("F = " + de.Key);
-                    foreach (DataRow dr in dRows)
-                        dr.Delete();
-                    AltBC.Merge(tables[1]);
-                    //wasUpdatedAtLeastOneSource = true;
-                }
-                if (tables[2] != null)
-                {
-                    //Cards = tables[2].Copy();
-                    //if (currentProfileIndex == 0)
-                    Cards.Rows.Clear();
-                    Cards.Merge(tables[2]);
-                    //wasUpdatedAtLeastOneSource = true;
-                }
-
-                //MessageBox.Show("done 5");
-                currentProfileIndex++;
-
-            }
-
-
-            ConfigManager.SaveConfiguration();
-
-            //MessageBox.Show("done 6");
-            /* Removing unused rows */
-            string cleanupQuery = string.Empty;
-            foreach (string existedProfiles in allProfiles)
-            {
-                cleanupQuery += " F <> " + existedProfiles + " AND ";
-            }
-            cleanupQuery = cleanupQuery.Trim(new char[] {' ', 'A', 'N', 'D' });
-            DataRow[] unusedRowsArt = Articles.Select(cleanupQuery);
-            DataRow[] unusedRowsAlt = AltBC.Select(cleanupQuery);
-            foreach (DataRow dr in unusedRowsArt)
-                dr.Delete();
-            foreach (DataRow dr in unusedRowsAlt)
-                dr.Delete();
-
-            //MessageBox.Show("done 7");
-            /* close notification */
-            if (notificationIsActive)
-            {
-                uw.Close();
-                uw.Dispose();
-            }
-
-            //MessageBox.Show("done 8");
-            Com_WinApi.OutputDebugString("MainWnd --- AddingData End");
-
-            if (_fl_artUpdated)
-            {
-                if (this.WindowState == FormWindowState.Minimized)
-                    this.WindowState = FormWindowState.Normal;
-                this.BringToFront();
-                MMessageBoxEx.Show(this.chequeDGV, "Були внесені зміни в базу товарів", Application.ProductName,
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-
-            //MessageBox.Show("done 9");
-            _fl_onlyUpdate = true;
-            _fl_SubUnitChanged = false;
-
+            // check app state
             this._fl_isOk = new Com_SecureRuntime().FullLoader();
             this.label_uiWndmain_DemoShowArt.Visible = this.label_uiWndmain_DemoShowChq.Visible = !this._fl_isOk;
-            //MessageBox.Show("done 10");
 
+            // resume source fetch timer
             timer1.Start();
+
+            // activate searchbox
             SrchTbox.Select();
+
+            // cleanup
             GC.Collect();
 
             /* device status */
@@ -2919,8 +2757,241 @@ namespace PayDesk.Components.UI
                         DDM_FPStatus.Image = Properties.Resources.FpNotOk;
                 }
                 catch { DDM_FPStatus.Image = Properties.Resources.FpNotOk; }
-            } else
+            }
+            else
                 DDM_FPStatus.Image = Properties.Resources.FpNotOk;
+
+            return;
+
+
+            ///* notification */
+            ///*
+            //*/
+            //int currentProfileIndex = 0;
+            //int startupIndex = 0;
+            //bool notificationIsActive = false;
+            //uiWndUpdateWnd uw = new uiWndUpdateWnd();
+
+
+            ///* Data Loader v2.0 */
+            //// Com_HashObject newFiles = DataWorkSource.CheckGetDataSource(dataContainer2.Structures[CoreConst.CONTAINER_STATE].GetTypedProperty<bool>(CoreConst.STATE_DATA_UPDATE_ONLY));
+            //// DataWorkSource.UpdateSource(newFiles, ref this.dataContainer2);
+
+            //if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles && this.Cheques.Tables.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
+            //{
+            //    DataWorkSource.CreateTables(ref Cheque, ref Articles, ref AltBC, ref Cards, ref Cheques);
+            //    this.CreateOrderStructure(this.Cheque);
+            //    foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
+            //    {
+            //        this.CreateOrderStructure(this.Cheques.Tables[de.Key.ToString()]);
+            //        this.Discount[de.Key] = DataWorkShared.GetStandartDiscountInfoStructure2();
+            //        this.Summa[de.Key] = DataWorkShared.GetStandartCalculationInfoStructure2();
+            //    }
+            //}
+
+            //if (this.Summa.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
+            //{
+            //    this.Discount.Clear();
+            //    this.Summa.Clear();
+            //    foreach (DictionaryEntry de in ConfigManager.Instance.CommonConfiguration.PROFILES_Items)
+            //    {
+            //        this.Discount[de.Key] = DataWorkShared.GetStandartDiscountInfoStructure2();
+            //        this.Summa[de.Key] = DataWorkShared.GetStandartCalculationInfoStructure2();
+            //    }
+            //}
+
+
+
+            ////MessageBox.Show("done 1");
+
+            //List<string> allProfiles = new List<string>();
+            ////bool wasUpdatedAtLeastOneSource = false;
+            //_fl_artUpdated = false;
+            //foreach (DictionaryEntry de in hfiles)
+            //{
+
+            //    string[] files = (string[])de.Value;
+
+            //    allProfiles.Add(de.Key.ToString());
+
+            //    /* detectiong for updates */
+
+            //    // server status
+            //    if (files[0] == CoreConst.STATE_LAN_ERROR && hfiles.Count == 1)
+            //        DDM_UpdateStatus.Image = Properties.Resources.ExNotOk;
+            //    else
+            //        DDM_UpdateStatus.Image = Properties.Resources.ok;
+
+            //    if ((files[0] == CoreConst.STATE_LAN_ERROR || files[0] == "") && files[1] == "" && files[2] == "" && _fl_onlyUpdate)
+            //    {
+            //        /* if only one profile */
+            //        if (hfiles.Count == 1)
+            //        //if (!_fl_artUpdated && (hfiles.Count == 1 || currentProfileIndex + 1 == hfiles.Count))
+            //        {
+            //            timer1.Start();
+            //            GC.Collect();
+            //            /* close notification */
+            //            if (notificationIsActive)
+            //            {
+            //                uw.Close();
+            //                uw.Dispose();
+            //            }
+            //            return;
+            //        }
+
+            //        /* next turn */
+            //        currentProfileIndex++;
+            //        continue;
+            //    }
+            //    //MessageBox.Show("done 2");
+
+            //    if (!notificationIsActive)
+            //    {
+            //        uw.ShowUpdate(this);
+            //        uw.Update();
+            //        uw.Refresh();
+            //        notificationIsActive = true;
+            //    }
+
+            //    /* loading */
+
+            //    //MessageBox.Show("done 3");
+            //    // string[] localFiles = DataWorkSource.LoadFilesOnLocalTempFolder(files, de.Key);
+
+            //    if (currentProfileIndex == 0)
+            //        startupIndex = 0;
+            //    else
+            //        startupIndex = Articles.Rows.Count;
+            //    object[] loadResult = DataWorkSource.LoadData(files, _fl_onlyUpdate, de.Key, startupIndex);
+
+
+            //    // ConfigManager.SaveConfiguration();
+
+            //    /* adding data */
+
+
+            //    //MessageBox.Show("done 4");
+
+            //    DataTable[] tables = (DataTable[])loadResult[0];
+            //    if (!_fl_artUpdated)
+            //        _fl_artUpdated = (bool)loadResult[1];
+
+            //    if (tables[0] != null)
+            //    {
+            //        //Articles = tables[0].Copy();
+            //        // var remainRows = from myRow in Articles.AsEnumerable() where myRow["F"] != de.Key select myRow;
+            //        //DataTable table = Articles.Clone();
+            //        //try
+            //        //{
+            //        //    if (Articles.Rows.Count > 0)
+            //        //        table = Articles.AsEnumerable().Where(r => r.Field<string>("F") != de.Key.ToString()).CopyToDataTable();
+            //        //}
+            //        //catch { }
+
+            //        //Articles.Rows.Clear();
+
+            //        //if (table.Rows.Count > 0)
+            //        //    Articles.Merge(table);
+
+            //        //foreach (DataRow dr in remainRows)
+            //        //    Articles.ImportRow(dr);
+
+
+            //        //DataRow[] dRows = Articles.Select("F = " + de.Key);
+            //        //foreach (DataRow dr in dRows)
+            //        //    dr.Delete();
+            //        Articles.Clear();
+            //        Articles.Merge(tables[0]);
+            //        //wasUpdatedAtLeastOneSource = true;
+            //    }
+            //    if (tables[1] != null)
+            //    {
+            //        //AltBC = tables[1].Copy();
+            //        //DataRow[] dRows = AltBC.Select("F = " + de.Key);
+            //        //foreach (DataRow dr in dRows)
+            //        //    dr.Delete();
+            //        AltBC.Clear();
+            //        AltBC.Merge(tables[1]);
+            //        //wasUpdatedAtLeastOneSource = true;
+            //    }
+            //    if (tables[2] != null)
+            //    {
+            //        //Cards = tables[2].Copy();
+            //        //if (currentProfileIndex == 0)
+            //        Cards.Rows.Clear();
+            //        Cards.Merge(tables[2]);
+            //        //wasUpdatedAtLeastOneSource = true;
+            //    }
+
+            //    //MessageBox.Show("done 5");
+            //    currentProfileIndex++;
+
+            //}
+
+
+            //// ConfigManager.SaveConfiguration();
+
+            ////MessageBox.Show("done 6");
+            ///* Removing unused rows */
+            ////string cleanupQuery = string.Empty;
+            ////foreach (string existedProfiles in allProfiles)
+            ////{
+            ////    cleanupQuery += " F <> " + existedProfiles + " AND ";
+            ////}
+            ////cleanupQuery = cleanupQuery.Trim(new char[] {' ', 'A', 'N', 'D' });
+            ////DataRow[] unusedRowsArt = Articles.Select(cleanupQuery);
+            ////DataRow[] unusedRowsAlt = AltBC.Select(cleanupQuery);
+            ////foreach (DataRow dr in unusedRowsArt)
+            ////    dr.Delete();
+            ////foreach (DataRow dr in unusedRowsAlt)
+            ////    dr.Delete();
+
+            ////MessageBox.Show("done 7");
+            ///* close notification */
+            //if (notificationIsActive)
+            //{
+            //    uw.Close();
+            //    uw.Dispose();
+            //}
+
+            ////MessageBox.Show("done 8");
+            //Com_WinApi.OutputDebugString("MainWnd --- AddingData End");
+
+            //if (_fl_artUpdated)
+            //{
+            //    if (this.WindowState == FormWindowState.Minimized)
+            //        this.WindowState = FormWindowState.Normal;
+            //    this.BringToFront();
+            //    MMessageBoxEx.Show(this.chequeDGV, "Були внесені зміни в базу товарів", Application.ProductName,
+            //        MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //}
+
+            ////MessageBox.Show("done 9");
+            //_fl_onlyUpdate = true;
+            //_fl_SubUnitChanged = false;
+
+            //this._fl_isOk = new Com_SecureRuntime().FullLoader();
+            //this.label_uiWndmain_DemoShowArt.Visible = this.label_uiWndmain_DemoShowChq.Visible = !this._fl_isOk;
+            ////MessageBox.Show("done 10");
+
+            //timer1.Start();
+            //SrchTbox.Select();
+            //GC.Collect();
+
+            ///* device status */
+            //if (Program.AppPlugins.IsActive(PluginType.LegalPrinterDriver))
+            //{
+            //    try
+            //    {
+            //        bool status = (bool)Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_SetCashier", ConfigManager.Instance.CommonConfiguration.APP_PayDesk, UserConfig.UserFpLogin, UserConfig.UserFpPassword, UserConfig.UserID);
+            //        if (status)
+            //            DDM_FPStatus.Image = Properties.Resources.ok;
+            //        else
+            //            DDM_FPStatus.Image = Properties.Resources.FpNotOk;
+            //    }
+            //    catch { DDM_FPStatus.Image = Properties.Resources.FpNotOk; }
+            //} else
+            //    DDM_FPStatus.Image = Properties.Resources.FpNotOk;
         }
 
         /// <summary>

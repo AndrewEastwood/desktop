@@ -10,11 +10,10 @@ namespace PayDesk.Components.UI
 {
     public partial class uiWndUpdateWnd : Form
     {
-        public uiWndUpdateWnd(bool onlyUpdate)
+        public uiWndUpdateWnd()
         {
             InitializeComponent();
-            if (!onlyUpdate)
-                label1.Text = "Відбувається завантаження бази товарів";
+            label1.Text = "Відбувається оновлення бази товарів";
         }
 
         public void ShowUpdate(IWin32Window owner)

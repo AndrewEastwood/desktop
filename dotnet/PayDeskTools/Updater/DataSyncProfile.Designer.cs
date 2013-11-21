@@ -35,9 +35,7 @@
             this.sync_remotePath = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.sync_fetchTimer = new System.Windows.Forms.NumericUpDown();
             this.sync_localPath = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.sync_dataReaders = new System.Windows.Forms.DataGridView();
             this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -52,7 +50,6 @@
             this.sync_profileName = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sync_fetchTimer)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sync_dataReaders)).BeginInit();
             this.tabPage3.SuspendLayout();
@@ -80,9 +77,7 @@
             this.tabPage1.Controls.Add(this.sync_remotePath);
             this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.sync_fetchTimer);
             this.tabPage1.Controls.Add(this.sync_localPath);
-            this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -105,9 +100,9 @@
             this.sync_monitorFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.sync_monitorFiles.Location = new System.Drawing.Point(6, 136);
+            this.sync_monitorFiles.Location = new System.Drawing.Point(6, 97);
             this.sync_monitorFiles.Name = "sync_monitorFiles";
-            this.sync_monitorFiles.Size = new System.Drawing.Size(332, 98);
+            this.sync_monitorFiles.Size = new System.Drawing.Size(332, 137);
             this.sync_monitorFiles.TabIndex = 8;
             this.sync_monitorFiles.Text = "";
             // 
@@ -124,7 +119,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 120);
+            this.label4.Location = new System.Drawing.Point(3, 81);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(63, 13);
             this.label4.TabIndex = 7;
@@ -139,26 +134,6 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "Local path";
             // 
-            // sync_fetchTimer
-            // 
-            this.sync_fetchTimer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.sync_fetchTimer.Location = new System.Drawing.Point(6, 97);
-            this.sync_fetchTimer.Maximum = new decimal(new int[] {
-            600000,
-            0,
-            0,
-            0});
-            this.sync_fetchTimer.Name = "sync_fetchTimer";
-            this.sync_fetchTimer.Size = new System.Drawing.Size(332, 20);
-            this.sync_fetchTimer.TabIndex = 6;
-            this.sync_fetchTimer.Value = new decimal(new int[] {
-            15000,
-            0,
-            0,
-            0});
-            // 
             // sync_localPath
             // 
             this.sync_localPath.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -169,22 +144,13 @@
             this.sync_localPath.Size = new System.Drawing.Size(332, 20);
             this.sync_localPath.TabIndex = 4;
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 81);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(91, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Fetch period (.ms)";
-            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.sync_dataReaders);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(363, 286);
+            this.tabPage2.Size = new System.Drawing.Size(344, 240);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Readers";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -225,7 +191,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(363, 286);
+            this.tabPage3.Size = new System.Drawing.Size(344, 240);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Transform";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -304,7 +270,6 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sync_fetchTimer)).EndInit();
             this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.sync_dataReaders)).EndInit();
             this.tabPage3.ResumeLayout(false);
@@ -323,9 +288,7 @@
         private System.Windows.Forms.TextBox sync_remotePath;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown sync_fetchTimer;
         private System.Windows.Forms.TextBox sync_localPath;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.DataGridView sync_dataReaders;
         private System.Windows.Forms.DataGridViewTextBoxColumn Source;

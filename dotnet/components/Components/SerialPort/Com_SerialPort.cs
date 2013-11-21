@@ -340,7 +340,7 @@ namespace components.Components.SerialPort
         public bool Write(byte[] SendArr)
         {
             bool fOK = false;
-
+            if (!_port.IsOpen) return fOK;
             _port.Write(SendArr, 0, SendArr.Length);
 
             int attempts = 5;
