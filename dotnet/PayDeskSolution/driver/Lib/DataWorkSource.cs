@@ -19,13 +19,34 @@ namespace driver.Lib
 {
     public static class DataWorkSource
     {
+        public static FileInfo GetLockFileInfo()
+        {
+            return new FileInfo(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + @"\.lock");
+        }
+        public static bool SourceFolderIsBusy()
+        {
+            return GetLockFileInfo().Exists;
+        }
+
+        public static void SourceFolder_Lock()
+        {
+            File.CreateText(GetLockFileInfo().FullName).Close();
+        }
+
+        public static void SourceFolder_Unlock()
+        {
+            if (SourceFolderIsBusy())
+                File.Delete(GetLockFileInfo().FullName);
+        }
+
         public static Dictionary<string, DataTable> DownloadSource()
         {
+            SourceFolder_Lock();
+
             Dictionary<string, DataTable> dTables = new Dictionary<string, DataTable>();
             Dictionary<string, FileInfo> dSources = new Dictionary<string, FileInfo>();
-
+            // source folder
             string sourceDir = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles;
-
             // get profile subunit
             int subUnit = driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit;
 
@@ -34,21 +55,34 @@ namespace driver.Lib
             dSources[CoreConst.DATA_CONTAINER_ALTERNATIVE] = new FileInfo(string.Format("{0}\\Alternatives_{1:D2}.xml", sourceDir, subUnit));
             dSources[CoreConst.DATA_CONTAINER_CLIENT] = new FileInfo(string.Format("{0}\\ClientCards_{1:D2}.xml", sourceDir, subUnit));
 
-            // create data
+            // init data data
             dTables[CoreConst.DATA_CONTAINER_PRODUCT] = CreateDataTableForProduct();
-            dTables[CoreConst.DATA_CONTAINER_PRODUCT].TableName = Path.GetFileNameWithoutExtension(dSources[CoreConst.DATA_CONTAINER_PRODUCT].Name);
-            if (dSources[CoreConst.DATA_CONTAINER_PRODUCT].Exists)
-                dTables[CoreConst.DATA_CONTAINER_PRODUCT].ReadXml(dSources[CoreConst.DATA_CONTAINER_PRODUCT].FullName);
-                
             dTables[CoreConst.DATA_CONTAINER_ALTERNATIVE] = CreateDataTableForAlternative();
-            dTables[CoreConst.DATA_CONTAINER_ALTERNATIVE].TableName = Path.GetFileNameWithoutExtension(dSources[CoreConst.DATA_CONTAINER_ALTERNATIVE].Name);
-            if (dSources[CoreConst.DATA_CONTAINER_ALTERNATIVE].Exists)
-                dTables[CoreConst.DATA_CONTAINER_ALTERNATIVE].ReadXml(dSources[CoreConst.DATA_CONTAINER_ALTERNATIVE].FullName);
-            
             dTables[CoreConst.DATA_CONTAINER_CLIENT] = CreateDataTableForCard();
+
+            // set names
+            dTables[CoreConst.DATA_CONTAINER_PRODUCT].TableName = Path.GetFileNameWithoutExtension(dSources[CoreConst.DATA_CONTAINER_PRODUCT].Name);
+            dTables[CoreConst.DATA_CONTAINER_ALTERNATIVE].TableName = Path.GetFileNameWithoutExtension(dSources[CoreConst.DATA_CONTAINER_ALTERNATIVE].Name);
             dTables[CoreConst.DATA_CONTAINER_CLIENT].TableName = Path.GetFileNameWithoutExtension(dSources[CoreConst.DATA_CONTAINER_CLIENT].Name);
-            if (dSources[CoreConst.DATA_CONTAINER_CLIENT].Exists)
-                dTables[CoreConst.DATA_CONTAINER_CLIENT].ReadXml(dSources[CoreConst.DATA_CONTAINER_CLIENT].FullName);
+
+            try
+            {
+                // load data
+                if (dSources[CoreConst.DATA_CONTAINER_PRODUCT].Exists)
+                    dTables[CoreConst.DATA_CONTAINER_PRODUCT].ReadXml(dSources[CoreConst.DATA_CONTAINER_PRODUCT].FullName);
+
+                if (dSources[CoreConst.DATA_CONTAINER_ALTERNATIVE].Exists)
+                    dTables[CoreConst.DATA_CONTAINER_ALTERNATIVE].ReadXml(dSources[CoreConst.DATA_CONTAINER_ALTERNATIVE].FullName);
+
+                if (dSources[CoreConst.DATA_CONTAINER_CLIENT].Exists)
+                    dTables[CoreConst.DATA_CONTAINER_CLIENT].ReadXml(dSources[CoreConst.DATA_CONTAINER_CLIENT].FullName);
+            }
+            catch { }
+            finally
+            {
+                //System.Threading.Thread.Sleep(15000);
+                SourceFolder_Unlock();
+            }
 
             return dTables;
         }

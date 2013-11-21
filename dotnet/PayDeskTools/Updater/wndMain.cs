@@ -82,6 +82,10 @@ namespace Updater
                     try
                     {
                         _syncConfig = (Hashtable)_syncConfig["sync"];
+
+                        if (IsDestinationLocked(_syncConfig))
+                            continue;
+
                         string title = _syncConfig["profileDisplayText"].ToString();
                         string _statusMessageProfile = perfromDataSync(de.Key.ToString(), _syncConfig);
                         if (_statusMessageProfile.Length > 0)
@@ -252,6 +256,11 @@ namespace Updater
             this.unlockDestinationFolder(config);
 
             return string.Format("    Нових: {0}\n    Видалено: {1}\n    Без змін: {2}", downloadedFiles, removedFiles, unchangedFiles);
+        }
+
+        public bool IsDestinationLocked(Hashtable config)
+        {
+            return new FileInfo(config["localPath"] + @"\.lock").Exists;
         }
 
         public void lockDestinationFolder(Hashtable config)

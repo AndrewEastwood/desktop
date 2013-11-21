@@ -2674,8 +2674,8 @@ namespace PayDesk.Components.UI
             timer1.Stop();
             this.Update();
 
-            // check for opened oreder
-            if (Cheque.Rows.Count != 0)
+            // check for opened oreder or unlocked folder
+            if (Cheque.Rows.Count != 0 || DataWorkSource.SourceFolderIsBusy())
             {
                 // so we want to come back here immediately once order is empty
                 _fl_canUpdate = true;
@@ -2717,11 +2717,9 @@ namespace PayDesk.Components.UI
             }
 
             // show notification window
-            //uiWndUpdateWnd uw = new uiWndUpdateWnd();
-            //uw.ShowUpdate(this);
-            //uw.Update();
-            //uw.Refresh();
-
+            DDM_UpdateStatus.Image = Properties.Resources.ok;
+            this.Update();
+            
             // download new sources
             Dictionary<string, DataTable> newSources = DataWorkSource.DownloadSource();
             Articles.Merge(newSources[CoreConst.DATA_CONTAINER_PRODUCT]);
@@ -2729,8 +2727,7 @@ namespace PayDesk.Components.UI
             Cards.Merge(newSources[CoreConst.DATA_CONTAINER_CLIENT]);
 
             // close notification window
-            //uw.Close();
-            //uw.Dispose();
+            DDM_UpdateStatus.Image = Properties.Resources.ExNotOk;
 
             // check app state
             this._fl_isOk = new Com_SecureRuntime().FullLoader();
