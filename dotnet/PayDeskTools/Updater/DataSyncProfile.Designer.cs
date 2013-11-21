@@ -48,6 +48,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.sync_profileName = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.sync_profileDisplayText = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -64,10 +66,10 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Location = new System.Drawing.Point(3, 42);
+            this.tabControl1.Location = new System.Drawing.Point(3, 81);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(352, 266);
+            this.tabControl1.Size = new System.Drawing.Size(352, 291);
             this.tabControl1.TabIndex = 10;
             // 
             // tabPage1
@@ -81,7 +83,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(344, 240);
+            this.tabPage1.Size = new System.Drawing.Size(344, 265);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -102,7 +104,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.sync_monitorFiles.Location = new System.Drawing.Point(6, 97);
             this.sync_monitorFiles.Name = "sync_monitorFiles";
-            this.sync_monitorFiles.Size = new System.Drawing.Size(332, 137);
+            this.sync_monitorFiles.Size = new System.Drawing.Size(332, 162);
             this.sync_monitorFiles.TabIndex = 8;
             this.sync_monitorFiles.Text = "";
             // 
@@ -258,15 +260,36 @@
             this.sync_profileName.TabIndex = 12;
             this.sync_profileName.TextChanged += new System.EventHandler(this.sync_profileName_TextChanged);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(0, 39);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(91, 13);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "Profile display text";
+            // 
+            // sync_profileDisplayText
+            // 
+            this.sync_profileDisplayText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sync_profileDisplayText.Location = new System.Drawing.Point(3, 55);
+            this.sync_profileDisplayText.Name = "sync_profileDisplayText";
+            this.sync_profileDisplayText.Size = new System.Drawing.Size(352, 20);
+            this.sync_profileDisplayText.TabIndex = 14;
+            this.sync_profileDisplayText.Text = "Default";
+            // 
             // DataSyncProfile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.sync_profileDisplayText);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.sync_profileName);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.tabControl1);
             this.Name = "DataSyncProfile";
-            this.Size = new System.Drawing.Size(358, 311);
+            this.Size = new System.Drawing.Size(358, 375);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
@@ -301,5 +324,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox sync_profileName;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox sync_profileDisplayText;
     }
 }

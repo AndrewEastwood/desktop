@@ -81,9 +81,11 @@ namespace Updater
                         continue;
                     try
                     {
-                        string _statusMessageProfile = perfromDataSync(de.Key.ToString(), (Hashtable)_syncConfig["sync"]);
+                        _syncConfig = (Hashtable)_syncConfig["sync"];
+                        string title = _syncConfig["profileDisplayText"].ToString();
+                        string _statusMessageProfile = perfromDataSync(de.Key.ToString(), _syncConfig);
                         if (_statusMessageProfile.Length > 0)
-                            _statusMessage += "\r\n" + de.Key.ToString() + ":\r\n" + "\r\n".PadLeft(de.Key.ToString().Length, '-') + _statusMessageProfile + "\r\n" + "".PadRight(15, '=');
+                            _statusMessage += "\r\n" + title + ":\r\n" + _statusMessageProfile + "\r\n" + "".PadRight(15, '=');
                     }
                     catch { }
                 }
@@ -249,7 +251,7 @@ namespace Updater
             // File.Delete(localLockFile.FullName);
             this.unlockDestinationFolder(config);
 
-            return string.Format("Нових: {0}\r\nВидалено: {1}\r\nБез змін: {2}", downloadedFiles, removedFiles, unchangedFiles);
+            return string.Format("    Нових: {0}\n    Видалено: {1}\n    Без змін: {2}", downloadedFiles, removedFiles, unchangedFiles);
         }
 
         public void lockDestinationFolder(Hashtable config)
