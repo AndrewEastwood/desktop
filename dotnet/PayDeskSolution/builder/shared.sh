@@ -80,8 +80,7 @@ function buildPatch() {
 
     chat "Patch Build Started"
 
-    _updateLibs
-    _updatePlugins
+    buildProduction
     _createAppPatch "patch"
 }
 
@@ -97,7 +96,6 @@ function buildProduction() {
     _copyTools
     _setBuildVersion
     _cleanGeneratedData
-    _createAppPatch "prod"
 }
 
 function _updateLibs() {

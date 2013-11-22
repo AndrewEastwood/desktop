@@ -62,6 +62,8 @@ namespace VirtualKeyboard.Components.UI.Other
                     this.selectedWindowIndex = 1;
                 if (result.ToLower().Contains("windows xp"))
                     this.selectedWindowIndex = 0;
+                if (result.ToLower().Contains("windows 8"))
+                    this.selectedWindowIndex = 0;
                 WindowsAPI.OutputDebugString("applied window index selector = " + this.selectedWindowIndex);
             }
             else

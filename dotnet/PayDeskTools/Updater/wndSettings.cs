@@ -15,9 +15,9 @@ namespace Updater
         private System.Windows.Forms.ToolStripButton toolStripButton_AddNew;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private ToolStripSeparator toolStripSeparator2;
-        private Panel panel1;
         private Label label1;
         private NumericUpDown general_fetchTimeout;
+        private GroupBox groupBox1;
         private System.Windows.Forms.ToolStripButton toolStripButton_Remove;
 
         public wndSettings()
@@ -50,19 +50,19 @@ namespace Updater
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton_Remove = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.general_fetchTimeout = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
+            this.general_fetchTimeout = new System.Windows.Forms.NumericUpDown();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.toolStrip1.SuspendLayout();
-            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.general_fetchTimeout)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(278, 413);
+            this.btnSave.Location = new System.Drawing.Point(278, 416);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(94, 23);
             this.btnSave.TabIndex = 2;
@@ -127,18 +127,18 @@ namespace Updater
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
-            // panel1
+            // label1
             // 
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.general_fetchTimeout);
-            this.panel1.Location = new System.Drawing.Point(0, 351);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(384, 56);
-            this.panel1.TabIndex = 12;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(96, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Fetch timeout (ms.)";
             // 
             // general_fetchTimeout
             // 
-            this.general_fetchTimeout.Location = new System.Drawing.Point(89, 3);
+            this.general_fetchTimeout.Location = new System.Drawing.Point(108, 19);
             this.general_fetchTimeout.Maximum = new decimal(new int[] {
             120000,
             0,
@@ -150,7 +150,7 @@ namespace Updater
             0,
             0});
             this.general_fetchTimeout.Name = "general_fetchTimeout";
-            this.general_fetchTimeout.Size = new System.Drawing.Size(120, 20);
+            this.general_fetchTimeout.Size = new System.Drawing.Size(270, 20);
             this.general_fetchTimeout.TabIndex = 0;
             this.general_fetchTimeout.Value = new decimal(new int[] {
             1000,
@@ -158,20 +158,22 @@ namespace Updater
             0,
             0});
             // 
-            // label1
+            // groupBox1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 5);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(71, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Fetch timeout";
+            this.groupBox1.Controls.Add(this.general_fetchTimeout);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Location = new System.Drawing.Point(0, 351);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(384, 56);
+            this.groupBox1.TabIndex = 13;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "General";
             // 
             // wndSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.ClientSize = new System.Drawing.Size(384, 448);
-            this.Controls.Add(this.panel1);
+            this.ClientSize = new System.Drawing.Size(384, 451);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.btnSave);
@@ -184,9 +186,9 @@ namespace Updater
             this.Text = "Settings";
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.general_fetchTimeout)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

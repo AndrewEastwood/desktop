@@ -19,6 +19,9 @@ namespace driver.Lib
 {
     public static class DataWorkSource
     {
+        // last date-time source update
+        private static Dictionary<string, long> _sourcesLastDate;
+
         public static FileInfo GetLockFileInfo()
         {
             return new FileInfo(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + @"\.lock");
@@ -39,26 +42,73 @@ namespace driver.Lib
                 File.Delete(GetLockFileInfo().FullName);
         }
 
-        public static Dictionary<string, DataTable> DownloadSource()
+        public static Dictionary<string, FileInfo> GetSourceFiles()
         {
-            SourceFolder_Lock();
-
-            Dictionary<string, DataTable> dTables = new Dictionary<string, DataTable>();
-            Dictionary<string, FileInfo> dSources = new Dictionary<string, FileInfo>();
             // source folder
             string sourceDir = driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles;
             // get profile subunit
             int subUnit = driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit;
-
-            // create source list
+            Dictionary<string, FileInfo> dSources = new Dictionary<string, FileInfo>();
             dSources[CoreConst.DATA_CONTAINER_PRODUCT] = new FileInfo(string.Format("{0}\\Products_{1:D2}.xml", sourceDir, subUnit));
             dSources[CoreConst.DATA_CONTAINER_ALTERNATIVE] = new FileInfo(string.Format("{0}\\Alternatives_{1:D2}.xml", sourceDir, subUnit));
             dSources[CoreConst.DATA_CONTAINER_CLIENT] = new FileInfo(string.Format("{0}\\ClientCards_{1:D2}.xml", sourceDir, subUnit));
+
+            return dSources;
+        }
+
+
+        public static Dictionary<string, DataTable> GetSourceTables()
+        {
+            Dictionary<string, DataTable> dTables = new Dictionary<string, DataTable>();
 
             // init data data
             dTables[CoreConst.DATA_CONTAINER_PRODUCT] = CreateDataTableForProduct();
             dTables[CoreConst.DATA_CONTAINER_ALTERNATIVE] = CreateDataTableForAlternative();
             dTables[CoreConst.DATA_CONTAINER_CLIENT] = CreateDataTableForCard();
+            dTables[CoreConst.DATA_CONTAINER_CHEQUE] = CreateDataTableForOrder();
+
+            return dTables;
+        }
+
+        public static bool NewSourcesAvailable()
+        {
+            Dictionary<string, FileInfo> dSources = GetSourceFiles();
+
+            // init dates
+            if (_sourcesLastDate == null)
+            {
+                _sourcesLastDate = new Dictionary<string, long>();
+                // init empty collection
+                _sourcesLastDate[CoreConst.DATA_CONTAINER_PRODUCT] = dSources[CoreConst.DATA_CONTAINER_PRODUCT].LastWriteTimeUtc.Ticks;
+                _sourcesLastDate[CoreConst.DATA_CONTAINER_ALTERNATIVE] = dSources[CoreConst.DATA_CONTAINER_ALTERNATIVE].LastWriteTimeUtc.Ticks;
+                _sourcesLastDate[CoreConst.DATA_CONTAINER_CLIENT] = dSources[CoreConst.DATA_CONTAINER_CLIENT].LastWriteTimeUtc.Ticks;
+                return true;
+            }
+
+            bool hasAny = false;
+
+            // compare with last write access info ticks
+            if (_sourcesLastDate[CoreConst.DATA_CONTAINER_PRODUCT] != dSources[CoreConst.DATA_CONTAINER_PRODUCT].LastWriteTimeUtc.Ticks)
+                hasAny = true;
+            if (_sourcesLastDate[CoreConst.DATA_CONTAINER_ALTERNATIVE] != dSources[CoreConst.DATA_CONTAINER_ALTERNATIVE].LastWriteTimeUtc.Ticks)
+                hasAny = true;
+            if (_sourcesLastDate[CoreConst.DATA_CONTAINER_CLIENT] != dSources[CoreConst.DATA_CONTAINER_CLIENT].LastWriteTimeUtc.Ticks)
+                hasAny = true;
+
+            // set current source dates
+            _sourcesLastDate[CoreConst.DATA_CONTAINER_PRODUCT] = dSources[CoreConst.DATA_CONTAINER_PRODUCT].LastWriteTimeUtc.Ticks;
+            _sourcesLastDate[CoreConst.DATA_CONTAINER_ALTERNATIVE] = dSources[CoreConst.DATA_CONTAINER_ALTERNATIVE].LastWriteTimeUtc.Ticks;
+            _sourcesLastDate[CoreConst.DATA_CONTAINER_CLIENT] = dSources[CoreConst.DATA_CONTAINER_CLIENT].LastWriteTimeUtc.Ticks;
+
+            return hasAny;
+        }
+
+        public static Dictionary<string, DataTable> DownloadSource()
+        {
+            SourceFolder_Lock();
+
+            Dictionary<string, DataTable> dTables = GetSourceTables();
+            Dictionary<string, FileInfo> dSources = GetSourceFiles();
 
             // set names
             dTables[CoreConst.DATA_CONTAINER_PRODUCT].TableName = Path.GetFileNameWithoutExtension(dSources[CoreConst.DATA_CONTAINER_PRODUCT].Name);

@@ -1937,7 +1937,7 @@ namespace PayDesk.Components.UI
                 case "SensorType_VK":
                     {
                         if (сенсорToolStripMenuItem.Checked)
-                            System.Diagnostics.Process.Start("vk.bat");
+                            System.Diagnostics.Process.Start("tools//VirtualKeyboard//vk.bat");
                         break;
                     }
                 case "SensorType_Components_ChqIsVertical":
@@ -2685,13 +2685,14 @@ namespace PayDesk.Components.UI
 
             _fl_canUpdate = false;
 
-            // clear all data
-            Articles.Rows.Clear();
-            AltBC.Rows.Clear();
-            Cards.Rows.Clear();
+            // check wheter we have new sources
+            if (!DataWorkSource.NewSourcesAvailable())
+            {
+                timer1.Start();
+                return;
+            }
 
             Com_WinApi.OutputDebugString("MainWnd --- AddingData Begin");
-
 
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles && this.Cheques.Tables.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
             {
@@ -2722,6 +2723,17 @@ namespace PayDesk.Components.UI
             
             // download new sources
             Dictionary<string, DataTable> newSources = DataWorkSource.DownloadSource();
+
+            // show simple message
+            if (_fl_onlyUpdate)
+                MMessageBox.Show(this.articleDGV, "Були внесені зміни в базу товарів");
+
+            // clear all prev data
+            Articles.Rows.Clear();
+            AltBC.Rows.Clear();
+            Cards.Rows.Clear();
+
+            // merge new data
             Articles.Merge(newSources[CoreConst.DATA_CONTAINER_PRODUCT]);
             AltBC.Merge(newSources[CoreConst.DATA_CONTAINER_ALTERNATIVE]);
             Cards.Merge(newSources[CoreConst.DATA_CONTAINER_CLIENT]);
@@ -2732,6 +2744,9 @@ namespace PayDesk.Components.UI
             // check app state
             this._fl_isOk = new Com_SecureRuntime().FullLoader();
             this.label_uiWndmain_DemoShowArt.Visible = this.label_uiWndmain_DemoShowChq.Visible = !this._fl_isOk;
+
+            // indicate that next time we will show message about new chages
+            this._fl_onlyUpdate = true; // <- this is false at startup
 
             // resume source fetch timer
             timer1.Start();
