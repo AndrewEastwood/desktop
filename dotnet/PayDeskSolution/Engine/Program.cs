@@ -217,8 +217,12 @@ namespace PayDesk
 
             CoreLib.WriteLog(new Exception("It is not an error. This message used for tracking of app's exit only."), "AppStartup (Main)");
 
-            System.Diagnostics.Process[] prc = System.Diagnostics.Process.GetProcessesByName("vk");
+            System.Diagnostics.Process[] prc = System.Diagnostics.Process.GetProcessesByName("VirtualKeyboard");
             foreach (System.Diagnostics.Process p in prc)
+                p.Kill();
+
+            System.Diagnostics.Process[] prcUpdater = System.Diagnostics.Process.GetProcessesByName("Updater");
+            foreach (System.Diagnostics.Process p in prcUpdater)
                 p.Kill();
         }
 

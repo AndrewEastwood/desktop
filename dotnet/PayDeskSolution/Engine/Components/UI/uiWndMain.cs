@@ -283,19 +283,19 @@ namespace PayDesk.Components.UI
             DataGridView[] grids = new DataGridView[] { chequeDGV, articleDGV };
             ViewLib.LoadGridsView(ref grids, splitContainer1.Orientation);
 
-            if (ConfigManager.Instance.CommonConfiguration.Path_Exchnage == string.Empty)
-            {
-                MMessageBoxEx.Show("Вкажіть шлях до папки обміну", Application.ProductName,
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                folderBrowserDialog1.RootFolder = Environment.SpecialFolder.Desktop;
-                folderBrowserDialog1.ShowDialog();
-                ConfigManager.Instance.CommonConfiguration.Path_Exchnage = folderBrowserDialog1.SelectedPath;
-                /*
-                if (Program.MainArgs.ContainsKey("-c") && Program.MainArgs["-c"] != null)
-                    ConfigManager.Instance.CommonConfiguration.SaveData(Program.MainArgs["-c"].ToString());
-                else*/
-                ConfigManager.SaveConfiguration();
-            }
+            //if (ConfigManager.Instance.CommonConfiguration.Path_Exchnage == string.Empty)
+            //{
+            //    MMessageBoxEx.Show("Вкажіть шлях до папки обміну", Application.ProductName,
+            //        MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //    folderBrowserDialog1.RootFolder = Environment.SpecialFolder.Desktop;
+            //    folderBrowserDialog1.ShowDialog();
+            //    ConfigManager.Instance.CommonConfiguration.Path_Exchnage = folderBrowserDialog1.SelectedPath;
+            //    /*
+            //    if (Program.MainArgs.ContainsKey("-c") && Program.MainArgs["-c"] != null)
+            //        ConfigManager.Instance.CommonConfiguration.SaveData(Program.MainArgs["-c"].ToString());
+            //    else*/
+            //    ConfigManager.SaveConfiguration();
+            //}
 
             UpdateMyControls();
 
@@ -1937,7 +1937,12 @@ namespace PayDesk.Components.UI
                 case "SensorType_VK":
                     {
                         if (сенсорToolStripMenuItem.Checked)
-                            System.Diagnostics.Process.Start("tools//VirtualKeyboard//vk.bat");
+                        {
+                            ProcessStartInfo _vkProc = new ProcessStartInfo();
+                            _vkProc.FileName = Application.StartupPath + "//tools//VirtualKeyboard//VirtualKeyboard.bat";
+                            _vkProc.WorkingDirectory = Application.StartupPath + "//tools//VirtualKeyboard//";
+                            System.Diagnostics.Process.Start(_vkProc);
+                        }
                         break;
                     }
                 case "SensorType_Components_ChqIsVertical":
@@ -2692,7 +2697,39 @@ namespace PayDesk.Components.UI
                 return;
             }
 
-            Com_WinApi.OutputDebugString("MainWnd --- AddingData Begin");
+            // Com_WinApi.OutputDebugString("MainWnd --- AddingData Begin");
+
+            // update source status icon
+            DDM_UpdateStatus.Image = Properties.Resources.ok;
+            this.Update();
+
+            // show data loading message
+            uiWndUpdateWnd _uiWndUpdateDlg = null;
+            {
+                _uiWndUpdateDlg = new uiWndUpdateWnd();
+                _uiWndUpdateDlg.ShowUpdate(this);
+                _uiWndUpdateDlg.Update();
+                _uiWndUpdateDlg.Refresh();
+            }
+
+            // download new sources
+            Dictionary<string, DataTable> newSources = DataWorkSource.DownloadSource();
+
+            // hide data loading message
+            if (_uiWndUpdateDlg != null)
+            {
+                _uiWndUpdateDlg.Close();
+                _uiWndUpdateDlg.Dispose();
+                _uiWndUpdateDlg = null;
+            }
+
+            // update source status icon
+            DDM_UpdateStatus.Image = Properties.Resources.ExNotOk;
+            this.Update();
+
+            // show message that db is updated
+            if (_fl_onlyUpdate)
+                MMessageBox.Show(this.articleDGV, "Будуть внесені зміни в базу товарів", Application.ProductName);
 
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles && this.Cheques.Tables.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
             {
@@ -2717,17 +2754,6 @@ namespace PayDesk.Components.UI
                 }
             }
 
-            // show notification window
-            DDM_UpdateStatus.Image = Properties.Resources.ok;
-            this.Update();
-            
-            // download new sources
-            Dictionary<string, DataTable> newSources = DataWorkSource.DownloadSource();
-
-            // show simple message
-            if (_fl_onlyUpdate)
-                MMessageBox.Show(this.articleDGV, "Були внесені зміни в базу товарів");
-
             // clear all prev data
             Articles.Rows.Clear();
             AltBC.Rows.Clear();
@@ -2737,9 +2763,6 @@ namespace PayDesk.Components.UI
             Articles.Merge(newSources[CoreConst.DATA_CONTAINER_PRODUCT]);
             AltBC.Merge(newSources[CoreConst.DATA_CONTAINER_ALTERNATIVE]);
             Cards.Merge(newSources[CoreConst.DATA_CONTAINER_CLIENT]);
-
-            // close notification window
-            DDM_UpdateStatus.Image = Properties.Resources.ExNotOk;
 
             // check app state
             this._fl_isOk = new Com_SecureRuntime().FullLoader();

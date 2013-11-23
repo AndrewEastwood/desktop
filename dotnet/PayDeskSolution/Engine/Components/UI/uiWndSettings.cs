@@ -60,7 +60,7 @@ namespace PayDesk.Components.UI
             this.System_Path_txbox_folderTemp.Text = ConfigManager.Instance.CommonConfiguration.Path_Temp;
             this.System_Path_txbox_folderBills.Text = ConfigManager.Instance.CommonConfiguration.Path_Bills;
             this.System_Path_txbox_folderUserSchemas.Text = ConfigManager.Instance.CommonConfiguration.Path_Schemes;
-            this.System_Path_txbox_folderExchange.Text = ConfigManager.Instance.CommonConfiguration.Path_Exchnage;
+            // this.System_Path_txbox_folderExchange.Text = ConfigManager.Instance.CommonConfiguration.Path_Exchnage;
             this.System_Path_txbox_folderUsers.Text = ConfigManager.Instance.CommonConfiguration.Path_Users;
             this.System_Path_txbox_folderTemplates.Text = ConfigManager.Instance.CommonConfiguration.Path_Templates;
             this.System_Path_txbox_folderPlugins.Text = ConfigManager.Instance.CommonConfiguration.Path_Plugins;
@@ -483,12 +483,12 @@ namespace PayDesk.Components.UI
                         linkedCtrl = this.System_Path_txbox_folderUserSchemas;
                         break;
                     }
-                case "System_Path_btn_folderExchangeBrowse":
-                    {
-                        folderBrowserDialog1.Description = "Вкажіть шлях до каталогу обміну";
-                        linkedCtrl = this.System_Path_txbox_folderExchange;
-                        break;
-                    }
+                //case "System_Path_btn_folderExchangeBrowse":
+                //    {
+                //        folderBrowserDialog1.Description = "Вкажіть шлях до каталогу обміну";
+                //        linkedCtrl = this.System_Path_txbox_folderExchange;
+                //        break;
+                //    }
                 case "System_Path_btn_folderUsersBrowse":
                     {
                         folderBrowserDialog1.Description = "Вкажіть шлях до каталогу користувачів";
@@ -608,8 +608,6 @@ namespace PayDesk.Components.UI
             catch { }
         }
 
-
-
         private void Settings_KeyDown(object sender, KeyEventArgs e)
         {
             KeyEventArgs esc = new KeyEventArgs(Keys.Escape);
@@ -703,7 +701,7 @@ namespace PayDesk.Components.UI
                 ConfigManager.Instance.CommonConfiguration.Path_Temp = this.System_Path_txbox_folderTemp.Text;
                 ConfigManager.Instance.CommonConfiguration.Path_Bills = this.System_Path_txbox_folderBills.Text;
                 ConfigManager.Instance.CommonConfiguration.Path_Schemes = this.System_Path_txbox_folderUserSchemas.Text;
-                ConfigManager.Instance.CommonConfiguration.Path_Exchnage = this.System_Path_txbox_folderExchange.Text;
+                //ConfigManager.Instance.CommonConfiguration.Path_Exchnage = this.System_Path_txbox_folderExchange.Text;
                 ConfigManager.Instance.CommonConfiguration.Path_Users = this.System_Path_txbox_folderUsers.Text;
                 ConfigManager.Instance.CommonConfiguration.Path_Templates = this.System_Path_txbox_folderTemplates.Text;
                 ConfigManager.Instance.CommonConfiguration.Path_Plugins = this.System_Path_txbox_folderPlugins.Text;
@@ -782,7 +780,7 @@ namespace PayDesk.Components.UI
                 {
                     wndSettings.uc_firmEntry fe = (wndSettings.uc_firmEntry)profiles_tab_profiles.TabPages[i].Controls[0];
                     ht.Add("NAME", fe.Profile_Name);
-                    ht.Add("SOURCE", fe.Profile_Source);
+                    //ht.Add("SOURCE", fe.Profile_Source);
                     ht.Add("OUTPUT", fe.Profile_Output);
                     ht.Add("FILTER", fe.Profile_Filter);
                     ht.Add("SUBUNIT", fe.Profile_SubUnit);

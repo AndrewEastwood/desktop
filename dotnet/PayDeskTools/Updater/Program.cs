@@ -15,6 +15,9 @@ namespace Updater
         static void Main(string[] args)
         {
 
+            ApplicationConfiguration.CustomConfigurationMethod = CustomConfigurationSettingsContext;
+            ApplicationConfiguration.Instance.LoadConfigurationData();
+
             System.Threading.Mutex myMutex = null;
             try
             {
@@ -23,14 +26,29 @@ namespace Updater
             catch { }
             if (myMutex != null)
             {
-                MessageBox.Show("Вже запущена одна копія програми", Application.ProductName);
-                Environment.Exit(0);
+
+                //System.Threading.Mutex myMutexSettings = null;
+                //try
+                //{
+                //    myMutexSettings = System.Threading.Mutex.OpenExisting("PayDeskUpdaterSettings");
+                //}
+                //catch { }
+
+                //if (myMutexSettings != null)
+                //{
+                //    MessageBox.Show("Вже запущена одна копія програми", Application.ProductName);
+                //    Environment.Exit(0);
+                //}
+
+                //myMutexSettings = new System.Threading.Mutex(true, "PayDeskUpdaterSettings");
+
+                //new wndSettings().ShowDialog();
+                
+                return;
             }
             else
                 myMutex = new System.Threading.Mutex(true, "PayDeskUpdater");
 
-            ApplicationConfiguration.CustomConfigurationMethod = CustomConfigurationSettingsContext;
-            ApplicationConfiguration.Instance.LoadConfigurationData();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

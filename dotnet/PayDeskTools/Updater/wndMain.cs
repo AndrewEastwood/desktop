@@ -21,7 +21,7 @@ namespace Updater
             InitializeComponent();
             try
             {
-                this.timer1.Interval = ApplicationConfiguration.Instance.GetValueByPath<int>("general.fetchTimeout");
+                this.timer1.Interval = ApplicationConfiguration.Instance.GetValueByPath<int>("general.main.fetchTimeout");
             }
             catch { }
             // trigger timer event at startup
@@ -71,6 +71,8 @@ namespace Updater
         {
             timer1.Stop();
 
+            notifyIcon1.Icon = AppStateIcons.isync_busy;
+
             string _statusMessage = "";
 
             Hashtable dataSyncProfiles = (Hashtable)ApplicationConfiguration.Instance.Configuration["datasync"];
@@ -99,11 +101,13 @@ namespace Updater
                     }
                     catch { }
                 }
-            
+
             timer1.Start();
 
             if (_statusMessage.Length > 0)
                 notifyIcon1.ShowBalloonTip(1, "Синхронізація завершена", _statusMessage, ToolTipIcon.Info);
+
+            notifyIcon1.Icon = AppStateIcons.isync;
         }
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -142,16 +146,17 @@ namespace Updater
 
             if (!System.IO.Directory.Exists(remotePathBase))
             {
-                notifyIcon1.ShowBalloonTip(1, "Помилка синхронізації", "Немає звязку з сервером", ToolTipIcon.Error);
-                timer1.Start();
+                // notifyIcon1.ShowBalloonTip(1, "Помилка синхронізації", "Немає звязку з сервером", ToolTipIcon.Error);
+                notifyIcon1.Icon = AppStateIcons.isync_err;
                 return null;
             }
 
             if (files.Length == 0)
             {
-                timer1.Start();
                 return null;
             }
+
+            notifyIcon1.Icon = AppStateIcons.isync_ok;
 
             // add lock file
             // File.CreateText(localLockFile.FullName).Close();
@@ -274,11 +279,13 @@ namespace Updater
 
 
             // System.Threading.Thread.Sleep(3000);
+            // do data transformations
             try
             {
                 this.dataTransformation(config, _statusUpdate);
             }
             catch { }
+
             // remove lock file
             // File.Delete(localLockFile.FullName);
             this.unlockDestinationFolder(config);

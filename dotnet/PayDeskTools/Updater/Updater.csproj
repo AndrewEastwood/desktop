@@ -54,6 +54,11 @@
     <Compile Include="AboutBox1.Designer.cs">
       <DependentUpon>AboutBox1.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppStateIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppStateIcons.resx</DependentUpon>
+    </Compile>
     <Compile Include="DataSyncProfile.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -90,6 +95,10 @@
     <EmbeddedResource Include="AboutBox1.resx">
       <DependentUpon>AboutBox1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AppStateIcons.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppStateIcons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="DataSyncProfile.resx">
       <DependentUpon>DataSyncProfile.cs</DependentUpon>
     </EmbeddedResource>
@@ -106,6 +115,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="isync.ico" />
+    <None Include="isync_ok.ico" />
+    <None Include="isync_err.ico" />
+    <None Include="isync_busy.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

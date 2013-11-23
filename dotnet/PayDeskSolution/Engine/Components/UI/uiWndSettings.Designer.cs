@@ -52,8 +52,6 @@
             this.System_Path_btn_folderArticlesBrowse = new System.Windows.Forms.Button();
             this.System_Path_txbox_folderBills = new System.Windows.Forms.TextBox();
             this.System_Path_btn_folderBillsBrowse = new System.Windows.Forms.Button();
-            this.System_Path_txbox_folderExchange = new System.Windows.Forms.TextBox();
-            this.System_Path_btn_folderExchangeBrowse = new System.Windows.Forms.Button();
             this.System_Path_btn_folderChequesBrowse = new System.Windows.Forms.Button();
             this.System_Path_txbox_folderCheques = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
@@ -95,7 +93,6 @@
             this.label27 = new System.Windows.Forms.Label();
             this.System_Path_txbox_folderUserSchemas = new System.Windows.Forms.TextBox();
             this.System_Path_btn_folderUserSchemasBrowse = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.System_Path_txbox_folderUsers = new System.Windows.Forms.TextBox();
             this.System_Path_btn_folderUsersBrowse = new System.Windows.Forms.Button();
@@ -195,6 +192,9 @@
             this.content_order_radioButton_addQuantity2 = new System.Windows.Forms.RadioButton();
             this.content_order_radioButton_addQuantity1 = new System.Windows.Forms.RadioButton();
             this.settings_content_tabControl_main_pBills = new System.Windows.Forms.TabPage();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.checkBox_pBills_ShowBillSumColumn = new System.Windows.Forms.CheckBox();
+            this.checkBox_pBills_ShowBillTotalSum = new System.Windows.Forms.CheckBox();
             this.content_bills_groupBox_secure = new System.Windows.Forms.GroupBox();
             this.checkBox_pBills_DeleteBillAtEnd = new System.Windows.Forms.CheckBox();
             this.content_bill_chBox_addCopyToArchive = new System.Windows.Forms.CheckBox();
@@ -211,9 +211,6 @@
             this.label29 = new System.Windows.Forms.Label();
             this.profiles_cBox_legalProfile = new System.Windows.Forms.ComboBox();
             this.profiles_btn_refresh = new System.Windows.Forms.Button();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.checkBox_pBills_ShowBillSumColumn = new System.Windows.Forms.CheckBox();
-            this.checkBox_pBills_ShowBillTotalSum = new System.Windows.Forms.CheckBox();
             this.PanelStyle.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage4.SuspendLayout();
@@ -253,13 +250,13 @@
             this.content_order_groupBox_additional.SuspendLayout();
             this.content_order_groupBox_addQuantity.SuspendLayout();
             this.settings_content_tabControl_main_pBills.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.content_bills_groupBox_secure.SuspendLayout();
             this.settings_content_tabControl_main_pArticles.SuspendLayout();
             this.panelProfiles.SuspendLayout();
             this.panel4.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
-            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // SaveButton
@@ -460,25 +457,6 @@
             this.System_Path_btn_folderBillsBrowse.Text = "...";
             this.System_Path_btn_folderBillsBrowse.UseVisualStyleBackColor = true;
             this.System_Path_btn_folderBillsBrowse.Click += new System.EventHandler(this.button_Click);
-            // 
-            // System_Path_txbox_folderExchange
-            // 
-            this.System_Path_txbox_folderExchange.Location = new System.Drawing.Point(38, 286);
-            this.System_Path_txbox_folderExchange.Name = "System_Path_txbox_folderExchange";
-            this.System_Path_txbox_folderExchange.ShortcutsEnabled = false;
-            this.System_Path_txbox_folderExchange.Size = new System.Drawing.Size(200, 20);
-            this.System_Path_txbox_folderExchange.TabIndex = 0;
-            // 
-            // System_Path_btn_folderExchangeBrowse
-            // 
-            this.System_Path_btn_folderExchangeBrowse.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.System_Path_btn_folderExchangeBrowse.Location = new System.Drawing.Point(244, 286);
-            this.System_Path_btn_folderExchangeBrowse.Name = "System_Path_btn_folderExchangeBrowse";
-            this.System_Path_btn_folderExchangeBrowse.Size = new System.Drawing.Size(32, 20);
-            this.System_Path_btn_folderExchangeBrowse.TabIndex = 1;
-            this.System_Path_btn_folderExchangeBrowse.Text = "...";
-            this.System_Path_btn_folderExchangeBrowse.UseVisualStyleBackColor = true;
-            this.System_Path_btn_folderExchangeBrowse.Click += new System.EventHandler(this.button_Click);
             // 
             // System_Path_btn_folderChequesBrowse
             // 
@@ -833,9 +811,6 @@
             this.flowLayoutPanel1.Controls.Add(this.label27);
             this.flowLayoutPanel1.Controls.Add(this.System_Path_txbox_folderUserSchemas);
             this.flowLayoutPanel1.Controls.Add(this.System_Path_btn_folderUserSchemasBrowse);
-            this.flowLayoutPanel1.Controls.Add(this.label1);
-            this.flowLayoutPanel1.Controls.Add(this.System_Path_txbox_folderExchange);
-            this.flowLayoutPanel1.Controls.Add(this.System_Path_btn_folderExchangeBrowse);
             this.flowLayoutPanel1.Controls.Add(this.label11);
             this.flowLayoutPanel1.Controls.Add(this.System_Path_txbox_folderUsers);
             this.flowLayoutPanel1.Controls.Add(this.System_Path_btn_folderUsersBrowse);
@@ -959,22 +934,11 @@
             this.System_Path_btn_folderUserSchemasBrowse.UseVisualStyleBackColor = true;
             this.System_Path_btn_folderUserSchemasBrowse.Click += new System.EventHandler(this.button_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.flowLayoutPanel1.SetFlowBreak(this.label1, true);
-            this.label1.Location = new System.Drawing.Point(35, 267);
-            this.label1.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(75, 13);
-            this.label1.TabIndex = 1009;
-            this.label1.Text = "Папка обміну";
-            // 
             // label11
             // 
             this.label11.AutoSize = true;
             this.flowLayoutPanel1.SetFlowBreak(this.label11, true);
-            this.label11.Location = new System.Drawing.Point(35, 312);
+            this.label11.Location = new System.Drawing.Point(35, 267);
             this.label11.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(107, 13);
@@ -983,7 +947,7 @@
             // 
             // System_Path_txbox_folderUsers
             // 
-            this.System_Path_txbox_folderUsers.Location = new System.Drawing.Point(38, 331);
+            this.System_Path_txbox_folderUsers.Location = new System.Drawing.Point(38, 286);
             this.System_Path_txbox_folderUsers.Name = "System_Path_txbox_folderUsers";
             this.System_Path_txbox_folderUsers.ShortcutsEnabled = false;
             this.System_Path_txbox_folderUsers.Size = new System.Drawing.Size(200, 20);
@@ -992,7 +956,7 @@
             // System_Path_btn_folderUsersBrowse
             // 
             this.System_Path_btn_folderUsersBrowse.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.System_Path_btn_folderUsersBrowse.Location = new System.Drawing.Point(244, 331);
+            this.System_Path_btn_folderUsersBrowse.Location = new System.Drawing.Point(244, 286);
             this.System_Path_btn_folderUsersBrowse.Name = "System_Path_btn_folderUsersBrowse";
             this.System_Path_btn_folderUsersBrowse.Size = new System.Drawing.Size(32, 20);
             this.System_Path_btn_folderUsersBrowse.TabIndex = 3;
@@ -1004,7 +968,7 @@
             // 
             this.label28.AutoSize = true;
             this.flowLayoutPanel1.SetFlowBreak(this.label28, true);
-            this.label28.Location = new System.Drawing.Point(35, 357);
+            this.label28.Location = new System.Drawing.Point(35, 312);
             this.label28.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(88, 13);
@@ -1013,7 +977,7 @@
             // 
             // System_Path_txbox_folderTemplates
             // 
-            this.System_Path_txbox_folderTemplates.Location = new System.Drawing.Point(38, 376);
+            this.System_Path_txbox_folderTemplates.Location = new System.Drawing.Point(38, 331);
             this.System_Path_txbox_folderTemplates.Name = "System_Path_txbox_folderTemplates";
             this.System_Path_txbox_folderTemplates.ShortcutsEnabled = false;
             this.System_Path_txbox_folderTemplates.Size = new System.Drawing.Size(200, 20);
@@ -1022,7 +986,7 @@
             // System_Path_btn_folderTemplatesBrowse
             // 
             this.System_Path_btn_folderTemplatesBrowse.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.System_Path_btn_folderTemplatesBrowse.Location = new System.Drawing.Point(244, 376);
+            this.System_Path_btn_folderTemplatesBrowse.Location = new System.Drawing.Point(244, 331);
             this.System_Path_btn_folderTemplatesBrowse.Name = "System_Path_btn_folderTemplatesBrowse";
             this.System_Path_btn_folderTemplatesBrowse.Size = new System.Drawing.Size(32, 20);
             this.System_Path_btn_folderTemplatesBrowse.TabIndex = 1016;
@@ -1034,7 +998,7 @@
             // 
             this.label15.AutoSize = true;
             this.flowLayoutPanel1.SetFlowBreak(this.label15, true);
-            this.label15.Location = new System.Drawing.Point(35, 402);
+            this.label15.Location = new System.Drawing.Point(35, 357);
             this.label15.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(142, 13);
@@ -1043,7 +1007,7 @@
             // 
             // System_Path_txbox_folderPlugins
             // 
-            this.System_Path_txbox_folderPlugins.Location = new System.Drawing.Point(38, 421);
+            this.System_Path_txbox_folderPlugins.Location = new System.Drawing.Point(38, 376);
             this.System_Path_txbox_folderPlugins.Name = "System_Path_txbox_folderPlugins";
             this.System_Path_txbox_folderPlugins.ShortcutsEnabled = false;
             this.System_Path_txbox_folderPlugins.Size = new System.Drawing.Size(200, 20);
@@ -1052,7 +1016,7 @@
             // System_Path_btn_folderPluginsBrowse
             // 
             this.System_Path_btn_folderPluginsBrowse.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.System_Path_btn_folderPluginsBrowse.Location = new System.Drawing.Point(244, 421);
+            this.System_Path_btn_folderPluginsBrowse.Location = new System.Drawing.Point(244, 376);
             this.System_Path_btn_folderPluginsBrowse.Name = "System_Path_btn_folderPluginsBrowse";
             this.System_Path_btn_folderPluginsBrowse.Size = new System.Drawing.Size(32, 20);
             this.System_Path_btn_folderPluginsBrowse.TabIndex = 3;
@@ -1064,7 +1028,7 @@
             // 
             this.label14.AutoSize = true;
             this.flowLayoutPanel1.SetFlowBreak(this.label14, true);
-            this.label14.Location = new System.Drawing.Point(35, 447);
+            this.label14.Location = new System.Drawing.Point(35, 402);
             this.label14.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(69, 13);
@@ -1073,7 +1037,7 @@
             // 
             // System_Path_txbox_folderReports
             // 
-            this.System_Path_txbox_folderReports.Location = new System.Drawing.Point(38, 466);
+            this.System_Path_txbox_folderReports.Location = new System.Drawing.Point(38, 421);
             this.System_Path_txbox_folderReports.Margin = new System.Windows.Forms.Padding(3, 3, 3, 40);
             this.System_Path_txbox_folderReports.Name = "System_Path_txbox_folderReports";
             this.System_Path_txbox_folderReports.ShortcutsEnabled = false;
@@ -1083,7 +1047,7 @@
             // System_Path_btn_folderReportsBrowse
             // 
             this.System_Path_btn_folderReportsBrowse.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.System_Path_btn_folderReportsBrowse.Location = new System.Drawing.Point(244, 466);
+            this.System_Path_btn_folderReportsBrowse.Location = new System.Drawing.Point(244, 421);
             this.System_Path_btn_folderReportsBrowse.Name = "System_Path_btn_folderReportsBrowse";
             this.System_Path_btn_folderReportsBrowse.Size = new System.Drawing.Size(32, 20);
             this.System_Path_btn_folderReportsBrowse.TabIndex = 3;
@@ -2017,6 +1981,44 @@
             this.settings_content_tabControl_main_pBills.Text = "Рахунки";
             this.settings_content_tabControl_main_pBills.UseVisualStyleBackColor = true;
             // 
+            // groupBox6
+            // 
+            this.groupBox6.AutoSize = true;
+            this.groupBox6.Controls.Add(this.checkBox_pBills_ShowBillSumColumn);
+            this.groupBox6.Controls.Add(this.checkBox_pBills_ShowBillTotalSum);
+            this.groupBox6.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox6.Location = new System.Drawing.Point(3, 80);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Padding = new System.Windows.Forms.Padding(20, 5, 20, 5);
+            this.groupBox6.Size = new System.Drawing.Size(326, 77);
+            this.groupBox6.TabIndex = 4;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Загальний список чеків";
+            // 
+            // checkBox_pBills_ShowBillSumColumn
+            // 
+            this.checkBox_pBills_ShowBillSumColumn.AutoSize = true;
+            this.checkBox_pBills_ShowBillSumColumn.Dock = System.Windows.Forms.DockStyle.Top;
+            this.checkBox_pBills_ShowBillSumColumn.Location = new System.Drawing.Point(20, 45);
+            this.checkBox_pBills_ShowBillSumColumn.Name = "checkBox_pBills_ShowBillSumColumn";
+            this.checkBox_pBills_ShowBillSumColumn.Padding = new System.Windows.Forms.Padding(0, 5, 5, 5);
+            this.checkBox_pBills_ShowBillSumColumn.Size = new System.Drawing.Size(286, 27);
+            this.checkBox_pBills_ShowBillSumColumn.TabIndex = 1;
+            this.checkBox_pBills_ShowBillSumColumn.Text = "Показувати колонку суми чеку";
+            this.checkBox_pBills_ShowBillSumColumn.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_pBills_ShowBillTotalSum
+            // 
+            this.checkBox_pBills_ShowBillTotalSum.AutoSize = true;
+            this.checkBox_pBills_ShowBillTotalSum.Dock = System.Windows.Forms.DockStyle.Top;
+            this.checkBox_pBills_ShowBillTotalSum.Location = new System.Drawing.Point(20, 18);
+            this.checkBox_pBills_ShowBillTotalSum.Name = "checkBox_pBills_ShowBillTotalSum";
+            this.checkBox_pBills_ShowBillTotalSum.Padding = new System.Windows.Forms.Padding(0, 5, 5, 5);
+            this.checkBox_pBills_ShowBillTotalSum.Size = new System.Drawing.Size(286, 27);
+            this.checkBox_pBills_ShowBillTotalSum.TabIndex = 4;
+            this.checkBox_pBills_ShowBillTotalSum.Text = "Показувати загальну суму чеків";
+            this.checkBox_pBills_ShowBillTotalSum.UseVisualStyleBackColor = true;
+            // 
             // content_bills_groupBox_secure
             // 
             this.content_bills_groupBox_secure.AutoSize = true;
@@ -2203,53 +2205,15 @@
             this.profiles_btn_refresh.UseVisualStyleBackColor = true;
             this.profiles_btn_refresh.Click += new System.EventHandler(this.button_Click);
             // 
-            // groupBox6
-            // 
-            this.groupBox6.AutoSize = true;
-            this.groupBox6.Controls.Add(this.checkBox_pBills_ShowBillSumColumn);
-            this.groupBox6.Controls.Add(this.checkBox_pBills_ShowBillTotalSum);
-            this.groupBox6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox6.Location = new System.Drawing.Point(3, 80);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Padding = new System.Windows.Forms.Padding(20, 5, 20, 5);
-            this.groupBox6.Size = new System.Drawing.Size(326, 77);
-            this.groupBox6.TabIndex = 4;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Загальний список чеків";
-            // 
-            // checkBox_pBills_ShowBillSumColumn
-            // 
-            this.checkBox_pBills_ShowBillSumColumn.AutoSize = true;
-            this.checkBox_pBills_ShowBillSumColumn.Dock = System.Windows.Forms.DockStyle.Top;
-            this.checkBox_pBills_ShowBillSumColumn.Location = new System.Drawing.Point(20, 45);
-            this.checkBox_pBills_ShowBillSumColumn.Name = "checkBox_pBills_ShowBillSumColumn";
-            this.checkBox_pBills_ShowBillSumColumn.Padding = new System.Windows.Forms.Padding(0, 5, 5, 5);
-            this.checkBox_pBills_ShowBillSumColumn.Size = new System.Drawing.Size(286, 27);
-            this.checkBox_pBills_ShowBillSumColumn.TabIndex = 1;
-            this.checkBox_pBills_ShowBillSumColumn.Text = "Показувати колонку суми чеку";
-            this.checkBox_pBills_ShowBillSumColumn.UseVisualStyleBackColor = true;
-            // 
-            // checkBox_pBills_ShowBillTotalSum
-            // 
-            this.checkBox_pBills_ShowBillTotalSum.AutoSize = true;
-            this.checkBox_pBills_ShowBillTotalSum.Dock = System.Windows.Forms.DockStyle.Top;
-            this.checkBox_pBills_ShowBillTotalSum.Location = new System.Drawing.Point(20, 18);
-            this.checkBox_pBills_ShowBillTotalSum.Name = "checkBox_pBills_ShowBillTotalSum";
-            this.checkBox_pBills_ShowBillTotalSum.Padding = new System.Windows.Forms.Padding(0, 5, 5, 5);
-            this.checkBox_pBills_ShowBillTotalSum.Size = new System.Drawing.Size(286, 27);
-            this.checkBox_pBills_ShowBillTotalSum.TabIndex = 4;
-            this.checkBox_pBills_ShowBillTotalSum.Text = "Показувати загальну суму чеків";
-            this.checkBox_pBills_ShowBillTotalSum.UseVisualStyleBackColor = true;
-            // 
             // uiWndSettings
             // 
             this.AcceptButton = this.SaveButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(490, 444);
+            this.Controls.Add(this.PanelSystem);
             this.Controls.Add(this.panelContent);
             this.Controls.Add(this.panelProfiles);
-            this.Controls.Add(this.PanelSystem);
             this.Controls.Add(this.PanelStyle);
             this.Controls.Add(this.PanelPDV);
             this.Controls.Add(this.treeView1);
@@ -2319,6 +2283,8 @@
             this.content_order_groupBox_addQuantity.PerformLayout();
             this.settings_content_tabControl_main_pBills.ResumeLayout(false);
             this.settings_content_tabControl_main_pBills.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.content_bills_groupBox_secure.ResumeLayout(false);
             this.content_bills_groupBox_secure.PerformLayout();
             this.settings_content_tabControl_main_pArticles.ResumeLayout(false);
@@ -2329,8 +2295,6 @@
             this.groupBox2.PerformLayout();
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2340,10 +2304,8 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Panel PanelStyle;
         private System.Windows.Forms.FontDialog fontDialog1;
-        private System.Windows.Forms.TextBox System_Path_txbox_folderExchange;
         private System.Windows.Forms.TextBox System_Path_txbox_folderCheques;
         private System.Windows.Forms.TextBox System_Path_txbox_folderBills;
-        private System.Windows.Forms.Button System_Path_btn_folderExchangeBrowse;
         private System.Windows.Forms.Button System_Path_btn_folderChequesBrowse;
         private System.Windows.Forms.Button System_Path_btn_folderBillsBrowse;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
@@ -2395,7 +2357,6 @@
         private System.Windows.Forms.DataGridView dataGridView_tax_compatibility;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;

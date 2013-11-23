@@ -22,8 +22,8 @@ namespace PayDesk.Components.UI.wndSettings
             if (ht.ContainsKey("NAME"))
                 this.textBox1.Text = ht["NAME"].ToString();
             this.textBox2.Text = id.ToString();
-            if (ht.ContainsKey("SOURCE"))
-                this.textBox3.Text = ht["SOURCE"].ToString();
+            //if (ht.ContainsKey("SOURCE"))
+            //    this.textBox3.Text = ht["SOURCE"].ToString();
             if (ht.ContainsKey("OUTPUT"))
                 this.textBox4.Text = ht["OUTPUT"].ToString();
             if (ht.ContainsKey("FILTER"))
@@ -44,9 +44,9 @@ namespace PayDesk.Components.UI.wndSettings
             {
                 try
                 {
-                    if (this.tableLayoutPanel1.Controls.ContainsKey(((Control)sender).Tag.ToString()))
-                        this.tableLayoutPanel1.Controls[((Control)sender).Tag.ToString()].Text = folderBrowserDialog1.SelectedPath;
-                    else
+                //    if (this.tableLayoutPanel1.Controls.ContainsKey(((Control)sender).Tag.ToString()))
+                //        this.tableLayoutPanel1.Controls[((Control)sender).Tag.ToString()].Text = folderBrowserDialog1.SelectedPath;
+                //    else
                         this.tableLayoutPanel2.Controls[((Control)sender).Tag.ToString()].Text = folderBrowserDialog1.SelectedPath;
                 }
                 catch { }
@@ -56,7 +56,7 @@ namespace PayDesk.Components.UI.wndSettings
         /* data */
         public string Profile_Name { get { return this.textBox1.Text; } set { this.textBox1.Text = value; } }
         public string Profile_ID { get { return this.textBox2.Text; } set { this.textBox2.Text = value; } }
-        public string Profile_Source { get { return this.textBox3.Text; } set { this.textBox3.Text = value; } }
+        // public string Profile_Source { get { return this.textBox3.Text; } set { this.textBox3.Text = value; } }
         public string Profile_Output { get { return this.textBox4.Text; } set { this.textBox4.Text = value; } }
         public string Profile_Filter { get { return this.textBox5.Text; } set { this.textBox5.Text = value; } }
         public string Profile_SubUnit { get { return this.textBox6.Text; } set { this.textBox6.Text = value; } }
