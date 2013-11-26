@@ -20,6 +20,8 @@ namespace Updater
         private TabPage tabPage1;
         private TabPage tabPage2;
         private TabControl tabControl1;
+        private Label label2;
+        private TextBox general_main_localPath;
         private System.Windows.Forms.ToolStripButton toolStripButton_Remove;
 
         public wndSettings()
@@ -55,27 +57,29 @@ namespace Updater
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(wndSettings));
             this.btnSave = new System.Windows.Forms.Button();
             this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.general_main_fetchTimeout = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton_AddNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton_Remove = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.label1 = new System.Windows.Forms.Label();
-            this.general_main_fetchTimeout = new System.Windows.Forms.NumericUpDown();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.label2 = new System.Windows.Forms.Label();
+            this.general_main_localPath = new System.Windows.Forms.TextBox();
             this.tabControl2.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.general_main_fetchTimeout)).BeginInit();
             this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(434, 369);
+            this.btnSave.Location = new System.Drawing.Point(258, 249);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(94, 23);
             this.btnSave.TabIndex = 2;
@@ -93,8 +97,76 @@ namespace Updater
             this.tabControl2.Location = new System.Drawing.Point(12, 12);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(516, 351);
+            this.tabControl2.Size = new System.Drawing.Size(340, 231);
             this.tabControl2.TabIndex = 10;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.label2);
+            this.tabPage2.Controls.Add(this.general_main_localPath);
+            this.tabPage2.Controls.Add(this.general_main_fetchTimeout);
+            this.tabPage2.Controls.Add(this.label1);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(332, 235);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Загальні";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // general_main_fetchTimeout
+            // 
+            this.general_main_fetchTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.general_main_fetchTimeout.Location = new System.Drawing.Point(9, 19);
+            this.general_main_fetchTimeout.Maximum = new decimal(new int[] {
+            120000,
+            0,
+            0,
+            0});
+            this.general_main_fetchTimeout.Minimum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.general_main_fetchTimeout.Name = "general_main_fetchTimeout";
+            this.general_main_fetchTimeout.Size = new System.Drawing.Size(317, 20);
+            this.general_main_fetchTimeout.TabIndex = 0;
+            this.general_main_fetchTimeout.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(215, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Час опитування віддаленої папки (мсек.)";
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.tabControl1);
+            this.tabPage1.Controls.Add(this.toolStrip1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(332, 205);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Профілі синхронізації";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(3, 28);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(326, 174);
+            this.tabControl1.TabIndex = 12;
             // 
             // toolStrip1
             // 
@@ -107,7 +179,7 @@ namespace Updater
             this.toolStrip1.Location = new System.Drawing.Point(3, 3);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip1.Size = new System.Drawing.Size(502, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(326, 25);
             this.toolStrip1.TabIndex = 11;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -146,74 +218,28 @@ namespace Updater
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
-            // label1
+            // label2
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(215, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Час опитування віддаленої папки (мсек.)";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 42);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(90, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Локальна папка";
             // 
-            // general_main_fetchTimeout
+            // general_main_localPath
             // 
-            this.general_main_fetchTimeout.Location = new System.Drawing.Point(9, 19);
-            this.general_main_fetchTimeout.Maximum = new decimal(new int[] {
-            120000,
-            0,
-            0,
-            0});
-            this.general_main_fetchTimeout.Minimum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.general_main_fetchTimeout.Name = "general_main_fetchTimeout";
-            this.general_main_fetchTimeout.Size = new System.Drawing.Size(156, 20);
-            this.general_main_fetchTimeout.TabIndex = 0;
-            this.general_main_fetchTimeout.Value = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.tabControl1);
-            this.tabPage1.Controls.Add(this.toolStrip1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(508, 325);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Профілі синхронізації";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.general_main_fetchTimeout);
-            this.tabPage2.Controls.Add(this.label1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(508, 325);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Загальні";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(3, 28);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(502, 294);
-            this.tabControl1.TabIndex = 12;
+            this.general_main_localPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.general_main_localPath.Location = new System.Drawing.Point(9, 58);
+            this.general_main_localPath.Name = "general_main_localPath";
+            this.general_main_localPath.Size = new System.Drawing.Size(317, 20);
+            this.general_main_localPath.TabIndex = 6;
             // 
             // wndSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.ClientSize = new System.Drawing.Size(540, 404);
+            this.ClientSize = new System.Drawing.Size(364, 284);
             this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.btnSave);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -224,13 +250,13 @@ namespace Updater
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Параметри";
             this.tabControl2.ResumeLayout(false);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.general_main_fetchTimeout)).EndInit();
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }

@@ -37,11 +37,6 @@ namespace Updater
                     Hashtable _syncConfig = (Hashtable)de.Value;
                     if (!_syncConfig.ContainsKey("sync"))
                         continue;
-                    try
-                    {
-                        this.unlockDestinationFolder((Hashtable)_syncConfig["sync"]);
-                    }
-                    catch { }
                 }
         }
 
@@ -74,7 +69,7 @@ namespace Updater
             notifyIcon1.Icon = AppStateIcons.isync_busy;
 
             string _statusMessage = "";
-
+            Dictionary<string, int> _generalUpdateStatus = new Dictionary<string, int>();
             Hashtable dataSyncProfiles = (Hashtable)ApplicationConfiguration.Instance.Configuration["datasync"];
             if (dataSyncProfiles != null)
                 foreach (DictionaryEntry de in dataSyncProfiles)
@@ -84,15 +79,21 @@ namespace Updater
                         continue;
                     try
                     {
+                        // get sync profile config
                         _syncConfig = (Hashtable)_syncConfig["sync"];
-
-                        if (IsDestinationLocked(_syncConfig))
-                            continue;
-
-                        string title = _syncConfig["profileDisplayText"].ToString();
+                        // do sync
                         Dictionary<string, int> _profileUpdateStatus = perfromDataSync(de.Key.ToString(), _syncConfig);
+                        // update sync status
                         if (_profileUpdateStatus != null)
                         {
+                            string title = _syncConfig["profileDisplayText"].ToString();
+
+                            // update general status data
+                            foreach (KeyValuePair<string, int> _propfileStatusEntry in _profileUpdateStatus)
+                                if (_generalUpdateStatus.ContainsKey(_propfileStatusEntry.Key))
+                                    _generalUpdateStatus[_propfileStatusEntry.Key] += _propfileStatusEntry.Value;
+                                else
+                                    _generalUpdateStatus[_propfileStatusEntry.Key] = _propfileStatusEntry.Value;
 
                             _statusMessage += string.Format("{0}\n    Нових: {1}\n    Видалено: {2}\n    Без змін: {3}", title, _profileUpdateStatus["new"], _profileUpdateStatus["removed"], _profileUpdateStatus["skipped"]);
                             _statusMessage += "\n".PadRight(15, '=') + "\n";
@@ -101,6 +102,14 @@ namespace Updater
                     }
                     catch { }
                 }
+
+            // System.Threading.Thread.Sleep(3000);
+            // do data transformations
+            try
+            {
+                this.dataTransformation(_generalUpdateStatus);
+            }
+            catch { }
 
             timer1.Start();
 
@@ -123,15 +132,83 @@ namespace Updater
             this.timer1.Start();
         }
 
+        /* files and files collections */
+        private Dictionary<string, string> getFilesByProfileByName(string profileKey)
+        {
+            Dictionary<string, string> _filesToMerge = new Dictionary<string, string>();
+            Hashtable dataSyncProfiles = (Hashtable)ApplicationConfiguration.Instance.Configuration["datasync"];
+            if (dataSyncProfiles != null)
+            {
+                Hashtable _syncConfig = (Hashtable)dataSyncProfiles[profileKey];
+                if (_syncConfig.ContainsKey("sync"))
+                    try
+                    {
+                        _syncConfig = (Hashtable)_syncConfig["sync"];
+                        _filesToMerge["ART"] = string.Format("Art_{0:X2}{1:X2}.SDF", int.Parse(_syncConfig["srcSchema"].ToString()), int.Parse(_syncConfig["srcSubunit"].ToString()));
+                        _filesToMerge["ALT"] = string.Format("Alt_{0:X2}{1:X2}.SDF", int.Parse(_syncConfig["srcSchema"].ToString()), int.Parse(_syncConfig["srcSubunit"].ToString()));
+                        _filesToMerge["CLI"] = string.Format("Cli_{0:X2}{1:X2}.SDF", int.Parse(_syncConfig["srcSchema"].ToString()), int.Parse(_syncConfig["srcSubunit"].ToString()));
+                    }
+                    catch { }
+            }
+
+            return _filesToMerge;
+        }
+
+        private Dictionary<string, List<string>> getFilesAllProfilesByType()
+        {
+            Dictionary<string, List<string>> _filesToMerge = new Dictionary<string, List<string>>();
+            Hashtable dataSyncProfiles = (Hashtable)ApplicationConfiguration.Instance.Configuration["datasync"];
+            if (dataSyncProfiles != null)
+                foreach (DictionaryEntry de in dataSyncProfiles)
+                {
+                    Hashtable _syncConfig = (Hashtable)de.Value;
+                    if (!_syncConfig.ContainsKey("sync"))
+                        continue;
+                    try
+                    {
+                        _syncConfig = (Hashtable)_syncConfig["sync"];
+
+                        if (!_filesToMerge.ContainsKey("ART"))
+                            _filesToMerge["ART"] = new List<string>();
+
+                        if (!_filesToMerge.ContainsKey("ALT"))
+                            _filesToMerge["ALT"] = new List<string>();
+
+                        if (!_filesToMerge.ContainsKey("CLI"))
+                            _filesToMerge["CLI"] = new List<string>();
+
+                        _filesToMerge["ART"].Add(string.Format("Art_{0:X2}{1:X2}.xml", int.Parse(_syncConfig["srcSchema"].ToString()), int.Parse(_syncConfig["srcSubunit"].ToString())));
+                        _filesToMerge["ALT"].Add(string.Format("Alt_{0:X2}{1:X2}.xml", int.Parse(_syncConfig["srcSchema"].ToString()), int.Parse(_syncConfig["srcSubunit"].ToString())));
+                        _filesToMerge["CLI"].Add(string.Format("Cli_{0:X2}{1:X2}.xml", int.Parse(_syncConfig["srcSchema"].ToString()), int.Parse(_syncConfig["srcSubunit"].ToString())));
+                    }
+                    catch { }
+                }
+
+            return _filesToMerge;
+        }
+
+        private Dictionary<string, string> getFilesDestinationNames()
+        {
+            return new Dictionary<string, string>()
+            {
+                {"ART", "__Products.xml"},
+                {"ALT", "__Alternatives.xml"},
+                {"CLI", "__ClientCards.xml"}
+            };
+        }
+
+        private FileInfo getFileDataConvertionBySource(FileInfo sourceFile)
+        {
+            return new FileInfo(sourceFile.FullName.Replace(sourceFile.Extension, ".xml"));
+        }
+
         /* datasync profile */
         private Dictionary<string, int> perfromDataSync(string profileName, Hashtable config)
         {
             // notifyIcon1.ShowBalloonTip(500, Application.ProductName, "Data Sync Started", ToolTipIcon.Info);
-
-            // loop through remote files
-            string[] files = config["monitorFiles"].ToString().Split('\n');
+            Dictionary<string, string> _src = getFilesByProfileByName(profileName);
             string remotePathBase = config["remotePath"].ToString();
-            string localPathBase = config["localPath"].ToString();
+            string localPathBase = ApplicationConfiguration.Instance.GetValueByPath<string>("general.main.localPath");
             FileInfo localRemoteFileInfo = new FileInfo(localPathBase + @"\info_" + profileName + ".txt");
             FileInfo localLockFile = new FileInfo(localPathBase + @"\.lock");
             FileInfo localStorageInfo = new FileInfo(localPathBase);
@@ -151,16 +228,10 @@ namespace Updater
                 return null;
             }
 
-            if (files.Length == 0)
-            {
-                return null;
-            }
-
             notifyIcon1.Icon = AppStateIcons.isync_ok;
 
             // add lock file
             // File.CreateText(localLockFile.FullName).Close();
-            this.lockDestinationFolder(config);
 
             if (localRemoteFileInfo.Exists)
             {
@@ -182,15 +253,15 @@ namespace Updater
             int unchangedFiles = 0;
             int totalFiles = 0;
 
-            for (int i = 0, len = files.Length; i < len; i++)
+            foreach (KeyValuePair<string, string> _fileEntry in _src)
             {
-                if (files[i].Length == 0)
+                if (_fileEntry.Value.Length == 0)
                     continue;
 
                 totalFiles++;
 
-                FileInfo remoteFileInfo = new FileInfo(remotePathBase + "\\" + files[i]);
-                FileInfo localFileInfo = new FileInfo(localPathBase + "\\" + files[i]);
+                FileInfo remoteFileInfo = new FileInfo(remotePathBase + "\\" + _fileEntry.Value);
+                FileInfo localFileInfo = new FileInfo(localPathBase + "\\" + _fileEntry.Value);
 
                 // List<FileInfo> _listOfRemovedFile = new List<FileInfo>();
 
@@ -215,9 +286,9 @@ namespace Updater
                 if (copyAllFiles)
                 {
                     System.IO.File.Copy(remoteFileInfo.FullName, localFileInfo.FullName, true);
-                    _filenNameToDatNew[files[i]] = remoteFileInfo.LastWriteTimeUtc;
+                    _filenNameToDatNew[_fileEntry.Value] = remoteFileInfo.LastWriteTimeUtc;
                     // do file data tarnsformations
-                    dataConverterManager(localFileInfo, config);
+                    dataConverterManager(_fileEntry.Key, localFileInfo);
                     downloadedFiles++;
                     continue;
                 }
@@ -226,36 +297,36 @@ namespace Updater
                 if (!localFileInfo.Exists)
                 {
                     System.IO.File.Copy(remoteFileInfo.FullName, localFileInfo.FullName, true);
-                    _filenNameToDatNew[files[i]] = remoteFileInfo.LastWriteTimeUtc;
+                    _filenNameToDatNew[_fileEntry.Value] = remoteFileInfo.LastWriteTimeUtc;
                     // do file data tarnsformations
-                    dataConverterManager(localFileInfo, config);
+                    dataConverterManager(_fileEntry.Key, localFileInfo);
                     downloadedFiles++;
                     continue;
                 }
 
-                if (!_filenNameToDate.ContainsKey(files[i]))
+                if (!_filenNameToDate.ContainsKey(_fileEntry.Value))
                 {
                     System.IO.File.Copy(remoteFileInfo.FullName, localFileInfo.FullName, true);
-                    _filenNameToDatNew[files[i]] = remoteFileInfo.LastWriteTimeUtc;
+                    _filenNameToDatNew[_fileEntry.Value] = remoteFileInfo.LastWriteTimeUtc;
                     // do file data tarnsformations
-                    dataConverterManager(localFileInfo, config);
+                    dataConverterManager(_fileEntry.Key, localFileInfo);
                     downloadedFiles++;
                     continue;
                 }
 
                 // do compare dates and compy when the remote one is newer than it was before
-                if (remoteFileInfo.LastWriteTimeUtc.Ticks > _filenNameToDate[files[i]].Ticks)
+                if (remoteFileInfo.LastWriteTimeUtc.Ticks > _filenNameToDate[_fileEntry.Value].Ticks)
                 {
                     System.IO.File.Copy(remoteFileInfo.FullName, localFileInfo.FullName, true);
-                    _filenNameToDatNew[files[i]] = remoteFileInfo.LastWriteTimeUtc;
+                    _filenNameToDatNew[_fileEntry.Value] = remoteFileInfo.LastWriteTimeUtc;
                     // do file data tarnsformations
-                    dataConverterManager(localFileInfo, config);
+                    dataConverterManager(_fileEntry.Key, localFileInfo);
                     downloadedFiles++;
                     continue;
                 }
                 else
                 {
-                    _filenNameToDatNew[files[i]] = remoteFileInfo.LastWriteTimeUtc;
+                    _filenNameToDatNew[_fileEntry.Value] = remoteFileInfo.LastWriteTimeUtc;
                     unchangedFiles++;
                 }
 
@@ -277,193 +348,151 @@ namespace Updater
             }
             System.IO.File.WriteAllLines(localRemoteFileInfo.FullName, _info.ToArray());
 
-
-            // System.Threading.Thread.Sleep(3000);
-            // do data transformations
-            try
-            {
-                this.dataTransformation(config, _statusUpdate);
-            }
-            catch { }
-
-            // remove lock file
-            // File.Delete(localLockFile.FullName);
-            this.unlockDestinationFolder(config);
-
             return _statusUpdate;
         }
 
-        public bool IsDestinationLocked(Hashtable config)
-        {
-            return new FileInfo(config["localPath"] + @"\.lock").Exists;
-        }
-
-        public void lockDestinationFolder(Hashtable config)
-        {
-            string localPathBase = config["localPath"].ToString();
-            FileInfo localLockFile = new FileInfo(localPathBase + @"\.lock");
-            FileInfo localStorageInfo = new FileInfo(localPathBase);
-            // create loca dir when it does not exsist
-            if (!System.IO.Directory.Exists(localStorageInfo.FullName))
-                System.IO.Directory.CreateDirectory(localStorageInfo.FullName);
-            // add lock file
-            File.CreateText(localLockFile.FullName).Close();
-        }
-
-        public void unlockDestinationFolder(Hashtable config)
-        {
-            string localPathBase = config["localPath"].ToString();
-            FileInfo localLockFile = new FileInfo(localPathBase + @"\.lock");
-            FileInfo localStorageInfo = new FileInfo(localPathBase);
-            // create loca dir when it does not exsist
-            if (!System.IO.Directory.Exists(localStorageInfo.FullName))
-                System.IO.Directory.CreateDirectory(localStorageInfo.FullName);
-            // remove lock file
-            File.Delete(localLockFile.FullName);
-        }
-        
         /* data converters and transformations  */
-        private void dataConverterManager(FileInfo file, Hashtable config)
+        private void dataConverterManager(string fileType, FileInfo file)
         {
-            Hashtable mapToReaders = (Hashtable)config["dataReaders"];
+            //Hashtable mapToReaders = (Hashtable)config["dataReaders"];
             FileInfo dataSourceFile = this.getFileDataConvertionBySource(file);
 
-            foreach (DictionaryEntry de in mapToReaders)
-            {
-                Hashtable entry = (Hashtable)de.Value;
+            //foreach (DictionaryEntry de in mapToReaders)
+            //{
+                //Hashtable entry = (Hashtable)de.Value;
 
-                if (entry["Source"].ToString().Equals(file.Name))
-                {
-                    if (entry["Reader"] == null)
-                        continue;
+                //if (entry["Source"].ToString().Equals(file.Name))
+                //{
+                //    if (entry["Reader"] == null)
+                //        continue;
 
                     DataTable data = null;
 
                     // do data transformatios
-                    switch (entry["Reader"].ToString())
+                    //switch (entry["Reader"].ToString())
+                    switch (fileType)
                     {
-                        case "Products":
+                        case "ART":
                             data = ReadProduct(file.FullName);
                             data.TableName = Path.GetFileNameWithoutExtension(file.Name);
                             data.ExtendedProperties["NAME"] = data.TableName;
                             data.WriteXml(dataSourceFile.FullName, true);
                             break;
-                        case "AlternativeBarCodes":
+                        case "ALT":
                             data = ReadAlternative(file.FullName);
                             data.TableName = Path.GetFileNameWithoutExtension(file.Name);
                             data.ExtendedProperties["NAME"] = data.TableName;
                             data.WriteXml(dataSourceFile.FullName, true);
                             break;
-                        case "ClientCards":
+                        case "CLI":
                             data = ReadCard(file.FullName);
                             data.TableName = Path.GetFileNameWithoutExtension(file.Name);
                             data.ExtendedProperties["NAME"] = data.TableName;
                             data.WriteXml(dataSourceFile.FullName, true);
                             break;
                     }
-                }
-            }
+                //}
+            //}
 
         }
 
-        private void dataTransformation(Hashtable config, Dictionary<string, int> currentStatus)
+        private void dataTransformation(Dictionary<string, int> updateStatus)
         {
-            Hashtable mapToTransform = (Hashtable)config["dataTransform"];
-            string localPathBase = config["localPath"].ToString();
-            FileInfo localStorageInfo = new FileInfo(localPathBase);
-
             // do not transform data when nothing changed
-            if (currentStatus == null || currentStatus["files"] == currentStatus["skipped"])
+            if (updateStatus == null || updateStatus["files"] == updateStatus["skipped"])
                 return;
 
-            foreach (DictionaryEntry de in mapToTransform)
+            string localPathBase = ApplicationConfiguration.Instance.GetValueByPath<string>("general.main.localPath");
+            FileInfo localStorageInfo = new FileInfo(localPathBase);
+            Dictionary<string, List<string>> _filesToMergeAllProfiles = getFilesAllProfilesByType();
+
+            // do data transformation
+            foreach (KeyValuePair<string, List<string>> _filesToMergeSameType in _filesToMergeAllProfiles)
             {
-                Hashtable entry = (Hashtable)de.Value;
-                List<string> _sourceList = new List<string>(entry["SourceList"].ToString().Split(new char[] { ';', ' ', ',' }, StringSplitOptions.RemoveEmptyEntries));
+                string _mergedSourceName = getFilesDestinationNames()[_filesToMergeSameType.Key];
 
-
-                //if (entry["SourceList"].ToString().Equals(file.Name))
-                //{
-                if (_sourceList.Count == 0)
-                    continue;
-
-                // do data transformatios
-                switch (entry["Function"].ToString())
+                switch (_filesToMergeSameType.Key)
                 {
-                    case "JoinedProducts":
+                    case "ART":
                         {
                             // source list
-                            string _mergedSourceName = entry["DestinationName"] != null ? entry["DestinationName"].ToString() : "DefaultProducts.xml";
+                            //string _mergedSourceName = "__Products.xml";
                             DataTable _mergedSources = CreateDataTableForProduct(Path.GetFileNameWithoutExtension(_mergedSourceName));
                             DataTable _runningSource = null;
-                            foreach (string _sourceName in _sourceList)
+                            try
                             {
-                                if (!File.Exists(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName))
-                                    continue;
-                                // read source
-                                _runningSource = CreateDataTableForProduct(Path.GetFileNameWithoutExtension(_sourceName));
-                                _runningSource.ReadXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName);
-                                // do merge
-                                _mergedSources.Merge(_runningSource);
-                            }
+                                foreach (string _sourceName in _filesToMergeSameType.Value)
+                                {
+                                    if (!File.Exists(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName))
+                                        continue;
+                                    // read source
+                                    _runningSource = CreateDataTableForProduct(Path.GetFileNameWithoutExtension(_sourceName));
+                                    _runningSource.ReadXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName);
+                                    // do merge
+                                    _mergedSources.Merge(_runningSource);
+                                }
 
-                            // save merged data
-                            _mergedSources.WriteXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _mergedSourceName);
+                                // save merged data
+                                _mergedSources.WriteXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _mergedSourceName);
+                            }
+                            catch { }
                             break;
                         }
-                    case "JoinedAlternativeBC":
+                    case "ALT":
                         {
                             // source list
-                            string _mergedSourceName = entry["DestinationName"] != null ? entry["DestinationName"].ToString() : "DefaultAlternatives.xml";
+                            //string _mergedSourceName = "__Alternatives.xml";
                             DataTable _mergedSources = CreateDataTableForAlternative(Path.GetFileNameWithoutExtension(_mergedSourceName));
                             DataTable _runningSource = null;
-                            foreach (string _sourceName in _sourceList)
+                            try
                             {
-                                if (!File.Exists(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName))
-                                    continue;
-                                // read source
-                                _runningSource = CreateDataTableForAlternative(Path.GetFileNameWithoutExtension(_sourceName));
-                                _runningSource.ReadXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName);
-                                // do merge
-                                _mergedSources.Merge(_runningSource);
-                            }
+                                foreach (string _sourceName in _filesToMergeSameType.Value)
+                                {
+                                    if (!File.Exists(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName))
+                                        continue;
+                                    // read source
+                                    _runningSource = CreateDataTableForAlternative(Path.GetFileNameWithoutExtension(_sourceName));
+                                    _runningSource.ReadXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName);
+                                    // do merge
+                                    _mergedSources.Merge(_runningSource);
+                                }
 
-                            // save merged data
-                            _mergedSources.WriteXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _mergedSourceName);
+                                // save merged data
+                                _mergedSources.WriteXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _mergedSourceName);
+                            }
+                            catch { }
                             break;
                         }
-                    case "JoinedClientCards":
+                    case "CLI":
                         {
                             // source list
-                            string _mergedSourceName = entry["DestinationName"] != null ? entry["DestinationName"].ToString() : "DefaultClientCards.xml";
+                            //string _mergedSourceName = "__ClientCards.xml";
                             DataTable _mergedSources = CreateDataTableForCard(Path.GetFileNameWithoutExtension(_mergedSourceName));
                             DataTable _runningSource = null;
-                            foreach (string _sourceName in _sourceList)
+                            try
                             {
-                                if (!File.Exists(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName))
-                                    continue;
-                                // read source
-                                _runningSource = CreateDataTableForCard(Path.GetFileNameWithoutExtension(_sourceName));
-                                _runningSource.ReadXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName);
-                                // do merge
-                                _mergedSources.Merge(_runningSource);
-                            }
+                                foreach (string _sourceName in _filesToMergeSameType.Value)
+                                {
+                                    if (!File.Exists(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName))
+                                        continue;
+                                    // read source
+                                    _runningSource = CreateDataTableForCard(Path.GetFileNameWithoutExtension(_sourceName));
+                                    _runningSource.ReadXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName);
+                                    // do merge
+                                    _mergedSources.Merge(_runningSource);
+                                }
 
-                            // save merged data
-                            _mergedSources.WriteXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _mergedSourceName);
+                                // save merged data
+                                _mergedSources.WriteXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _mergedSourceName);
+                            }
+                            catch { }
                             break;
                         }
                 }
-
-
             }
         }
 
-        private FileInfo getFileDataConvertionBySource(FileInfo sourceFile)
-        {
-            return new FileInfo(sourceFile.FullName.Replace(sourceFile.Extension, ".xml"));
-        }
-
+        /* data init and raw parsers */
         private static DataTable CreateDataTableForProduct(string name)
         {
             DataTable dTable = new DataTable(name);

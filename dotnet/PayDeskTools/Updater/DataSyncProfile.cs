@@ -40,6 +40,12 @@ namespace Updater
                 OnProfileNameChange(this.sync_profileDisplayText.Text, this, e);
         }
 
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+
+        }
+
         //private void sync_profileName_TextChanged(object sender, EventArgs e)
         //{
         //    if (_stopEventProfileNameChange)

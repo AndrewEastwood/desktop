@@ -2540,7 +2540,7 @@ namespace MINI_FP6
                 if (isRetrive)
                 {
                     string memoryAddr = "305E";
-                    if (Params.Compatibility.ContainsKey("OP6")) memoryAddr = "3077";
+                    //if (Params.Compatibility.ContainsKey("OP6")) memoryAddr = "3077";
                     mem = GetMemory(memoryAddr, (byte)16, (byte)2);
                     Params.DriverData["LastFOrderNo"] = cfnom = uint.Parse(mem[1].ToString("X") + mem[0].ToString("X2"));
                 }
