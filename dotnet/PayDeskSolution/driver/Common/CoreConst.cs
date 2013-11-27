@@ -9,6 +9,7 @@ namespace driver.Common
         // order structure
         public const string CONTAINER_ORDER = "CN_ORDER";
         public const string STORE_NO = "STORE_NO";
+        public const string PAYDESK_NO = "PAYDESK_NO";
         public const string CLIENT_ID = "CLIENT_ID";
         public const string IS_RET = "IS_RET";
         public const string IS_LEGAL = "IS_LEGAL";
