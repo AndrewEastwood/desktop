@@ -107,7 +107,8 @@ namespace Updater
             // do data transformations
             try
             {
-                this.dataTransformation(_generalUpdateStatus);
+                if (this.dataTransformation(_generalUpdateStatus))
+                    switchTempSourceToNormal();
             }
             catch { }
 
@@ -187,14 +188,39 @@ namespace Updater
             return _filesToMerge;
         }
 
-        private Dictionary<string, string> getFilesDestinationNames()
+        private Dictionary<string, string> getFilesDestinationNames(bool isTemporary)
         {
             return new Dictionary<string, string>()
             {
-                {"ART", "__Products.xml"},
-                {"ALT", "__Alternatives.xml"},
-                {"CLI", "__ClientCards.xml"}
+                {"ART", (isTemporary ? "__" : "") + "Products.xml"},
+                {"ALT", (isTemporary ? "__" : "") + "Alternatives.xml"},
+                {"CLI", (isTemporary ? "__" : "") + "ClientCards.xml"}
             };
+        }
+
+        private void switchTempSourceToNormal()
+        {
+            string localPathBase = ApplicationConfiguration.Instance.GetValueByPath<string>("general.main.localPath");
+            // FileInfo localStorageInfo = new FileInfo(localPathBase);
+
+            string[] _tmpSrc = getFilesDestinationNames(true).Values.ToArray<string>();
+            string[] _normSrc = getFilesDestinationNames(false).Values.ToArray<string>();
+
+            for (int i = 0, len = _tmpSrc.Length; i < len; i++)
+            {
+                try
+                {
+                    if (File.Exists(localPathBase + Path.DirectorySeparatorChar + _normSrc[i]))
+                        File.Delete(localPathBase + Path.DirectorySeparatorChar + _normSrc[i]);
+
+                    File.Move(localPathBase + Path.DirectorySeparatorChar + _tmpSrc[i], localPathBase + Path.DirectorySeparatorChar + _normSrc[i]);
+
+                    if (File.Exists(localPathBase + Path.DirectorySeparatorChar + _tmpSrc[i]))
+                        File.Delete(localPathBase + Path.DirectorySeparatorChar + _tmpSrc[i]);
+                }
+                catch { }
+            }
+
         }
 
         private FileInfo getFileDataConvertionBySource(FileInfo sourceFile)
@@ -396,20 +422,34 @@ namespace Updater
 
         }
 
-        private void dataTransformation(Dictionary<string, int> updateStatus)
+        private bool dataTransformation(Dictionary<string, int> updateStatus)
         {
-            // do not transform data when nothing changed
-            if (updateStatus == null || updateStatus["files"] == updateStatus["skipped"])
-                return;
-
             string localPathBase = ApplicationConfiguration.Instance.GetValueByPath<string>("general.main.localPath");
-            FileInfo localStorageInfo = new FileInfo(localPathBase);
+            bool _allNormalFilesExist = true;
+
+            // do check whether we have all normal files
+            Dictionary<string, string> _normSrc = getFilesDestinationNames(false);
+            foreach (KeyValuePair<string, string> _fileNormalNameEntryToCheck in _normSrc)
+                if (!File.Exists(localPathBase + Path.DirectorySeparatorChar + _fileNormalNameEntryToCheck.Value))
+                {
+                    _allNormalFilesExist = false;
+                    break;
+                }
+            
+            // do not transform data when nothing has changed
+            if (_allNormalFilesExist && (updateStatus == null || updateStatus["files"] == updateStatus["skipped"]))
+                return false;
+
+            Dictionary<string, string> _tmpSrc = getFilesDestinationNames(true);
             Dictionary<string, List<string>> _filesToMergeAllProfiles = getFilesAllProfilesByType();
+
+            bool hasFail = false;
 
             // do data transformation
             foreach (KeyValuePair<string, List<string>> _filesToMergeSameType in _filesToMergeAllProfiles)
             {
-                string _mergedSourceName = getFilesDestinationNames()[_filesToMergeSameType.Key];
+                string _mergedSourceName = _tmpSrc[_filesToMergeSameType.Key];
+                string _mergedTableName = Path.GetFileNameWithoutExtension(_normSrc[_filesToMergeSameType.Key]);
 
                 switch (_filesToMergeSameType.Key)
                 {
@@ -417,79 +457,87 @@ namespace Updater
                         {
                             // source list
                             //string _mergedSourceName = "__Products.xml";
-                            DataTable _mergedSources = CreateDataTableForProduct(Path.GetFileNameWithoutExtension(_mergedSourceName));
+                            DataTable _mergedSources = CreateDataTableForProduct(_mergedTableName);
                             DataTable _runningSource = null;
                             try
                             {
                                 foreach (string _sourceName in _filesToMergeSameType.Value)
                                 {
-                                    if (!File.Exists(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName))
+                                    if (!File.Exists(localPathBase + Path.DirectorySeparatorChar + _sourceName))
                                         continue;
                                     // read source
                                     _runningSource = CreateDataTableForProduct(Path.GetFileNameWithoutExtension(_sourceName));
-                                    _runningSource.ReadXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName);
+                                    _runningSource.ReadXml(localPathBase + Path.DirectorySeparatorChar + _sourceName);
                                     // do merge
                                     _mergedSources.Merge(_runningSource);
                                 }
 
                                 // save merged data
-                                _mergedSources.WriteXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _mergedSourceName);
+                                //if (_mergedSources.Rows.Count > 0)
+                                _mergedSources.WriteXml(localPathBase + Path.DirectorySeparatorChar + _mergedSourceName);
                             }
-                            catch { }
+                            catch { hasFail = true; }
                             break;
                         }
                     case "ALT":
                         {
                             // source list
                             //string _mergedSourceName = "__Alternatives.xml";
-                            DataTable _mergedSources = CreateDataTableForAlternative(Path.GetFileNameWithoutExtension(_mergedSourceName));
+                            DataTable _mergedSources = CreateDataTableForAlternative(_mergedTableName);
                             DataTable _runningSource = null;
                             try
                             {
                                 foreach (string _sourceName in _filesToMergeSameType.Value)
                                 {
-                                    if (!File.Exists(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName))
+                                    if (!File.Exists(localPathBase + Path.DirectorySeparatorChar + _sourceName))
                                         continue;
                                     // read source
                                     _runningSource = CreateDataTableForAlternative(Path.GetFileNameWithoutExtension(_sourceName));
-                                    _runningSource.ReadXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName);
+                                    _runningSource.ReadXml(localPathBase + Path.DirectorySeparatorChar + _sourceName);
                                     // do merge
                                     _mergedSources.Merge(_runningSource);
                                 }
 
                                 // save merged data
-                                _mergedSources.WriteXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _mergedSourceName);
+                                //if (_mergedSources.Rows.Count > 0)
+                                _mergedSources.WriteXml(localPathBase + Path.DirectorySeparatorChar + _mergedSourceName);
                             }
-                            catch { }
+                            catch { hasFail = true; }
                             break;
                         }
                     case "CLI":
                         {
                             // source list
                             //string _mergedSourceName = "__ClientCards.xml";
-                            DataTable _mergedSources = CreateDataTableForCard(Path.GetFileNameWithoutExtension(_mergedSourceName));
+                            DataTable _mergedSources = CreateDataTableForCard(_mergedTableName);
                             DataTable _runningSource = null;
                             try
                             {
                                 foreach (string _sourceName in _filesToMergeSameType.Value)
                                 {
-                                    if (!File.Exists(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName))
+                                    if (!File.Exists(localPathBase + Path.DirectorySeparatorChar + _sourceName))
                                         continue;
                                     // read source
                                     _runningSource = CreateDataTableForCard(Path.GetFileNameWithoutExtension(_sourceName));
-                                    _runningSource.ReadXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _sourceName);
+                                    _runningSource.ReadXml(localPathBase + Path.DirectorySeparatorChar + _sourceName);
                                     // do merge
                                     _mergedSources.Merge(_runningSource);
                                 }
 
                                 // save merged data
-                                _mergedSources.WriteXml(localStorageInfo.FullName + Path.DirectorySeparatorChar + _mergedSourceName);
+                                //if (_mergedSources.Rows.Count > 0)
+                                _mergedSources.WriteXml(localPathBase + Path.DirectorySeparatorChar + _mergedSourceName);
                             }
-                            catch { }
+                            catch { hasFail = true; }
                             break;
                         }
                 }
             }
+
+            if (hasFail)
+                return false;
+
+            return true;
         }
 
         /* data init and raw parsers */
