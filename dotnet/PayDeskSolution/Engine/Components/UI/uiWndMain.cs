@@ -5026,6 +5026,7 @@ namespace PayDesk.Components.UI
                 Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure(this.Cheque);
                 // fill cheque structure
                 //chqInfo["DATA"] = this.Cheque.Copy();
+                chqInfo[CoreConst.PAYDESK_NO] = ConfigManager.Instance.CommonConfiguration.APP_PayDesk;
                 chqInfo["STORE_NO"] = this.currentSubUnit;
                 chqInfo["CLIENT_ID"] = this.clientID;
                 chqInfo["IS_RET"] = this.retriveChq;

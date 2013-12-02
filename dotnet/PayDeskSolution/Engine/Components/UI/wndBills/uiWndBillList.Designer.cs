@@ -30,19 +30,12 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(uiWndBillList));
             this.textBox_billsList_billNoSearch = new System.Windows.Forms.TextBox();
             this.billGrid = new System.Windows.Forms.DataGridView();
             this.listGrid = new System.Windows.Forms.DataGridView();
-            this.oid = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nom = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dt = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmt = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.LockSatet = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.FxNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CloseDT = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label2 = new System.Windows.Forms.Label();
             this.button_billsList_Delete = new System.Windows.Forms.Button();
             this.button_billsList_Print = new System.Windows.Forms.Button();
@@ -70,6 +63,15 @@
             this.label7 = new System.Windows.Forms.Label();
             this.button_billsList_Search = new System.Windows.Forms.Button();
             this.fileSystemWatcher_billIFolder = new System.IO.FileSystemWatcher();
+            this.oid = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nom = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dt = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cmt = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.sum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LockSatet = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.DeskNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FxNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CloseDT = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.billGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.listGrid)).BeginInit();
             this.panel1.SuspendLayout();
@@ -145,16 +147,17 @@
             this.cmt,
             this.sum,
             this.LockSatet,
+            this.DeskNo,
             this.FxNo,
             this.CloseDT});
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.listGrid.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.listGrid.DefaultCellStyle = dataGridViewCellStyle4;
             this.listGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.listGrid.Location = new System.Drawing.Point(3, 3);
@@ -170,77 +173,6 @@
             this.listGrid.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.listGrid_CellMouseClick);
             this.listGrid.Enter += new System.EventHandler(this.listGrid_Enter);
             this.listGrid.Leave += new System.EventHandler(this.listGrid_Leave);
-            // 
-            // oid
-            // 
-            this.oid.HeaderText = "#";
-            this.oid.Name = "oid";
-            this.oid.ReadOnly = true;
-            this.oid.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.oid.Visible = false;
-            this.oid.Width = 5;
-            // 
-            // nom
-            // 
-            this.nom.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.nom.HeaderText = "№";
-            this.nom.Name = "nom";
-            this.nom.ReadOnly = true;
-            this.nom.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.nom.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.nom.Width = 24;
-            // 
-            // dt
-            // 
-            this.dt.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.dt.HeaderText = "Дата";
-            this.dt.Name = "dt";
-            this.dt.ReadOnly = true;
-            this.dt.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.dt.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dt.Width = 39;
-            // 
-            // cmt
-            // 
-            this.cmt.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.cmt.HeaderText = "Коментарій";
-            this.cmt.Name = "cmt";
-            this.cmt.ReadOnly = true;
-            this.cmt.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cmt.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // sum
-            // 
-            this.sum.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.sum.HeaderText = "СУМА";
-            this.sum.Name = "sum";
-            this.sum.ReadOnly = true;
-            this.sum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.sum.Width = 44;
-            // 
-            // LockSatet
-            // 
-            this.LockSatet.HeaderText = "*";
-            this.LockSatet.Name = "LockSatet";
-            this.LockSatet.ReadOnly = true;
-            this.LockSatet.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.LockSatet.Width = 25;
-            // 
-            // FxNo
-            // 
-            this.FxNo.HeaderText = "Чек";
-            this.FxNo.Name = "FxNo";
-            this.FxNo.ReadOnly = true;
-            this.FxNo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.FxNo.Width = 60;
-            // 
-            // CloseDT
-            // 
-            this.CloseDT.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.CloseDT.HeaderText = "Закритий";
-            this.CloseDT.Name = "CloseDT";
-            this.CloseDT.ReadOnly = true;
-            this.CloseDT.Width = 80;
             // 
             // label2
             // 
@@ -555,6 +487,87 @@
             this.fileSystemWatcher_billIFolder.SynchronizingObject = this;
             this.fileSystemWatcher_billIFolder.Changed += new System.IO.FileSystemEventHandler(this.fileSystemWatcher_billIFolder_Changed);
             // 
+            // oid
+            // 
+            this.oid.HeaderText = "#";
+            this.oid.Name = "oid";
+            this.oid.ReadOnly = true;
+            this.oid.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.oid.Visible = false;
+            this.oid.Width = 5;
+            // 
+            // nom
+            // 
+            this.nom.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.nom.HeaderText = "#";
+            this.nom.Name = "nom";
+            this.nom.ReadOnly = true;
+            this.nom.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.nom.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.nom.Width = 20;
+            // 
+            // dt
+            // 
+            this.dt.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.dt.HeaderText = "Дата";
+            this.dt.Name = "dt";
+            this.dt.ReadOnly = true;
+            this.dt.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.dt.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dt.Width = 39;
+            // 
+            // cmt
+            // 
+            this.cmt.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cmt.HeaderText = "Коментарій";
+            this.cmt.Name = "cmt";
+            this.cmt.ReadOnly = true;
+            this.cmt.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cmt.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // sum
+            // 
+            this.sum.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.sum.DefaultCellStyle = dataGridViewCellStyle3;
+            this.sum.HeaderText = "СУМА";
+            this.sum.Name = "sum";
+            this.sum.ReadOnly = true;
+            this.sum.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.sum.Width = 44;
+            // 
+            // LockSatet
+            // 
+            this.LockSatet.HeaderText = "*";
+            this.LockSatet.Name = "LockSatet";
+            this.LockSatet.ReadOnly = true;
+            this.LockSatet.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.LockSatet.Width = 25;
+            // 
+            // DeskNo
+            // 
+            this.DeskNo.HeaderText = "№";
+            this.DeskNo.Name = "DeskNo";
+            this.DeskNo.ReadOnly = true;
+            this.DeskNo.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.DeskNo.Width = 20;
+            // 
+            // FxNo
+            // 
+            this.FxNo.HeaderText = "Чек";
+            this.FxNo.Name = "FxNo";
+            this.FxNo.ReadOnly = true;
+            this.FxNo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.FxNo.Width = 60;
+            // 
+            // CloseDT
+            // 
+            this.CloseDT.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.CloseDT.HeaderText = "Закритий";
+            this.CloseDT.Name = "CloseDT";
+            this.CloseDT.ReadOnly = true;
+            this.CloseDT.Width = 80;
+            // 
             // uiWndBillList
             // 
             this.AcceptButton = this.button_billsList_Open;
@@ -640,6 +653,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn cmt;
         private System.Windows.Forms.DataGridViewTextBoxColumn sum;
         private System.Windows.Forms.DataGridViewCheckBoxColumn LockSatet;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DeskNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn FxNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn CloseDT;
     }
