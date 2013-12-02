@@ -358,21 +358,37 @@ namespace Updater
 
             }
 
-            // update status
-            Dictionary<string, int> _statusUpdate = new Dictionary<string, int>();
-            _statusUpdate["new"] = downloadedFiles;
-            _statusUpdate["removed"] = removedFiles;
-            _statusUpdate["skipped"] = unchangedFiles;
-            _statusUpdate["files"] = totalFiles;
-
             // save remote file list
             List<string> _info = new List<string>();
             foreach (KeyValuePair<string, DateTime> remoteOnLocalInfoEntry in _filenNameToDatNew)
             {
                 // save remote file info
                 _info.Add(remoteOnLocalInfoEntry.Key + "#" + remoteOnLocalInfoEntry.Value.Ticks.ToString());
+
             }
             System.IO.File.WriteAllLines(localRemoteFileInfo.FullName, _info.ToArray());
+
+            // cleanup unused sources
+            foreach (KeyValuePair<string, DateTime> _filenNamePrev in _filenNameToDate)
+            {
+                // cleanup
+                if (!_filenNameToDatNew.ContainsKey(_filenNamePrev.Key))
+                    try
+                    {
+                        string unusedFilePath = localPathBase + Path.DirectorySeparatorChar + _filenNamePrev.Key;
+                        File.Delete(unusedFilePath);
+                        File.Delete(this.getFileDataConvertionBySource(new FileInfo(unusedFilePath)).FullName);
+                        removedFiles++;
+                    }
+                    catch { }
+            }
+
+            // update status
+            Dictionary<string, int> _statusUpdate = new Dictionary<string, int>();
+            _statusUpdate["new"] = downloadedFiles;
+            _statusUpdate["removed"] = removedFiles;
+            _statusUpdate["skipped"] = unchangedFiles;
+            _statusUpdate["files"] = totalFiles;
 
             return _statusUpdate;
         }
@@ -437,7 +453,7 @@ namespace Updater
                 }
             
             // do not transform data when nothing has changed
-            if (_allNormalFilesExist && (updateStatus == null || updateStatus["files"] == updateStatus["skipped"]))
+            if ((_allNormalFilesExist && (updateStatus == null || updateStatus["files"] == updateStatus["skipped"])) && updateStatus["removed"] == 0)
                 return false;
 
             Dictionary<string, string> _tmpSrc = getFilesDestinationNames(true);
