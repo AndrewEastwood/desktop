@@ -16,6 +16,7 @@ namespace DATECS_EXELLIO.Config
         private static Hashtable _allowedMethods;
         private static Hashtable _appAccess;
         private static Hashtable _miscData;
+        private static Hashtable _compatibility;
         private static NumberFormatInfo _numberFormat;
 
         /* CONSTRUCTORS */
@@ -29,6 +30,7 @@ namespace DATECS_EXELLIO.Config
             _allowedMethods = new Hashtable();
             _appAccess = new Hashtable();
             _miscData = new Hashtable();
+            _compatibility = new Hashtable();
             // 6byte
             string[] _states = new string[48]{
                 "",//0
@@ -127,6 +129,9 @@ namespace DATECS_EXELLIO.Config
 
             if (Parameters.Contains("MiscData"))
                 _miscData = (Hashtable)Parameters["MiscData"];
+
+            if (Parameters.Contains("Compatibility"))
+                _compatibility = (Hashtable)Parameters["Compatibility"];
         }
 
 
@@ -216,6 +221,7 @@ namespace DATECS_EXELLIO.Config
         public static Hashtable AllowedMethods { get { return _allowedMethods; } set { _allowedMethods = value; } }
         public static Hashtable AppAccess { get { return _appAccess; } set { _appAccess = value; } }
         public static Hashtable MiscData { get { return _miscData; } set { _miscData = value; } }
+        public static Hashtable Compatibility { get { return _compatibility; } set { _compatibility = value; } }
         public static NumberFormatInfo NumberFormat { get { return _numberFormat; } set { _numberFormat = value; } }
     }
 }

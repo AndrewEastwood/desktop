@@ -107,7 +107,7 @@ namespace MINI_FP6.UI.AppUI
             treeNode38,
             treeNode39,
             treeNode40});
-            System.Windows.Forms.TreeNode treeNode42 = new System.Windows.Forms.TreeNode("IKC-E260T", 2, 2, new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode42 = new System.Windows.Forms.TreeNode("MINI-FP6", 2, 2, new System.Windows.Forms.TreeNode[] {
             treeNode28,
             treeNode34,
             treeNode41});
@@ -307,7 +307,7 @@ namespace MINI_FP6.UI.AppUI
             treeNode42.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             treeNode42.SelectedImageIndex = 2;
             treeNode42.Tag = "fp";
-            treeNode42.Text = "IKC-E260T";
+            treeNode42.Text = "MINI-FP6";
             this.functionsTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode42});
             this.functionsTree.ShowNodeToolTips = true;
