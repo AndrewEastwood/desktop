@@ -110,8 +110,8 @@ namespace PayDesk.Components.UI.wndBills
             // Find
             if (e.KeyValue == new KeyEventArgs(Keys.F).KeyValue && e.Alt)
             {
-                textBox_billsList_billNoSearch.Select();
-                textBox_billsList_billNoSearch.SelectAll();
+                //textBox_billsList_billNoSearch.Select();
+                //textBox_billsList_billNoSearch.SelectAll();
                 return;
             }
             // Print
@@ -135,15 +135,15 @@ namespace PayDesk.Components.UI.wndBills
             // Exit
             if (e.KeyValue == new KeyEventArgs(Keys.Escape).KeyValue)
             {
-                if (textBox_billsList_billNoSearch.Focused)
-                {
-                    textBox_billsList_billNoSearch.ResetText();
-                    listGrid.Focus();
-                    listGrid.Select();
-                    for (int i = 0; i < this.listGrid.RowCount; i++)
-                        this.listGrid.Rows[i].Visible = true;
-                }
-                else
+                //if (textBox_billsList_billNoSearch.Focused)
+                //{
+                //    textBox_billsList_billNoSearch.ResetText();
+                //    listGrid.Focus();
+                //    listGrid.Select();
+                //    for (int i = 0; i < this.listGrid.RowCount; i++)
+                //        this.listGrid.Rows[i].Visible = true;
+                //}
+                //else
                     Close();
                 return;
             }
@@ -206,7 +206,7 @@ namespace PayDesk.Components.UI.wndBills
                     button_billsList_Print.Enabled = !billIsClosed;// && !billIsLocked;
                     button_billsList_Delete.Enabled = !billIsClosed && !billIsLocked && !billIsLoaded;
                     button_billsList_madecopy.Enabled = !billIsClosed && billIsLocked && !billIsLoaded;
-                    button_billsList_unlock.Visible = false;
+                    //button_billsList_unlock.Visible = false;
                     string orderNo = DataWorkShared.ExtractOrderProperty(dTBill, CoreConst.ORDER_NO, string.Empty).ToString();
                     string billState = string.Empty;
                     switch (orderNo)
@@ -292,7 +292,7 @@ namespace PayDesk.Components.UI.wndBills
             else
             {
                 this.ActivityControls(false);
-                button_billsList_unlock.Visible = false;
+                //button_billsList_unlock.Visible = false;
             }
 
             //this.listGrid.BackgroundColor = this.listGrid.BackgroundColor;
@@ -404,7 +404,7 @@ namespace PayDesk.Components.UI.wndBills
                 Close();
             }
             else
-                this.FilterByNo(textBox_billsList_billNoSearch.Text);
+                ;// this.FilterByNo(textBox_billsList_billNoSearch.Text);
         }
         /// <summary>
         /// Refresh (read) all bill files from folder and apply latest filter by date.
@@ -413,8 +413,8 @@ namespace PayDesk.Components.UI.wndBills
         /// <param name="e"></param>
         private void button_billsList_Refresh_Click(object sender, EventArgs e)
         {
-            this.textBox_billsList_billNoSearch.Text = this.textBox_billsList_billNoSearch.Tag.ToString();
-            this.textBox_billsList_billNoSearch.Refresh();
+            //this.textBox_billsList_billNoSearch.Text = this.textBox_billsList_billNoSearch.Tag.ToString();
+            //this.textBox_billsList_billNoSearch.Refresh();
             this.billGrid.Select();
             this.billGrid.Update();
             this.LoadDayBillsWithClear();
@@ -500,11 +500,11 @@ namespace PayDesk.Components.UI.wndBills
                 this.FilterAll(this.dateTimePicker1.Value, this.textBox1.Text, this.currentActiveBillOID);
             }
             else*/
-            if (this.textBox_billsList_billNoSearch.Text != string.Empty && this.textBox_billsList_billNoSearch.Text != this.textBox_billsList_billNoSearch.Tag.ToString())
+            /*if (this.textBox_billsList_billNoSearch.Text != string.Empty && this.textBox_billsList_billNoSearch.Text != this.textBox_billsList_billNoSearch.Tag.ToString())
                 this.FilterByNo(this.textBox_billsList_billNoSearch.Text);
             else
                 this.LoadDayBillsWithClear();
-
+            */
         }
         /// <summary>
         /// 
@@ -513,8 +513,8 @@ namespace PayDesk.Components.UI.wndBills
         /// <param name="e"></param>
         private void textBox_billsList_billNoSearch_Validated(object sender, EventArgs e)
         {
-            if (this.textBox_billsList_billNoSearch.Text == string.Empty)
-                this.textBox_billsList_billNoSearch.Text = this.textBox_billsList_billNoSearch.Tag.ToString();
+            //if (this.textBox_billsList_billNoSearch.Text == string.Empty)
+            //    this.textBox_billsList_billNoSearch.Text = this.textBox_billsList_billNoSearch.Tag.ToString();
         }
         /// <summary>
         /// 
@@ -523,8 +523,8 @@ namespace PayDesk.Components.UI.wndBills
         /// <param name="e"></param>
         private void textBox_billsList_billNoSearch_Enter(object sender, EventArgs e)
         {
-            if (this.textBox_billsList_billNoSearch.Text == this.textBox_billsList_billNoSearch.Tag.ToString())
-                this.textBox_billsList_billNoSearch.Text = string.Empty;
+            ///if (this.textBox_billsList_billNoSearch.Text == this.textBox_billsList_billNoSearch.Tag.ToString())
+            //    this.textBox_billsList_billNoSearch.Text = string.Empty;
 
         }
 
@@ -562,18 +562,18 @@ namespace PayDesk.Components.UI.wndBills
                     props = (PropertyCollection)((object[])billEntry.Value)[1];
                     billInfo = ((Dictionary<string, object>)props[CoreConst.BILL]);
                     this.billFileList.Add(billInfo[CoreConst.OID].ToString(), billEntry.Key);
-
+                    
                     listGrid.Rows.Add(
                         new object[] {
                             billInfo[CoreConst.OID], 
                             billInfo[CoreConst.BILL_NO],
-                            billInfo[CoreConst.DATETIME],
+                            ((DateTime)billInfo[CoreConst.DATETIME]).ToString("mm.dd.yy hh:mm"),
                             (billInfo[CoreConst.COMMENT] != null)?billInfo[CoreConst.COMMENT].ToString().Replace("%20", " "):"", 
                             (double)props[CoreConst.ORDER_REAL_SUMA], 
                             bool.Parse(billInfo[CoreConst.IS_LOCKED].ToString()), 
-                            billInfo[CoreConst.PAYDESK_NO], 
+                            props[CoreConst.PAYDESK_NO], 
                             props[CoreConst.ORDER_NO],
-                            (billInfo.ContainsKey(CoreConst.DATETIME_LOCK)?billInfo[CoreConst.DATETIME_LOCK]:"-")
+                            (billInfo.ContainsKey(CoreConst.DATETIME_LOCK) && billInfo[CoreConst.DATETIME_LOCK] is DateTime ? ((DateTime)billInfo[CoreConst.DATETIME_LOCK]).ToString("mm.dd.yy hh:mm") : "-")
                         }
                     );
 
@@ -942,5 +942,6 @@ namespace PayDesk.Components.UI.wndBills
                 if (e.NewValue < e.OldValue && (this.listGrid.FirstDisplayedScrollingRowIndex - 1) >= 0)
                     this.listGrid.FirstDisplayedScrollingRowIndex--;*/
         }
+
     }
 }
