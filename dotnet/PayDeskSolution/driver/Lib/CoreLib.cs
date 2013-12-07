@@ -648,7 +648,7 @@ namespace driver.Lib
             int MOD_ALT = 0x1;
             int MOD_CONTROL = 0x2;
             int MOD_SHIFT = 0x4;
-            int MOD_WIN = 0x8;
+            // int MOD_WIN = 0x8;
 
             if ((key & Keys.Alt) == Keys.Alt)
                 modifiers = modifiers | MOD_ALT;

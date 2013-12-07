@@ -32,7 +32,7 @@ namespace PayDesk.Components.UI
         // startup hook
         private void Printing_Load(object sender, EventArgs e)
         {
-            checkBox_useCommonPrinting.Checked = ConfigManager.Instance.CommonConfiguration.APP_UseCommonPrinting;
+            //checkBox_useCommonPrinting.Checked = ConfigManager.Instance.CommonConfiguration.APP_UseCommonPrinting;
 
             // Printers
             /*if (ConfigManager.Instance.CommonConfiguration.APP_PrintersLinks != null && ConfigManager.Instance.CommonConfiguration.APP_PrintersLinks[0] != null)
@@ -297,7 +297,6 @@ namespace PayDesk.Components.UI
             if (this.listBox_printers.Items.Count > 0)
                 this.listBox_printers.SelectedIndex = 0;*/
         }
-
 
         /* old
         private void PathSelection_Click(object sender, EventArgs e)

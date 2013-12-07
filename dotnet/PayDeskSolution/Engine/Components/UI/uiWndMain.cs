@@ -81,8 +81,6 @@ namespace PayDesk.Components.UI
         private double discCommonPercent = 0.0;
         private double discCommonCash = 0.0;
         private bool discApplied = false;
-        /* new data */
-        components.Components.DataContainer.DataContainer dataContainer2;
 
         private DataSet Data = new DataSet();
         private Hashtable Discount = new Hashtable();
@@ -100,14 +98,6 @@ namespace PayDesk.Components.UI
         private bool _fl_useTotDisc = true;
         private bool _fl_isOk = false;
         //private bool _fl_modeChanged = false;
-
-        private Hashtable GetAppStatements()
-        {
-            Hashtable currentStates = new Hashtable();
-            currentStates[CoreConst.STATE_DATA_UPDATED] = false;
-
-            return currentStates;
-        }
         
         /// <summary>
         /// Application's Constructor
@@ -115,100 +105,6 @@ namespace PayDesk.Components.UI
         public uiWndMain()
         {
             InitializeComponent();
-
-            dataContainer2 = DataWorkShared.GetDataContainer();
-
-            // initialize statements
-            dataContainer2.Structures[CoreConst.CONTAINER_STATE, CoreConst.STATE_CALC_USE_TOTAL_DISC] = true;
-
-
-            dataContainer2.Structures[CoreConst.CONTAINER_STATE].UpdateMethod = this.GetAppStatements;
-            //dataContainer2.Structures[CoreConst.CONTAINER_STATE] = this.GetAppStatements;
-            dataContainer2.Structures[CoreConst.CONTAINER_STATE].Update();
-            
-
-            //Program.AppPlugins.GetActive<IAppUI>().Execute(this);
-                    
-           // Settings1.Default["test"] = "gfdgdgdf";
-            //Settings1.Default.Save();
-            /*
-            Properties.Settings.Default.Context.Add("gdfgdfg", "gdfgdfg");
-            Properties.Settings.Default.Save();
-
-            System.Configuration.ConfigXmlDocument f = new System.Configuration.ConfigXmlDocument();
-            f.LoadXml("PayDesk.exe.config");
-            System.Configuration.SettingElement g = new System.Configuration.SettingElement("gfdgf", System.Configuration.SettingsSerializeAs.Xml);
-            System.Configuration.SettingsContext sc = new System.Configuration.SettingsContext();
-            System.Configuration.LocalFileSettingsProvider lfs = new System.Configuration.LocalFileSettingsProvider();
-            System.Collections.Specialized.NameValueCollection nvc = new System.Collections.Specialized.NameValueCollection();
-            nvc.Add("test2", "tttt"); lfs.Initialize("PayDesk.xml", nvc);
-            lfs.Reset(sc);
-
-
-            */
-
-            
-
-            /*
-            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new BinaryFormatter();
-
-            XmlPO.XmlParserObject xobj = new XmlPO.XmlParserObject();
-            */
-            /*
-            System.Collections.Hashtable _driverData = new System.Collections.Hashtable();
-            _driverData.Add("Status", 1);
-            _driverData.Add("ErrorStatus", 1);
-            _driverData.Add("ArtMemorySize", (uint)11800);
-            _driverData.Add("UserNo", (byte)1);
-            _driverData.Add("UserPwd", "0000");
-            _driverData.Add("DeskNo", (byte)1);
-            
-            System.Collections.Hashtable _driverData2 = new System.Collections.Hashtable();
-            _driverData2.Add("LastFunc", "");
-            _driverData2.Add("LastArtNo", (uint)1);
-            _driverData2.Add("LastFOrderNo", (uint)0);
-            _driverData2.Add("LastNOrderNo", (uint)0);
-            _driverData2.Add("LastROrderNo", (uint)0);
-
-            System.Collections.Hashtable _xData = new System.Collections.Hashtable();
-            _xData.Add("testBlock", _driverData);
-            _xData.Add("testBlock2", _driverData2);
-            _xData.Add("listtest", new int[] { 1, 2, 3, 5, 7, 0 });
-            
-            xobj.ParseDataToXml("myxmlfile.xml", _xData);
-            */
-            /*
-            System.Collections.Hashtable ldata = xobj.ParseXmlToData("AppConfig.xml");
-            ;
-
-            XmlPO.Components.Objects.SectionElement section = new XmlPO.Components.Objects.SectionElement("simple");
-            section.Comment = "demo test";
-
-            XmlPO.Components.Objects.BlockElement b = new XmlPO.Components.Objects.BlockElement("b1");
-            XmlPO.Components.Objects.PropertyElement p = new XmlPO.Components.Objects.PropertyElement("p1");
-            p.Value = 12345;
-            b.Add(p);
-            section.Add(b);
-            XmlPO.Components.Objects.DocumentElement doc = new XmlPO.Components.Objects.DocumentElement();
-            doc.AddContainer(section);
-
-
-
-            xobj.ParseDocumentToXml("t.xml", doc);
-            */
-            //System.Collections.Hashtable ldata = xobj.ParseXmlToData("myxmlfile.xml");
-
-
-            //ComPort _cport = new ComPort();
-            //PayDesk.Config.AppSettings sett = new Config.AppSettings();
-
-           /* ConfigManager cm = new ConfigManager();
-            sett.Tax_AppTaxChar = new char[] { 'a' };
-            sett.Tax_AppTaxDisc = new bool[] { true };
-            sett.PRN_Templates = new Dictionary<string, object>();
-            sett.PRN_Templates.Add("test", new Dictionary<string, object>(2));
-            string rez = cm.SerializeObject(sett, sett.GetType());
-            cm.Save(rez);*/
         }
 
         ~uiWndMain()
@@ -226,8 +122,6 @@ namespace PayDesk.Components.UI
             base.OnLoad(e);
 
             /* initialise data values */
-
-
             
             /* loop by all available profiles */
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
@@ -247,7 +141,6 @@ namespace PayDesk.Components.UI
 
             //winapi.Funcs.OutputDebugString("load_begin");
             this._fl_isOk = new Com_SecureRuntime().FullLoader();
-
 
             //Restore position
             this.Text = string.Format("{2}{1}{0}", Application.ProductName, " - ", ConfigManager.Instance.CommonConfiguration.APP_SubUnitName);
@@ -1674,10 +1567,6 @@ namespace PayDesk.Components.UI
                 case "LastDBChanges":
                     {
                         this.timer1_Tick(this.timer1, EventArgs.Empty);
-                        /*uiWndBaseChanges DBChanges = new uiWndBaseChanges();
-                        if (DBChanges.ShowDialog() == DialogResult.OK)
-                            timer1_Tick(timer1, EventArgs.Empty);
-                        DBChanges.Dispose();
                         */
                         break;
                     }
@@ -2727,8 +2616,6 @@ namespace PayDesk.Components.UI
                     this.Summa[de.Key] = DataWorkShared.GetStandartCalculationInfoStructure2();
                 }
             }
-
-
 
             //MessageBox.Show("done 1");
 
@@ -4857,40 +4744,6 @@ namespace PayDesk.Components.UI
         {
             set { }
             get { return new bool[3]; }
-        }
-
-        public DataTable PD_DEMO_Order
-        {
-            get
-            {
-                Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure();
-                // fill cheque structure
-                //chqInfo["DATA"] = this.Cheque.Copy();
-                chqInfo["STORE_NO"] = this.currentSubUnit;
-                chqInfo["CLIENT_ID"] = this.clientID;
-                chqInfo["IS_RET"] = this.retriveChq;
-                chqInfo["IS_LEGAL"] = false;
-                chqInfo["ORDER_NO"] = string.Empty;
-                chqInfo["ORDER_SUMA"] = this.chqSUMA;
-                chqInfo["ORDER_REAL_SUMA"] = this.realSUMA;
-                chqInfo["TAX_SUMA"] = this.realSUMA;
-                chqInfo["TAX_BILL"] = this.nakladna;
-                chqInfo["DISCOUNT"] = this.PD_DiscountInfo;
-
-                object bill = this.Cheque.ExtendedProperties["BILL"];
-                DataWorkShared.UpdateExtendedProperties(this.Cheque, chqInfo);
-                this.Cheque.ExtendedProperties["BILL"] = bill;
-                /*
-                chqInfo["BILL_NO"] = string.Empty;
-                chqInfo["BILL_COMMENT"] = string.Empty;
-                if (this.Cheque.ExtendedProperties.Contains("BILL")) {
-                    //Номер рахунку
-                    chqInfo["BILL_NO"] = Cheque.ExtendedProperties["NOM"];
-                    //Коментр рахунку
-                    chqInfo["BILL_COMMENT"] = Cheque.ExtendedProperties["CMT"];
-                }*/
-                return this.Cheque;
-            }
         }
 
         public DataTable PD_Order
