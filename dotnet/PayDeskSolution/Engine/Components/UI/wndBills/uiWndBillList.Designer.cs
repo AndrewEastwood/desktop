@@ -59,6 +59,8 @@
             this.label_allBills_TotalRecords = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label_lastUpdateDateTime = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.button_billsList_Refresh = new System.Windows.Forms.Button();
@@ -76,6 +78,7 @@
             this.filterBy_billNo = new System.Windows.Forms.ComboBox();
             this.filterBy_billDesk = new System.Windows.Forms.ComboBox();
             this.filterBy_billTag = new System.Windows.Forms.ComboBox();
+            this.label_orderInfo_orderComment = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.billGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.listGrid)).BeginInit();
             this.panel1.SuspendLayout();
@@ -385,6 +388,8 @@
             this.flowLayoutPanel1.Controls.Add(this.label_allBills_TotalRecords);
             this.flowLayoutPanel1.Controls.Add(this.label5);
             this.flowLayoutPanel1.Controls.Add(this.label6);
+            this.flowLayoutPanel1.Controls.Add(this.label4);
+            this.flowLayoutPanel1.Controls.Add(this.label_lastUpdateDateTime);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 417);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -437,6 +442,29 @@
             this.label6.Size = new System.Drawing.Size(46, 23);
             this.label6.TabIndex = 29;
             this.label6.Text = "000,00";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(229, 5);
+            this.label4.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.label4.Name = "label4";
+            this.label4.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
+            this.label4.Size = new System.Drawing.Size(110, 23);
+            this.label4.TabIndex = 30;
+            this.label4.Text = "Останнє оновлення:";
+            // 
+            // label_lastUpdateDateTime
+            // 
+            this.label_lastUpdateDateTime.AutoSize = true;
+            this.label_lastUpdateDateTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label_lastUpdateDateTime.Location = new System.Drawing.Point(339, 5);
+            this.label_lastUpdateDateTime.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.label_lastUpdateDateTime.Name = "label_lastUpdateDateTime";
+            this.label_lastUpdateDateTime.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
+            this.label_lastUpdateDateTime.Size = new System.Drawing.Size(93, 23);
+            this.label_lastUpdateDateTime.TabIndex = 31;
+            this.label_lastUpdateDateTime.Text = "00.00.00 00:00";
             // 
             // panel2
             // 
@@ -520,6 +548,7 @@
             // 
             // panel5
             // 
+            this.panel5.Controls.Add(this.label_orderInfo_orderComment);
             this.panel5.Controls.Add(this.label_orderInfo_orderNo);
             this.panel5.Controls.Add(this.label_orderInfo_discount);
             this.panel5.Controls.Add(this.label_orderInfo_suma);
@@ -594,6 +623,7 @@
             this.fileSystemWatcher_billIFolder.EnableRaisingEvents = true;
             this.fileSystemWatcher_billIFolder.SynchronizingObject = this;
             this.fileSystemWatcher_billIFolder.Changed += new System.IO.FileSystemEventHandler(this.fileSystemWatcher_billIFolder_Changed);
+            this.fileSystemWatcher_billIFolder.Deleted += new System.IO.FileSystemEventHandler(this.fileSystemWatcher_billIFolder_Changed);
             // 
             // filterBy_billWaiter
             // 
@@ -646,6 +676,18 @@
             this.filterBy_billTag.TabIndex = 3;
             this.filterBy_billTag.Tag = "filterBy_billTag";
             this.filterBy_billTag.TextChanged += new System.EventHandler(this.filterBy_TextChanged);
+            // 
+            // label_orderInfo_orderComment
+            // 
+            this.label_orderInfo_orderComment.AutoSize = true;
+            this.label_orderInfo_orderComment.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_orderInfo_orderComment.Location = new System.Drawing.Point(0, 96);
+            this.label_orderInfo_orderComment.Margin = new System.Windows.Forms.Padding(0);
+            this.label_orderInfo_orderComment.Name = "label_orderInfo_orderComment";
+            this.label_orderInfo_orderComment.Padding = new System.Windows.Forms.Padding(20, 5, 5, 0);
+            this.label_orderInfo_orderComment.Size = new System.Drawing.Size(60, 18);
+            this.label_orderInfo_orderComment.TabIndex = 26;
+            this.label_orderInfo_orderComment.Text = "label1";
             // 
             // uiWndBillList
             // 
@@ -738,5 +780,8 @@
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label_lastUpdateDateTime;
+        private System.Windows.Forms.Label label_orderInfo_orderComment;
     }
 }

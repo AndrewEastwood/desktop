@@ -38,22 +38,28 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
+            this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button1.Location = new System.Drawing.Point(12, 25);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 50);
+            this.button1.Size = new System.Drawing.Size(134, 48);
             this.button1.TabIndex = 0;
-            this.button1.Text = "ДЛЯ КУХНІ (тільки нові позиції)";
+            this.button1.Text = "ДЛЯ КУХНІ\r\n(нові позиції)";
+            this.button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button2.Location = new System.Drawing.Point(118, 25);
+            this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
+            this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button2.Location = new System.Drawing.Point(152, 25);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 50);
+            this.button2.Size = new System.Drawing.Size(134, 48);
             this.button2.TabIndex = 1;
             this.button2.Text = "ДЛЯ КЛІЄНТА";
+            this.button2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -72,7 +78,7 @@
             this.button_printBill_closeWindow.ForeColor = System.Drawing.Color.OrangeRed;
             this.button_printBill_closeWindow.Location = new System.Drawing.Point(12, 101);
             this.button_printBill_closeWindow.Name = "button_printBill_closeWindow";
-            this.button_printBill_closeWindow.Size = new System.Drawing.Size(206, 30);
+            this.button_printBill_closeWindow.Size = new System.Drawing.Size(274, 30);
             this.button_printBill_closeWindow.TabIndex = 2;
             this.button_printBill_closeWindow.Text = "ЗАКРИТИ ВІКНО";
             this.button_printBill_closeWindow.UseVisualStyleBackColor = true;
@@ -82,7 +88,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(230, 143);
+            this.ClientSize = new System.Drawing.Size(298, 143);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button_printBill_closeWindow);
             this.Controls.Add(this.button2);
