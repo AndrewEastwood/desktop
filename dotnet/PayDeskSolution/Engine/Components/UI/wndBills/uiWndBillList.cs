@@ -20,22 +20,26 @@ using driver.Lib;
 using driver.Common;
 using driver.Components.UI;
 using components.Components.MMessageBox;
+using components.Public;
 
 namespace PayDesk.Components.UI.wndBills
 {
     public partial class uiWndBillList : Form
     {
+
+        private Hashtable _localConfig;
         //private FileStream stream; .Components.UI.wndBills
         //private BinaryFormatter binF = new BinaryFormatter();
         private DataTable dTBill = new DataTable();
         private DataTable dTList = new DataTable();
         private string loadedBillNo;
         //private double billListSuma;
-        private string[] bills;
+        //private string[] bills;
         private Dictionary<string, string> billFileList = new Dictionary<string, string>();
-        private int currentActiveRowIndex = -1;
+        //private int currentActiveRowIndex = -1;
         private string currentActiveBillOID = string.Empty;
-        private DateTime currentDateTimeFilter = new DateTime();
+        //private DateTime currentDateTimeFilter = new DateTime();
+        bool _blockFilterAction;
 
         /* CONSTRUCTORS */
 
@@ -45,6 +49,8 @@ namespace PayDesk.Components.UI.wndBills
         public uiWndBillList()
         {
             InitializeComponent();
+
+            _localConfig = ApplicationConfiguration.Instance.GetValueByKey<Hashtable>("dinningRoom");
 
             // restore position
             try
@@ -68,7 +74,6 @@ namespace PayDesk.Components.UI.wndBills
             this.billGrid.Font = ConfigManager.Instance.CommonConfiguration.STYLE_BillWindowEntryItems;
             this.listGrid.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_BillItemsRowHeight;
             this.billGrid.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_BillItemProductsRowHeight;
-            
 
             this.fileSystemWatcher_billIFolder.Path = ConfigManager.Instance.CommonConfiguration.Path_Bills;
 
@@ -77,6 +82,46 @@ namespace PayDesk.Components.UI.wndBills
 
             // hide column
             this.sum.Visible = ConfigManager.Instance.CommonConfiguration.Content_Bills_ShowBillSumColumn;
+
+            // update filter dropdowns
+            string pattern = _localConfig["patternBarOrderComment"].ToString();
+            string[] sections = pattern.Split(new char[] { ' ' });
+            foreach (string s in sections)
+            {
+                try
+                {// 
+                    List<string> _filterOptions = new List<string>();
+                    foreach (DictionaryEntry section in (Hashtable)_localConfig[s])
+                    {
+                        try
+                        {
+                            if (section.Key.ToString() == "items")
+                                foreach (DictionaryEntry singleItem in (Hashtable)section.Value)
+                                    _filterOptions.Add(singleItem.Value.ToString());
+                            if (section.Key.ToString() == "active" && bool.Parse(section.Value.ToString()))
+                            {
+                                switch (s.ToLower())
+                                {
+                                    case "waiters":
+                                        filterBy_billWaiter.Items.AddRange(_filterOptions.ToArray());
+                                        filterBy_billWaiter.Enabled = true;
+                                        break;
+                                    case "desknumbers":
+                                        filterBy_billDesk.Items.AddRange(_filterOptions.ToArray());
+                                        filterBy_billDesk.Enabled = true;
+                                        break;
+                                    case "orderumbers":
+                                        filterBy_billTag.Items.AddRange(_filterOptions.ToArray());
+                                        filterBy_billTag.Enabled = true;
+                                        break;
+                                }
+                            }
+                        }
+                        catch { }
+                    }
+                }
+                catch { }
+            }
         }
         /// <summary>
         /// 
@@ -107,13 +152,6 @@ namespace PayDesk.Components.UI.wndBills
         /// <param name="e"></param>
         private void BillsList_KeyDown(object sender, KeyEventArgs e)
         {
-            // Find
-            if (e.KeyValue == new KeyEventArgs(Keys.F).KeyValue && e.Alt)
-            {
-                //textBox_billsList_billNoSearch.Select();
-                //textBox_billsList_billNoSearch.SelectAll();
-                return;
-            }
             // Print
             if (e.KeyValue == new KeyEventArgs(Keys.P).KeyValue && e.Alt)
             {
@@ -123,7 +161,6 @@ namespace PayDesk.Components.UI.wndBills
             // Delete
             if (e.KeyValue == new KeyEventArgs(Keys.D).KeyValue && e.Alt)
             {
-                //button_billsList_Delete.PerformClick();
                 return;
             }
             // Load selected bill
@@ -135,16 +172,7 @@ namespace PayDesk.Components.UI.wndBills
             // Exit
             if (e.KeyValue == new KeyEventArgs(Keys.Escape).KeyValue)
             {
-                //if (textBox_billsList_billNoSearch.Focused)
-                //{
-                //    textBox_billsList_billNoSearch.ResetText();
-                //    listGrid.Focus();
-                //    listGrid.Select();
-                //    for (int i = 0; i < this.listGrid.RowCount; i++)
-                //        this.listGrid.Rows[i].Visible = true;
-                //}
-                //else
-                    Close();
+                Close();
                 return;
             }
         }
@@ -193,11 +221,6 @@ namespace PayDesk.Components.UI.wndBills
                                 break;
                         }
 
-
-                    //double chqSUMA = (double)dTBill.Compute("sum(SUM)", "");
-                    //double chqSUMA = (double)dTBill.ExtendedProperties[CoreConst.ORDER_REAL_SUMA];
-                    //label2.Text = string.Format("{0} {1} {2} {3:0.00}{4}", "Перегляд рахунку №", billInfo[CoreConst.BILL_NO], "на суму:", chqSUMA, "грн.");
-
                     bool billIsLoaded = DataWorkShared.ExtractBillProperty(dTBill, CoreConst.BILL_NO, string.Empty).ToString() == this.loadedBillNo;
                     bool billIsClosed = DataWorkShared.ExtractOrderProperty(dTBill, CoreConst.ORDER_NO, string.Empty, false).ToString() != string.Empty;
                     bool billIsLocked =(bool)DataWorkShared.ExtractBillProperty(dTBill, CoreConst.IS_LOCKED, false);
@@ -237,48 +260,10 @@ namespace PayDesk.Components.UI.wndBills
                     label_orderInfo_realSuma.Text = string.Format("{0}{1} {2}", "СУМА", ":", DataWorkShared.ExtractOrderProperty(dTBill, CoreConst.ORDER_REAL_SUMA));
                     label_orderInfo_orderNo.Text = string.Format("{0}{1} {2}", "Номер чеку", ":", orderNo);
                     label_orderInfo_discount.Text = string.Empty; 
-                    /*if (billIsClosed || billIsLocked)
-                    {*/
-                        // bill is closed forever
-                        /*button_billsList_Open.Enabled = !billIsClosed;
-                        button_billsList_Print.Enabled = false;
-                        button_billsList_Delete.Enabled = false;
-                        button_billsList_madecopy.Enabled = !billIsClosed && billIsLocked;
-                        button_billsList_unlock.Visible = false;*/
-                   /* }
-                    else*/
-                    //{
-                    /*
-                        // bill is not closed but is was printed, so it locked
-                        if ((dTBill.ExtendedProperties.ContainsKey("LOCK") && bool.Parse(dTBill.ExtendedProperties["LOCK"].ToString())) || billIsLoaded)
-                        {
-                            // if this bill is loaded we couldn't load it again.
-                            button_billsList_Open.Enabled = !billIsLoaded;
-                            // lock PRINT, DELETE, COPY operations
-                            button_billsList_Print.Enabled = false;
-                            button_billsList_Delete.Enabled = false;
-                            button_billsList_madecopy.Enabled = false;
-                            // if this bill is loaded we couldn't ulock it
-                            button_billsList_unlock.Visible = !billIsLoaded;
-                        }
-                        else
-                        {*/
-                            // bill is not closed and locked too. Normal bill.
-                           /* button_billsList_Open.Enabled = true;
-                            button_billsList_Print.Enabled = true;
-                            button_billsList_Delete.Enabled = true;
-                            button_billsList_madecopy.Enabled = true;
-                            button_billsList_unlock.Visible = false;*/
-                        //}
-                    //}
-                    
-
-
                 }
                 catch { }
 
                 // shif v-scrollbar
-                //this.listGrid.Rows[ridx].Selected = true;
                 try
                 {
                     if (vScrollBar1.Maximum < rIdx)
@@ -292,15 +277,8 @@ namespace PayDesk.Components.UI.wndBills
             else
             {
                 this.ActivityControls(false);
-                //button_billsList_unlock.Visible = false;
             }
 
-            //this.listGrid.BackgroundColor = this.listGrid.BackgroundColor;
-            //this.listGrid.Parent.BackColor = this.listGrid.BackgroundColor;
-            //this.listGrid.Refresh();
-            //this.listGrid.Parent.Refresh();
-            //this.listGrid.Update();
-            //this.listGrid.Invalidate();
             this.listGrid.Focus();
         }
         /// <summary>
@@ -331,16 +309,7 @@ namespace PayDesk.Components.UI.wndBills
             PayDesk.Components.UI.wndBills.uiWndBillPrint bp = new PayDesk.Components.UI.wndBills.uiWndBillPrint(dTBill);
             DialogResult printResult = bp.ShowDialog(this);
             bp.Dispose();
-            /*
-            CoreLib.Print(new object[] { dTBill }, "kitchen", 1);
-
-            for (int i = 0; i < dTBill.Rows.Count; i++)
-                dTBill.Rows[i]["PRINTCOUNT"] = Convert.ToDouble(dTBill.Rows[i]["TOT"]);
-
-            CoreLib.SaveBill(false, 0, "", dTBill);*/
-
             this.LoadDayBillsWithClear();
-            //this.FilterByDate(this.dateTimePicker1.Value, this.currentActiveBillOID);
         }
         /// <summary>
         /// 
@@ -350,30 +319,12 @@ namespace PayDesk.Components.UI.wndBills
         private void button_billsList_Delete_Click(object sender, EventArgs e)
         {
             if (this.loadedBillNo == DataWorkShared.ExtractBillProperty(this.dTBill, CoreConst.BILL_NO, string.Empty).ToString())
-                MMessageBox.Show("Неможливо видалити рахунок № " + this.loadedBillNo + "\r\nВін є відкритий в основному вікні",
+                MMessageBox.Show("Неможливо анулювати рахунок № " + this.loadedBillNo + "\r\nВін є відкритий в основному вікні",
                       Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
-            {/*
-                if (!UserConfig.Properties[24])
-                    if (new Admin().ShowDialog(this) != DialogResult.OK)
-                        return;*/
+            {
                 DataWorkBill.LockBill(dTBill, "null");
                 this.LoadDayBillsWithClear();
-                /*
-                if ()
-                {
-                    for (int i = 0, j = 0; j < bills.Length; i++, j++)
-                    {
-                        if (i == listGrid.CurrentRow.Index)
-                            j++;
-                        if (j < bills.Length)
-                            bills[i] = bills[j];
-                    }
-                    Array.Resize<string>(ref bills, bills.Length - 1);
-                    listGrid.Rows.Remove(listGrid.CurrentRow);
-                    if (listGrid.RowCount == 0)
-                        this.button_billsList_ShowAllBills.Enabled = false;
-                }*/
             }
 
         }
@@ -418,6 +369,13 @@ namespace PayDesk.Components.UI.wndBills
             this.billGrid.Select();
             this.billGrid.Update();
             this.LoadDayBillsWithClear();
+
+            _blockFilterAction = true;
+            filterBy_billNo.ResetText();
+            filterBy_billDesk.ResetText();
+            filterBy_billWaiter.ResetText();
+            filterBy_billTag.ResetText();
+            _blockFilterAction = false;
         }
         /// <summary>
         /// Unlock selected bill.
@@ -431,11 +389,11 @@ namespace PayDesk.Components.UI.wndBills
                     return;
 
             DataWorkBill.UnlockBill(this.LoadedBill);
-            this.LoadDayBills();
+            this._loadDayBills();
             //this.FilterByDate(this.dateTimePicker1.Value, this.currentActiveBillOID);
         }
         /// <summary>
-        /// 
+        /// Download another bills (will open date range picker before)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -446,7 +404,6 @@ namespace PayDesk.Components.UI.wndBills
             {
                 //this.FilterReset(this.currentActiveBillOID);
                 this.LoadRangeBills(dateFilter.Filter_FromDate ,dateFilter.Filter_ToDate);
- 
             }
             dateFilter.Dispose();
         }
@@ -457,7 +414,7 @@ namespace PayDesk.Components.UI.wndBills
         /// <param name="e"></param>
         private void listGrid_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e) { }
         /// <summary>
-        /// 
+        /// Do 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -489,43 +446,89 @@ namespace PayDesk.Components.UI.wndBills
 
         }
         /// <summary>
-        /// 
+        /// Watch bill folder for changes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button_billsList_Search_Click(object sender, EventArgs e)
-        {/*
-            if (this.dateTimePicker1.Checked)
+        private void fileSystemWatcher_billIFolder_Changed(object sender, FileSystemEventArgs e)
+        {
+            if (!this.IsDisposed)
             {
-                this.FilterAll(this.dateTimePicker1.Value, this.textBox1.Text, this.currentActiveBillOID);
+                //MMessageBox.Show(this, "Були внесені змінити в базу рахунків\r\nВідбудеться оновлення списку. Натисніть ОК для продовження.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.button_billsList_Refresh.PerformClick();
             }
-            else*/
-            /*if (this.textBox_billsList_billNoSearch.Text != string.Empty && this.textBox_billsList_billNoSearch.Text != this.textBox_billsList_billNoSearch.Tag.ToString())
-                this.FilterByNo(this.textBox_billsList_billNoSearch.Text);
-            else
-                this.LoadDayBillsWithClear();
-            */
         }
         /// <summary>
-        /// 
+        /// Do smth before window is closed
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void textBox_billsList_billNoSearch_Validated(object sender, EventArgs e)
+        private void uiWndBillList_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //if (this.textBox_billsList_billNoSearch.Text == string.Empty)
-            //    this.textBox_billsList_billNoSearch.Text = this.textBox_billsList_billNoSearch.Tag.ToString();
+            // saving position
+            ConfigManager.Instance.CommonConfiguration.WP_ALL["BILL_VIEW"] = this.Location;
         }
         /// <summary>
-        /// 
+        /// Controls vertical scroll bar
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void textBox_billsList_billNoSearch_Enter(object sender, EventArgs e)
+        private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
         {
-            ///if (this.textBox_billsList_billNoSearch.Text == this.textBox_billsList_billNoSearch.Tag.ToString())
-            //    this.textBox_billsList_billNoSearch.Text = string.Empty;
+            this.listGrid.FirstDisplayedScrollingRowIndex = e.NewValue;
+            this.listGrid.Rows[e.NewValue].Selected = true;
+            this.listGrid[1, e.NewValue].Selected = true;
+        }
+        /// <summary>
+        /// Manage filtering
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void filterBy_TextChanged(object sender, EventArgs e)
+        {
+            if (_blockFilterAction)
+                return;
 
+            string _filterStrBy_billNo = filterBy_billNo.Text;
+            string _filterStrBy_billComment = "";
+
+            string pattern = _localConfig["patternBarOrderComment"].ToString();
+            string[] sections = pattern.Split(new char[] { ' ' });
+            foreach (string s in sections)
+            {
+                switch (s.ToLower())
+                {
+                    case "waiters":
+                        _filterStrBy_billComment += filterBy_billWaiter.Text;
+                        break;
+                    case "desknumbers":
+                        _filterStrBy_billComment += filterBy_billDesk.Text;
+                        break;
+                    case "orderumbers":
+                        _filterStrBy_billComment += filterBy_billTag.Text;
+                        break;
+                }
+                _filterStrBy_billComment += " ";
+            }
+
+            _filterStrBy_billComment = _filterStrBy_billComment.Trim();
+            _filterStrBy_billNo = _filterStrBy_billNo.Trim();
+
+
+            FilterByNo(_filterStrBy_billNo);
+            FilterByComment(_filterStrBy_billComment, true);
+
+            //switch (((Control)sender).Tag.ToString())
+            //{
+            //    case "filterBy_billNo":
+            //        break;
+            //    case "filterBy_billWaiter":
+            //        break;
+            //    case "filterBy_billDesk":
+            //        break;
+            //    case "filterBy_billTag":
+            //        break;
+            //}
         }
 
         /* METHODS */
@@ -541,13 +544,13 @@ namespace PayDesk.Components.UI.wndBills
             return DataWorkBill.LoadCombinedBill(this.billFileList[index]);
         }
         /// <summary>
-        /// Load all bills from bill's directory
+        /// Load all bills from bill's directory. It is the basic method for "range" and 'clear day" bills loaders
         /// </summary>
-        private double LoadDayBills()
+        private double _loadDayBills()
         {
-            return this.LoadDayBills(DateTime.Now);
+            return this._loadDayBills(DateTime.Now);
         }
-        private double LoadDayBills(DateTime selectedDay)
+        private double _loadDayBills(DateTime selectedDay)
         {
             Dictionary<string, object> items = DataWorkBill.LoadDayBills(selectedDay, ConfigManager.Instance.CommonConfiguration.Path_Bills, ConfigManager.Instance.CommonConfiguration.APP_SubUnit);
             DataTable currentBill = new DataTable();
@@ -582,67 +585,15 @@ namespace PayDesk.Components.UI.wndBills
                     {
                         Font extFont = listGrid.Font;
                         listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.Font = new Font(extFont, FontStyle.Strikeout);
-                    }
+                        listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.BackColor = Color.GreenYellow;
+                    } else if (bool.Parse(billInfo[CoreConst.IS_LOCKED].ToString()))
+                        listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.BackColor = Color.DarkOrange;
                     else
                         listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.BackColor = Color.LightPink;
 
                 }
             }
             catch { }
-
-
-            /*
-            string item = string.Empty;
-            bills = Directory.GetFiles(ConfigManager.Instance.CommonConfiguration.Path_Bills, string.Format("{0:X2}_N*_{1}.bill", ConfigManager.Instance.CommonConfiguration.APP_SubUnit, selectedDay.ToString("ddMMyy")));
-            Array.Sort(bills);
-            double billListSuma = 0.0;
-            double billSuma = 0.0;
-            object[] billEntry = new object[2];
-            PropertyCollection props = new PropertyCollection();
-            Dictionary<string, object> billInfo = new Dictionary<string, object>();
-            object orderNo = new object();
-            for (int i = 0; i < bills.Length; i++, item = string.Empty)
-            {
-                try
-                {
-                    stream = new FileStream(bills[i], FileMode.Open, FileAccess.Read, FileShare.Read);
-                    billEntry = (object[])binF.Deserialize(stream);
-                    //dTBill = (DataTable)binF.Deserialize(stream);
-                    dTBill = (DataTable)billEntry[0];
-                    props = (PropertyCollection)billEntry[1];
-                    billInfo = ((Dictionary<string, object>)props[CoreConst.BILL]);
-
-                    stream.Close();
-                    stream.Dispose();
-
-                    //Adding item
-                    billFileList.Add(billInfo[CoreConst.OID].ToString(), bills[i]);
-                    billSuma = (double)props[CoreConst.ORDER_SUMA];
-                    orderNo = props[CoreConst.ORDER_NO];
-                    // hide special flags
-                    //if (orderNo != null && (string.Compare(orderNo.ToString(), "null") == 0 || string.Compare(orderNo.ToString(), "k") == 0))
-                    //    orderNo = string.Empty;
-                    listGrid.Rows.Add(
-                        new object[] {
-                            billInfo[CoreConst.OID], 
-                            billInfo[CoreConst.BILL_NO],
-                            billInfo[CoreConst.DATETIME],
-                            billInfo[CoreConst.COMMENT], 
-                            billSuma, 
-                            bool.Parse(billInfo[CoreConst.IS_LOCKED].ToString()), 
-                            orderNo
-                        }
-                    );
-                    billListSuma += billSuma;
-                    if (props.ContainsKey(CoreConst.ORDER_NO) && props[CoreConst.ORDER_NO] != null && props[CoreConst.ORDER_NO].ToString() != string.Empty)
-                    {
-                        Font extFont = listGrid.Font;
-                        listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.Font = new Font(extFont, FontStyle.Strikeout);
-                    }
-                }
-                catch (Exception ex) { CoreLib.WriteLog(ex, "LoadDayBills(DateTime selectedDay); Unable to load bill file: " + bills[i]); }
-
-            }*/
 
             return generalSuma;
         }
@@ -663,6 +614,13 @@ namespace PayDesk.Components.UI.wndBills
             listGrid.SelectionChanged += listGrid_SelectionChanged;
             if (this.listGrid.RowCount != 0)
             {
+                // update filter box
+                this.filterBy_billNo.Items.Clear();
+                this.filterBy_billNo.Enabled = true;
+                for (int i = 0; i < listGrid.RowCount; i++)
+                    this.filterBy_billNo.Items.Add(listGrid["NOM", i].Value.ToString().Trim('0'));
+
+                // select active bill
                 bool wasSelected = false;
                 int index = 0;
                 if (this.currentActiveBillOID != string.Empty)
@@ -681,22 +639,16 @@ namespace PayDesk.Components.UI.wndBills
                 {
                     index = this.listGrid.Rows.GetLastRow(DataGridViewElementStates.None);
                     this.listGrid.Rows[index].Selected = true;
-
-                    //index = this.listGrid.Rows[this.listGrid.Rows.GetLastRow(DataGridViewElementStates.None)].Index-1;
-                    //this.listGrid.FirstDisplayedScrollingRowIndex = index;
                 }
 
-
-                //this.listGrid_CellMouseClick(this.listGrid, new DataGridViewCellMouseEventArgs(1, index, 20, 20, new MouseEventArgs(System.Windows.Forms.MouseButtons.Left, 2, 10, 10, 1)));
-                  // this.listGrid.Focus();
-                  // this.listGrid.Select();
-                //this.listGrid.InvalidateRow(this.listGrid.SelectedRows[0].Index);
                 this.button_billsList_Open.Enabled = true;
                 this.listGrid.CurrentCell = this.listGrid[1, index];
             }
             else
             {
                 this.button_billsList_Open.Enabled = false;
+                // disable filter box by num
+                this.filterBy_billNo.Enabled = false;
             }
 
             this.listGrid.Focus();
@@ -751,7 +703,7 @@ namespace PayDesk.Components.UI.wndBills
             double allSuma = 0.0;
             while (dateFrom < dateTo)
             {
-                allSuma += this.LoadDayBills(dateFrom);
+                allSuma += this._loadDayBills(dateFrom);
                 dateFrom = dateFrom.AddDays(1.0);
             }
             Hashtable param = new Hashtable();
@@ -761,18 +713,14 @@ namespace PayDesk.Components.UI.wndBills
         private void LoadDayBillsWithClear(DateTime selectedDay)
         {
             this.LoadDayBillsBeforeHook();
-            double allSuma = this.LoadDayBills(selectedDay);
+            double allSuma = this._loadDayBills(selectedDay);
             Hashtable param = new Hashtable();
             param.Add("SUMA", allSuma);
             this.LoadDayBillsAfterHook(param);
         }
         private void LoadDayBillsWithClear()
         {
-            this.LoadDayBillsBeforeHook();
-            double allSuma = this.LoadDayBills(DateTime.Now);
-            Hashtable param = new Hashtable();
-            param.Add("SUMA", allSuma);
-            this.LoadDayBillsAfterHook(param);
+            LoadDayBillsWithClear(DateTime.Now);
         }
         /// <summary>
         /// Set activity mode to all needle controls
@@ -795,6 +743,18 @@ namespace PayDesk.Components.UI.wndBills
                 label_orderInfo_discount.Text = string.Empty;
             }
             //button_billsList_madecopy.Enabled = isActive;
+        }
+        private void FilterReset(string activeBillOID)
+        {
+            int activeVisibleRowNo = -1;
+            for (int i = 0; i < listGrid.RowCount; i++)
+            {
+                if (activeVisibleRowNo < 0 && listGrid["NOM", i].Value.ToString() == activeBillOID)
+                    activeVisibleRowNo = i;
+                listGrid.Rows[i].Visible = true;
+            }
+            if (activeVisibleRowNo >= 0)
+                listGrid.Rows[activeVisibleRowNo].Selected = true;
         }
         private void FilterByDate(DateTime filterDateTime, string activeBillOID)
         {
@@ -841,14 +801,49 @@ namespace PayDesk.Components.UI.wndBills
         }
         private void FilterByNo(string billNumber)
         {
-            if (billNumber == string.Empty)
-                return;
-
+            FilterByNo(billNumber, false);
+        }
+        private void FilterByNo(string billNumber, bool isCascadeFilter)
+        {
             int hiddenRows = 0;
             int firstVisibleRowNo = -1;
             for (int i = 0; i < listGrid.RowCount; i++)
-                if (listGrid["NOM", i].Value.ToString().Contains(billNumber))
+                if (billNumber == string.Empty || listGrid["NOM", i].Value.ToString().Contains(billNumber))
                 {
+                    //listGrid.Rows[i].Selected = true;
+                    if (isCascadeFilter && !listGrid.Rows[i].Visible)
+                        continue;
+
+                    listGrid.Rows[i].Visible = true;
+                    if (firstVisibleRowNo < 0)
+                        firstVisibleRowNo = i;
+                    //listGrid.CurrentCell = listGrid["NOM", i];
+                }
+                else
+                {
+                    listGrid.Rows[i].Visible = false;
+                    hiddenRows++;
+                }
+            //if (firstVisibleRowNo >= 0)
+            //    listGrid.Rows[firstVisibleRowNo].Selected = true;
+
+            this.FilterResultHook();
+           /* if (hiddenRows == this.listGrid.RowCount)
+                this.ActivityControls(false);*/
+        }
+        private void FilterByComment(string partial)
+        {
+            FilterByComment(partial, false);
+        }
+        private void FilterByComment(string partial, bool isCascadeFilter)
+        {
+            int hiddenRows = 0;
+            int firstVisibleRowNo = -1;
+            for (int i = 0; i < listGrid.RowCount; i++)
+                if (partial == string.Empty || listGrid["CMT", i].Value.ToString().Contains(partial))
+                {
+                    if (isCascadeFilter && !listGrid.Rows[i].Visible)
+                        continue;
                     //listGrid.Rows[i].Selected = true;
                     listGrid.Rows[i].Visible = true;
                     if (firstVisibleRowNo < 0)
@@ -860,88 +855,21 @@ namespace PayDesk.Components.UI.wndBills
                     listGrid.Rows[i].Visible = false;
                     hiddenRows++;
                 }
-            if (firstVisibleRowNo >= 0)
-                listGrid.Rows[firstVisibleRowNo].Selected = true;
+            //if (firstVisibleRowNo >= 0)
+            //    listGrid.Rows[firstVisibleRowNo].Selected = true;
 
             this.FilterResultHook();
-           /* if (hiddenRows == this.listGrid.RowCount)
-                this.ActivityControls(false);*/
-        }
-        private void FilterReset(string activeBillOID)
-        {
-            int activeVisibleRowNo = -1;
-            for (int i = 0; i < listGrid.RowCount; i++)
-            {
-                if (activeVisibleRowNo < 0 && listGrid["NOM", i].Value.ToString() == activeBillOID)
-                    activeVisibleRowNo = i;
-                listGrid.Rows[i].Visible = true;
-            }
-            if (activeVisibleRowNo >= 0)
-                listGrid.Rows[activeVisibleRowNo].Selected = true;
         }
         private void FilterResultHook()
         {
             if (this.listGrid.Rows.GetRowCount(DataGridViewElementStates.Visible) == 0)
                 this.ActivityControls(false);
         }
-
         /* PROPERTIES */
 
         /// <summary>
         /// Завантажений рахунок
         /// </summary>
         public DataTable LoadedBill { get { return dTBill; } }
-
-
-        private void fileSystemWatcher_billIFolder_Changed(object sender, FileSystemEventArgs e)
-        {
-            if (!this.IsDisposed)
-            {
-                //MMessageBox.Show(this, "Були внесені змінити в базу рахунків\r\nВідбудеться оновлення списку. Натисніть ОК для продовження.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.button_billsList_Refresh.PerformClick();
-            }             
-        }
-
-        private void uiWndBillList_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            // saving position
-            ConfigManager.Instance.CommonConfiguration.WP_ALL["BILL_VIEW"] = this.Location;
-        }
-
-        private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
-        {/*
-            if (e.NewValue == 0)
-            {
-                this.listGrid.FirstDisplayedScrollingRowIndex = e.NewValue;
-                this.listGrid.Rows[0].Selected = true;
-
-                return;
-            }
-
-            this.listGrid.FirstDisplayedScrollingRowIndex = e.NewValue / 5;
-            this.listGrid.Rows[this.listGrid.FirstDisplayedScrollingRowIndex].Selected = true;
-
-            if (e.NewValue >= this.vScrollBar1.Maximum)
-            {
-                this.listGrid.FirstDisplayedScrollingRowIndex = this.listGrid.RowCount - 1;
-                this.listGrid.Rows[this.listGrid.RowCount - 1].Selected = true;
-                return;
-            }
-            */
-
-
-            this.listGrid.FirstDisplayedScrollingRowIndex = e.NewValue;
-            this.listGrid.Rows[e.NewValue].Selected = true;
-            this.listGrid[1, e.NewValue].Selected = true;
-            //this.listGrid.Rows[e.NewValue]. = DataGridViewElementStates.Selected;
-
-            /*
-            if (e.NewValue > e.OldValue && (this.listGrid.FirstDisplayedScrollingRowIndex + 1) < this.listGrid.RowCount)
-                this.listGrid.FirstDisplayedScrollingRowIndex++;
-            else
-                if (e.NewValue < e.OldValue && (this.listGrid.FirstDisplayedScrollingRowIndex - 1) >= 0)
-                    this.listGrid.FirstDisplayedScrollingRowIndex--;*/
-        }
-
     }
 }

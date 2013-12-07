@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(uiWndBillList));
             this.billGrid = new System.Windows.Forms.DataGridView();
             this.listGrid = new System.Windows.Forms.DataGridView();
@@ -60,6 +60,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
             this.button_billsList_Refresh = new System.Windows.Forms.Button();
             this.button_billsList_madecopy = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -75,9 +76,6 @@
             this.filterBy_billNo = new System.Windows.Forms.ComboBox();
             this.filterBy_billDesk = new System.Windows.Forms.ComboBox();
             this.filterBy_billTag = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.panel8 = new System.Windows.Forms.Panel();
-            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.billGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.listGrid)).BeginInit();
             this.panel1.SuspendLayout();
@@ -89,7 +87,6 @@
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher_billIFolder)).BeginInit();
-            this.panel8.SuspendLayout();
             this.SuspendLayout();
             // 
             // billGrid
@@ -100,22 +97,22 @@
             this.billGrid.AllowUserToResizeRows = false;
             this.billGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.billGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.billGrid.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.billGrid.DefaultCellStyle = dataGridViewCellStyle1;
             this.billGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.billGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.billGrid.Location = new System.Drawing.Point(0, 18);
+            this.billGrid.Location = new System.Drawing.Point(0, 0);
             this.billGrid.Name = "billGrid";
             this.billGrid.ReadOnly = true;
             this.billGrid.RowHeadersVisible = false;
             this.billGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.billGrid.Size = new System.Drawing.Size(292, 317);
+            this.billGrid.Size = new System.Drawing.Size(292, 335);
             this.billGrid.StandardTab = true;
             this.billGrid.TabIndex = 11;
             this.billGrid.TabStop = false;
@@ -128,14 +125,14 @@
             this.listGrid.AllowUserToResizeRows = false;
             this.listGrid.BackgroundColor = System.Drawing.Color.White;
             this.listGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.listGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.listGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.listGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.oid,
             this.nom,
@@ -146,14 +143,14 @@
             this.DeskNo,
             this.FxNo,
             this.CloseDT});
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.listGrid.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.listGrid.DefaultCellStyle = dataGridViewCellStyle4;
             this.listGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.listGrid.Location = new System.Drawing.Point(3, 3);
@@ -165,7 +162,7 @@
             this.listGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.listGrid.Size = new System.Drawing.Size(515, 364);
             this.listGrid.StandardTab = true;
-            this.listGrid.TabIndex = 1;
+            this.listGrid.TabIndex = 4;
             this.listGrid.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.listGrid_CellMouseClick);
             this.listGrid.Enter += new System.EventHandler(this.listGrid_Enter);
             this.listGrid.Leave += new System.EventHandler(this.listGrid_Leave);
@@ -209,8 +206,8 @@
             // sum
             // 
             this.sum.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.sum.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.sum.DefaultCellStyle = dataGridViewCellStyle3;
             this.sum.HeaderText = "СУМА";
             this.sum.Name = "sum";
             this.sum.ReadOnly = true;
@@ -268,7 +265,7 @@
             this.button_billsList_Delete.Location = new System.Drawing.Point(726, 503);
             this.button_billsList_Delete.Name = "button_billsList_Delete";
             this.button_billsList_Delete.Size = new System.Drawing.Size(156, 35);
-            this.button_billsList_Delete.TabIndex = 5;
+            this.button_billsList_Delete.TabIndex = 11;
             this.button_billsList_Delete.Text = "АНУЛЮВАТИ";
             this.button_billsList_Delete.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button_billsList_Delete.UseVisualStyleBackColor = true;
@@ -286,7 +283,7 @@
             this.button_billsList_Print.Location = new System.Drawing.Point(363, 0);
             this.button_billsList_Print.Name = "button_billsList_Print";
             this.button_billsList_Print.Size = new System.Drawing.Size(205, 45);
-            this.button_billsList_Print.TabIndex = 2;
+            this.button_billsList_Print.TabIndex = 7;
             this.button_billsList_Print.Text = "Друкувати рахунок";
             this.button_billsList_Print.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button_billsList_Print.UseVisualStyleBackColor = false;
@@ -302,7 +299,7 @@
             this.button_billsList_Open.Location = new System.Drawing.Point(0, 0);
             this.button_billsList_Open.Name = "button_billsList_Open";
             this.button_billsList_Open.Size = new System.Drawing.Size(303, 45);
-            this.button_billsList_Open.TabIndex = 8;
+            this.button_billsList_Open.TabIndex = 6;
             this.button_billsList_Open.Text = "        Відкрити позначений рахунок в основне вікно програми";
             this.button_billsList_Open.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button_billsList_Open.UseVisualStyleBackColor = true;
@@ -320,7 +317,7 @@
             this.button_billsList_ShowAllBills.Margin = new System.Windows.Forms.Padding(0);
             this.button_billsList_ShowAllBills.Name = "button_billsList_ShowAllBills";
             this.button_billsList_ShowAllBills.Size = new System.Drawing.Size(205, 35);
-            this.button_billsList_ShowAllBills.TabIndex = 10;
+            this.button_billsList_ShowAllBills.TabIndex = 9;
             this.button_billsList_ShowAllBills.Text = "Завантажити інші рахунки";
             this.button_billsList_ShowAllBills.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button_billsList_ShowAllBills.UseVisualStyleBackColor = true;
@@ -356,7 +353,7 @@
             this.vScrollBar1.Location = new System.Drawing.Point(518, 3);
             this.vScrollBar1.Name = "vScrollBar1";
             this.vScrollBar1.Size = new System.Drawing.Size(47, 364);
-            this.vScrollBar1.TabIndex = 23;
+            this.vScrollBar1.TabIndex = 5;
             this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll);
             // 
             // panel7
@@ -453,6 +450,17 @@
             this.panel2.Size = new System.Drawing.Size(568, 35);
             this.panel2.TabIndex = 21;
             // 
+            // label3
+            // 
+            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Bold);
+            this.label3.Location = new System.Drawing.Point(303, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(60, 35);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "АБО";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // button_billsList_Refresh
             // 
             this.button_billsList_Refresh.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -465,7 +473,7 @@
             this.button_billsList_Refresh.Margin = new System.Windows.Forms.Padding(0);
             this.button_billsList_Refresh.Name = "button_billsList_Refresh";
             this.button_billsList_Refresh.Size = new System.Drawing.Size(303, 35);
-            this.button_billsList_Refresh.TabIndex = 9;
+            this.button_billsList_Refresh.TabIndex = 8;
             this.button_billsList_Refresh.Text = "Обновити поточий список рахунків";
             this.button_billsList_Refresh.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button_billsList_Refresh.UseVisualStyleBackColor = true;
@@ -482,7 +490,7 @@
             this.button_billsList_madecopy.Location = new System.Drawing.Point(588, 503);
             this.button_billsList_madecopy.Name = "button_billsList_madecopy";
             this.button_billsList_madecopy.Size = new System.Drawing.Size(132, 35);
-            this.button_billsList_madecopy.TabIndex = 6;
+            this.button_billsList_madecopy.TabIndex = 10;
             this.button_billsList_madecopy.Text = "Копія рах.";
             this.button_billsList_madecopy.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button_billsList_madecopy.UseVisualStyleBackColor = true;
@@ -493,7 +501,6 @@
             this.panel3.BackColor = System.Drawing.SystemColors.ControlDark;
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel3.Controls.Add(this.billGrid);
-            this.panel3.Controls.Add(this.panel8);
             this.panel3.Controls.Add(this.panel4);
             this.panel3.Location = new System.Drawing.Point(588, 12);
             this.panel3.Name = "panel3";
@@ -590,77 +597,55 @@
             // 
             // filterBy_billWaiter
             // 
+            this.filterBy_billWaiter.Enabled = false;
             this.filterBy_billWaiter.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
             this.filterBy_billWaiter.FormattingEnabled = true;
+            this.filterBy_billWaiter.IntegralHeight = false;
             this.filterBy_billWaiter.Location = new System.Drawing.Point(99, 12);
             this.filterBy_billWaiter.Name = "filterBy_billWaiter";
             this.filterBy_billWaiter.Size = new System.Drawing.Size(237, 33);
-            this.filterBy_billWaiter.TabIndex = 31;
+            this.filterBy_billWaiter.TabIndex = 1;
             this.filterBy_billWaiter.Tag = "filterBy_billWaiter";
+            this.filterBy_billWaiter.TextChanged += new System.EventHandler(this.filterBy_TextChanged);
             // 
             // filterBy_billNo
             // 
+            this.filterBy_billNo.Enabled = false;
             this.filterBy_billNo.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
             this.filterBy_billNo.FormattingEnabled = true;
+            this.filterBy_billNo.IntegralHeight = false;
             this.filterBy_billNo.Location = new System.Drawing.Point(12, 12);
             this.filterBy_billNo.Name = "filterBy_billNo";
             this.filterBy_billNo.Size = new System.Drawing.Size(81, 33);
-            this.filterBy_billNo.TabIndex = 32;
+            this.filterBy_billNo.TabIndex = 0;
             this.filterBy_billNo.Tag = "filterBy_billNo";
+            this.filterBy_billNo.TextChanged += new System.EventHandler(this.filterBy_TextChanged);
             // 
             // filterBy_billDesk
             // 
+            this.filterBy_billDesk.Enabled = false;
             this.filterBy_billDesk.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
             this.filterBy_billDesk.FormattingEnabled = true;
+            this.filterBy_billDesk.IntegralHeight = false;
             this.filterBy_billDesk.Location = new System.Drawing.Point(342, 12);
             this.filterBy_billDesk.Name = "filterBy_billDesk";
             this.filterBy_billDesk.Size = new System.Drawing.Size(117, 33);
-            this.filterBy_billDesk.TabIndex = 33;
+            this.filterBy_billDesk.TabIndex = 2;
             this.filterBy_billDesk.Tag = "filterBy_billDesk";
+            this.filterBy_billDesk.TextChanged += new System.EventHandler(this.filterBy_TextChanged);
             // 
             // filterBy_billTag
             // 
+            this.filterBy_billTag.Enabled = false;
             this.filterBy_billTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
             this.filterBy_billTag.FormattingEnabled = true;
+            this.filterBy_billTag.IntegralHeight = false;
             this.filterBy_billTag.Location = new System.Drawing.Point(465, 12);
             this.filterBy_billTag.Name = "filterBy_billTag";
             this.filterBy_billTag.Size = new System.Drawing.Size(117, 33);
-            this.filterBy_billTag.TabIndex = 34;
+            this.filterBy_billTag.TabIndex = 3;
             this.filterBy_billTag.Tag = "filterBy_billTag";
-            // 
-            // label3
-            // 
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Bold);
-            this.label3.Location = new System.Drawing.Point(303, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(60, 35);
-            this.label3.TabIndex = 11;
-            this.label3.Text = "АБО";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // panel8
-            // 
-            this.panel8.AutoSize = true;
-            this.panel8.BackColor = System.Drawing.SystemColors.Window;
-            this.panel8.Controls.Add(this.label4);
-            this.panel8.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel8.Location = new System.Drawing.Point(0, 0);
-            this.panel8.Name = "panel8";
-            this.panel8.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.panel8.Size = new System.Drawing.Size(292, 18);
-            this.panel8.TabIndex = 24;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(0, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(160, 13);
-            this.label4.TabIndex = 24;
-            this.label4.Text = "Вміст вибраного рахунку:";
+            this.filterBy_billTag.TextChanged += new System.EventHandler(this.filterBy_TextChanged);
             // 
             // uiWndBillList
             // 
@@ -700,13 +685,10 @@
             this.flowLayoutPanel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher_billIFolder)).EndInit();
-            this.panel8.ResumeLayout(false);
-            this.panel8.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -756,7 +738,5 @@
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Panel panel8;
-        private System.Windows.Forms.Label label4;
     }
 }

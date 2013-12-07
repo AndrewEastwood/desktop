@@ -250,7 +250,7 @@
         XTesb3QPLh88M+QwdP6m681Lt7xuXbu94vbgcOjwnZHokdE77DtTd1PuvriXeW/h/sYH6AdFD6UeVjxS
         fNTws+7PbaOWo6fHXMf6Hwc/vj/OGn/2S8Yv7ycKnpCfVEyqTDZPmU2dmnafvvF05dOJZ+nPFmYKf5X+
         tfa5zvMffnP8rX82YnbiBf/Fp99LXsq/PPRq2aueuYC5R69TXy/MF72Rf3P4LeNt37vwd5MLWe+x7ys/
-        6H7o/ujz8cGn1E+f/gUDmPP8usTo0wAAAAlwSFlzAAALEAAACxABrSO9dQAABMRJREFUWEfFll1MU3cY
+        6H7o/ujz8cGn1E+f/gUDmPP8usTo0wAAAAlwSFlzAAALDAAACwwBP0AiyAAABMRJREFUWEfFll1MU3cY
         xrndjVni4seIYWEomOxighfLbucF2Xa7q2VcDG5kXzEbOheNbGEKQvxYdBglfBUsCOWja7EWqaV4oEAp
         Xy0MqKzOgYWVDy0fUrTP3vecntKWw5YAYSf55f2/7/+c53lOcwL/GAD/K4rDnURxGE5lxxw2y20iWi8a
         xWE4lR2zEP5cxUNCeOzHw8dUxd5PvTSTKs1kxHtXobZuRwASaSMTi9uPNveqWOV1m1jXkPake7iv7n5G
@@ -321,7 +321,7 @@
         XTesb3QPLh88M+QwdP6m681Lt7xuXbu94vbgcOjwnZHokdE77DtTd1PuvriXeW/h/sYH6AdFD6UeVjxS
         fNTws+7PbaOWo6fHXMf6Hwc/vj/OGn/2S8Yv7ycKnpCfVEyqTDZPmU2dmnafvvF05dOJZ+nPFmYKf5X+
         tfa5zvMffnP8rX82YnbiBf/Fp99LXsq/PPRq2aueuYC5R69TXy/MF72Rf3P4LeNt37vwd5MLWe+x7ys/
-        6H7o/ujz8cGn1E+f/gUDmPP8usTo0wAAAAlwSFlzAAALEAAACxABrSO9dQAABUpJREFUWEelltlvVGUY
+        6H7o/ujz8cGn1E+f/gUDmPP8usTo0wAAAAlwSFlzAAALDAAACwwBP0AiyAAABUpJREFUWEelltlvVGUY
         xs8fwMycGdDgGhQQWSy0BT24xETvjHfe6ZXxyngjXaQFWiuKLIU2gJSylG50oxSKgBEFpFCotrSUtjAI
         KAKGaIwGFVmuXp/n+8535jvtUAht8su7nPd9nvcMU1JHRB6IFQcneuUnYsKY7vn9krZ5L2haBnP+lB93
         x3REqIDQ/eCVdbpy7k6ZtP+qY1lnPDhi2OwIbD8SKtItDMNb05mQ5J1S2Q1zQ/L2Kllzn0fYfiRUpFuw
@@ -394,7 +394,7 @@
         XTesb3QPLh88M+QwdP6m681Lt7xuXbu94vbgcOjwnZHokdE77DtTd1PuvriXeW/h/sYH6AdFD6UeVjxS
         fNTws+7PbaOWo6fHXMf6Hwc/vj/OGn/2S8Yv7ycKnpCfVEyqTDZPmU2dmnafvvF05dOJZ+nPFmYKf5X+
         tfa5zvMffnP8rX82YnbiBf/Fp99LXsq/PPRq2aueuYC5R69TXy/MF72Rf3P4LeNt37vwd5MLWe+x7ys/
-        6H7o/ujz8cGn1E+f/gUDmPP8usTo0wAAAAlwSFlzAAALEQAACxEBf2RfkQAABlNJREFUWEfFl2lMVFcY
+        6H7o/ujz8cGn1E+f/gUDmPP8usTo0wAAAAlwSFlzAAALDAAACwwBP0AiyAAABlNJREFUWEfFl2lMVFcY
         ho1alyom1qSaiIKIYkVA9m0YNmUf9mUQmGGTHVHi/qOm1mis+sM0VnChaKIxaBvUNAVExIpQFBEBBUHZ
         BLVqa6tF1GrfnnNm7p17Zy7a/rEkDxPgnnne7zvfOcAYAO8kPiu7gQD6KvVzKf7LGvYpKCKiJUyphBS7
         yspwqr0de0+fhqeLPQJDgiSfE/Jv1lAnH2DVps1IXlUAdX4+VHl5SMrNRVJOLhKzc/g3K66qhJezPcJj
@@ -537,12 +537,6 @@
         SUzz8vIa9zcIzovYWJpI5gAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="label_orderInfo_realSuma.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="label7.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="label_orderInfo_realSuma.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>

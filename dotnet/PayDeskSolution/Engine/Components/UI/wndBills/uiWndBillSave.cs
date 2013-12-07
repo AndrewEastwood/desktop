@@ -92,6 +92,7 @@ namespace PayDesk.Components.UI.wndBills
                         comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
                         comboBox1.Sorted = true;
                         comboBox1.MaxDropDownItems = 8;
+                        comboBox1.IntegralHeight = false;
                         comboBox1.KeyDown += new KeyEventHandler(comboBox_KeyDown);
                         /*
                         Button buttonAdd1 = new Button();
