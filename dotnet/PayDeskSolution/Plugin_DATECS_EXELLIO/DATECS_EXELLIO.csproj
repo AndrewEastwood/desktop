@@ -68,6 +68,12 @@
     <Compile Include="Components\UI\AppUI\Access.Designer.cs">
       <DependentUpon>Access.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\UI\AppUI\Compatibility.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\UI\AppUI\Compatibility.Designer.cs">
+      <DependentUpon>Compatibility.cs</DependentUpon>
+    </Compile>
     <Compile Include="Components\UI\AppUI\Config.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -345,6 +351,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Components\UI\AppUI\Compatibility.resx">
+      <DependentUpon>Compatibility.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Components\UI\AppUI\Port.resx">
       <DependentUpon>Port.cs</DependentUpon>
       <SubType>Designer</SubType>

@@ -34,8 +34,9 @@ namespace DATECS_EXELLIO
     public class DATECS_EXELLIO : ILegalPrinterDriver
     {
         // UI Components
-        private UserControl driverui;
-        private UserControl portui;
+        private UserControl _driverui;
+        private UserControl _portui;
+        private UserControl _compatibilityui;
 
         // Data
         private byte[] InputData;
@@ -52,14 +53,14 @@ namespace DATECS_EXELLIO
         //private Hashtable AllowedMethods;
 
         // Communication port
-        private Com_SerialPort port;
+        private Com_SerialPort _port;
 
         // Common functions
-        private CoreLib func;
+        private CoreLib _func;
         //private XmlParserObject xmlpo;
 
         // Configuarion
-        private Params param;
+        private Params _param;
 
         // Service symbols
         private byte SEQ = 0x00;
@@ -83,14 +84,14 @@ namespace DATECS_EXELLIO
         // Destructor
         ~DATECS_EXELLIO()
         {
-            if (port.IsOpen)
-                port.Close();
-            port.Dispose(true);
+            if (_port.IsOpen)
+                _port.Close();
+            _port.Dispose(true);
 
-            driverui.Dispose();
-            portui.Dispose();
+            _driverui.Dispose();
+            _portui.Dispose();
 
-            param.Save();
+            _param.Save();
 
             // perform saving configuration data
             //DocumentElement config = new DocumentElement(Name);
@@ -104,8 +105,8 @@ namespace DATECS_EXELLIO
         // Driver Data
         private void InitialiseDriverData()
         {
-            param = new Params();
-            param.Load();
+            _param = new Params();
+            _param.Load();
             //xmlpo = new XmlParserObject(Config.Path.FULL_CFG_PARAM_PATH);
             
             // initialize variables
@@ -163,36 +164,37 @@ namespace DATECS_EXELLIO
         private void InitializeDriverComponents()
         {
             // initialize objects
-            port = new Com_SerialPort();
-            func = new CoreLib();
+            _port = new Com_SerialPort();
+            _func = new CoreLib();
 
             // perforom configation com-port
-            port.LoadPortConfig();
+            _port.LoadPortConfig();
             //port.Open();
 
             // perform configuration user's interfaces
-            portui = new UI.AppUI.Port(ref port);
-            driverui = new UI.AppUI.Tree();
-            ((TreeView)driverui.Controls["functionsTree"]).NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(this.NodeMouseDoubleClick);
+            _portui = new UI.AppUI.Port(ref _port);
+            _driverui = new UI.AppUI.Tree();
+            _compatibilityui = new UI.AppUI.Compatibility();
+            ((TreeView)_driverui.Controls["functionsTree"]).NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(this.NodeMouseDoubleClick);
         }
 
         // Perform activation current instance
         public bool Activate()
         {
-            return port.Open();
+            return _port.Open();
         }
 
         // Perform deactivation current instance
         public bool Deactivate()
         {
-            return port.Close();
+            return _port.Close();
         }
 
         // Main Access Point
         public object CallFunction(string name, params object[] param)
         {
             // local variables
-            string description = ((UI.AppUI.Tree)driverui).GetDescription(name);
+            string description = ((UI.AppUI.Tree)_driverui).GetDescription(name);
             object value = new object();
 
             // reset transfering data
@@ -253,7 +255,7 @@ namespace DATECS_EXELLIO
                             object[] taxData = SetTaxRate(str.Password, str.DecimalPoint, str.UseRates, str.Rates);
                             string _infotext = string.Empty;
 
-                            if (!func.IsEmpty(taxData))
+                            if (!_func.IsEmpty(taxData))
                             {
                                 _infotext = string.Format("{0}\r\n\r\n{1} - {2}\r\n{3}: {4:0.00} [{5}]\r\n{6}: {7:0.00} [{8}]\r\n{9}: {10:0.00} [{11}]\r\n{12}: {13:0.00} [{14}]",
                                     "Податкові ставки",
@@ -385,7 +387,7 @@ namespace DATECS_EXELLIO
                                 "Помилка виконання команди"};
                             string _infotext = string.Empty;
                             string _infoFormat = string.Empty;
-                            if (!func.IsEmpty(artInfo) && artInfo[0].ToString() != "F")
+                            if (!_func.IsEmpty(artInfo) && artInfo[0].ToString() != "F")
                                 switch (sga.Option)
                                 {
                                     case 'I':
@@ -545,7 +547,7 @@ namespace DATECS_EXELLIO
                         {
                             object[] xzInfo = ReportXZ(rxz.Password, rxz.ReportType, new bool[] { rxz.ClearUserSumm, rxz.ClearArtsSumm });
                             string _infotext = string.Empty;
-                            if (!func.IsEmpty(xzInfo))
+                            if (!_func.IsEmpty(xzInfo))
                             {
                                 string _infoFormat = "{0}\r\n\r\n{1} - {2}\r\n{3}: {4:0.00}\r\n{5}: {6:0.00}\r\n";
                                 _infoFormat += "{7}: {8}\r\n{9}: {10}\r\n{11}: {12}";
@@ -736,7 +738,7 @@ namespace DATECS_EXELLIO
                         {
                             object[] zrep = GetLastZReport(glzr.ReportMode);
                             string _infotext = string.Empty;
-                            if (!func.IsEmpty(zrep))
+                            if (!_func.IsEmpty(zrep))
                             {
                                 string _infoFormat = "{0}\r\n\r\n{1} - {2}\r\n{3}: {4:0.00}\r\n{5}: {6:0.00}\r\n";
                                 _infoFormat += "{7}: {8}\r\n{9}: {10}\r\n{11}: {12}";
@@ -1058,7 +1060,7 @@ namespace DATECS_EXELLIO
                         // remove all products
                             SetGetArticle('D', "A,0000");
                             Params.DriverData["LastArtNo"] = (uint)1;
-                            this.param.Save();
+                            this._param.Save();
                         // }
                         // rxz.Dispose();
                         break;
@@ -1960,7 +1962,7 @@ namespace DATECS_EXELLIO
 
             // Creating data
             string _data = option.ToString();
-            if (!func.IsEmpty(param))
+            if (!_func.IsEmpty(param))
                 for (int i = 0; i < param.Length; i++)
                     _data += param[i].ToString();
 
@@ -2719,7 +2721,7 @@ namespace DATECS_EXELLIO
         private void FP_Sale(object[] param)
         {
             // Return if parameters are empty
-            if (func.IsEmpty(param))
+            if (_func.IsEmpty(param))
                 return;
 
             ClrDispl();
@@ -2731,7 +2733,7 @@ namespace DATECS_EXELLIO
                 pdLogger.Logme("FP_Sale at ResetOrder", Config.Assembly.NAME);
                 Params.ErrorFlags["FP_Sale"] = false;
                 Params.ErrorFlags["FP_Payment"] = false;
-                this.param.Save();
+                this._param.Save();
             }
 
             // Check if function has errors
@@ -2770,7 +2772,7 @@ namespace DATECS_EXELLIO
 
                 // Get last article id
                 string[] _ainfo = SetGetArticle('L');
-                if (!func.IsEmpty(_ainfo) && _ainfo[0] != "F")
+                if (!_func.IsEmpty(_ainfo) && _ainfo[0] != "F")
                 {
                     nextArticleNo = uint.Parse(_ainfo[1]);
                     nextArticleNo++;
@@ -2779,7 +2781,7 @@ namespace DATECS_EXELLIO
                     for (; nextArticleNo < (uint)Params.DriverData["ArtMemorySize"]; nextArticleNo++)
                     {
                         _ainfo = SetGetArticle('R', nextArticleNo);
-                        if (func.IsEmpty(_ainfo) || _ainfo[0] == "F")
+                        if (_func.IsEmpty(_ainfo) || _ainfo[0] == "F")
                             break;
                     }
 
@@ -2796,7 +2798,7 @@ namespace DATECS_EXELLIO
                 ushort[] _ofoRez = OpenFOrder((byte)Params.DriverData["UserNo"], Params.DriverData["UserPwd"].ToString(), (byte)Params.DriverData["DeskNo"], true);
                 if (_ofoRez == null)
                 {
-                    pdLogger.Logme("FP_Sale at OpenFOrder: returned null \r\nPortData: " + func.ArrayByteToString(OutputData), Config.Assembly.NAME);
+                    pdLogger.Logme("FP_Sale at OpenFOrder: returned null \r\nPortData: " + _func.ArrayByteToString(OutputData), Config.Assembly.NAME);
                     throw new Exception("Помилка відкриття чеку\r\nМожливо логін або пароль касира не встановлені");
                 }
 
@@ -2805,9 +2807,9 @@ namespace DATECS_EXELLIO
                 for (int i = 0; i < dTable.Rows.Count; i++)
                 {
                     article[0] = dTable.Rows[i]["VG"];
-                    article[1] = func.GetDouble(dTable.Rows[i]["PRICE"]).ToString(Params.NumberFormat);
+                    article[1] = _func.GetDouble(dTable.Rows[i]["PRICE"]).ToString(Params.NumberFormat);
                     article[2] = dTable.Rows[i]["DESC"].ToString();
-                    article[3] = func.GetDouble(dTable.Rows[i]["TOT"]);
+                    article[3] = _func.GetDouble(dTable.Rows[i]["TOT"]);
 
                     if (article[2].ToString().Length == 0)
                         article[2] = dTable.Rows[i]["NAME"].ToString();
@@ -2831,23 +2833,23 @@ namespace DATECS_EXELLIO
 
                 Params.DriverData["LastArtNo"] = nextArticleNo;
                 Params.ErrorFlags["FP_Sale"] = false;
-                this.param.Save();
+                this._param.Save();
                 return;
             }
             catch(Exception _ex)
             {
                 Params.ErrorFlags["FP_Sale"] = true;
                 ex = _ex;
-                pdLogger.Logme(_ex, "FP_Sale Exception \r\nPortData: " + func.ArrayByteToString(OutputData), Config.Assembly.NAME);
+                pdLogger.Logme(_ex, "FP_Sale Exception \r\nPortData: " + _func.ArrayByteToString(OutputData), Config.Assembly.NAME);
             }
 
-            this.param.Save();
+            this._param.Save();
             throw new Exception(ex.Message , ex);
         }
         private void FP_PayMoney(object[] param)
         {
             // Return if parameters are empty
-            if (func.IsEmpty(param))
+            if (_func.IsEmpty(param))
                 return;
 
             // Check last executed function for error
@@ -2858,7 +2860,7 @@ namespace DATECS_EXELLIO
                 pdLogger.Logme("FP_PayMoney at ResetOrder", Config.Assembly.NAME);
                 Params.ErrorFlags["FP_PayMoney"] = false;
                 Params.ErrorFlags["FP_Payment"] = false;
-                this.param.Save();
+                this._param.Save();
             }
             bool storeErrorState = false;
             Exception ex = null;
@@ -2893,7 +2895,7 @@ namespace DATECS_EXELLIO
 
                 // Get last article id
                 string[] _ainfo = SetGetArticle('L');
-                if (!func.IsEmpty(_ainfo) && _ainfo[0] != "F")
+                if (!_func.IsEmpty(_ainfo) && _ainfo[0] != "F")
                 {
                     nexArticleNo = uint.Parse(_ainfo[1]);
                     nexArticleNo++;
@@ -2902,7 +2904,7 @@ namespace DATECS_EXELLIO
                     for (; nexArticleNo < (uint)Params.DriverData["ArtMemorySize"]; nexArticleNo++)
                     {
                         _ainfo = SetGetArticle('R', nexArticleNo);
-                        if (func.IsEmpty(_ainfo) || _ainfo[0] == "F")
+                        if (_func.IsEmpty(_ainfo) || _ainfo[0] == "F")
                             break;
                     }
 
@@ -2919,16 +2921,16 @@ namespace DATECS_EXELLIO
                 ushort[] _ofoRez = OpenROrder((byte)Params.DriverData["UserNo"], Params.DriverData["UserPwd"].ToString(), (byte)Params.DriverData["DeskNo"], true);
                 if (_ofoRez == null)
                 {
-                    pdLogger.Logme("FP_PayMoney at OpenROrder: returned null \r\nPortData: " + func.ArrayByteToString(OutputData), Config.Assembly.NAME);
+                    pdLogger.Logme("FP_PayMoney at OpenROrder: returned null \r\nPortData: " + _func.ArrayByteToString(OutputData), Config.Assembly.NAME);
                     throw new Exception("Помилка відкриття чеку");
                 }
                 // Program and sale each articles
                 for (int i = 0; i < dTable.Rows.Count; i++)
                 {
                     article[0] = dTable.Rows[i]["VG"];
-                    article[1] = func.GetDouble(dTable.Rows[i]["PRICE"]).ToString(Params.NumberFormat);
+                    article[1] = _func.GetDouble(dTable.Rows[i]["PRICE"]).ToString(Params.NumberFormat);
                     article[2] = dTable.Rows[i]["DESC"].ToString();
-                    article[3] = func.GetDouble(dTable.Rows[i]["TOT"]);
+                    article[3] = _func.GetDouble(dTable.Rows[i]["TOT"]);
 
                     if (article[2].ToString().Length == 0)
                         article[2] = dTable.Rows[i]["NAME"].ToString();
@@ -2953,7 +2955,7 @@ namespace DATECS_EXELLIO
 
                 Params.ErrorFlags["FP_PayMoney"] = false;
                 Params.DriverData["LastArtNo"] = nexArticleNo;
-                this.param.Save();
+                this._param.Save();
                 return;
             }
             catch (Exception _ex)
@@ -2961,17 +2963,17 @@ namespace DATECS_EXELLIO
                 if (storeErrorState)
                     Params.ErrorFlags["FP_PayMoney"] = true;
                 ex = _ex;
-                pdLogger.Logme(_ex, "FP_PayMoney Exception \r\nPortData: " + func.ArrayByteToString(OutputData), Config.Assembly.NAME);
+                pdLogger.Logme(_ex, "FP_PayMoney Exception \r\nPortData: " + _func.ArrayByteToString(OutputData), Config.Assembly.NAME);
             }
 
-            this.param.Save();
+            this._param.Save();
 
             throw new Exception(ex.Message, ex);
         }
         private void FP_Payment(object[] param)
         {
             // Return if parameters are empty
-            if (func.IsEmpty(param))
+            if (_func.IsEmpty(param))
                 return;
 
             // Check last executed function for error
@@ -2982,7 +2984,7 @@ namespace DATECS_EXELLIO
                 pdLogger.Logme("FP_Payment at ResetOrder", Config.Assembly.NAME);
                 Params.ErrorFlags["FP_Sale"] = false;
                 Params.ErrorFlags["FP_PayMoney"] = false;
-                this.param.Save();
+                this._param.Save();
                 return;
             }
 
@@ -3021,14 +3023,14 @@ namespace DATECS_EXELLIO
 
                 // Detect if current order was paid
                 object[] _tState = GetFixTransState('T');
-                if (!func.IsEmpty(_tState) && _tState[2] != null && _tState[3] != null && (double)_tState[2] == (double)_tState[3])
+                if (!_func.IsEmpty(_tState) && _tState[2] != null && _tState[3] != null && (double)_tState[2] == (double)_tState[3])
                     _canClose = true;
 
                 // Perform payment of that order
                 if (!_canClose)
                 {
                     object[] _pdata = Total("", pmode, (double)param[1]);
-                        if (!func.IsEmpty(_pdata))
+                        if (!_func.IsEmpty(_pdata))
                         {
                             switch (_pdata[0].ToString())
                             {
@@ -3068,28 +3070,28 @@ namespace DATECS_EXELLIO
                 {
                     // Perform closing order
                     ushort[] order = CloseFOrder();
-                    pdLogger.Logme("FP_Payment at CloseFOrder \r\nPortData: " + func.ArrayByteToString(OutputData), Config.Assembly.NAME);
+                    pdLogger.Logme("FP_Payment at CloseFOrder \r\nPortData: " + _func.ArrayByteToString(OutputData), Config.Assembly.NAME);
                 }
 
                 // Set current order number
                 Params.ErrorFlags["FP_Payment"] = false;
-                this.param.Save();
+                this._param.Save();
                 return;
             }
             catch (Exception _ex)
             {
                 Params.ErrorFlags["FP_Payment"] = true;
                 ex = _ex;
-                pdLogger.Logme(_ex, "FP_Payment Exception \r\nPortData: " + func.ArrayByteToString(OutputData), Config.Assembly.NAME);
+                pdLogger.Logme(_ex, "FP_Payment Exception \r\nPortData: " + _func.ArrayByteToString(OutputData), Config.Assembly.NAME);
             }
 
-            this.param.Save();
+            this._param.Save();
             throw new Exception(ex.Message, ex);
         }
         private void FP_Discount(object[] param)
         {
             // Return if parameters are empty
-            if (func.IsEmpty(param))
+            if (_func.IsEmpty(param))
                 return;
 
             // Check if function has errors
@@ -3097,7 +3099,7 @@ namespace DATECS_EXELLIO
             {
                 ResetOrder();
                 Params.ErrorFlags["FP_Discount"] = false;
-				this.param.Save();
+				this._param.Save();
                 return;
             }
 
@@ -3114,7 +3116,7 @@ namespace DATECS_EXELLIO
                 double[] _d = SubTotal(true, false, _discValue, _discType);
 
                 Params.ErrorFlags["FP_Discount"] = false;
-                this.param.Save();
+                this._param.Save();
                 return;
             }
             catch (Exception _ex)
@@ -3123,7 +3125,7 @@ namespace DATECS_EXELLIO
                 ex = _ex;
             }
 
-            this.param.Save();
+            this._param.Save();
             throw new Exception(ex.Message, ex);
         }
         private uint FP_LastChqNo(object[] param)
@@ -3131,19 +3133,19 @@ namespace DATECS_EXELLIO
             // Get current order number
             uint cfnom = GetLastFChqNo();
             Params.DriverData["LastFOrderNo"] = cfnom;
-            pdLogger.Logme("FP_Payment at GetLastFChqNo \r\nPortData: " + func.ArrayByteToString(OutputData), Config.Assembly.NAME);
+            pdLogger.Logme("FP_Payment at GetLastFChqNo \r\nPortData: " + _func.ArrayByteToString(OutputData), Config.Assembly.NAME);
             // return uint.Parse(Params.DriverData["LastFOrderNo"].ToString());
             return cfnom;
         }
         private uint FP_LastZRepNo(object[] param)
         {
             // Return if parameters are empty
-            if (func.IsEmpty(param))
+            if (_func.IsEmpty(param))
                 return 0;
 
             object[] zRepInfo = GetPaymentInfo();
 
-            if (func.IsEmpty(zRepInfo))
+            if (_func.IsEmpty(zRepInfo))
                 zRepInfo[4] = (uint)0;
 
             return (uint)zRepInfo[4];
@@ -3156,7 +3158,7 @@ namespace DATECS_EXELLIO
         {
             bool rez = false;
             // Return if parameters are empty
-            if (func.IsEmpty(param))
+            if (_func.IsEmpty(param))
                 return rez;
 
             // Try to perform commands
@@ -3183,7 +3185,7 @@ namespace DATECS_EXELLIO
         private void FP_SendCustomer(object[] param)
         {
             // Return if parameters are empty
-            if (func.IsEmpty(param))
+            if (_func.IsEmpty(param))
                 return;
 
             // Try to perform commands
@@ -3226,7 +3228,7 @@ namespace DATECS_EXELLIO
 
             mas[4 + param.Length] = POS;
 
-            bccItem = (ushort)(mas[1] + mas[2] + _nom + func.UIntSumMas(param) + POS);
+            bccItem = (ushort)(mas[1] + mas[2] + _nom + _func.UIntSumMas(param) + POS);
             for (i = 0; i < bccData.Length; i++)
                 bccData[i] += (byte)((bccItem >> (i * 4)) & bccItemMask);
 
@@ -3242,26 +3244,32 @@ namespace DATECS_EXELLIO
         {
             string exceptionMsg = "";
 
-            if (!port.IsOpen)
+            if (!_port.IsOpen)
                 try
                 {
-                    port.Open();
+                    _port.Open();
                 }
                 catch { }
 
-            if (port.IsOpen && port.Write(InputData))
+            if (_port.IsOpen && _port.Write(InputData))
             {
                 //WinAPI.OutputDebugString("W");
 
-                int t = totRead;
-                int b = totRead * 2;
+                //int t = totRead;
+                //int b = totRead * 2;
+                int attToRead = int.Parse(Params.Compatibility["msg_comm_attemptsToRead"].ToString());
+                int attToWait = int.Parse(Params.Compatibility["msg_comm_attemptsToWait"].ToString());
+                int waitWhenBusy = int.Parse(Params.Compatibility["msg_comm_timeoutOnBusy"].ToString());
+                int waitWhenFail = int.Parse(Params.Compatibility["msg_comm_timeoutOnFail"].ToString());
+
+
                 byte[] buffer = new byte[512];
                 OutputData = new byte[0];
                 do
                 {
                     Array.Clear(buffer, 0, buffer.Length);
                     //WinAPI.OutputDebugString("R");
-                    if (port.Read(ref buffer, out ReadedBytes))
+                    if (_port.Read(ref buffer, out ReadedBytes))
                     {
                         Array.Resize<byte>(ref OutputData, (int)(OutputData.Length + ReadedBytes));
                         Array.Copy(buffer, 0, OutputData, OutputData.Length - ReadedBytes, ReadedBytes);
@@ -3273,10 +3281,10 @@ namespace DATECS_EXELLIO
                                 case "busy":
                                     {
                                         //WinAPI.OutputDebugString("S");
-                                        if (b < 0)
+                                        if (attToWait < 0)
                                             throw new Exception("Помилка виконання команди \"" + Params.DriverData["LastFunc"] + "\"");
-                                        b--;
-                                        Thread.Sleep(200);
+                                        attToWait--;
+                                        Thread.Sleep(waitWhenBusy);
                                         break;
                                     }
                                 case "true":
@@ -3288,8 +3296,8 @@ namespace DATECS_EXELLIO
                                 case "false":
                                     {
                                         //WinAPI.OutputDebugString("F");
-                                        t--;
-                                        Thread.Sleep(50);
+                                        attToRead--;
+                                        Thread.Sleep(waitWhenFail);
                                         break;
                                     }
                                 case "failed":
@@ -3307,12 +3315,12 @@ namespace DATECS_EXELLIO
                     else
                         break;
 
-                } while (t > 0);
+                } while (attToRead > 0);
                 //WinAPI.OutputDebugString("E");
             }
 
             if (close)
-                port.Close();
+                _port.Close();
 
             UpdateCriticalMethod(Params.DriverData["LastFunc"].ToString(), true);
             throw new Exception("Помилка читання з фіскального принтера" + " " + Name + exceptionMsg);
@@ -3379,7 +3387,7 @@ namespace DATECS_EXELLIO
                     for (i = 0, j = 3; i < 4; i++, j--)
                         _resBcc += (ushort)((OutputData[LEN + 1 + i] - 0x30) << j * 4);
                     // calculate checksum by recived message
-                    _bcc = (ushort)(LEN + 0x20 + SEQ + 0x20 + CMD + func.UIntSumMas(_data) + SEP + func.UIntSumMas(_status) + POS);
+                    _bcc = (ushort)(LEN + 0x20 + SEQ + 0x20 + CMD + _func.UIntSumMas(_data) + SEP + _func.UIntSumMas(_status) + POS);
                     // compare calculated and recived checksums
                     if (_bcc != _resBcc)
                         throw new Exception("Неправильна конрольна сума отриманого повідомлення");
@@ -3454,9 +3462,33 @@ namespace DATECS_EXELLIO
         /// </summary>
         public string Author { get { return Config.Assembly.AUTHOR; } }
         public Hashtable AllowedMethods { get { return Params.AllowedMethods; } }
-        public UserControl DriverUI { get { return driverui; } }
-        public UserControl PortUI { get { return portui; } }
-        public UserControl CompatibilityUI { get { return null; } }
+        public UserControl DriverUI
+        {
+            get
+            {
+                if (_driverui == null || _driverui.IsDisposed)
+                    _driverui = new UI.AppUI.Tree();
+                return _driverui;
+            }
+        }
+        public UserControl PortUI
+        {
+            get
+            {
+                if (_portui == null || _portui.IsDisposed)
+                    _portui = new UI.AppUI.Port(ref _port);
+                return _portui;
+            }
+        }
+        public UserControl CompatibilityUI
+        {
+            get
+            {
+                if (_compatibilityui == null || _compatibilityui.IsDisposed)
+                    _compatibilityui = new UI.AppUI.Compatibility();
+                return _compatibilityui;
+            }
+        }
         #endregion
     }
 }
