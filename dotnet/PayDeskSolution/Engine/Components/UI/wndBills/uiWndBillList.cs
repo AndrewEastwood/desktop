@@ -235,21 +235,21 @@ namespace PayDesk.Components.UI.wndBills
                     string billState = string.Empty;
                     switch (orderNo)
                     {
-                        case "null": { billState = "Рахунок АНУЛЬОВАНИЙ"; orderNo = "Нема"; break; }
-                        case "copy": { billState = "Створена копія рахунку."; orderNo = "Нема"; break; }
+                        case "null": { billState = "Рахунок АНУЛЬОВАНИЙ"; orderNo = "-"; break; }
+                        case "copy": { billState = "Створена копія рахунку."; orderNo = "-"; break; }
                     }
 
                     if (orderNo == string.Empty)
-                        orderNo = "Нема";
+                        orderNo = "-";
 
 
                     if (billIsClosed)
-                        billState += "Рахунок закритий.";
+                        billState += " Рахунок закритий.";
                     else
                         if (billIsLocked)
-                            billState += "Рахунок надрукований клієнту. Зробіть чек!";
+                            billState += " Рахунок надрукований клієнту. Зробіть чек!";
                         else
-                            billState += "Доступний для редагування.";
+                            billState += " Доступний для редагування.";
 
                     if (billIsLoaded)
                         billState += "   Відкритий в основному вікні.";
@@ -322,7 +322,14 @@ namespace PayDesk.Components.UI.wndBills
         /// <param name="e"></param>
         private void button_billsList_Delete_Click(object sender, EventArgs e)
         {
-            if (this.loadedBillNo == DataWorkShared.ExtractBillProperty(this.dTBill, CoreConst.BILL_NO, string.Empty).ToString())
+            string _Bill_comment = DataWorkShared.ExtractBillProperty(this.dTBill, CoreConst.COMMENT, string.Empty).ToString();
+            string _bill_no = DataWorkShared.ExtractBillProperty(this.dTBill, CoreConst.BILL_NO, string.Empty).ToString();
+
+            if (MMessageBox.Show("Ви дісно хочете анулювати рахунок № " + _bill_no + "?\r\nВід: " + _Bill_comment,
+                      Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != System.Windows.Forms.DialogResult.Yes)
+                return;
+
+            if (this.loadedBillNo == _bill_no)
                 MMessageBox.Show("Неможливо анулювати рахунок № " + this.loadedBillNo + "\r\nВін є відкритий в основному вікні",
                       Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
@@ -462,8 +469,18 @@ namespace PayDesk.Components.UI.wndBills
         {
             if (!this.IsDisposed)
             {
+                this.button_billsList_Refresh.BackColor = Color.DodgerBlue;
+                if (this.button_billsList_Refresh.Tag == null)
+                    this.button_billsList_Refresh.Tag = this.button_billsList_Refresh.Text;
+                this.button_billsList_Refresh.Text = "Внесення нових змін";
                 //MMessageBox.Show(this, "Були внесені змінити в базу рахунків\r\nВідбудеться оновлення списку. Натисніть ОК для продовження.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.button_billsList_Refresh.PerformClick();
+                this.button_billsList_Refresh.BackColor = SystemColors.Control;
+                if (this.button_billsList_Refresh.Tag is string)
+                {
+                    this.button_billsList_Refresh.Text = this.button_billsList_Refresh.Tag.ToString();
+                    this.button_billsList_Refresh.Tag = null;
+                }
             }
         }
         /// <summary>
@@ -577,30 +594,60 @@ namespace PayDesk.Components.UI.wndBills
                     billInfo = ((Dictionary<string, object>)props[CoreConst.BILL]);
                     this.billFileList.Add(billInfo[CoreConst.OID].ToString(), billEntry.Key);
 
+                    string _bill_orderNumber = "";
+
+                    if ("null".Equals(props[CoreConst.ORDER_NO]))
+                        _bill_orderNumber = "Анульований";
+                    else if ("copy".Equals(props[CoreConst.ORDER_NO]))
+                        _bill_orderNumber = "Заблокований";
+                    else if (props[CoreConst.ORDER_NO] is string)
+                        _bill_orderNumber = props[CoreConst.ORDER_NO].ToString();
+
                     listGrid.Rows.Add(
                         new object[] {
                             billInfo[CoreConst.OID],
-                            billInfo[CoreConst.BILL_NO],
-                            ((DateTime)billInfo[CoreConst.DATETIME]).ToString("dd.MM.yy hh:mm"),
-                            (billInfo[CoreConst.COMMENT] != null)?billInfo[CoreConst.COMMENT].ToString().Replace("%20", " "):"",
-                            (double)props[CoreConst.ORDER_REAL_SUMA],
+                            billInfo[CoreConst.BILL_NO].ToString().TrimStart('0'),
+                            billInfo[CoreConst.DATETIME] is DateTime ? ((DateTime)billInfo[CoreConst.DATETIME]).ToString("dd.MM.yy hh:mm") : billInfo[CoreConst.DATETIME],
+                            (billInfo[CoreConst.COMMENT] != null) ? billInfo[CoreConst.COMMENT].ToString().Replace("%20", " ") : "",
+                            props[CoreConst.ORDER_REAL_SUMA] is double ? (double)props[CoreConst.ORDER_REAL_SUMA] : 0.00,
                             bool.Parse(billInfo[CoreConst.IS_LOCKED].ToString()),
                             props[CoreConst.PAYDESK_NO],
-                            props[CoreConst.ORDER_NO],
+                            _bill_orderNumber,
                             (billInfo.ContainsKey(CoreConst.DATETIME_LOCK) && billInfo[CoreConst.DATETIME_LOCK] is DateTime ? ((DateTime)billInfo[CoreConst.DATETIME_LOCK]).ToString("dd.MM.yy hh:mm") : "-")
                         }
                     );
 
-                    generalSuma += (double)props[CoreConst.ORDER_REAL_SUMA];
-                    if (props.ContainsKey(CoreConst.ORDER_NO) && props[CoreConst.ORDER_NO] != null && props[CoreConst.ORDER_NO].ToString() != string.Empty)
+                    if (props[CoreConst.ORDER_NO] is string && !"null".Equals(props[CoreConst.ORDER_NO]) && !"copy".Equals(props[CoreConst.ORDER_NO]) && bool.Parse(billInfo[CoreConst.IS_LOCKED].ToString()))
                     {
+                        // normal closed bill
                         Font extFont = listGrid.Font;
                         listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.Font = new Font(extFont, FontStyle.Strikeout);
                         listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.BackColor = Color.GreenYellow;
-                    } else if (bool.Parse(billInfo[CoreConst.IS_LOCKED].ToString()))
+                        generalSuma += (double)props[CoreConst.ORDER_REAL_SUMA];
+                    }
+                    else if (props[CoreConst.ORDER_NO] == null && bool.Parse(billInfo[CoreConst.IS_LOCKED].ToString()))
+                    {
+                        // printed to client and is still active (waiting to be closed as order)
                         listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.BackColor = Color.DarkOrange;
+                        generalSuma += (double)props[CoreConst.ORDER_REAL_SUMA];
+                    }
+                    else if ("null".Equals(props[CoreConst.ORDER_NO]) && bool.Parse(billInfo[CoreConst.IS_LOCKED].ToString()))
+                    {
+                        // this is canceled bill
+                        listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.BackColor = Color.DarkCyan;
+                        listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.ForeColor = Color.White;
+                    }
+                    else if ("copy".Equals(props[CoreConst.ORDER_NO]) && bool.Parse(billInfo[CoreConst.IS_LOCKED].ToString()))
+                    {
+                        // this is locked and had been copied to active bill
+                        listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.BackColor = Color.LightBlue;
+                    }
                     else
+                    {
+                        // active bill
                         listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.BackColor = Color.LightPink;
+                        generalSuma += (double)props[CoreConst.ORDER_REAL_SUMA];
+                    }
                 }
             }
             catch { }
@@ -688,28 +735,31 @@ namespace PayDesk.Components.UI.wndBills
             /* USED FOR SCROLLING BY ALL ROWS WITH SELECTION */
             // correcting number (total visible rows in list)
             //if (!wasSelected)
+            //{
+            if (this.listGrid.RowCount > 0)
             {
-                if (this.listGrid.RowCount != 0)
-                {
-                    if (!wasSelected)
-                        this.listGrid.FirstDisplayedScrollingRowIndex = this.listGrid.RowCount - 1;
-                    else
-                        this.listGrid.FirstDisplayedScrollingRowIndex = 1;
-                }
-                if (this.listGrid.FirstDisplayedScrollingRowIndex > 0)
+                if (!wasSelected)
+                    this.listGrid.FirstDisplayedScrollingRowIndex = this.listGrid.RowCount - 1;
+
+                if (listGrid.RowTemplate.Height * (listGrid.RowCount + 1) > listGrid.Height)
                 {
                     this.vScrollBar1.Maximum = this.listGrid.RowCount - 1;
                     this.vScrollBar1.SmallChange = 1;
                     this.vScrollBar1.LargeChange = 1;
-                    this.vScrollBar1.Value = this.vScrollBar1.Maximum;
+                    if (!wasSelected)
+                        this.vScrollBar1.Value = this.vScrollBar1.Maximum;
+                    else
+                        this.vScrollBar1.Value = this.listGrid.FirstDisplayedScrollingRowIndex;
                     this.vScrollBar1.Visible = true;
                 }
                 else
                     this.vScrollBar1.Visible = false;
             }
+
             //listGrid.Select();
             //listGrid.Focus();
             //this.listGrid.PerformLayout();
+            //}
         }
         private void LoadRangeBills(DateTime dateFrom)
         {

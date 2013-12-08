@@ -1567,7 +1567,6 @@ namespace PayDesk.Components.UI
                 case "LastDBChanges":
                     {
                         this.timer1_Tick(this.timer1, EventArgs.Empty);
-                        */
                         break;
                     }
                 case "Administrator":
@@ -2991,7 +2990,7 @@ namespace PayDesk.Components.UI
             double dValue = 0.0;
             double taxValue = 0.0;
             double artSum = 0.0;
-            int index = 0;
+            //int index = 0;
             DataRow[] dRows = null;
             double discSUMA = 0.0;
             //DataRow[] artRecord = null;

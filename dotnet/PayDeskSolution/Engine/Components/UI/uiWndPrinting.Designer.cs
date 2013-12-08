@@ -346,7 +346,7 @@ namespace PayDesk.Components.UI
             this.printersGrid.AllowUserToAddRows = false;
             this.printersGrid.AllowUserToResizeRows = false;
             this.printersGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.printersGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.printersGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.printersGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnPrnName,
             this.ColumnPrnPath,
@@ -372,10 +372,11 @@ namespace PayDesk.Components.UI
             // ColumnPrnPath
             // 
             this.ColumnPrnPath.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.ColumnPrnPath.HeaderText = "Шлях до програми друку";
+            this.ColumnPrnPath.HeaderText = "Програма друку";
             this.ColumnPrnPath.Name = "ColumnPrnPath";
             this.ColumnPrnPath.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.ColumnPrnPath.Width = 98;
+            this.ColumnPrnPath.Width = 150;
+            this.ColumnPrnPath.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             // 
             // ColumnPrnTpl
             // 
@@ -383,7 +384,8 @@ namespace PayDesk.Components.UI
             this.ColumnPrnTpl.HeaderText = "Шаблон";
             this.ColumnPrnTpl.Name = "ColumnPrnTpl";
             this.ColumnPrnTpl.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.ColumnPrnTpl.Width = 52;
+            this.ColumnPrnTpl.Width = 150;
+            this.ColumnPrnTpl.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             // 
             // ColumnPrnAction
             // 
@@ -431,7 +433,7 @@ namespace PayDesk.Components.UI
             this.controlGrid.AllowUserToResizeColumns = false;
             this.controlGrid.AllowUserToResizeRows = false;
             this.controlGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.controlGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.controlGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.controlGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnCtrlDelete,
             this.ColumnCtrlBrowse,

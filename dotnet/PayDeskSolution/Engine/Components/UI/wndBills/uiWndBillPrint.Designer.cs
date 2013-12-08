@@ -75,12 +75,12 @@
             // button_printBill_closeWindow
             // 
             this.button_printBill_closeWindow.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button_printBill_closeWindow.ForeColor = System.Drawing.Color.OrangeRed;
+            this.button_printBill_closeWindow.ForeColor = System.Drawing.Color.DarkRed;
             this.button_printBill_closeWindow.Location = new System.Drawing.Point(12, 101);
             this.button_printBill_closeWindow.Name = "button_printBill_closeWindow";
             this.button_printBill_closeWindow.Size = new System.Drawing.Size(274, 30);
             this.button_printBill_closeWindow.TabIndex = 2;
-            this.button_printBill_closeWindow.Text = "ЗАКРИТИ ВІКНО";
+            this.button_printBill_closeWindow.Text = "Н Е   Д Р У К У В А Т И";
             this.button_printBill_closeWindow.UseVisualStyleBackColor = true;
             this.button_printBill_closeWindow.Click += new System.EventHandler(this.button_printBill_closeWindow_Click);
             // 

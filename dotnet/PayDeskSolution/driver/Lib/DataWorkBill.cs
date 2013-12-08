@@ -262,7 +262,7 @@ namespace driver.Lib
             DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.OID, BillNewUID(newNom));
             DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.BILL_NO, newNom);
             DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.OWNER_NO, nomOrig);
-            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.DATETIME, DateTime.Now.ToShortDateString());
+            DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.DATETIME, DateTime.Now);
             DataWorkShared.SetBillProperty(dtBill, driver.Common.CoreConst.PATH, path);
             //dtBill.ExtendedProperties["OID"] = strOID;
             //dtBill.ExtendedProperties["NOM"] = newNom;

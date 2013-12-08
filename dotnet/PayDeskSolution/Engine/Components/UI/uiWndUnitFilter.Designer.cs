@@ -51,24 +51,27 @@
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.checkedListBox1.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.checkedListBox1.Size = new System.Drawing.Size(204, 260);
+            this.checkedListBox1.Size = new System.Drawing.Size(204, 92);
             this.checkedListBox1.Sorted = true;
             this.checkedListBox1.TabIndex = 0;
             this.checkedListBox1.Click += new System.EventHandler(this.checkedListBox_Click);
             // 
             // updateValuesButton
             // 
-            this.updateValuesButton.Location = new System.Drawing.Point(14, 295);
+            this.updateValuesButton.Image = ((System.Drawing.Image)(resources.GetObject("updateValuesButton.Image")));
+            this.updateValuesButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.updateValuesButton.Location = new System.Drawing.Point(95, 127);
             this.updateValuesButton.Name = "updateValuesButton";
-            this.updateValuesButton.Size = new System.Drawing.Size(243, 23);
+            this.updateValuesButton.Size = new System.Drawing.Size(83, 23);
             this.updateValuesButton.TabIndex = 1;
-            this.updateValuesButton.Text = "Обновити значення з таблиці товарів";
+            this.updateValuesButton.Text = "Обновити";
+            this.updateValuesButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.updateValuesButton.UseVisualStyleBackColor = true;
             this.updateValuesButton.Click += new System.EventHandler(this.updateValuesButton_Click);
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(182, 336);
+            this.saveButton.Location = new System.Drawing.Point(184, 127);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 2;
@@ -83,7 +86,7 @@
             this.panel1.Controls.Add(this.checkedListBox1);
             this.panel1.Location = new System.Drawing.Point(14, 25);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(243, 264);
+            this.panel1.Size = new System.Drawing.Size(243, 96);
             this.panel1.TabIndex = 3;
             // 
             // checkedListBox2
@@ -96,7 +99,7 @@
             this.checkedListBox2.Location = new System.Drawing.Point(0, 0);
             this.checkedListBox2.Name = "checkedListBox2";
             this.checkedListBox2.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.checkedListBox2.Size = new System.Drawing.Size(35, 260);
+            this.checkedListBox2.Size = new System.Drawing.Size(35, 92);
             this.checkedListBox2.TabIndex = 1;
             this.checkedListBox2.Click += new System.EventHandler(this.checkedListBox_Click);
             // 
@@ -114,16 +117,16 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(48, 9);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(62, 13);
+            this.label2.Size = new System.Drawing.Size(122, 13);
             this.label2.TabIndex = 5;
-            this.label2.Text = "Запит к-сті";
+            this.label2.Text = "Запит початкової к-істі";
             // 
             // uiWndUnitFilter
             // 
             this.AcceptButton = this.saveButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(271, 371);
+            this.ClientSize = new System.Drawing.Size(271, 162);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.panel1);
