@@ -30,12 +30,12 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(uiWndMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.chequeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.змінитиКстьТоваруToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.видалитиВибранийТоварToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -122,24 +122,24 @@
             this.DDM_UpdateStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.ioTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.digitalPanel = new System.Windows.Forms.Panel();
-            this.CashLbl = new System.Windows.Forms.Label();
+            this.lbl_orderSuma = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.addBillInfo = new System.Windows.Forms.Label();
-            this.addChequeInfo = new System.Windows.Forms.Label();
+            this.lbl_billInfo = new System.Windows.Forms.Label();
+            this.lbl_orderInfo = new System.Windows.Forms.Label();
             this.searchPanel = new System.Windows.Forms.Panel();
-            this.SrchTbox = new System.Windows.Forms.TextBox();
+            this.tb_search = new System.Windows.Forms.TextBox();
             this.searchImage = new System.Windows.Forms.PictureBox();
             this.infoPanel = new System.Windows.Forms.Panel();
-            this.chequeInfoLabel = new System.Windows.Forms.Label();
-            this.appInfoLabel = new System.Windows.Forms.Label();
+            this.lbl_moneyInfo = new System.Windows.Forms.Label();
+            this.lbl_appInfo = new System.Windows.Forms.Label();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.chequeContainer = new System.Windows.Forms.SplitContainer();
-            this.chequeDGV = new System.Windows.Forms.DataGridView();
+            this.grid_Order = new System.Windows.Forms.DataGridView();
             this.sensorPanel1 = new components.UI.Controls.SensorUgcPanel.SensorUgcPanel();
             this.label_uiWndmain_DemoShowChq = new System.Windows.Forms.Label();
             this.sensorDataPanel1 = new components.UI.Controls.SensorDataPanel.SensorDataPanel();
-            this.articleDGV = new System.Windows.Forms.DataGridView();
+            this.grid_Products = new System.Windows.Forms.DataGridView();
             this.label_uiWndmain_DemoShowArt = new System.Windows.Forms.Label();
             this.timer_buyer_ready = new System.Windows.Forms.Timer(this.components);
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
@@ -165,8 +165,8 @@
             this.chequeContainer.Panel1.SuspendLayout();
             this.chequeContainer.Panel2.SuspendLayout();
             this.chequeContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chequeDGV)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.articleDGV)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grid_Order)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grid_Products)).BeginInit();
             this.SuspendLayout();
             // 
             // chequeContextMenu
@@ -425,14 +425,14 @@
             this.вихідToolStripMenuItem});
             this.mainMenu.Name = "contextMenuStrip1";
             this.mainMenu.OwnerItem = this.DDM_Main;
-            this.mainMenu.Size = new System.Drawing.Size(216, 308);
+            this.mainMenu.Size = new System.Drawing.Size(204, 308);
             this.mainMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.Menu_ItemClicked);
             // 
             // fxFunc_toolStripMenuItem
             // 
             this.fxFunc_toolStripMenuItem.Name = "fxFunc_toolStripMenuItem";
             this.fxFunc_toolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F4;
-            this.fxFunc_toolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.fxFunc_toolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.fxFunc_toolStripMenuItem.Tag = "fiscalFunctions";
             this.fxFunc_toolStripMenuItem.Text = "Функції ЕККР";
             // 
@@ -440,20 +440,20 @@
             // 
             this.останніЗміниБазToolStripMenuItem.Name = "останніЗміниБазToolStripMenuItem";
             this.останніЗміниБазToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B)));
-            this.останніЗміниБазToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.останніЗміниБазToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.останніЗміниБазToolStripMenuItem.Tag = "LastDBChanges";
             this.останніЗміниБазToolStripMenuItem.Text = "Обновити базу";
             // 
             // toolStripMenuItem21
             // 
             this.toolStripMenuItem21.Name = "toolStripMenuItem21";
-            this.toolStripMenuItem21.Size = new System.Drawing.Size(212, 6);
+            this.toolStripMenuItem21.Size = new System.Drawing.Size(200, 6);
             // 
             // адміністраторToolStripMenuItem
             // 
             this.адміністраторToolStripMenuItem.Name = "адміністраторToolStripMenuItem";
             this.адміністраторToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-            this.адміністраторToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.адміністраторToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.адміністраторToolStripMenuItem.Tag = "Administrator";
             this.адміністраторToolStripMenuItem.Text = "Адміністратор";
             // 
@@ -461,7 +461,7 @@
             // 
             this.фільтрОдиницьToolStripMenuItem.Name = "фільтрОдиницьToolStripMenuItem";
             this.фільтрОдиницьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this.фільтрОдиницьToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.фільтрОдиницьToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.фільтрОдиницьToolStripMenuItem.Tag = "UnitFilter";
             this.фільтрОдиницьToolStripMenuItem.Text = "Фільтр Одиниць";
             // 
@@ -469,7 +469,7 @@
             // 
             this.формуванняЧекуToolStripMenuItem.Name = "формуванняЧекуToolStripMenuItem";
             this.формуванняЧекуToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
-            this.формуванняЧекуToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.формуванняЧекуToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.формуванняЧекуToolStripMenuItem.Tag = "ChequeFormat";
             this.формуванняЧекуToolStripMenuItem.Text = "Формування Чеку";
             // 
@@ -477,7 +477,7 @@
             // 
             this.інвентаризаціяToolStripMenuItem.Name = "інвентаризаціяToolStripMenuItem";
             this.інвентаризаціяToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
-            this.інвентаризаціяToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.інвентаризаціяToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.інвентаризаціяToolStripMenuItem.Tag = "Invent";
             this.інвентаризаціяToolStripMenuItem.Text = "Інвентаризація";
             // 
@@ -485,7 +485,7 @@
             // 
             this.чекПоверненняToolStripMenuItem.Name = "чекПоверненняToolStripMenuItem";
             this.чекПоверненняToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.чекПоверненняToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.чекПоверненняToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.чекПоверненняToolStripMenuItem.Tag = "RetriveCheque";
             this.чекПоверненняToolStripMenuItem.Text = "Чек Повернення";
             // 
@@ -493,7 +493,7 @@
             // 
             this.налаштуванняToolStripMenuItem.Name = "налаштуванняToolStripMenuItem";
             this.налаштуванняToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.налаштуванняToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.налаштуванняToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.налаштуванняToolStripMenuItem.Tag = "Settings";
             this.налаштуванняToolStripMenuItem.Text = "Налаштування";
             // 
@@ -501,19 +501,19 @@
             // 
             this.параметриДрукуToolStripMenuItem.Name = "параметриДрукуToolStripMenuItem";
             this.параметриДрукуToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.параметриДрукуToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.параметриДрукуToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.параметриДрукуToolStripMenuItem.Tag = "PrintingSettings";
             this.параметриДрукуToolStripMenuItem.Text = "Параметри Друку";
             // 
             // toolStripMenuItem20
             // 
             this.toolStripMenuItem20.Name = "toolStripMenuItem20";
-            this.toolStripMenuItem20.Size = new System.Drawing.Size(212, 6);
+            this.toolStripMenuItem20.Size = new System.Drawing.Size(200, 6);
             // 
             // реєстраціяToolStripMenuItem
             // 
             this.реєстраціяToolStripMenuItem.Name = "реєстраціяToolStripMenuItem";
-            this.реєстраціяToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.реєстраціяToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.реєстраціяToolStripMenuItem.Tag = "Registration";
             this.реєстраціяToolStripMenuItem.Text = "Реєстрація";
             // 
@@ -522,20 +522,20 @@
             this.проПрограмуToolStripMenuItem.Name = "проПрограмуToolStripMenuItem";
             this.проПрограмуToolStripMenuItem.ShortcutKeyDisplayString = "";
             this.проПрограмуToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
-            this.проПрограмуToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.проПрограмуToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.проПрограмуToolStripMenuItem.Tag = "AboutApp";
             this.проПрограмуToolStripMenuItem.Text = "Про Програму";
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(212, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(200, 6);
             // 
             // змінитиКористувачаToolStripMenuItem
             // 
             this.змінитиКористувачаToolStripMenuItem.Name = "змінитиКористувачаToolStripMenuItem";
             this.змінитиКористувачаToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
-            this.змінитиКористувачаToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.змінитиКористувачаToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.змінитиКористувачаToolStripMenuItem.Tag = "ChangeCashier";
             this.змінитиКористувачаToolStripMenuItem.Text = "Змінити Касира";
             // 
@@ -543,7 +543,7 @@
             // 
             this.вихідToolStripMenuItem.Name = "вихідToolStripMenuItem";
             this.вихідToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.вихідToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.вихідToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.вихідToolStripMenuItem.Tag = "Exit";
             this.вихідToolStripMenuItem.Text = "Вихід";
             // 
@@ -568,6 +568,7 @@
             this.сенсорToolStripMenuItem,
             this.управліннToolStripMenuItem});
             this.wndMenu.Name = "wndMenu";
+            this.wndMenu.OwnerItem = this.DDM_Wnd;
             this.wndMenu.Size = new System.Drawing.Size(175, 98);
             this.wndMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.Menu_ItemClicked);
             // 
@@ -750,14 +751,14 @@
             this.закритиБезЗмінToolStripMenuItem});
             this.billMenu.Name = "billMenu";
             this.billMenu.OwnerItem = this.DDM_Bills;
-            this.billMenu.Size = new System.Drawing.Size(258, 264);
+            this.billMenu.Size = new System.Drawing.Size(247, 264);
             this.billMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.Menu_ItemClicked);
             // 
             // менеджерРахунківToolStripMenuItem
             // 
             this.менеджерРахунківToolStripMenuItem.Name = "менеджерРахунківToolStripMenuItem";
             this.менеджерРахунківToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.M)));
-            this.менеджерРахунківToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
+            this.менеджерРахунківToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
             this.менеджерРахунківToolStripMenuItem.Tag = "BillManager";
             this.менеджерРахунківToolStripMenuItem.Text = "Менеджер Рахунків";
             // 
@@ -766,14 +767,14 @@
             this.всіРахункиToolStripMenuItem.Name = "всіРахункиToolStripMenuItem";
             this.всіРахункиToolStripMenuItem.ShortcutKeyDisplayString = "";
             this.всіРахункиToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
-            this.всіРахункиToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
+            this.всіРахункиToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
             this.всіРахункиToolStripMenuItem.Tag = "AllBills";
             this.всіРахункиToolStripMenuItem.Text = "Всі Рахунки";
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(254, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(243, 6);
             // 
             // друкуватиРахунокToolStripMenuItem
             // 
@@ -781,7 +782,7 @@
             this.друкуватиРахунокToolStripMenuItem.Name = "друкуватиРахунокToolStripMenuItem";
             this.друкуватиРахунокToolStripMenuItem.ShortcutKeyDisplayString = "";
             this.друкуватиРахунокToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.P)));
-            this.друкуватиРахунокToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
+            this.друкуватиРахунокToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
             this.друкуватиРахунокToolStripMenuItem.Tag = "PrintBill";
             this.друкуватиРахунокToolStripMenuItem.Text = "Друкувати Рахунок";
             this.друкуватиРахунокToolStripMenuItem.Visible = false;
@@ -793,21 +794,21 @@
             this.анулюватиРахунокToolStripMenuItem.ShortcutKeyDisplayString = "";
             this.анулюватиРахунокToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
                         | System.Windows.Forms.Keys.D)));
-            this.анулюватиРахунокToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
+            this.анулюватиРахунокToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
             this.анулюватиРахунокToolStripMenuItem.Tag = "ResetBill";
             this.анулюватиРахунокToolStripMenuItem.Text = "Анулювати Рахунок";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(254, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(243, 6);
             // 
             // зберегтиРахунокToolStripMenuItem
             // 
             this.зберегтиРахунокToolStripMenuItem.Name = "зберегтиРахунокToolStripMenuItem";
             this.зберегтиРахунокToolStripMenuItem.ShortcutKeyDisplayString = "";
             this.зберегтиРахунокToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.S)));
-            this.зберегтиРахунокToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
+            this.зберегтиРахунокToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
             this.зберегтиРахунокToolStripMenuItem.Tag = "SaveBill";
             this.зберегтиРахунокToolStripMenuItem.Text = "Зберегти Рахунок";
             // 
@@ -815,7 +816,7 @@
             // 
             this.зберегтиІДрукуватиToolStripMenuItem.Name = "зберегтиІДрукуватиToolStripMenuItem";
             this.зберегтиІДрукуватиToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.D)));
-            this.зберегтиІДрукуватиToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
+            this.зберегтиІДрукуватиToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
             this.зберегтиІДрукуватиToolStripMenuItem.Tag = "SaveAndPrint";
             this.зберегтиІДрукуватиToolStripMenuItem.Text = "Зберегти і Друкувати";
             // 
@@ -823,7 +824,7 @@
             // 
             this.зберегтиІЗакритиToolStripMenuItem.Name = "зберегтиІЗакритиToolStripMenuItem";
             this.зберегтиІЗакритиToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.C)));
-            this.зберегтиІЗакритиToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
+            this.зберегтиІЗакритиToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
             this.зберегтиІЗакритиToolStripMenuItem.Tag = "SaveAndClose";
             this.зберегтиІЗакритиToolStripMenuItem.Text = "Зберегти і Закрити";
             // 
@@ -831,7 +832,7 @@
             // 
             this.ToolStripMenu_Bills_SavePrintAndClose.Name = "ToolStripMenu_Bills_SavePrintAndClose";
             this.ToolStripMenu_Bills_SavePrintAndClose.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.X)));
-            this.ToolStripMenu_Bills_SavePrintAndClose.Size = new System.Drawing.Size(257, 22);
+            this.ToolStripMenu_Bills_SavePrintAndClose.Size = new System.Drawing.Size(246, 22);
             this.ToolStripMenu_Bills_SavePrintAndClose.Tag = "SaveAndPrintAndClose";
             this.ToolStripMenu_Bills_SavePrintAndClose.Text = "Зберегти (Друк і Закрити)";
             // 
@@ -839,20 +840,20 @@
             // 
             this.змінитиКоментарToolStripMenuItem.Name = "змінитиКоментарToolStripMenuItem";
             this.змінитиКоментарToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.K)));
-            this.змінитиКоментарToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
+            this.змінитиКоментарToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
             this.змінитиКоментарToolStripMenuItem.Tag = "SaveChangeComment";
             this.змінитиКоментарToolStripMenuItem.Text = "Змінити коментар";
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(254, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(243, 6);
             // 
             // перезавантажитиРахунокToolStripMenuItem
             // 
             this.перезавантажитиРахунокToolStripMenuItem.Name = "перезавантажитиРахунокToolStripMenuItem";
             this.перезавантажитиРахунокToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.R)));
-            this.перезавантажитиРахунокToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
+            this.перезавантажитиРахунокToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
             this.перезавантажитиРахунокToolStripMenuItem.Tag = "ReloadBill";
             this.перезавантажитиРахунокToolStripMenuItem.Text = "Перезавантажити рахунок";
             // 
@@ -860,7 +861,7 @@
             // 
             this.закритиБезЗмінToolStripMenuItem.Name = "закритиБезЗмінToolStripMenuItem";
             this.закритиБезЗмінToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Q)));
-            this.закритиБезЗмінToolStripMenuItem.Size = new System.Drawing.Size(257, 22);
+            this.закритиБезЗмінToolStripMenuItem.Size = new System.Drawing.Size(246, 22);
             this.закритиБезЗмінToolStripMenuItem.Tag = "CloseBillWithoutChanges";
             this.закритиБезЗмінToolStripMenuItem.Text = "Закрити без змін";
             // 
@@ -882,7 +883,7 @@
             this.ddmPlugins_tsiMenu_comportCommands});
             this.wndMainPlugins.Name = "wndMainPlugins";
             this.wndMainPlugins.OwnerItem = this.DDM_Plugins;
-            this.wndMainPlugins.Size = new System.Drawing.Size(260, 26);
+            this.wndMainPlugins.Size = new System.Drawing.Size(243, 26);
             this.wndMainPlugins.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.Menu_ItemClicked);
             // 
             // ddmPlugins_tsiMenu_comportCommands
@@ -890,7 +891,7 @@
             this.ddmPlugins_tsiMenu_comportCommands.Name = "ddmPlugins_tsiMenu_comportCommands";
             this.ddmPlugins_tsiMenu_comportCommands.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
                         | System.Windows.Forms.Keys.F1)));
-            this.ddmPlugins_tsiMenu_comportCommands.Size = new System.Drawing.Size(259, 22);
+            this.ddmPlugins_tsiMenu_comportCommands.Size = new System.Drawing.Size(242, 22);
             this.ddmPlugins_tsiMenu_comportCommands.Tag = "SendComPortCommand";
             this.ddmPlugins_tsiMenu_comportCommands.Text = "СОМ-Port Команди";
             // 
@@ -937,7 +938,7 @@
             this.digitalPanel.BackColor = System.Drawing.Color.Transparent;
             this.digitalPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.digitalPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.digitalPanel.Controls.Add(this.CashLbl);
+            this.digitalPanel.Controls.Add(this.lbl_orderSuma);
             this.digitalPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.digitalPanel.Location = new System.Drawing.Point(417, 0);
             this.digitalPanel.Margin = new System.Windows.Forms.Padding(0);
@@ -945,20 +946,20 @@
             this.digitalPanel.Size = new System.Drawing.Size(418, 57);
             this.digitalPanel.TabIndex = 19;
             // 
-            // CashLbl
+            // lbl_orderSuma
             // 
-            this.CashLbl.AutoEllipsis = true;
-            this.CashLbl.BackColor = System.Drawing.Color.Transparent;
-            this.CashLbl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CashLbl.Font = new System.Drawing.Font("Tahoma", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.CashLbl.ForeColor = System.Drawing.Color.Green;
-            this.CashLbl.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.CashLbl.Location = new System.Drawing.Point(0, 0);
-            this.CashLbl.Margin = new System.Windows.Forms.Padding(0);
-            this.CashLbl.Name = "CashLbl";
-            this.CashLbl.Size = new System.Drawing.Size(416, 55);
-            this.CashLbl.TabIndex = 16;
-            this.CashLbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lbl_orderSuma.AutoEllipsis = true;
+            this.lbl_orderSuma.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_orderSuma.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbl_orderSuma.Font = new System.Drawing.Font("Tahoma", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lbl_orderSuma.ForeColor = System.Drawing.Color.Green;
+            this.lbl_orderSuma.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lbl_orderSuma.Location = new System.Drawing.Point(0, 0);
+            this.lbl_orderSuma.Margin = new System.Windows.Forms.Padding(0);
+            this.lbl_orderSuma.Name = "lbl_orderSuma";
+            this.lbl_orderSuma.Size = new System.Drawing.Size(416, 55);
+            this.lbl_orderSuma.TabIndex = 16;
+            this.lbl_orderSuma.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // panel2
             // 
@@ -976,42 +977,42 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.addBillInfo);
-            this.panel1.Controls.Add(this.addChequeInfo);
+            this.panel1.Controls.Add(this.lbl_billInfo);
+            this.panel1.Controls.Add(this.lbl_orderInfo);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(417, 28);
             this.panel1.TabIndex = 2;
             // 
-            // addBillInfo
+            // lbl_billInfo
             // 
-            this.addBillInfo.AutoSize = true;
-            this.addBillInfo.BackColor = System.Drawing.Color.Transparent;
-            this.addBillInfo.Dock = System.Windows.Forms.DockStyle.Left;
-            this.addBillInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.addBillInfo.Location = new System.Drawing.Point(0, 0);
-            this.addBillInfo.Name = "addBillInfo";
-            this.addBillInfo.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
-            this.addBillInfo.Size = new System.Drawing.Size(0, 20);
-            this.addBillInfo.TabIndex = 21;
-            this.addBillInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lbl_billInfo.AutoSize = true;
+            this.lbl_billInfo.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_billInfo.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lbl_billInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lbl_billInfo.Location = new System.Drawing.Point(0, 0);
+            this.lbl_billInfo.Name = "lbl_billInfo";
+            this.lbl_billInfo.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
+            this.lbl_billInfo.Size = new System.Drawing.Size(0, 20);
+            this.lbl_billInfo.TabIndex = 21;
+            this.lbl_billInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // addChequeInfo
+            // lbl_orderInfo
             // 
-            this.addChequeInfo.BackColor = System.Drawing.Color.White;
-            this.addChequeInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.addChequeInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.addChequeInfo.Location = new System.Drawing.Point(0, 0);
-            this.addChequeInfo.Name = "addChequeInfo";
-            this.addChequeInfo.Size = new System.Drawing.Size(415, 26);
-            this.addChequeInfo.TabIndex = 22;
-            this.addChequeInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lbl_orderInfo.BackColor = System.Drawing.Color.White;
+            this.lbl_orderInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbl_orderInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lbl_orderInfo.Location = new System.Drawing.Point(0, 0);
+            this.lbl_orderInfo.Name = "lbl_orderInfo";
+            this.lbl_orderInfo.Size = new System.Drawing.Size(415, 26);
+            this.lbl_orderInfo.TabIndex = 22;
+            this.lbl_orderInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // searchPanel
             // 
             this.searchPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.searchPanel.Controls.Add(this.SrchTbox);
+            this.searchPanel.Controls.Add(this.tb_search);
             this.searchPanel.Controls.Add(this.searchImage);
             this.searchPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.searchPanel.Location = new System.Drawing.Point(0, 28);
@@ -1020,20 +1021,20 @@
             this.searchPanel.Size = new System.Drawing.Size(417, 29);
             this.searchPanel.TabIndex = 18;
             // 
-            // SrchTbox
+            // tb_search
             // 
-            this.SrchTbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.SrchTbox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.SrchTbox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SrchTbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 17.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.SrchTbox.Location = new System.Drawing.Point(34, 0);
-            this.SrchTbox.Margin = new System.Windows.Forms.Padding(0);
-            this.SrchTbox.MaxLength = 1000;
-            this.SrchTbox.Name = "SrchTbox";
-            this.SrchTbox.Size = new System.Drawing.Size(381, 27);
-            this.SrchTbox.TabIndex = 0;
-            this.SrchTbox.TabStop = false;
-            this.SrchTbox.WordWrap = false;
+            this.tb_search.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.tb_search.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tb_search.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tb_search.Font = new System.Drawing.Font("Microsoft Sans Serif", 17.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tb_search.Location = new System.Drawing.Point(34, 0);
+            this.tb_search.Margin = new System.Windows.Forms.Padding(0);
+            this.tb_search.MaxLength = 1000;
+            this.tb_search.Name = "tb_search";
+            this.tb_search.Size = new System.Drawing.Size(381, 27);
+            this.tb_search.TabIndex = 0;
+            this.tb_search.TabStop = false;
+            this.tb_search.WordWrap = false;
             // 
             // searchImage
             // 
@@ -1050,8 +1051,8 @@
             // 
             this.infoPanel.BackColor = System.Drawing.Color.White;
             this.infoPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.infoPanel.Controls.Add(this.chequeInfoLabel);
-            this.infoPanel.Controls.Add(this.appInfoLabel);
+            this.infoPanel.Controls.Add(this.lbl_moneyInfo);
+            this.infoPanel.Controls.Add(this.lbl_appInfo);
             this.infoPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.infoPanel.Location = new System.Drawing.Point(0, 0);
             this.infoPanel.Name = "infoPanel";
@@ -1059,31 +1060,32 @@
             this.infoPanel.Size = new System.Drawing.Size(835, 20);
             this.infoPanel.TabIndex = 20;
             // 
-            // chequeInfoLabel
+            // lbl_moneyInfo
             // 
-            this.chequeInfoLabel.AutoEllipsis = true;
-            this.chequeInfoLabel.AutoSize = true;
-            this.chequeInfoLabel.BackColor = System.Drawing.Color.Transparent;
-            this.chequeInfoLabel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.chequeInfoLabel.Font = new System.Drawing.Font("Tahoma", 20F, System.Drawing.FontStyle.Bold);
-            this.chequeInfoLabel.ForeColor = System.Drawing.Color.Black;
-            this.chequeInfoLabel.Location = new System.Drawing.Point(833, 0);
-            this.chequeInfoLabel.Name = "chequeInfoLabel";
-            this.chequeInfoLabel.Size = new System.Drawing.Size(0, 33);
-            this.chequeInfoLabel.TabIndex = 18;
+            this.lbl_moneyInfo.AutoEllipsis = true;
+            this.lbl_moneyInfo.AutoSize = true;
+            this.lbl_moneyInfo.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_moneyInfo.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lbl_moneyInfo.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lbl_moneyInfo.ForeColor = System.Drawing.Color.Black;
+            this.lbl_moneyInfo.Location = new System.Drawing.Point(833, 0);
+            this.lbl_moneyInfo.Name = "lbl_moneyInfo";
+            this.lbl_moneyInfo.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lbl_moneyInfo.Size = new System.Drawing.Size(0, 16);
+            this.lbl_moneyInfo.TabIndex = 18;
             // 
-            // appInfoLabel
+            // lbl_appInfo
             // 
-            this.appInfoLabel.AutoSize = true;
-            this.appInfoLabel.BackColor = System.Drawing.Color.Transparent;
-            this.appInfoLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.appInfoLabel.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.appInfoLabel.ForeColor = System.Drawing.Color.Black;
-            this.appInfoLabel.Location = new System.Drawing.Point(0, 0);
-            this.appInfoLabel.Name = "appInfoLabel";
-            this.appInfoLabel.Size = new System.Drawing.Size(0, 23);
-            this.appInfoLabel.TabIndex = 17;
-            this.appInfoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lbl_appInfo.AutoSize = true;
+            this.lbl_appInfo.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_appInfo.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lbl_appInfo.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lbl_appInfo.ForeColor = System.Drawing.Color.Black;
+            this.lbl_appInfo.Location = new System.Drawing.Point(0, 0);
+            this.lbl_appInfo.Name = "lbl_appInfo";
+            this.lbl_appInfo.Size = new System.Drawing.Size(0, 23);
+            this.lbl_appInfo.TabIndex = 17;
+            this.lbl_appInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // splitContainer1
             // 
@@ -1100,7 +1102,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.sensorDataPanel1);
-            this.splitContainer1.Panel2.Controls.Add(this.articleDGV);
+            this.splitContainer1.Panel2.Controls.Add(this.grid_Products);
             this.splitContainer1.Panel2.Controls.Add(this.label_uiWndmain_DemoShowArt);
             this.splitContainer1.Size = new System.Drawing.Size(835, 450);
             this.splitContainer1.SplitterDistance = 100;
@@ -1119,7 +1121,7 @@
             // 
             // chequeContainer.Panel1
             // 
-            this.chequeContainer.Panel1.Controls.Add(this.chequeDGV);
+            this.chequeContainer.Panel1.Controls.Add(this.grid_Order);
             // 
             // chequeContainer.Panel2
             // 
@@ -1131,59 +1133,59 @@
             this.chequeContainer.TabIndex = 6;
             this.chequeContainer.TabStop = false;
             // 
-            // chequeDGV
+            // grid_Order
             // 
-            this.chequeDGV.AccessibleRole = System.Windows.Forms.AccessibleRole.Window;
-            this.chequeDGV.AllowUserToAddRows = false;
-            this.chequeDGV.AllowUserToDeleteRows = false;
-            this.chequeDGV.AllowUserToOrderColumns = true;
-            this.chequeDGV.AllowUserToResizeRows = false;
-            this.chequeDGV.BackgroundColor = System.Drawing.Color.White;
-            this.chequeDGV.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.chequeDGV.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.chequeDGV.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
-            this.chequeDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.chequeDGV.DefaultCellStyle = dataGridViewCellStyle14;
-            this.chequeDGV.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chequeDGV.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.chequeDGV.Location = new System.Drawing.Point(0, 0);
-            this.chequeDGV.MultiSelect = false;
-            this.chequeDGV.Name = "chequeDGV";
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.chequeDGV.RowHeadersDefaultCellStyle = dataGridViewCellStyle15;
-            this.chequeDGV.RowHeadersVisible = false;
-            this.chequeDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.chequeDGV.Size = new System.Drawing.Size(835, 66);
-            this.chequeDGV.StandardTab = true;
-            this.chequeDGV.TabIndex = 1;
-            this.chequeDGV.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.chequeDGV_CellBeginEdit);
-            this.chequeDGV.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.chequeDGV_CellEndEdit);
-            this.chequeDGV.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DGV_MouseClick);
-            this.chequeDGV.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseClick);
-            this.chequeDGV.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseDoubleClick);
-            this.chequeDGV.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.chequeDGV_RowsAdded);
-            this.chequeDGV.Enter += new System.EventHandler(this.DGV_Enter);
-            this.chequeDGV.Leave += new System.EventHandler(this.DGV_Leave);
+            this.grid_Order.AccessibleRole = System.Windows.Forms.AccessibleRole.Window;
+            this.grid_Order.AllowUserToAddRows = false;
+            this.grid_Order.AllowUserToDeleteRows = false;
+            this.grid_Order.AllowUserToOrderColumns = true;
+            this.grid_Order.AllowUserToResizeRows = false;
+            this.grid_Order.BackgroundColor = System.Drawing.Color.White;
+            this.grid_Order.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.grid_Order.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.grid_Order.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.grid_Order.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.grid_Order.DefaultCellStyle = dataGridViewCellStyle2;
+            this.grid_Order.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grid_Order.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.grid_Order.Location = new System.Drawing.Point(0, 0);
+            this.grid_Order.MultiSelect = false;
+            this.grid_Order.Name = "grid_Order";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.grid_Order.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.grid_Order.RowHeadersVisible = false;
+            this.grid_Order.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.grid_Order.Size = new System.Drawing.Size(835, 66);
+            this.grid_Order.StandardTab = true;
+            this.grid_Order.TabIndex = 1;
+            this.grid_Order.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.chequeDGV_CellBeginEdit);
+            this.grid_Order.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.chequeDGV_CellEndEdit);
+            this.grid_Order.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseClick);
+            this.grid_Order.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseDoubleClick);
+            this.grid_Order.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.chequeDGV_RowsAdded);
+            this.grid_Order.Enter += new System.EventHandler(this.DGV_Enter);
+            this.grid_Order.Leave += new System.EventHandler(this.DGV_Leave);
+            this.grid_Order.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DGV_MouseClick);
             // 
             // sensorPanel1
             // 
@@ -1193,7 +1195,7 @@
             this.sensorPanel1.SensorType = 50;
             this.sensorPanel1.Size = new System.Drawing.Size(150, 46);
             this.sensorPanel1.TabIndex = 0;
-            this.sensorPanel1.OnSensorButtonClicked += new global::components.UI.Controls.SensorUgcPanel.SensorUgcPanel.SensorButtonClicked(this.sensorPanel1_OnSensorButtonClicked);
+            this.sensorPanel1.OnSensorButtonClicked += new components.UI.Controls.SensorUgcPanel.SensorUgcPanel.SensorButtonClicked(this.sensorPanel1_OnSensorButtonClicked);
             // 
             // label_uiWndmain_DemoShowChq
             // 
@@ -1214,61 +1216,61 @@
             this.sensorDataPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sensorDataPanel1.Location = new System.Drawing.Point(0, 0);
             this.sensorDataPanel1.Name = "sensorDataPanel1";
+            this.sensorDataPanel1.NavigatorFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.sensorDataPanel1.Size = new System.Drawing.Size(835, 312);
             this.sensorDataPanel1.TabIndex = 4;
             this.sensorDataPanel1.Visible = false;
-            this.sensorDataPanel1.Navigator.OnFilterChanged += new global::components.UI.Controls.CategoryNavBar.CategoryNavBar.FilterChanged(Navigator_OnFilterChanged);
             // 
-            // articleDGV
+            // grid_Products
             // 
-            this.articleDGV.AllowUserToAddRows = false;
-            this.articleDGV.AllowUserToDeleteRows = false;
-            this.articleDGV.AllowUserToOrderColumns = true;
-            this.articleDGV.AllowUserToResizeRows = false;
-            this.articleDGV.BackgroundColor = System.Drawing.SystemColors.InactiveCaptionText;
-            this.articleDGV.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.articleDGV.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.articleDGV.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle16;
-            this.articleDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.articleDGV.DefaultCellStyle = dataGridViewCellStyle17;
-            this.articleDGV.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.articleDGV.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.articleDGV.Location = new System.Drawing.Point(0, 0);
-            this.articleDGV.MultiSelect = false;
-            this.articleDGV.Name = "articleDGV";
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.articleDGV.RowHeadersDefaultCellStyle = dataGridViewCellStyle18;
-            this.articleDGV.RowHeadersVisible = false;
-            this.articleDGV.RowTemplate.Height = 30;
-            this.articleDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.articleDGV.Size = new System.Drawing.Size(835, 312);
-            this.articleDGV.StandardTab = true;
-            this.articleDGV.TabIndex = 2;
-            this.articleDGV.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DGV_MouseClick);
-            this.articleDGV.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseClick);
-            this.articleDGV.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseDoubleClick);
-            this.articleDGV.Enter += new System.EventHandler(this.DGV_Enter);
-            this.articleDGV.Leave += new System.EventHandler(this.DGV_Leave);
+            this.grid_Products.AllowUserToAddRows = false;
+            this.grid_Products.AllowUserToDeleteRows = false;
+            this.grid_Products.AllowUserToOrderColumns = true;
+            this.grid_Products.AllowUserToResizeRows = false;
+            this.grid_Products.BackgroundColor = System.Drawing.SystemColors.InactiveCaptionText;
+            this.grid_Products.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.grid_Products.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.grid_Products.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            this.grid_Products.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.grid_Products.DefaultCellStyle = dataGridViewCellStyle5;
+            this.grid_Products.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grid_Products.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.grid_Products.Location = new System.Drawing.Point(0, 0);
+            this.grid_Products.MultiSelect = false;
+            this.grid_Products.Name = "grid_Products";
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.grid_Products.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            this.grid_Products.RowHeadersVisible = false;
+            this.grid_Products.RowTemplate.Height = 30;
+            this.grid_Products.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.grid_Products.Size = new System.Drawing.Size(835, 312);
+            this.grid_Products.StandardTab = true;
+            this.grid_Products.TabIndex = 2;
+            this.grid_Products.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseClick);
+            this.grid_Products.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseDoubleClick);
+            this.grid_Products.Enter += new System.EventHandler(this.DGV_Enter);
+            this.grid_Products.Leave += new System.EventHandler(this.DGV_Leave);
+            this.grid_Products.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DGV_MouseClick);
             // 
             // label_uiWndmain_DemoShowArt
             // 
@@ -1336,8 +1338,8 @@
             this.chequeContainer.Panel1.ResumeLayout(false);
             this.chequeContainer.Panel2.ResumeLayout(false);
             this.chequeContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.chequeDGV)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.articleDGV)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grid_Order)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grid_Products)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1356,7 +1358,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripMenuItem ВибірТоваруToolStripMenuItem1;
-        private System.Windows.Forms.DataGridView chequeDGV;
+        private System.Windows.Forms.DataGridView grid_Order;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
         private System.Windows.Forms.ToolStripMenuItem пошукПоНазвіToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem пошукПоКодуToolStripMenuItem;
@@ -1375,16 +1377,16 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.TableLayoutPanel ioTablePanel;
         private System.Windows.Forms.Panel digitalPanel;
-        private System.Windows.Forms.Label CashLbl;
+        private System.Windows.Forms.Label lbl_orderSuma;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel infoPanel;
-        private System.Windows.Forms.Label chequeInfoLabel;
-        private System.Windows.Forms.Label appInfoLabel;
+        private System.Windows.Forms.Label lbl_moneyInfo;
+        private System.Windows.Forms.Label lbl_appInfo;
         private System.Windows.Forms.ToolStripDropDownButton DDM_Main;
         private System.Windows.Forms.ToolStripDropDownButton DDM_Wnd;
         private System.Windows.Forms.ToolStripDropDownButton DDM_Bills;
         private System.Windows.Forms.Panel searchPanel;
-        private System.Windows.Forms.TextBox SrchTbox;
+        private System.Windows.Forms.TextBox tb_search;
         private System.Windows.Forms.ContextMenuStrip mainMenu;
         private System.Windows.Forms.ContextMenuStrip wndMenu;
         private System.Windows.Forms.ContextMenuStrip billMenu;
@@ -1411,11 +1413,11 @@
         private System.Windows.Forms.ToolStripMenuItem зберегтиРахунокToolStripMenuItem;
         private System.Windows.Forms.PictureBox searchImage;
         private System.Windows.Forms.ToolStripMenuItem fxFunc_toolStripMenuItem;
-        private System.Windows.Forms.DataGridView articleDGV;
+        private System.Windows.Forms.DataGridView grid_Products;
         private System.Windows.Forms.ToolStripStatusLabel DDM_UpdateStatus;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label addChequeInfo;
-        private System.Windows.Forms.Label addBillInfo;
+        private System.Windows.Forms.Label lbl_orderInfo;
+        private System.Windows.Forms.Label lbl_billInfo;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem зберегтиІДрукуватиToolStripMenuItem;

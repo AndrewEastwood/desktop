@@ -95,6 +95,8 @@
             this.msg_comm_attemptsToRead.Name = "msg_comm_attemptsToRead";
             this.msg_comm_attemptsToRead.Size = new System.Drawing.Size(215, 20);
             this.msg_comm_attemptsToRead.TabIndex = 1;
+            this.msg_comm_attemptsToRead.ValueChanged += new System.EventHandler(this.msg_comm_ValueChanged);
+            this.msg_comm_attemptsToRead.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.msg_comm_KeyPress);
             // 
             // label2
             // 
@@ -120,6 +122,8 @@
             this.msg_comm_timeoutOnFail.Name = "msg_comm_timeoutOnFail";
             this.msg_comm_timeoutOnFail.Size = new System.Drawing.Size(215, 20);
             this.msg_comm_timeoutOnFail.TabIndex = 3;
+            this.msg_comm_timeoutOnFail.ValueChanged += new System.EventHandler(this.msg_comm_ValueChanged);
+            this.msg_comm_timeoutOnFail.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.msg_comm_KeyPress);
             // 
             // label3
             // 
@@ -145,6 +149,8 @@
             this.msg_comm_attemptsToWait.Name = "msg_comm_attemptsToWait";
             this.msg_comm_attemptsToWait.Size = new System.Drawing.Size(215, 20);
             this.msg_comm_attemptsToWait.TabIndex = 5;
+            this.msg_comm_attemptsToWait.ValueChanged += new System.EventHandler(this.msg_comm_ValueChanged);
+            this.msg_comm_attemptsToWait.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.msg_comm_KeyPress);
             // 
             // label4
             // 
@@ -170,6 +176,8 @@
             this.msg_comm_timeoutOnBusy.Name = "msg_comm_timeoutOnBusy";
             this.msg_comm_timeoutOnBusy.Size = new System.Drawing.Size(215, 20);
             this.msg_comm_timeoutOnBusy.TabIndex = 7;
+            this.msg_comm_timeoutOnBusy.ValueChanged += new System.EventHandler(this.msg_comm_ValueChanged);
+            this.msg_comm_timeoutOnBusy.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.msg_comm_KeyPress);
             // 
             // Compatibility
             // 
