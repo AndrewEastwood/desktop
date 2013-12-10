@@ -1116,6 +1116,16 @@ namespace DATECS_FP3530T
             }
             return value;
         }
+        public void CallFunctionIgnoreAnswer(string name, params object[] param)
+        {
+            this.IgnoreAnswer = true;
+            try
+            {
+                CallFunction(name, param);
+            }
+            catch { }
+            finally { this.IgnoreAnswer = false; }
+        }
 
         // Driver implementation
         // Warning! Don't change this code region
@@ -3093,6 +3103,12 @@ namespace DATECS_FP3530T
             if (port.IsOpen && port.Write(InputData))
             {
                 //WinAPI.OutputDebugString("W");
+                if (this.IgnoreAnswer)
+                {
+                    UpdateCriticalMethod(Params.DriverData["LastFunc"].ToString(), false);
+                    port.Close();
+                    return true;
+                }
 
                 int t = totRead;
                 int b = totRead * 2;
@@ -3298,6 +3314,7 @@ namespace DATECS_FP3530T
         public UserControl DriverUI { get { return driverui; } }
         public UserControl PortUI { get { return portui; } }
         public UserControl CompatibilityUI { get { return null; } }
+        public bool IgnoreAnswer { get; set; }
         #endregion
     }
 }

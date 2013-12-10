@@ -1204,6 +1204,16 @@ namespace DATECS_EXELLIO
             }
             return value;
         }
+        public void CallFunctionIgnoreAnswer(string name, params object[] param)
+        {
+            this.IgnoreAnswer = true;
+            try
+            {
+                CallFunction(name, param);
+            }
+            catch { }
+            finally { this.IgnoreAnswer = false; }
+        }
 
         // Driver implementation
         // Warning! Don't change this code region
@@ -3242,6 +3252,7 @@ namespace DATECS_EXELLIO
         }
         private bool SendGetData(int totRead, bool close)
         {
+
             string exceptionMsg = "";
 
             if (!_port.IsOpen)
@@ -3254,6 +3265,12 @@ namespace DATECS_EXELLIO
             if (_port.IsOpen && _port.Write(InputData))
             {
                 //WinAPI.OutputDebugString("W");
+                if (this.IgnoreAnswer)
+                {
+                    UpdateCriticalMethod(Params.DriverData["LastFunc"].ToString(), false);
+                    _port.Close();
+                    return true;
+                }
 
                 //int t = totRead;
                 //int b = totRead * 2;
@@ -3489,6 +3506,7 @@ namespace DATECS_EXELLIO
                 return _compatibilityui;
             }
         }
+        public bool IgnoreAnswer { get; set; }
         #endregion
     }
 }

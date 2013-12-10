@@ -23,9 +23,11 @@ namespace components.Shared.Interfaces
 
         // Main Access Method
         object CallFunction(string name, params object[] param);
+        void CallFunctionIgnoreAnswer(string name, params object[] param);
 
         // Additional Properties
         Hashtable AllowedMethods { get; }
+        bool IgnoreAnswer { get; set; }
 
         // UI
         System.Windows.Forms.UserControl DriverUI { get; }

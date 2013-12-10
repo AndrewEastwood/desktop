@@ -3711,7 +3711,7 @@ namespace PayDesk.Components.UI
                     bool[] show = new bool[] { true, true };
                     if (Cheque.Rows.Count != 0)
                         lines = new string[] { _topLabel, grid_Order.CurrentRow.Cells["DESC"].Value.ToString() };
-                    Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_SendCustomer", lines, show);
+                    Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunctionIgnoreAnswer("FP_SendCustomer", lines, show);
                 }
                 catch { }
         }
@@ -4081,7 +4081,7 @@ namespace PayDesk.Components.UI
                     lines[0] = string.Format("{0} : {1:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", "Гроші", pMethod.CashSum);
                     lines[1] = string.Format("{0} : {1}", "Здача", lbl_orderSuma.Text);
                     bool[] show = new bool[] { true, true };
-                    Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_SendCustomer", lines, show);
+                    Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunctionIgnoreAnswer("FP_SendCustomer", lines, show);
                 }
                 catch { }
 
@@ -4278,7 +4278,7 @@ namespace PayDesk.Components.UI
                     lines[0] = string.Format("{0} : {1:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", "Гроші", pMethod.CashSum);
                     lines[1] = string.Format("{0} : {1}", "Здача", lbl_orderSuma.Text);
                     bool[] show = new bool[] { true, true };
-                    Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_SendCustomer", lines, show);
+                    Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunctionIgnoreAnswer("FP_SendCustomer", lines, show);
                 }
                 catch { }
 
