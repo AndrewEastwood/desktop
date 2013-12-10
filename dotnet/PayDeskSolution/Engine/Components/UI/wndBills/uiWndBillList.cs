@@ -634,13 +634,14 @@ namespace PayDesk.Components.UI.wndBills
                     else if ("null".Equals(props[CoreConst.ORDER_NO]) && bool.Parse(billInfo[CoreConst.IS_LOCKED].ToString()))
                     {
                         // this is canceled bill
-                        listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.BackColor = Color.DarkCyan;
+                        listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.BackColor = Color.DarkRed;
                         listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.ForeColor = Color.White;
                     }
                     else if ("copy".Equals(props[CoreConst.ORDER_NO]) && bool.Parse(billInfo[CoreConst.IS_LOCKED].ToString()))
                     {
                         // this is locked and had been copied to active bill
-                        listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.BackColor = Color.LightBlue;
+                        listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.BackColor = Color.Gray;
+                        listGrid.Rows[listGrid.Rows.Count - 1].DefaultCellStyle.ForeColor = Color.DarkSlateGray;
                     }
                     else
                     {

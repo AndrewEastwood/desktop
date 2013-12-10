@@ -52,6 +52,7 @@ namespace PayDesk.Components.UI.wndBills
             // 
             // button_save
             // 
+            this.button_save.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button_save.Location = new System.Drawing.Point(187, 99);
             this.button_save.Margin = new System.Windows.Forms.Padding(20, 10, 20, 20);
             this.button_save.Name = "button_save";
@@ -74,6 +75,7 @@ namespace PayDesk.Components.UI.wndBills
             // 
             // button_clear
             // 
+            this.button_clear.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button_clear.Location = new System.Drawing.Point(20, 99);
             this.button_clear.Margin = new System.Windows.Forms.Padding(20, 10, 20, 20);
             this.button_clear.Name = "button_clear";
