@@ -1451,6 +1451,7 @@ namespace PayDesk.Components.UI
             параметриДрукуToolStripMenuItem.Enabled = !inventChq && Cheque.Rows.Count == 0 && ADMIN_STATE;
             змінитиКористувачаToolStripMenuItem.Enabled = !inventChq && Cheque.Rows.Count == 0;
             вихідToolStripMenuItem.Enabled = !inventChq && Cheque.Rows.Count == 0;
+            чекПоверненняToolStripMenuItem.Checked = retriveChq;
 
             //друкуватиРахунокToolStripMenuItem.Enabled = Cheque.ExtendedProperties.Contains("BILL");
             bool isLocked = (bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false);
@@ -4052,7 +4053,7 @@ namespace PayDesk.Components.UI
 
                 //File.Delete(Cheque.ExtendedProperties["PATH"].ToString());
             }
-            
+            retriveChq = false;
             string closedInfo = string.Empty;
             if (chqNumbers.Count > 1)
                 closedInfo = string.Format("{0} {1} ", "Закриті чеки №", string.Join(",", chqNumbers.ToArray()));

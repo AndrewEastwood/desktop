@@ -357,7 +357,7 @@ namespace driver.Lib
                 }
                 catch { }
                 //get info about cheques (total, date, suma)
-                if (string.IsNullOrEmpty(localData[1]) || DateTime.Now.ToShortDateString() != localData[1])
+                if (string.IsNullOrEmpty(localData[1]) || DateTime.Now.ToString("dd.MM.yyyy") != localData[1])
                 {
                     localData[0] = "0";//total chqs
                     localData[1] = DateTime.Now.ToString("dd.MM.yyyy");//date
@@ -385,7 +385,7 @@ namespace driver.Lib
                 //save cheque and get his number.
                 StreamWriter sw = new StreamWriter(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Cheques + "\\" + fileName, false, Encoding.Default);
                 sw.WriteLine(chqNom);
-                sw.WriteLine(localData[1]);
+                sw.WriteLine(DateTime.Now.ToString("dd.MM.yyyy"));
                 sw.Write(string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "} ", MathLib.GetDouble(localData[2].Trim()) + suma));
 
                 if (sw != null)
