@@ -2680,7 +2680,7 @@ namespace PayDesk.Components.UI
             this.Update();
 
             // check for opened oreder or unlocked folder
-            if (Cheque.Rows.Count != 0 || DataWorkSource.SourceFolderIsBusy())
+            if (Cheque.Rows.Count != 0)
             {
                 // so we want to come back here immediately once order is empty
                 _fl_canUpdate = true;

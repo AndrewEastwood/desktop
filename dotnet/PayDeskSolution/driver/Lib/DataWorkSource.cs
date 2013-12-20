@@ -22,26 +22,6 @@ namespace driver.Lib
         // last date-time source update
         private static Dictionary<string, long> _sourcesLastDate;
 
-        public static FileInfo GetLockFileInfo()
-        {
-            return new FileInfo(driver.Config.ConfigManager.Instance.CommonConfiguration.Path_Articles + @"\.lock");
-        }
-        public static bool SourceFolderIsBusy()
-        {
-            return GetLockFileInfo().Exists;
-        }
-
-        public static void SourceFolder_Lock()
-        {
-            File.CreateText(GetLockFileInfo().FullName).Close();
-        }
-
-        public static void SourceFolder_Unlock()
-        {
-            if (SourceFolderIsBusy())
-                File.Delete(GetLockFileInfo().FullName);
-        }
-
         public static Dictionary<string, FileInfo> GetSourceFiles()
         {
             // source folder
@@ -55,7 +35,6 @@ namespace driver.Lib
 
             return dSources;
         }
-
 
         public static Dictionary<string, DataTable> GetSourceTables()
         {
@@ -105,8 +84,6 @@ namespace driver.Lib
 
         public static Dictionary<string, DataTable> DownloadSource()
         {
-            SourceFolder_Lock();
-
             Dictionary<string, DataTable> dTables = GetSourceTables();
             Dictionary<string, FileInfo> dSources = GetSourceFiles();
 
@@ -130,8 +107,6 @@ namespace driver.Lib
             catch { }
             finally
             {
-                //System.Threading.Thread.Sleep(15000);
-                SourceFolder_Unlock();
             }
 
             return dTables;
