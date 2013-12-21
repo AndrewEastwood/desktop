@@ -29,9 +29,9 @@ namespace driver.Lib
             // get profile subunit
             int subUnit = driver.Config.ConfigManager.Instance.CommonConfiguration.APP_SubUnit;
             Dictionary<string, FileInfo> dSources = new Dictionary<string, FileInfo>();
-            dSources[CoreConst.DATA_CONTAINER_PRODUCT] = new FileInfo(string.Format("{0}\\Products_{1:D2}.xml", sourceDir, subUnit));
-            dSources[CoreConst.DATA_CONTAINER_ALTERNATIVE] = new FileInfo(string.Format("{0}\\Alternatives_{1:D2}.xml", sourceDir, subUnit));
-            dSources[CoreConst.DATA_CONTAINER_CLIENT] = new FileInfo(string.Format("{0}\\ClientCards_{1:D2}.xml", sourceDir, subUnit));
+            dSources[CoreConst.DATA_CONTAINER_PRODUCT] = new FileInfo(string.Format("{0}\\Products.xml", sourceDir, subUnit));
+            dSources[CoreConst.DATA_CONTAINER_ALTERNATIVE] = new FileInfo(string.Format("{0}\\Alternatives.xml", sourceDir, subUnit));
+            dSources[CoreConst.DATA_CONTAINER_CLIENT] = new FileInfo(string.Format("{0}\\ClientCards.xml", sourceDir, subUnit));
 
             return dSources;
         }
