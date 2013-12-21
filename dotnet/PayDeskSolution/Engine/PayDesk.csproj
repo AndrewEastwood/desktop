@@ -359,6 +359,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="addplugins.sh" />
     <None Include="app.config" />
     <None Include="Resources\by_bc.png" />
     <None Include="Resources\by_c.png" />
@@ -427,5 +428,8 @@
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>C:\Windows\System32\cmd.exe call "$(ProjectDir)addplugins.bat"</PreBuildEvent>
   </PropertyGroup>
 </Project>
