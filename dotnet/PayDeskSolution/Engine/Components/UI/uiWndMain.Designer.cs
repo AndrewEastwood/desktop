@@ -1135,18 +1135,6 @@
             this.chequeContainer.TabIndex = 6;
             this.chequeContainer.TabStop = false;
             // 
-<<<<<<< HEAD
-            // chequeDGV
-            // 
-            this.chequeDGV.AccessibleRole = System.Windows.Forms.AccessibleRole.Window;
-            this.chequeDGV.AllowUserToAddRows = false;
-            this.chequeDGV.AllowUserToDeleteRows = false;
-            this.chequeDGV.AllowUserToOrderColumns = true;
-            this.chequeDGV.AllowUserToResizeRows = false;
-            this.chequeDGV.BackgroundColor = System.Drawing.Color.White;
-            this.chequeDGV.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.chequeDGV.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
-=======
             // grid_Order
             // 
             this.grid_Order.AccessibleRole = System.Windows.Forms.AccessibleRole.Window;
@@ -1157,7 +1145,7 @@
             this.grid_Order.BackgroundColor = System.Drawing.Color.White;
             this.grid_Order.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.grid_Order.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
->>>>>>> stable
+
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -1165,13 +1153,8 @@
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-<<<<<<< HEAD
-            this.chequeDGV.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.chequeDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-=======
             this.grid_Order.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.grid_Order.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
->>>>>>> stable
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -1179,21 +1162,12 @@
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.InactiveCaption;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-<<<<<<< HEAD
-            this.chequeDGV.DefaultCellStyle = dataGridViewCellStyle2;
-            this.chequeDGV.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chequeDGV.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.chequeDGV.Location = new System.Drawing.Point(0, 0);
-            this.chequeDGV.MultiSelect = false;
-            this.chequeDGV.Name = "chequeDGV";
-=======
             this.grid_Order.DefaultCellStyle = dataGridViewCellStyle2;
             this.grid_Order.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grid_Order.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.grid_Order.Location = new System.Drawing.Point(0, 0);
             this.grid_Order.MultiSelect = false;
             this.grid_Order.Name = "grid_Order";
->>>>>>> stable
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -1201,22 +1175,6 @@
             dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-<<<<<<< HEAD
-            this.chequeDGV.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.chequeDGV.RowHeadersVisible = false;
-            this.chequeDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.chequeDGV.Size = new System.Drawing.Size(835, 66);
-            this.chequeDGV.StandardTab = true;
-            this.chequeDGV.TabIndex = 1;
-            this.chequeDGV.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.chequeDGV_CellBeginEdit);
-            this.chequeDGV.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.chequeDGV_CellEndEdit);
-            this.chequeDGV.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseClick);
-            this.chequeDGV.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseDoubleClick);
-            this.chequeDGV.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.chequeDGV_RowsAdded);
-            this.chequeDGV.Enter += new System.EventHandler(this.DGV_Enter);
-            this.chequeDGV.Leave += new System.EventHandler(this.DGV_Leave);
-            this.chequeDGV.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DGV_MouseClick);
-=======
             this.grid_Order.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.grid_Order.RowHeadersVisible = false;
             this.grid_Order.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -1231,7 +1189,6 @@
             this.grid_Order.Enter += new System.EventHandler(this.DGV_Enter);
             this.grid_Order.Leave += new System.EventHandler(this.DGV_Leave);
             this.grid_Order.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DGV_MouseClick);
->>>>>>> stable
             // 
             // sensorPanel1
             // 
@@ -1267,17 +1224,6 @@
             this.sensorDataPanel1.TabIndex = 4;
             this.sensorDataPanel1.Visible = false;
             // 
-<<<<<<< HEAD
-            // articleDGV
-            // 
-            this.articleDGV.AllowUserToAddRows = false;
-            this.articleDGV.AllowUserToDeleteRows = false;
-            this.articleDGV.AllowUserToOrderColumns = true;
-            this.articleDGV.AllowUserToResizeRows = false;
-            this.articleDGV.BackgroundColor = System.Drawing.SystemColors.InactiveCaptionText;
-            this.articleDGV.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.articleDGV.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
-=======
             // grid_Products
             // 
             this.grid_Products.AllowUserToAddRows = false;
@@ -1287,7 +1233,6 @@
             this.grid_Products.BackgroundColor = System.Drawing.SystemColors.InactiveCaptionText;
             this.grid_Products.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.grid_Products.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
->>>>>>> stable
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -1295,13 +1240,8 @@
             dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-<<<<<<< HEAD
-            this.articleDGV.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
-            this.articleDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-=======
             this.grid_Products.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.grid_Products.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
->>>>>>> stable
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -1309,21 +1249,12 @@
             dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.InactiveCaption;
             dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-<<<<<<< HEAD
-            this.articleDGV.DefaultCellStyle = dataGridViewCellStyle5;
-            this.articleDGV.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.articleDGV.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.articleDGV.Location = new System.Drawing.Point(0, 0);
-            this.articleDGV.MultiSelect = false;
-            this.articleDGV.Name = "articleDGV";
-=======
             this.grid_Products.DefaultCellStyle = dataGridViewCellStyle5;
             this.grid_Products.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grid_Products.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.grid_Products.Location = new System.Drawing.Point(0, 0);
             this.grid_Products.MultiSelect = false;
             this.grid_Products.Name = "grid_Products";
->>>>>>> stable
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -1331,20 +1262,6 @@
             dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-<<<<<<< HEAD
-            this.articleDGV.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
-            this.articleDGV.RowHeadersVisible = false;
-            this.articleDGV.RowTemplate.Height = 30;
-            this.articleDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.articleDGV.Size = new System.Drawing.Size(835, 312);
-            this.articleDGV.StandardTab = true;
-            this.articleDGV.TabIndex = 2;
-            this.articleDGV.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseClick);
-            this.articleDGV.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_CellMouseDoubleClick);
-            this.articleDGV.Enter += new System.EventHandler(this.DGV_Enter);
-            this.articleDGV.Leave += new System.EventHandler(this.DGV_Leave);
-            this.articleDGV.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DGV_MouseClick);
-=======
             this.grid_Products.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.grid_Products.RowHeadersVisible = false;
             this.grid_Products.RowTemplate.Height = 30;
@@ -1357,7 +1274,6 @@
             this.grid_Products.Enter += new System.EventHandler(this.DGV_Enter);
             this.grid_Products.Leave += new System.EventHandler(this.DGV_Leave);
             this.grid_Products.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DGV_MouseClick);
->>>>>>> stable
             // 
             // label_uiWndmain_DemoShowArt
             // 

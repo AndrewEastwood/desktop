@@ -1426,7 +1426,7 @@ namespace PayDesk.Components.UI
             this.grid_Products.Invalidate();//
             this.grid_Products.Refresh();
             this.grid_Products.Update();
-            //this.articleDGV.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+            //this.grid_Order.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
             
             this.grid_Order.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_ChequeRowHeight;
             this.grid_Order.Invalidate();
@@ -1771,7 +1771,7 @@ namespace PayDesk.Components.UI
 
                             */
                             this.grid_Products.Parent = this.sensorDataPanel1.Placeholder;
-                            //this.articleDGV.BringToFront();
+                            //this.grid_Order.BringToFront();
 
                             RefreshComponents(true);
 
@@ -2526,7 +2526,7 @@ namespace PayDesk.Components.UI
             DDM_Status.Text = CoreLib.ShowArticleInfo(grid_Order, grid_Products);
 
             // seonsor command
-            if (this.сенсорToolStripMenuItem.Checked && (sender as DataGridView).Name == "articleDGV")
+            if (this.сенсорToolStripMenuItem.Checked && (sender as DataGridView).Name == "grid_Order")
                 Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
 
         }
@@ -2618,7 +2618,7 @@ namespace PayDesk.Components.UI
 
             // show message that db is updated
             if (_fl_onlyUpdate)
-                MMessageBox.Show(this.articleDGV, "Будуть внесені зміни в базу товарів", Application.ProductName);
+                MMessageBox.Show(this.grid_Order, "Будуть внесені зміни в базу товарів", Application.ProductName);
 
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles && this.Cheques.Tables.Count != ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
             {
@@ -2643,7 +2643,6 @@ namespace PayDesk.Components.UI
                 }
             }
 
-<<<<<<< HEAD
             // clear all prev data
             Articles.Rows.Clear();
             AltBC.Rows.Clear();
@@ -2657,30 +2656,15 @@ namespace PayDesk.Components.UI
             // check app state
             this._fl_isOk = new Com_SecureRuntime().FullLoader();
             this.label_uiWndmain_DemoShowArt.Visible = this.label_uiWndmain_DemoShowChq.Visible = !this._fl_isOk;
-=======
-            //MessageBox.Show("done 1");
-
-            List<string> allProfiles = new List<string>();
-            //bool wasUpdatedAtLeastOneSource = false;
-            _fl_artUpdated = false;
-            foreach (DictionaryEntry de in hfiles)
-            {
-
-                string[] files = (string[])de.Value;
-
-                allProfiles.Add(de.Key.ToString());
-
-                /* detectiong for updates */
->>>>>>> stable
 
             // indicate that next time we will show message about new chages
             this._fl_onlyUpdate = true; // <- this is false at startup
 
             // resume source fetch timer
             timer1.Start();
-
+            
             // activate searchbox
-            SrchTbox.Select();
+            tb_search.Select();
 
             // cleanup
             GC.Collect();
@@ -2897,7 +2881,6 @@ namespace PayDesk.Components.UI
             ////MessageBox.Show("done 8");
             //Com_WinApi.OutputDebugString("MainWnd --- AddingData End");
 
-<<<<<<< HEAD
             //if (_fl_artUpdated)
             //{
             //    if (this.WindowState == FormWindowState.Minimized)
@@ -2906,16 +2889,6 @@ namespace PayDesk.Components.UI
             //    MMessageBoxEx.Show(this.chequeDGV, "Були внесені зміни в базу товарів", Application.ProductName,
             //        MessageBoxButtons.OK, MessageBoxIcon.Information);
             //}
-=======
-            if (_fl_artUpdated)
-            {
-                if (this.WindowState == FormWindowState.Minimized)
-                    this.WindowState = FormWindowState.Normal;
-                this.BringToFront();
-                MMessageBoxEx.Show(this.grid_Order, "Були внесені зміни в базу товарів", Application.ProductName,
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
->>>>>>> stable
 
             ////MessageBox.Show("done 9");
             //_fl_onlyUpdate = true;
@@ -2925,15 +2898,9 @@ namespace PayDesk.Components.UI
             //this.label_uiWndmain_DemoShowArt.Visible = this.label_uiWndmain_DemoShowChq.Visible = !this._fl_isOk;
             ////MessageBox.Show("done 10");
 
-<<<<<<< HEAD
             //timer1.Start();
             //SrchTbox.Select();
             //GC.Collect();
-=======
-            timer1.Start();
-            tb_search.Select();
-            GC.Collect();
->>>>>>> stable
 
             ///* device status */
             //if (Program.AppPlugins.IsActive(PluginType.LegalPrinterDriver))
@@ -5097,7 +5064,7 @@ namespace PayDesk.Components.UI
                         if (this.grid_Products.RowCount == 0)
                             break;
                         /*
-                        if (this.articleDGV.Visible)
+                        if (this.grid_Order.Visible)
                         {
                             Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
                             break;
