@@ -72,23 +72,14 @@ namespace PayDesk.Components.UI
                     new bool[checkedListBox1.Items.Count], 
                     new bool[checkedListBox1.Items.Count] };
 
-                using (StreamWriter sw = File.CreateText(ConfigManager.Instance.CommonConfiguration.Path_Units))
+                for (int i = 0; i < checkedListBox1.Items.Count; i++)
                 {
-                    for (int i = 0; i < checkedListBox1.Items.Count; i++)
-                    {
-                        sw.Write(checkedListBox1.Items[i].ToString() == "" ? " " : checkedListBox1.Items[i]);
-                        sw.Write("_");
-                        sw.WriteLine(checkedListBox1.GetItemChecked(i) ? "1" : "0");
-                        sw.WriteLine("_");
-                        sw.WriteLine(checkedListBox2.GetItemChecked(i) ? "1" : "0");
-                        //Save to config
-                        ((string[])ConfigManager.Instance.CommonConfiguration.APP_UnitFilter[0])[i] = checkedListBox1.Items[i].ToString();
-                        ((bool[])ConfigManager.Instance.CommonConfiguration.APP_UnitFilter[1])[i] = checkedListBox1.GetItemChecked(i);
-                        ((bool[])ConfigManager.Instance.CommonConfiguration.APP_UnitFilter[2])[i] = checkedListBox2.GetItemChecked(i);
-                    }
-                    sw.Close();
-                    sw.Dispose();
+                    //Save to config
+                    ((string[])ConfigManager.Instance.CommonConfiguration.APP_UnitFilter[0])[i] = checkedListBox1.Items[i].ToString();
+                    ((bool[])ConfigManager.Instance.CommonConfiguration.APP_UnitFilter[1])[i] = checkedListBox1.GetItemChecked(i);
+                    ((bool[])ConfigManager.Instance.CommonConfiguration.APP_UnitFilter[2])[i] = checkedListBox2.GetItemChecked(i);
                 }
+
             }
             catch (Exception ex)
             {

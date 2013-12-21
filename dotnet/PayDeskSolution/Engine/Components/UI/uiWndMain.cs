@@ -82,8 +82,6 @@ namespace PayDesk.Components.UI
         private double discCommonPercent = 0.0;
         private double discCommonCash = 0.0;
         private bool discApplied = false;
-        /* new data */
-        components.Components.DataContainer.DataContainer dataContainer2;
 
         private DataSet Data = new DataSet();
         private Hashtable Discount = new Hashtable();
@@ -101,14 +99,6 @@ namespace PayDesk.Components.UI
         private bool _fl_useTotDisc = true;
         private bool _fl_isOk = false;
         //private bool _fl_modeChanged = false;
-
-        private Hashtable GetAppStatements()
-        {
-            Hashtable currentStates = new Hashtable();
-            currentStates[CoreConst.STATE_DATA_UPDATED] = false;
-
-            return currentStates;
-        }
         
         /// <summary>
         /// Application's Constructor
@@ -116,100 +106,6 @@ namespace PayDesk.Components.UI
         public uiWndMain()
         {
             InitializeComponent();
-
-            dataContainer2 = DataWorkShared.GetDataContainer();
-
-            // initialize statements
-            dataContainer2.Structures[CoreConst.CONTAINER_STATE, CoreConst.STATE_CALC_USE_TOTAL_DISC] = true;
-
-
-            dataContainer2.Structures[CoreConst.CONTAINER_STATE].UpdateMethod = this.GetAppStatements;
-            //dataContainer2.Structures[CoreConst.CONTAINER_STATE] = this.GetAppStatements;
-            dataContainer2.Structures[CoreConst.CONTAINER_STATE].Update();
-            
-
-            //Program.AppPlugins.GetActive<IAppUI>().Execute(this);
-                    
-           // Settings1.Default["test"] = "gfdgdgdf";
-            //Settings1.Default.Save();
-            /*
-            Properties.Settings.Default.Context.Add("gdfgdfg", "gdfgdfg");
-            Properties.Settings.Default.Save();
-
-            System.Configuration.ConfigXmlDocument f = new System.Configuration.ConfigXmlDocument();
-            f.LoadXml("PayDesk.exe.config");
-            System.Configuration.SettingElement g = new System.Configuration.SettingElement("gfdgf", System.Configuration.SettingsSerializeAs.Xml);
-            System.Configuration.SettingsContext sc = new System.Configuration.SettingsContext();
-            System.Configuration.LocalFileSettingsProvider lfs = new System.Configuration.LocalFileSettingsProvider();
-            System.Collections.Specialized.NameValueCollection nvc = new System.Collections.Specialized.NameValueCollection();
-            nvc.Add("test2", "tttt"); lfs.Initialize("PayDesk.xml", nvc);
-            lfs.Reset(sc);
-
-
-            */
-
-            
-
-            /*
-            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new BinaryFormatter();
-
-            XmlPO.XmlParserObject xobj = new XmlPO.XmlParserObject();
-            */
-            /*
-            System.Collections.Hashtable _driverData = new System.Collections.Hashtable();
-            _driverData.Add("Status", 1);
-            _driverData.Add("ErrorStatus", 1);
-            _driverData.Add("ArtMemorySize", (uint)11800);
-            _driverData.Add("UserNo", (byte)1);
-            _driverData.Add("UserPwd", "0000");
-            _driverData.Add("DeskNo", (byte)1);
-            
-            System.Collections.Hashtable _driverData2 = new System.Collections.Hashtable();
-            _driverData2.Add("LastFunc", "");
-            _driverData2.Add("LastArtNo", (uint)1);
-            _driverData2.Add("LastFOrderNo", (uint)0);
-            _driverData2.Add("LastNOrderNo", (uint)0);
-            _driverData2.Add("LastROrderNo", (uint)0);
-
-            System.Collections.Hashtable _xData = new System.Collections.Hashtable();
-            _xData.Add("testBlock", _driverData);
-            _xData.Add("testBlock2", _driverData2);
-            _xData.Add("listtest", new int[] { 1, 2, 3, 5, 7, 0 });
-            
-            xobj.ParseDataToXml("myxmlfile.xml", _xData);
-            */
-            /*
-            System.Collections.Hashtable ldata = xobj.ParseXmlToData("AppConfig.xml");
-            ;
-
-            XmlPO.Components.Objects.SectionElement section = new XmlPO.Components.Objects.SectionElement("simple");
-            section.Comment = "demo test";
-
-            XmlPO.Components.Objects.BlockElement b = new XmlPO.Components.Objects.BlockElement("b1");
-            XmlPO.Components.Objects.PropertyElement p = new XmlPO.Components.Objects.PropertyElement("p1");
-            p.Value = 12345;
-            b.Add(p);
-            section.Add(b);
-            XmlPO.Components.Objects.DocumentElement doc = new XmlPO.Components.Objects.DocumentElement();
-            doc.AddContainer(section);
-
-
-
-            xobj.ParseDocumentToXml("t.xml", doc);
-            */
-            //System.Collections.Hashtable ldata = xobj.ParseXmlToData("myxmlfile.xml");
-
-
-            //ComPort _cport = new ComPort();
-            //PayDesk.Config.AppSettings sett = new Config.AppSettings();
-
-           /* ConfigManager cm = new ConfigManager();
-            sett.Tax_AppTaxChar = new char[] { 'a' };
-            sett.Tax_AppTaxDisc = new bool[] { true };
-            sett.PRN_Templates = new Dictionary<string, object>();
-            sett.PRN_Templates.Add("test", new Dictionary<string, object>(2));
-            string rez = cm.SerializeObject(sett, sett.GetType());
-            cm.Save(rez);*/
         }
 
         ~uiWndMain()
@@ -227,8 +123,6 @@ namespace PayDesk.Components.UI
             base.OnLoad(e);
 
             /* initialise data values */
-
-
             
             /* loop by all available profiles */
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
@@ -244,11 +138,10 @@ namespace PayDesk.Components.UI
             }
 
             admin = new uiWndAdmin();
-            admin.OwnerControlEx = this.chequeDGV;
+            admin.OwnerControlEx = this.grid_Order;
 
             //winapi.Funcs.OutputDebugString("load_begin");
             this._fl_isOk = new Com_SecureRuntime().FullLoader();
-
 
             //Restore position
             this.Text = string.Format("{2}{1}{0}", Application.ProductName, " - ", ConfigManager.Instance.CommonConfiguration.APP_SubUnitName);
@@ -278,9 +171,9 @@ namespace PayDesk.Components.UI
 
             // new feature: this.bdo
 
-            chequeDGV.DataSource = Cheque;
-            articleDGV.DataSource = Articles;
-            DataGridView[] grids = new DataGridView[] { chequeDGV, articleDGV };
+            grid_Order.DataSource = Cheque;
+            grid_Products.DataSource = Articles;
+            DataGridView[] grids = new DataGridView[] { grid_Order, grid_Products };
             ViewLib.LoadGridsView(ref grids, splitContainer1.Orientation);
 
             //if (ConfigManager.Instance.CommonConfiguration.Path_Exchnage == string.Empty)
@@ -366,7 +259,7 @@ namespace PayDesk.Components.UI
                         DDM_FPStatus.Image = Properties.Resources.ok;
                     else
                     {
-                        MMessageBoxEx.Show(this.chequeDGV, "Немає зв'язку з фіскальним пристроєм.\r\nНеможливо зареєструвати касира в ЕККР",
+                        MMessageBoxEx.Show(this.grid_Order, "Немає зв'язку з фіскальним пристроєм.\r\nНеможливо зареєструвати касира в ЕККР",
                             Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         DDM_FPStatus.Image = Properties.Resources.FpNotOk;
                     }
@@ -375,7 +268,7 @@ namespace PayDesk.Components.UI
                 {
                     DDM_FPStatus.Image = Properties.Resources.FpNotOk;
                     driver.Lib.CoreLib.WriteLog(ex, "Немає зв'язку з фіскальним пристроєм.\r\nНеможливо зареєструвати касира в ЕККР");
-                    MMessageBoxEx.Show(this.chequeDGV, ex.Message + "\r\nНемає зв'язку з фіскальним пристроєм.\r\nНеможливо зареєструвати касира в ЕККР",
+                    MMessageBoxEx.Show(this.grid_Order, ex.Message + "\r\nНемає зв'язку з фіскальним пристроєм.\r\nНеможливо зареєструвати касира в ЕККР",
                         Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             } else
@@ -421,7 +314,7 @@ namespace PayDesk.Components.UI
         {
             if (inventChq)
             {
-                MMessageBoxEx.Show(this.chequeDGV, "Відкритий чек інвентаризації!", Application.ProductName,
+                MMessageBoxEx.Show(this.grid_Order, "Відкритий чек інвентаризації!", Application.ProductName,
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 e.Cancel = true;
                 return;
@@ -429,19 +322,19 @@ namespace PayDesk.Components.UI
 
             DialogResult rez = DialogResult.No;
 
-            if (chequeDGV.RowCount != 0)
+            if (grid_Order.RowCount != 0)
             {
-                MMessageBoxEx.Show(this.chequeDGV, "Закрийте чек перед тим, як вийти", Application.ProductName,
+                MMessageBoxEx.Show(this.grid_Order, "Закрийте чек перед тим, як вийти", Application.ProductName,
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 e.Cancel = true;
                 return;
             }
 
             if (DialogResult == DialogResult.Retry)
-                rez = MMessageBoxEx.Show(this.chequeDGV, "Змінити касира ?", Application.ProductName,
+                rez = MMessageBoxEx.Show(this.grid_Order, "Змінити касира ?", Application.ProductName,
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
             else
-                rez = MMessageBoxEx.Show(this.chequeDGV, "Вийти з програми ?", Application.ProductName,
+                rez = MMessageBoxEx.Show(this.grid_Order, "Вийти з програми ?", Application.ProductName,
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
 
             switch (rez)
@@ -461,7 +354,7 @@ namespace PayDesk.Components.UI
                             }
                             catch (Exception ex)
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, ex.Message + "\r\nНеможливо розреєструвати касира в ЕККР",
+                                MMessageBoxEx.Show(this.grid_Order, ex.Message + "\r\nНеможливо розреєструвати касира в ЕККР",
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         }
@@ -546,10 +439,10 @@ namespace PayDesk.Components.UI
             //}
 
 
-            if (e.Control && !e.SuppressKeyPress && chequeDGV.CurrentCell != null && chequeDGV.CurrentCell.IsInEditMode)
+            if (e.Control && !e.SuppressKeyPress && grid_Order.CurrentCell != null && grid_Order.CurrentCell.IsInEditMode)
             {
                 Com_WinApi.OutputDebugString("EndEdit perform");
-                chequeDGV.EndEdit();
+                grid_Order.EndEdit();
             }
 
         }
@@ -648,7 +541,7 @@ namespace PayDesk.Components.UI
                             //if (this.Cheque.ExtendedProperties.ContainsKey("BILL") && this.Cheque.ExtendedProperties["BILL"] != null && bool.Parse(this.Cheque.ExtendedProperties["LOCK"].ToString()))
                             if ((bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false))
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
+                                MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
@@ -665,7 +558,7 @@ namespace PayDesk.Components.UI
 
                             try
                             {
-                                int index = chequeDGV.CurrentRow.Index;
+                                int index = grid_Order.CurrentRow.Index;
 
                                 if (DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.OID, string.Empty).ToString() != string.Empty)
                                 {
@@ -710,8 +603,8 @@ namespace PayDesk.Components.UI
                                         index = 0;
                                     else
                                         break;//r
-                                chequeDGV.CurrentCell = chequeDGV.Rows[index].Cells[chequeDGV.Columns.GetFirstColumn(DataGridViewElementStates.Visible).Name];
-                                chequeDGV.Rows[index].Selected = true;
+                                grid_Order.CurrentCell = grid_Order.Rows[index].Cells[grid_Order.Columns.GetFirstColumn(DataGridViewElementStates.Visible).Name];
+                                grid_Order.Rows[index].Selected = true;
                             }
                             catch { }
                             break;
@@ -723,7 +616,7 @@ namespace PayDesk.Components.UI
                             //if (this.Cheque.ExtendedProperties.ContainsKey("BILL") && this.Cheque.ExtendedProperties["BILL"] != null && bool.Parse(this.Cheque.ExtendedProperties["LOCK"].ToString()))
                             if ((bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false))
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
+                                MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
@@ -770,7 +663,7 @@ namespace PayDesk.Components.UI
                         {
                             if ((bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false))
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
+                                MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
@@ -818,7 +711,7 @@ namespace PayDesk.Components.UI
                         {
                             if ((bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false))
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
+                                MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
@@ -866,7 +759,7 @@ namespace PayDesk.Components.UI
                         {
                             if ((bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false))
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
+                                MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
@@ -876,7 +769,7 @@ namespace PayDesk.Components.UI
 
                             ResetDiscount();
                             UpdateSumInfo(true);
-                            addChequeInfo.Text = string.Empty;
+                            lbl_orderInfo.Text = string.Empty;
                             break;
                         } 
                         #endregion
@@ -894,7 +787,7 @@ namespace PayDesk.Components.UI
                             //if (   this.Cheque.ExtendedProperties.ContainsKey("BILL") && this.Cheque.ExtendedProperties["BILL"] != null && bool.Parse(((Dictionary<string, object>)this.Cheque.ExtendedProperties["BILL"])["IS_LOCKED"].ToString()))
                             if ((bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false))
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
+                                MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
                                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
@@ -906,19 +799,19 @@ namespace PayDesk.Components.UI
                             {
                                 case 1:
                                     {
-                                        MMessageBoxEx.Show(this.chequeDGV, "Були внесені змінити в поточний рахунок\r\nПерезавантажте рахунок за допомогою меню або натисніть ALT+R", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        MMessageBoxEx.Show(this.grid_Order, "Були внесені змінити в поточний рахунок\r\nПерезавантажте рахунок за допомогою меню або натисніть ALT+R", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                         break;
                                     }
                                 case 2:
                                     {
-                                        MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок вже закритий\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок вже закритий\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                         _fl_menuIsActive = false;
                                         this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
                                         break;
                                     }
                                 case -1:
                                     {
-                                        MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок видалений з бази\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок видалений з бази\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                         _fl_menuIsActive = false;
                                         this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
                                         break;
@@ -958,55 +851,55 @@ namespace PayDesk.Components.UI
                                         Com_WinApi.OutputDebugString("SEARCH: ok to proceed by program");
                                         //winapi.WinAPI.OutputDebugString("srch: " + chararray);
                                         SearchFilter(false, 2, true);
-                                        SrchTbox.Text = chararray;
+                                        tb_search.Text = chararray;
                                     }
                                     else
                                     {
                                         Com_WinApi.OutputDebugString("SEARCH: no ok. Using textbox.");
-                                        string _sameText = SrchTbox.Text;
+                                        string _sameText = tb_search.Text;
                                         SearchFilter(false, 2, true);
-                                        SrchTbox.Text = _sameText;
+                                        tb_search.Text = _sameText;
                                     }
-                                    SrchTbox.Select();
+                                    tb_search.Select();
                                     chararray = string.Empty;
                                 }
 
                             //close edit
-                            if (chequeDGV.CurrentCell != null && chequeDGV.CurrentCell.IsInEditMode)
+                            if (grid_Order.CurrentCell != null && grid_Order.CurrentCell.IsInEditMode)
                             {
-                                chequeDGV.EndEdit();
+                                grid_Order.EndEdit();
                                 editWasClosed = true;
                             }
 
                             //lastInputChar = DateTime.Now;
                             //launch article property
-                            if (chequeDGV.Focused && chequeDGV.RowCount != 0)
+                            if (grid_Order.Focused && grid_Order.RowCount != 0)
                             {
                                 if (!getAdminAccess(24))
                                     return;
 
-                                DataRow dRow = Cheque.Rows.Find(chequeDGV.CurrentRow.Cells["C"].Value);
+                                DataRow dRow = Cheque.Rows.Find(grid_Order.CurrentRow.Cells["C"].Value);
                                 Request req = new Request(dRow, MathLib.GetDouble(dRow["TOT"]));
-                                req.UpdateRowSource(this.chequeDGV, this);
+                                req.UpdateRowSource(this.grid_Order, this);
                                 req.Dispose();
                                 UpdateSumInfo(true);
                                 break;//r
                             }
 
                             //Adding article to Cheque
-                            if (articleDGV.Focused && articleDGV.RowCount != 0)
+                            if (grid_Products.Focused && grid_Products.RowCount != 0)
                             {
-                                DataRow article = Articles.Rows.Find(articleDGV.CurrentRow.Cells["C"].Value);
+                                DataRow article = Articles.Rows.Find(grid_Products.CurrentRow.Cells["C"].Value);
 
                                 if (!this._fl_isOk && this.Cheque.Rows.Count >= 3 && this.Cheque.Rows.Find(article["C"].ToString()) == null)
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Ви не можете продавати більше позицій в демо-режимі", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    MMessageBoxEx.Show(this.grid_Order, "Ви не можете продавати більше позицій в демо-режимі", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                                     break;
                                 }
 
                                 if (article != null)
                                 {
-                                    CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article, ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles);
+                                    CoreLib.AddArticleToCheque(grid_Order, grid_Products, article, ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles);
                                     SearchFilter(true, this.currSrchType, false);
                                     // hide product panel when it was displayed automatically
                                     /*if (splitContainer1.Panel2.Tag != null)
@@ -1023,7 +916,7 @@ namespace PayDesk.Components.UI
                             //winapi.WinAPI.OutputDebugString("srch: " + SrchTbox.Text);
 
                             //Searching
-                            if (!editWasClosed && SrchTbox.Focused && SrchTbox.Text != string.Empty)
+                            if (!editWasClosed && tb_search.Focused && tb_search.Text != string.Empty)
                             {
                                 DataTable sTable = Articles.Clone();
                                 bool allowToShow = false;
@@ -1031,20 +924,20 @@ namespace PayDesk.Components.UI
 
                                 //Debug.Write("BeginAdd");
                                 #region search box
-                                if (SrchTbox.Text != "")
+                                if (tb_search.Text != "")
                                 {
                                     switch (currSrchType)
                                     {
                                         case 0:
                                             {
                                                 #region by name
-                                                string[] words = SrchTbox.Text.Trim().Split(' ');
+                                                string[] words = tb_search.Text.Trim().Split(' ');
                                                 DataRow[] dr1 = new DataRow[0];
                                                 DataRow[] dr2 = new DataRow[0];
-                                                DataTable dTable = (DataTable)articleDGV.DataSource;
+                                                DataTable dTable = (DataTable)grid_Products.DataSource;
 
                                                 //string srchString = string.Empty;
-                                                SrchTbox.Text = string.Empty;
+                                                tb_search.Text = string.Empty;
                                                 for (int l = 0; l < words.Length; l++)
                                                 {
                                                     try
@@ -1074,18 +967,18 @@ namespace PayDesk.Components.UI
 
                                                     if (dTable.Rows.Count > 0)
                                                     {
-                                                        articleDGV.DataSource = dTable;
-                                                        articleDGV.Select();
+                                                        grid_Products.DataSource = dTable;
+                                                        grid_Products.Select();
                                                         allowToShow = true;
-                                                        SrchTbox.Text += words[l] + " ";
+                                                        tb_search.Text += words[l] + " ";
                                                         //SrchTbox.Select(0, srchString.Length);
                                                     }
                                                 }
 
-                                                if (SrchTbox.Text == string.Empty)
+                                                if (tb_search.Text == string.Empty)
                                                 //if (SrchTbox.SelectedText == string.Empty)
                                                 {
-                                                    MMessageBoxEx.Show(this.chequeDGV, "Нажаль нічого не вдалось знайти", "Результат пошуку",
+                                                    MMessageBoxEx.Show(this.grid_Order, "Нажаль нічого не вдалось знайти", "Результат пошуку",
                                                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                                                     SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
                                                 }
@@ -1098,18 +991,18 @@ namespace PayDesk.Components.UI
                                                 #region by id
                                                 try
                                                 {
-                                                    DataRow[] dr = Articles.Select("ID Like \'" + SrchTbox.Text + "%\'");
+                                                    DataRow[] dr = Articles.Select("ID Like \'" + tb_search.Text + "%\'");
 
                                                     if (dr.Length == 0)
                                                     {
-                                                        MMessageBoxEx.Show(this.chequeDGV, "Нажаль нічого не вдалось знайти", "Результат пошуку", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                                        MMessageBoxEx.Show(this.grid_Order, "Нажаль нічого не вдалось знайти", "Результат пошуку", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                                         SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
                                                         break;
                                                     }
                                                     if (dr.Length == 1)
                                                     {
                                                         SearchFilter(false, currSrchType, true);
-                                                        CoreLib.AddArticleToCheque(chequeDGV, articleDGV, dr[0], ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles);
+                                                        CoreLib.AddArticleToCheque(grid_Order, grid_Products, dr[0], ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles);
                                                         allowToShow = false;
                                                         break;
                                                     }
@@ -1121,16 +1014,16 @@ namespace PayDesk.Components.UI
                                                             sTable.Rows.Add(dr[i].ItemArray);
                                                         sTable.EndLoadData();
 
-                                                        articleDGV.DataSource = sTable;
-                                                        articleDGV.Select();
+                                                        grid_Products.DataSource = sTable;
+                                                        grid_Products.Select();
                                                         allowToShow = true;
                                                     }
 
                                                 }
                                                 catch
                                                 {
-                                                    SrchTbox.Focus();
-                                                    SrchTbox.SelectAll();
+                                                    tb_search.Focus();
+                                                    tb_search.SelectAll();
                                                 }
                                                 #endregion
                                                 break;
@@ -1140,12 +1033,12 @@ namespace PayDesk.Components.UI
                                                 #region by bc
                                                 try
                                                 {
-                                                    allowToShow = BCSearcher(SrchTbox.Text, true);
+                                                    allowToShow = BCSearcher(tb_search.Text, true);
                                                 }
                                                 catch (FormatException)
                                                 {
-                                                    SrchTbox.Focus();
-                                                    SrchTbox.SelectAll();
+                                                    tb_search.Focus();
+                                                    tb_search.SelectAll();
                                                 }
                                                 #endregion
                                                 break;
@@ -1159,13 +1052,13 @@ namespace PayDesk.Components.UI
                                 {
                                     вікноТоварівToolStripMenuItem.PerformClick();
                                     splitContainer1.Panel2.Tag = new object();
-                                    articleDGV.Select();
+                                    grid_Products.Select();
                                     // skin sensor integration (hide panel when some arts are showing)
                                     if (this.сенсорToolStripMenuItem.Checked)
                                         this.chequeContainer.Panel2Collapsed = true;
                                 }
 
-                                articleDGV.Update();
+                                grid_Products.Update();
                                 //Debug.Write("EndAdd");
                             }
 
@@ -1181,7 +1074,7 @@ namespace PayDesk.Components.UI
                             if (!getAdminAccess(23, false))
                             {
                                 //if (admin.ShowDialog() != DialogResult.OK)
-                                MMessageBoxEx.Show(this.chequeDGV, "Закриття чеку заблоковано", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MMessageBoxEx.Show(this.grid_Order, "Закриття чеку заблоковано", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 break;//r
                             }
 
@@ -1201,7 +1094,7 @@ namespace PayDesk.Components.UI
                                     CloseCheque(false);
                                 }
                                 else
-                                    MMessageBoxEx.Show(this.chequeDGV, "Не встановлено фіскальний принтер.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    MMessageBoxEx.Show(this.grid_Order, "Не встановлено фіскальний принтер.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
 
                             break;
@@ -1240,13 +1133,13 @@ namespace PayDesk.Components.UI
 
                             if (!getAdminAccess(6, false))
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, "Закриття нефіксованого чеку заблоковано", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MMessageBoxEx.Show(this.grid_Order, "Закриття нефіксованого чеку заблоковано", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 break;
                             }
 
                             if (!getAdminAccess(23, false))
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, "Функція закриття чеку заблоковано", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MMessageBoxEx.Show(this.grid_Order, "Функція закриття чеку заблоковано", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 break;
                             }
 
@@ -1257,7 +1150,7 @@ namespace PayDesk.Components.UI
                             //}
 
                             if (ConfigManager.Instance.CommonConfiguration.Content_Common_PromptMsgOnIllegal &&
-                                DialogResult.Yes != MMessageBoxEx.Show(this.chequeDGV, "Закрити чек без фіксації оплати",
+                                DialogResult.Yes != MMessageBoxEx.Show(this.grid_Order, "Закрити чек без фіксації оплати",
                                 Application.ProductName,
                                 MessageBoxButtons.YesNo,
                                 MessageBoxIcon.Question,
@@ -1277,7 +1170,7 @@ namespace PayDesk.Components.UI
                         {
                             if (!ConfigManager.Instance.CommonConfiguration.APP_SrchTypesAccess[0])
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, "Пошук по назві не дозволений", Application.ProductName,
+                                MMessageBoxEx.Show(this.grid_Order, "Пошук по назві не дозволений", Application.ProductName,
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
@@ -1286,8 +1179,8 @@ namespace PayDesk.Components.UI
                                 SearchFilter(false, 0, true);
                             else
                             {
-                                SrchTbox.Focus();
-                                SrchTbox.Select(SrchTbox.Text.Length, 0);
+                                tb_search.Focus();
+                                tb_search.Select(tb_search.Text.Length, 0);
                             }
                             break;
                         } 
@@ -1297,7 +1190,7 @@ namespace PayDesk.Components.UI
                         {
                             if (!ConfigManager.Instance.CommonConfiguration.APP_SrchTypesAccess[1])
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, "Пошук по коду не дозволений", Application.ProductName,
+                                MMessageBoxEx.Show(this.grid_Order, "Пошук по коду не дозволений", Application.ProductName,
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
@@ -1306,8 +1199,8 @@ namespace PayDesk.Components.UI
                                 SearchFilter(false, 1, true);
                             else
                             {
-                                SrchTbox.Focus();
-                                SrchTbox.Select(SrchTbox.Text.Length, 0);
+                                tb_search.Focus();
+                                tb_search.Select(tb_search.Text.Length, 0);
                             }
                             break;
                         } 
@@ -1318,7 +1211,7 @@ namespace PayDesk.Components.UI
                             //winapi.WinAPI.OutputDebugString("F7");
                             if (!ConfigManager.Instance.CommonConfiguration.APP_SrchTypesAccess[2])
                             {
-                                MMessageBoxEx.Show(this.chequeDGV, "Пошук по штрих-коду не дозволений", Application.ProductName,
+                                MMessageBoxEx.Show(this.grid_Order, "Пошук по штрих-коду не дозволений", Application.ProductName,
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 break;//r
                             }
@@ -1327,8 +1220,8 @@ namespace PayDesk.Components.UI
                                 SearchFilter(false, 2, true);
                             else
                             {
-                                SrchTbox.Focus();
-                                SrchTbox.Select(0, SrchTbox.Text.Length);
+                                tb_search.Focus();
+                                tb_search.Select(0, tb_search.Text.Length);
                             }
                             break;
                         } 
@@ -1337,7 +1230,7 @@ namespace PayDesk.Components.UI
                         #region F8
                         {
                             if (Cheque.ExtendedProperties.Contains("BILL"))
-                                MMessageBoxEx.Show(this.chequeDGV, "Відкритий рахунок №" + " " + Cheque.ExtendedProperties["NOM"], Application.ProductName,
+                                MMessageBoxEx.Show(this.grid_Order, "Відкритий рахунок №" + " " + Cheque.ExtendedProperties["NOM"], Application.ProductName,
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                             break;
                         } 
@@ -1361,8 +1254,8 @@ namespace PayDesk.Components.UI
                         #region ESCAPE
                         {
                             if (this.currSrchType != ConfigManager.Instance.CommonConfiguration.APP_SearchType ||
-                                this.SrchTbox.Text.Length != 0 ||
-                                this.Articles.Rows.Count != this.articleDGV.RowCount)
+                                this.tb_search.Text.Length != 0 ||
+                                this.Articles.Rows.Count != this.grid_Products.RowCount)
                             {
                                 SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
                                 //this.sensorDataPanel1.Navigator.DisplayedCategoryFilter = "";
@@ -1382,17 +1275,17 @@ namespace PayDesk.Components.UI
                             nakladna = !nakladna;
 
                             if (nakladna)
-                                CashLbl.Image = Properties.Resources.naklad;
+                                lbl_orderSuma.Image = Properties.Resources.naklad;
                             else
-                                CashLbl.Image = null;
+                                lbl_orderSuma.Image = null;
                             break;
                         } 
                         #endregion
                     case 0x1F:
                         #region CONTROL
                         {
-                            if (chequeDGV.CurrentCell != null && chequeDGV.CurrentCell.IsInEditMode)
-                                chequeDGV.EndEdit();
+                            if (grid_Order.CurrentCell != null && grid_Order.CurrentCell.IsInEditMode)
+                                grid_Order.EndEdit();
                             break;
                         } 
                         #endregion
@@ -1444,7 +1337,7 @@ namespace PayDesk.Components.UI
         #region InitCtrl SubMethods
         private void RefreshAppInformer()
         {
-            appInfoLabel.Text = string.Format("{0}: {1}     {2}: \"{3}\"     {4}: {5}     {6}: \"{7}\"",
+            lbl_appInfo.Text = string.Format("{0}: {1}     {2}: \"{3}\"     {4}: {5}     {6}: \"{7}\"",
                 "Підрозділ №",
                 ConfigManager.Instance.CommonConfiguration.APP_SubUnit,
                 "Назва підрозділу",
@@ -1458,8 +1351,8 @@ namespace PayDesk.Components.UI
         {
             if (inventChq)
             {
-                CashLbl.Text = string.Format("{0}", "ІНВЕНТАРИЗАЦІЯ"); ;
-                chequeInfoLabel.Text = string.Format("{0}", Cheque.ExtendedProperties["Date"]);
+                lbl_orderSuma.Text = string.Format("{0}", "ІНВЕНТАРИЗАЦІЯ"); ;
+                lbl_moneyInfo.Text = string.Format("{0}", Cheque.ExtendedProperties["Date"]);
             }
             else
             {
@@ -1482,20 +1375,20 @@ namespace PayDesk.Components.UI
                 }
                 
                 if (retriveChq)
-                    chequeInfoLabel.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, Cheque.Rows.Count, totalWord, "повертається на суму");
+                    lbl_moneyInfo.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, Cheque.Rows.Count, totalWord, "повертається на суму");
                 else
-                    chequeInfoLabel.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, Cheque.Rows.Count, totalWord, "продається на суму");
-                CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", realSUMA);
+                    lbl_moneyInfo.Text = string.Format("{0} {1} {2} {3} {4}", "В", ctrlWord, Cheque.Rows.Count, totalWord, "продається на суму");
+                lbl_orderSuma.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", realSUMA);
                 if (DataWorkShared.ExtractOrderProperty(this.Cheque, CoreConst.BILL, null, true) == null)
-                    this.addBillInfo.Text = string.Empty;
+                    this.lbl_billInfo.Text = string.Empty;
             }
 
             if(resetDigitalPanel)
             {
-                CashLbl.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_SumFontColor;
-                CashLbl.Font = ConfigManager.Instance.CommonConfiguration.STYLE_SumFont;
+                lbl_orderSuma.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_SumFontColor;
+                lbl_orderSuma.Font = ConfigManager.Instance.CommonConfiguration.STYLE_SumFont;
 
-                CashLbl.Image = null;
+                lbl_orderSuma.Image = null;
                 digitalPanel.BackgroundImage = null;
                 nakladna = false;
             }
@@ -1504,41 +1397,41 @@ namespace PayDesk.Components.UI
         {
             //Colors
             infoPanel.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundInfPan;
-            addChequeInfo.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundAddPan;
+            lbl_orderInfo.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundAddPan;
             digitalPanel.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundSumRest;
-            chequeDGV.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundNAChqTbl;
-            chequeDGV.DefaultCellStyle.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundNAChqTbl;
-            articleDGV.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundArtTbl;
-            articleDGV.DefaultCellStyle.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundArtTbl;
+            grid_Order.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundNAChqTbl;
+            grid_Order.DefaultCellStyle.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundNAChqTbl;
+            grid_Products.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundArtTbl;
+            grid_Products.DefaultCellStyle.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundArtTbl;
             statusStrip1.BackColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundStatPan;
 
             //Fonts
-            CashLbl.Font = ConfigManager.Instance.CommonConfiguration.STYLE_SumFont;
-            CashLbl.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_SumFontColor;
-            articleDGV.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ArticlesFont;
-            articleDGV.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ArticlesFontColor;
-            chequeDGV.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ChequeFont;
-            chequeDGV.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ChequeFontColor;
+            lbl_orderSuma.Font = ConfigManager.Instance.CommonConfiguration.STYLE_SumFont;
+            lbl_orderSuma.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_SumFontColor;
+            grid_Products.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ArticlesFont;
+            grid_Products.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ArticlesFontColor;
+            grid_Order.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ChequeFont;
+            grid_Order.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ChequeFontColor;
             statusStrip1.Font = ConfigManager.Instance.CommonConfiguration.STYLE_StatusFont;
             statusStrip1.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_StatusFontColor;
-            addChequeInfo.Font = ConfigManager.Instance.CommonConfiguration.STYLE_AddInformerFont;
-            addChequeInfo.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_AddInformerFontColor;
-            chequeInfoLabel.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ChqInformerFont;
-            chequeInfoLabel.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ChqInformerFontColor;
-            appInfoLabel.Font = ConfigManager.Instance.CommonConfiguration.STYLE_AppInformerFont;
-            appInfoLabel.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_AppInformerFontColor;
+            lbl_orderInfo.Font = ConfigManager.Instance.CommonConfiguration.STYLE_AddInformerFont;
+            lbl_orderInfo.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_AddInformerFontColor;
+            lbl_moneyInfo.Font = ConfigManager.Instance.CommonConfiguration.STYLE_ChqInformerFont;
+            lbl_moneyInfo.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_ChqInformerFontColor;
+            lbl_appInfo.Font = ConfigManager.Instance.CommonConfiguration.STYLE_AppInformerFont;
+            lbl_appInfo.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_AppInformerFontColor;
 
             // misc
-            this.articleDGV.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_ArticleRowHeight;
-            this.articleDGV.Invalidate();//
-            this.articleDGV.Refresh();
-            this.articleDGV.Update();
+            this.grid_Products.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_ArticleRowHeight;
+            this.grid_Products.Invalidate();//
+            this.grid_Products.Refresh();
+            this.grid_Products.Update();
             //this.articleDGV.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
             
-            this.chequeDGV.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_ChequeRowHeight;
-            this.chequeDGV.Invalidate();
-            this.chequeDGV.Refresh();
-            this.chequeDGV.Update();
+            this.grid_Order.RowTemplate.Height = ConfigManager.Instance.CommonConfiguration.STYLE_Misc_ChequeRowHeight;
+            this.grid_Order.Invalidate();
+            this.grid_Order.Refresh();
+            this.grid_Order.Update();
             //this.chequeDGV.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
 
         }//ok
@@ -1561,6 +1454,7 @@ namespace PayDesk.Components.UI
             параметриДрукуToolStripMenuItem.Enabled = !inventChq && Cheque.Rows.Count == 0 && ADMIN_STATE;
             змінитиКористувачаToolStripMenuItem.Enabled = !inventChq && Cheque.Rows.Count == 0;
             вихідToolStripMenuItem.Enabled = !inventChq && Cheque.Rows.Count == 0;
+            чекПоверненняToolStripMenuItem.Checked = retriveChq;
 
             //друкуватиРахунокToolStripMenuItem.Enabled = Cheque.ExtendedProperties.Contains("BILL");
             bool isLocked = (bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false);
@@ -1669,7 +1563,7 @@ namespace PayDesk.Components.UI
                         }
                         catch (Exception ex)
                         {
-                            MMessageBoxEx.Show(this.chequeDGV, ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MMessageBoxEx.Show(this.grid_Order, ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         ff.Dispose();
                         break;
@@ -1677,18 +1571,13 @@ namespace PayDesk.Components.UI
                 case "LastDBChanges":
                     {
                         this.timer1_Tick(this.timer1, EventArgs.Empty);
-                        /*uiWndBaseChanges DBChanges = new uiWndBaseChanges();
-                        if (DBChanges.ShowDialog() == DialogResult.OK)
-                            timer1_Tick(timer1, EventArgs.Empty);
-                        DBChanges.Dispose();
-                        */
                         break;
                     }
                 case "Administrator":
                     {
                         DialogResult rez = DialogResult.None;
                         if (ADMIN_STATE)
-                            rez = MMessageBoxEx.Show(this.chequeDGV, "Вийти з режиму адміністратора", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                            rez = MMessageBoxEx.Show(this.grid_Order, "Вийти з режиму адміністратора", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                         else
                             rez = admin.ShowDialog();
 
@@ -1804,7 +1693,7 @@ namespace PayDesk.Components.UI
                     {
                         uiWndRegistration rf = new uiWndRegistration();
                         if (rf.ShowDialog() == DialogResult.OK)
-                            MMessageBoxEx.Show(this.chequeDGV, "Перезавантажте програму для продовження реєстрації", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MMessageBoxEx.Show(this.grid_Order, "Перезавантажте програму для продовження реєстрації", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                         rf.Dispose();
                         break;
                     }
@@ -1881,7 +1770,7 @@ namespace PayDesk.Components.UI
                                 this.chequeContainer.SplitterDistance = this.chequeContainer.Height * 2 / 3;
 
                             */
-                            this.articleDGV.Parent = this.sensorDataPanel1.Placeholder;
+                            this.grid_Products.Parent = this.sensorDataPanel1.Placeholder;
                             //this.articleDGV.BringToFront();
 
                             RefreshComponents(true);
@@ -1907,7 +1796,7 @@ namespace PayDesk.Components.UI
                             this.sensorDataPanel1.Visible = false;
                             this.chequeContainer.Panel2Collapsed = true;
                             
-                            this.articleDGV.Parent = this.splitContainer1.Panel2;
+                            this.grid_Products.Parent = this.splitContainer1.Panel2;
 
                             //this.TopMost = false;
                             управліннToolStripMenuItem.Enabled = false; 
@@ -1984,19 +1873,19 @@ namespace PayDesk.Components.UI
                         {
                             case 1:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Були внесені змінити в поточний рахунок\r\nПерезавантажте рахунок за допомогою меню або натисніть ALT+R", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Були внесені змінити в поточний рахунок\r\nПерезавантажте рахунок за допомогою меню або натисніть ALT+R", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     break;
                                 }
                             case 2:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок вже закритий\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок вже закритий\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     _fl_menuIsActive = false;
                                     this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
                                     break;
                                 }
                             case -1:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок видалений з бази\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок видалений з бази\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     _fl_menuIsActive = false;
                                     this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
                                     break;
@@ -2007,7 +1896,7 @@ namespace PayDesk.Components.UI
 
                         if ((bool)DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.IS_LOCKED, false))
                         {
-                            MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
+                            MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO) + " надрукований клієнту.\r\nЗробіть з нього чек.",
                                 Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             break;//r
                         }
@@ -2016,7 +1905,7 @@ namespace PayDesk.Components.UI
                             break;
                         */
 
-                        if (DialogResult.Yes != MMessageBoxEx.Show(this.chequeDGV, "Анулювати поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO),
+                        if (DialogResult.Yes != MMessageBoxEx.Show(this.grid_Order, "Анулювати поточний рахунок № " + DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO),
                             Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                             break;
                         //CoreLib.LockBill(Cheque, "null");
@@ -2037,19 +1926,19 @@ namespace PayDesk.Components.UI
                         {
                             case 1:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Були внесені змінити в поточний рахунок\r\nПерезавантажте рахунок за допомогою меню або натисніть ALT+R", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Були внесені змінити в поточний рахунок\r\nПерезавантажте рахунок за допомогою меню або натисніть ALT+R", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     break;
                                 }
                             case 2:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок вже закритий\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок вже закритий\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     _fl_menuIsActive = false;
                                     this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
                                     break;
                                 }
                             case -1:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок видалений з бази\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок видалений з бази\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     _fl_menuIsActive = false;
                                     this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
                                     break;
@@ -2073,7 +1962,7 @@ namespace PayDesk.Components.UI
                                 this.RefershMenus();
                             }
                             bPrn.Dispose();
-                            addChequeInfo.Text = string.Empty;
+                            lbl_orderInfo.Text = string.Empty;
                             RowsRemoved_MyEvent(true, true, true);
                             //this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", bs.GetNewBillNo);
                         }
@@ -2090,19 +1979,19 @@ namespace PayDesk.Components.UI
                         {
                             case 1:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Були внесені змінити в поточний рахунок\r\nПерезавантажте рахунок за допомогою меню або натисніть ALT+R", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Були внесені змінити в поточний рахунок\r\nПерезавантажте рахунок за допомогою меню або натисніть ALT+R", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     break;
                                 }
                             case 2:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок вже закритий\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок вже закритий\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     _fl_menuIsActive = false;
                                     this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
                                     break;
                                 }
                             case -1:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок видалений з бази\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок видалений з бази\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     _fl_menuIsActive = false;
                                     this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
                                     break;
@@ -2114,7 +2003,7 @@ namespace PayDesk.Components.UI
                         uiWndBillSave bs = new uiWndBillSave(this.PD_Order);
                         if (bs.ShowDialog() == DialogResult.OK)
                         {
-                            this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", bs.GetNewBillNo);
+                            this.lbl_billInfo.Text = string.Format("{0} {1}", "Рахунок №", bs.GetNewBillNo);
                             uiWndBillPrint bPrn = new uiWndBillPrint(bs.SavedBill);
                             if (bPrn.ShowDialog(this) == DialogResult.OK)
                             {
@@ -2138,19 +2027,19 @@ namespace PayDesk.Components.UI
                         {
                             case 1:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Були внесені змінити в поточний рахунок\r\nПерезавантажте рахунок за допомогою меню або натисніть ALT+R", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Були внесені змінити в поточний рахунок\r\nПерезавантажте рахунок за допомогою меню або натисніть ALT+R", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     break;
                                 }
                             case 2:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок вже закритий\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок вже закритий\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     _fl_menuIsActive = false;
                                     this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
                                     break;
                                 }
                             case -1:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок видалений з бази\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок видалений з бази\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     _fl_menuIsActive = false;
                                     this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
                                     break;
@@ -2168,7 +2057,7 @@ namespace PayDesk.Components.UI
                         uiWndBillSave bs = new uiWndBillSave(this.PD_Order);
                         if (bs.ShowDialog() == DialogResult.OK)
                         {
-                            addChequeInfo.Text = string.Empty;
+                            lbl_orderInfo.Text = string.Empty;
                             RowsRemoved_MyEvent(true, true, true);
                             // if (bs.IsNewBill)
                             // ------ this.addBillInfo.Text = string.Format("{0} {1}", "ЗБЕРЕЖЕНИЙ РАХ.№", bs.GetNewBillNo);
@@ -2192,10 +2081,10 @@ namespace PayDesk.Components.UI
                             {
                                 Cheque.Merge(bl.LoadedBill);
                                 this.UpdateDiscountValues(this.Cheque);
-                                this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO));
+                                this.lbl_billInfo.Text = string.Format("{0} {1}", "Рахунок №", DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO));
                                 UpdateSumInfo(true);
                             }
-                            else MMessageBoxEx.Show(this.chequeDGV, "Неможливо відкрити рахунок\nТаблиця чеку не є порожня", Application.ProductName,
+                            else MMessageBoxEx.Show(this.grid_Order, "Неможливо відкрити рахунок\nТаблиця чеку не є порожня", Application.ProductName,
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                         bl.Dispose();
                         break;
@@ -2207,19 +2096,19 @@ namespace PayDesk.Components.UI
                         {
                             case 1:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Були внесені змінити в поточний рахунок\r\nПерезавантажте рахунок за допомогою меню або натисніть ALT+R", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Були внесені змінити в поточний рахунок\r\nПерезавантажте рахунок за допомогою меню або натисніть ALT+R", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     break;
                                 }
                             case 2:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок вже закритий\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок вже закритий\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     _fl_menuIsActive = false;
                                     this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
                                     break;
                                 }
                             case -1:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок видалений з бази\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок видалений з бази\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     _fl_menuIsActive = false;
                                     this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
                                     break;
@@ -2243,19 +2132,19 @@ namespace PayDesk.Components.UI
                         {
                             case 1:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Були внесені змінити в поточний рахунок\r\nПерезавантажте рахунок за допомогою меню або натисніть ALT+R", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Були внесені змінити в поточний рахунок\r\nПерезавантажте рахунок за допомогою меню або натисніть ALT+R", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     break;
                                 }
                             case 2:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок вже закритий\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок вже закритий\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     _fl_menuIsActive = false;
                                     this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
                                     break;
                                 }
                             case -1:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок видалений з бази\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок видалений з бази\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     _fl_menuIsActive = false;
                                     this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
                                     break;
@@ -2270,7 +2159,7 @@ namespace PayDesk.Components.UI
                         if (bs.ShowDialog() == DialogResult.OK)
                         {
                             //if (bs.IsNewBill)
-                            this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", bs.GetNewBillNo);
+                            this.lbl_billInfo.Text = string.Format("{0} {1}", "Рахунок №", bs.GetNewBillNo);
                             //this.PD_Order = bs.SavedBill;
                             // else
                             //    this.addBillInfo.Text = "";
@@ -2293,19 +2182,19 @@ namespace PayDesk.Components.UI
                         {
                             case 1:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Були внесені змінити в поточний рахунок\r\nПерезавантажте рахунок за допомогою меню або натисніть ALT+R", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Були внесені змінити в поточний рахунок\r\nПерезавантажте рахунок за допомогою меню або натисніть ALT+R", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     break;
                                 }
                             case 2:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок вже закритий\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок вже закритий\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     _fl_menuIsActive = false;
                                     this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
                                     break;
                                 }
                             case -1:
                                 {
-                                    MMessageBoxEx.Show(this.chequeDGV, "Поточний рахунок видалений з бази\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MMessageBoxEx.Show(this.grid_Order, "Поточний рахунок видалений з бази\r\nНатисніть ОК для продовження роботи", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     _fl_menuIsActive = false;
                                     this.Menu_ItemClicked(this.billMenu, new ToolStripItemClickedEventArgs(закритиБезЗмінToolStripMenuItem));
                                     break;
@@ -2319,7 +2208,7 @@ namespace PayDesk.Components.UI
                         if (bs.ShowDialog() == DialogResult.OK)
                         {
                             //if (bs.IsNewBill)
-                            this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", bs.GetNewBillNo);
+                            this.lbl_billInfo.Text = string.Format("{0} {1}", "Рахунок №", bs.GetNewBillNo);
                             //this.PD_Order = bs.SavedBill;
                             // else
                             //    this.addBillInfo.Text = "";
@@ -2338,13 +2227,13 @@ namespace PayDesk.Components.UI
                         DataTable LoadedBill = DataWorkBill.LoadCombinedBill(ConfigManager.Instance.CommonConfiguration.Path_Bills + "\\" + billName.ToString());
                         RowsRemoved_MyEvent(true, true, true);
                         Cheque.Merge(LoadedBill);
-                        this.addBillInfo.Text = string.Format("{0} {1}", "Рахунок №", DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO));
+                        this.lbl_billInfo.Text = string.Format("{0} {1}", "Рахунок №", DataWorkShared.ExtractBillProperty(this.Cheque, CoreConst.BILL_NO));
                         UpdateSumInfo(true);
                         break;
                     }
                 case "CloseBillWithoutChanges": // CloseBill
                     {
-                        addChequeInfo.Text = string.Empty;
+                        lbl_orderInfo.Text = string.Empty;
                         RowsRemoved_MyEvent(true, true, true);
                         break;
                     }
@@ -2370,8 +2259,8 @@ namespace PayDesk.Components.UI
 
             switch (((ContextMenuStrip)sender).Tag.ToString())
             {
-                case "ChequeTableContext": chequeDGV.Select(); break;
-                case "ArticleTableContext": articleDGV.Select(); break;
+                case "ChequeTableContext": grid_Order.Select(); break;
+                case "ArticleTableContext": grid_Products.Select(); break;
                 case "ColumnsTableContext": break;
             }
 
@@ -2452,32 +2341,32 @@ namespace PayDesk.Components.UI
                     {
                         uiWndColumnsEditorBox colEd = null;
 
-                        if (chequeDGV.NewRowIndex == -1 && chequeDGV.Focused)
-                            colEd = new uiWndColumnsEditorBox(ref chequeDGV, 1);
-                        if (articleDGV.NewRowIndex == -1 && articleDGV.Focused)
-                            colEd = new uiWndColumnsEditorBox(ref articleDGV, 2);
+                        if (grid_Order.NewRowIndex == -1 && grid_Order.Focused)
+                            colEd = new uiWndColumnsEditorBox(ref grid_Order, 1);
+                        if (grid_Products.NewRowIndex == -1 && grid_Products.Focused)
+                            colEd = new uiWndColumnsEditorBox(ref grid_Products, 2);
                         
                         colEd.ShowDialog();
                         colEd.Dispose();
 
-                        ViewLib.SaveGridsView(new DataGridView[] { chequeDGV, articleDGV }, splitContainer1.Orientation);
+                        ViewLib.SaveGridsView(new DataGridView[] { grid_Order, grid_Products }, splitContainer1.Orientation);
                         break;
                     }
                 case "FieldLock":
                     {
                         закріпитиToolStripMenuItem.Checked = !закріпитиToolStripMenuItem.Checked;
 
-                        if (chequeDGV.Focused)
+                        if (grid_Order.Focused)
                         {
-                            chequeDGV.AllowUserToOrderColumns = !закріпитиToolStripMenuItem.Checked;
-                            chequeDGV.AllowUserToResizeColumns = !закріпитиToolStripMenuItem.Checked;
+                            grid_Order.AllowUserToOrderColumns = !закріпитиToolStripMenuItem.Checked;
+                            grid_Order.AllowUserToResizeColumns = !закріпитиToolStripMenuItem.Checked;
                             ConfigManager.Instance.CommonConfiguration.STYLE_ChqColumnLock = закріпитиToolStripMenuItem.Checked;
                             break;
                         }
-                        if (articleDGV.Focused)
+                        if (grid_Products.Focused)
                         {
-                            articleDGV.AllowUserToOrderColumns = !закріпитиToolStripMenuItem.Checked;
-                            articleDGV.AllowUserToResizeColumns = !закріпитиToolStripMenuItem.Checked;
+                            grid_Products.AllowUserToOrderColumns = !закріпитиToolStripMenuItem.Checked;
+                            grid_Products.AllowUserToResizeColumns = !закріпитиToolStripMenuItem.Checked;
                             ConfigManager.Instance.CommonConfiguration.STYLE_ArtColumnLock = закріпитиToolStripMenuItem.Checked;
                         }
                         break;
@@ -2485,7 +2374,7 @@ namespace PayDesk.Components.UI
                 case "SaveFieldPositions":
                     {
                         SaveGUI();
-                        ViewLib.SaveGridsView(new DataGridView[] { chequeDGV, articleDGV }, splitContainer1.Orientation);
+                        ViewLib.SaveGridsView(new DataGridView[] { grid_Order, grid_Products }, splitContainer1.Orientation);
                         break;
                     } 
                 #endregion
@@ -2507,7 +2396,7 @@ namespace PayDesk.Components.UI
             if (Cheque.Rows.Count % ConfigManager.Instance.CommonConfiguration.APP_InvAutoSave == 0 && inventChq)
                 DataWorkCheque.SaveInvent(Cheque, true, this.Cheques);
 
-            if (chequeDGV.Rows.Count == 1)
+            if (grid_Order.Rows.Count == 1)
                 RefershMenus();
 
             if (!inventChq)
@@ -2521,7 +2410,7 @@ namespace PayDesk.Components.UI
         private void chequeDGV_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
             //winapi.Funcs.OutputDebugString("1");
-            chequeDGV.Rows[e.RowIndex].Selected = true;
+            grid_Order.Rows[e.RowIndex].Selected = true;
             //winapi.Funcs.OutputDebugString("2");
         }
         /// <summary>
@@ -2532,17 +2421,17 @@ namespace PayDesk.Components.UI
         private void chequeDGV_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             //winapi.WinAPI.OutputDebugString("3");
-            double addedTot = MathLib.GetDouble(chequeDGV["TOT", e.RowIndex].Value.ToString());
+            double addedTot = MathLib.GetDouble(grid_Order["TOT", e.RowIndex].Value.ToString());
             addedTot = MathLib.GetRoundedDose(addedTot);
 
             if (addedTot <= 0 && !this.сенсорToolStripMenuItem.Checked)
             {
-                MMessageBoxEx.Show(this.chequeDGV, "Помилкове значення кількості", Application.ProductName);
-                chequeDGV.BeginEdit(true);
+                MMessageBoxEx.Show(this.grid_Order, "Помилкове значення кількості", Application.ProductName);
+                grid_Order.BeginEdit(true);
             }
             else
             {
-                double activeTot = MathLib.GetDouble(chequeDGV["TMPTOT", e.RowIndex].Value);
+                double activeTot = MathLib.GetDouble(grid_Order["TMPTOT", e.RowIndex].Value);
                 double thisTot = addedTot + activeTot;
                 if (thisTot <= 0)
                 {
@@ -2550,34 +2439,34 @@ namespace PayDesk.Components.UI
                     else thisTot = 1.0;
                 }
                 thisTot = MathLib.GetRoundedDose(thisTot);
-                double price = MathLib.GetDouble(chequeDGV["PRICE", e.RowIndex].Value.ToString());
+                double price = MathLib.GetDouble(grid_Order["PRICE", e.RowIndex].Value.ToString());
                 if (UserConfig.Properties[8])
                 {
-                    DataRow dRow = Cheque.Rows.Find(chequeDGV.CurrentRow.Cells["C"].Value);
+                    DataRow dRow = Cheque.Rows.Find(grid_Order.CurrentRow.Cells["C"].Value);
                     price = CoreLib.AutomaticPrice(thisTot, dRow);
                 }
                 double sum = MathLib.GetRoundedMoney(thisTot * price);
 
-                chequeDGV["TOT", e.RowIndex].Value = thisTot;
-                chequeDGV["TMPTOT", e.RowIndex].Value = thisTot;
-                chequeDGV["PRICE", e.RowIndex].Value = price;
-                chequeDGV["SUM", e.RowIndex].Value = sum;
-                chequeDGV["ASUM", e.RowIndex].Value = sum;
-                chequeDGV.Update();
+                grid_Order["TOT", e.RowIndex].Value = thisTot;
+                grid_Order["TMPTOT", e.RowIndex].Value = thisTot;
+                grid_Order["PRICE", e.RowIndex].Value = price;
+                grid_Order["SUM", e.RowIndex].Value = sum;
+                grid_Order["ASUM", e.RowIndex].Value = sum;
+                grid_Order.Update();
 
                 UpdateSumInfo(true);
-                SrchTbox.Select();
-                SrchTbox.SelectAll();
+                tb_search.Select();
+                tb_search.SelectAll();
 
                 try
                 {
-                    DataRow[] dr = Articles.Select("ID like '" + chequeDGV.CurrentRow.Cells["TID"].Value + "'");
+                    DataRow[] dr = Articles.Select("ID like '" + grid_Order.CurrentRow.Cells["TID"].Value + "'");
                     if (dr != null && dr.Length != 0 && dr[0] != null)
                     {
-                        thisTot = MathLib.GetDouble(chequeDGV["TQ", e.RowIndex].Value);
+                        thisTot = MathLib.GetDouble(grid_Order["TQ", e.RowIndex].Value);
                         if (thisTot != 0)
-                            addedTot *= MathLib.GetDouble(chequeDGV["TQ", e.RowIndex].Value);
-                        CoreLib.AddArticleToCheque(chequeDGV, articleDGV, dr[0], addedTot, Articles);
+                            addedTot *= MathLib.GetDouble(grid_Order["TQ", e.RowIndex].Value);
+                        CoreLib.AddArticleToCheque(grid_Order, grid_Products, dr[0], addedTot, Articles);
                     }
                 }
                 catch { }
@@ -2592,7 +2481,7 @@ namespace PayDesk.Components.UI
 
             if (e.Button == MouseButtons.Right)
             {
-                DataGridView.HitTestInfo info = chequeDGV.HitTest(e.X, e.Y);
+                DataGridView.HitTestInfo info = grid_Order.HitTest(e.X, e.Y);
 
                 if (info.ColumnIndex > 0 && info.RowIndex < 0)
                 {
@@ -2634,7 +2523,7 @@ namespace PayDesk.Components.UI
                 return;
 
             (sender as DataGridView).CurrentCell = (sender as DataGridView)[e.ColumnIndex, e.RowIndex];
-            DDM_Status.Text = CoreLib.ShowArticleInfo(chequeDGV, articleDGV);
+            DDM_Status.Text = CoreLib.ShowArticleInfo(grid_Order, grid_Products);
 
             // seonsor command
             if (this.сенсорToolStripMenuItem.Checked && (sender as DataGridView).Name == "articleDGV")
@@ -2649,7 +2538,7 @@ namespace PayDesk.Components.UI
                 return;
 
             (sender as DataGridView).CurrentCell = (sender as DataGridView)[e.ColumnIndex, e.RowIndex];
-            DDM_Status.Text = CoreLib.ShowArticleInfo(chequeDGV, articleDGV);
+            DDM_Status.Text = CoreLib.ShowArticleInfo(grid_Order, grid_Products);
 
             // Send ENTER Key
             Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
@@ -2657,14 +2546,14 @@ namespace PayDesk.Components.UI
         private void DGV_Enter(object sender, EventArgs e)
         {
             if ((sender as DataGridView).Name == "chequeDGV")
-                chequeDGV.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundAChqTbl;
+                grid_Order.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundAChqTbl;
 
             (sender as DataGridView).DefaultCellStyle.SelectionBackColor = Color.FromKnownColor(KnownColor.Highlight);
         }//ok
         private void DGV_Leave(object sender, EventArgs e)
         {
             if ((sender as DataGridView).Name == "chequeDGV")
-                chequeDGV.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundNAChqTbl;
+                grid_Order.BackgroundColor = ConfigManager.Instance.CommonConfiguration.STYLE_BackgroundNAChqTbl;
             (sender as DataGridView).DefaultCellStyle.SelectionBackColor = Color.FromKnownColor(KnownColor.InactiveCaption);
         }//ok
         #endregion
@@ -2754,6 +2643,7 @@ namespace PayDesk.Components.UI
                 }
             }
 
+<<<<<<< HEAD
             // clear all prev data
             Articles.Rows.Clear();
             AltBC.Rows.Clear();
@@ -2767,6 +2657,21 @@ namespace PayDesk.Components.UI
             // check app state
             this._fl_isOk = new Com_SecureRuntime().FullLoader();
             this.label_uiWndmain_DemoShowArt.Visible = this.label_uiWndmain_DemoShowChq.Visible = !this._fl_isOk;
+=======
+            //MessageBox.Show("done 1");
+
+            List<string> allProfiles = new List<string>();
+            //bool wasUpdatedAtLeastOneSource = false;
+            _fl_artUpdated = false;
+            foreach (DictionaryEntry de in hfiles)
+            {
+
+                string[] files = (string[])de.Value;
+
+                allProfiles.Add(de.Key.ToString());
+
+                /* detectiong for updates */
+>>>>>>> stable
 
             // indicate that next time we will show message about new chages
             this._fl_onlyUpdate = true; // <- this is false at startup
@@ -2992,6 +2897,7 @@ namespace PayDesk.Components.UI
             ////MessageBox.Show("done 8");
             //Com_WinApi.OutputDebugString("MainWnd --- AddingData End");
 
+<<<<<<< HEAD
             //if (_fl_artUpdated)
             //{
             //    if (this.WindowState == FormWindowState.Minimized)
@@ -3000,6 +2906,16 @@ namespace PayDesk.Components.UI
             //    MMessageBoxEx.Show(this.chequeDGV, "Були внесені зміни в базу товарів", Application.ProductName,
             //        MessageBoxButtons.OK, MessageBoxIcon.Information);
             //}
+=======
+            if (_fl_artUpdated)
+            {
+                if (this.WindowState == FormWindowState.Minimized)
+                    this.WindowState = FormWindowState.Normal;
+                this.BringToFront();
+                MMessageBoxEx.Show(this.grid_Order, "Були внесені зміни в базу товарів", Application.ProductName,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+>>>>>>> stable
 
             ////MessageBox.Show("done 9");
             //_fl_onlyUpdate = true;
@@ -3009,9 +2925,15 @@ namespace PayDesk.Components.UI
             //this.label_uiWndmain_DemoShowArt.Visible = this.label_uiWndmain_DemoShowChq.Visible = !this._fl_isOk;
             ////MessageBox.Show("done 10");
 
+<<<<<<< HEAD
             //timer1.Start();
             //SrchTbox.Select();
             //GC.Collect();
+=======
+            timer1.Start();
+            tb_search.Select();
+            GC.Collect();
+>>>>>>> stable
 
             ///* device status */
             //if (Program.AppPlugins.IsActive(PluginType.LegalPrinterDriver))
@@ -3230,7 +3152,7 @@ namespace PayDesk.Components.UI
             double dValue = 0.0;
             double taxValue = 0.0;
             double artSum = 0.0;
-            int index = 0;
+            //int index = 0;
             DataRow[] dRows = null;
             double discSUMA = 0.0;
             //DataRow[] artRecord = null;
@@ -3838,7 +3760,7 @@ namespace PayDesk.Components.UI
         private void UpdateSumDisplay(bool updateAddChequeInfo, bool updateCustomer)
         {
             if (updateAddChequeInfo)
-                addChequeInfo.Text = string.Empty;
+                lbl_orderInfo.Text = string.Empty;
             // if (updateAddChequeInfo && discCommonPercent != 0.0)
 
             if (discConstPercent != 0.0 || discArrPercent[0] != 0.0 || discArrPercent[1] != 0.0 ||
@@ -3924,20 +3846,20 @@ namespace PayDesk.Components.UI
                                 discInfo[5] = string.Format(valueMask, Math.Abs(discArrPercent[1]), "%");
                     }
 
-                addChequeInfo.Text = valueMask = string.Empty;
+                lbl_orderInfo.Text = valueMask = string.Empty;
                 for (byte i = 0; i < discInfo.Length && discInfo[i] != null; i++)
                     valueMask += (discInfo[i] + " ");
-                addChequeInfo.Text = valueMask.Remove(valueMask.Length - 1, 1);
+                lbl_orderInfo.Text = valueMask.Remove(valueMask.Length - 1, 1);
             }
 
             //Show cheque Suma on display
             string cashLabelFormat = string.Format("{0: ;-; } {{0:F{1}}}", retriveChq ? -1 : 1, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals);
-            CashLbl.Text = string.Format(cashLabelFormat, realSUMA);
+            lbl_orderSuma.Text = string.Format(cashLabelFormat, realSUMA);
 
             if (ConfigManager.Instance.CommonConfiguration.APP_ShowInfoOnIndicator && Program.AppPlugins.IsActive(PluginType.LegalPrinterDriver) && updateCustomer)
                 try
                 {
-                    string _topLabel = "СУМА:" + CashLbl.Text;
+                    string _topLabel = "СУМА:" + lbl_orderSuma.Text;
                     if (discCommonPercent != 0)
                     {
                         if (discCommonPercent > 0)
@@ -3950,8 +3872,8 @@ namespace PayDesk.Components.UI
                     string[] lines = new string[] { string.Empty, string.Empty };
                     bool[] show = new bool[] { true, true };
                     if (Cheque.Rows.Count != 0)
-                        lines = new string[] { _topLabel, chequeDGV.CurrentRow.Cells["DESC"].Value.ToString() };
-                    Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_SendCustomer", lines, show);
+                        lines = new string[] { _topLabel, grid_Order.CurrentRow.Cells["DESC"].Value.ToString() };
+                    Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunctionIgnoreAnswer("FP_SendCustomer", lines, show);
                 }
                 catch { }
         }
@@ -3976,6 +3898,7 @@ namespace PayDesk.Components.UI
             uiWndPayment pMethod = new uiWndPayment(realSUMA, true);
             pMethod.ShowDialog();
             pMethod.Dispose();
+            StringBuilder _moneyInfo = new StringBuilder();
 
 
 
@@ -3984,11 +3907,11 @@ namespace PayDesk.Components.UI
 
 
             if (UserConfig.Properties[4] &&
-                DialogResult.Yes == MMessageBoxEx.Show(this.chequeDGV, "Видати накладну згідно цього чеку ?", Application.ProductName,
+                DialogResult.Yes == MMessageBoxEx.Show(this.grid_Order, "Видати накладну згідно цього чеку ?", Application.ProductName,
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2))
             {
                 nakladna = true;
-                CashLbl.Image = Properties.Resources.naklad;
+                lbl_orderSuma.Image = Properties.Resources.naklad;
             }
 
             switch (pMethod.Type[0])
@@ -4027,6 +3950,7 @@ namespace PayDesk.Components.UI
                     //profileKey = de.Key;
                     // profile main index
                     currentProfileKey = profileKey;
+
 
                     pIdx++;
 
@@ -4067,6 +3991,12 @@ namespace PayDesk.Components.UI
                     profileResult["PROFILE_LAST"] = pIdx == ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count;
 
 
+                    try
+                    {
+                        Hashtable _info = (Hashtable)ConfigManager.Instance.CommonConfiguration.PROFILES_Items[currentProfileKey];
+                        _moneyInfo.AppendFormat("{0}: {1:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}; ", _info["NAME"], _chqSUMA);
+                    }
+                    catch { }
 
                     /* close logic implementation */
 
@@ -4141,7 +4071,7 @@ namespace PayDesk.Components.UI
                             catch { }
 
                             CoreLib.WriteLog(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name);
-                            MMessageBoxEx.Show(this.chequeDGV, "Помилка під час продажу товарів" + "\r\n" + ex.Message,
+                            MMessageBoxEx.Show(this.grid_Order, "Помилка під час продажу товарів" + "\r\n" + ex.Message,
                                 Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
@@ -4167,7 +4097,7 @@ namespace PayDesk.Components.UI
                             catch { }
 
                             CoreLib.WriteLog(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name);
-                            MMessageBoxEx.Show(this.chequeDGV, "Помилка під час закриття чеку" + "\r\n" + ex.Message,
+                            MMessageBoxEx.Show(this.grid_Order, "Помилка під час закриття чеку" + "\r\n" + ex.Message,
                                 Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
@@ -4184,7 +4114,7 @@ namespace PayDesk.Components.UI
                             uiWndChqNomRequest chqR = new uiWndChqNomRequest();
 
                             bool customOrderNo = false;
-                            if (chqR.ShowDialog(this.chequeDGV) == System.Windows.Forms.DialogResult.Yes)
+                            if (chqR.ShowDialog(this.grid_Order) == System.Windows.Forms.DialogResult.Yes)
                             {
                                 customOrderNo = true;
                                 chqNom = chqR.ChequeNumber.ToString();
@@ -4203,7 +4133,7 @@ namespace PayDesk.Components.UI
                         }
                         catch (Exception ex)
                         {
-                            MMessageBoxEx.Show(this.chequeDGV, "Не вдається отримати номер Z-звіту" + "\r\n" + ex.Message,
+                            MMessageBoxEx.Show(this.grid_Order, "Не вдається отримати номер Z-звіту" + "\r\n" + ex.Message,
                                 Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             CoreLib.WriteLog(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name);
                         }
@@ -4214,7 +4144,7 @@ namespace PayDesk.Components.UI
                         }
                         catch (Exception ex)
                         {
-                            MMessageBoxEx.Show(this.chequeDGV, "Помилка відкриття грошової скриньки" + "\r\n" + ex.Message,
+                            MMessageBoxEx.Show(this.grid_Order, "Помилка відкриття грошової скриньки" + "\r\n" + ex.Message,
                                 Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             CoreLib.WriteLog(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name);
                         }
@@ -4251,7 +4181,7 @@ namespace PayDesk.Components.UI
 
             if (skippedProfiles == ConfigManager.Instance.CommonConfiguration.PROFILES_Items.Count)
             {
-                MMessageBox.Show(this.chequeDGV, "Немає товарів для усіх профілів. Обновіть фільтри профілів.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MMessageBox.Show(this.grid_Order, "Немає товарів для усіх профілів. Обновіть фільтри профілів.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 //UpdateSumInfo_profile(currentProfileKey, false);
                 return;
             }
@@ -4259,7 +4189,7 @@ namespace PayDesk.Components.UI
 
             if (generalError)
             {
-                MMessageBox.Show(this.chequeDGV, "Виникла помилка під час збереження частини чеку.\r\nСпробуйте ще раз закрити чек", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MMessageBox.Show(this.grid_Order, "Виникла помилка під час збереження частини чеку.\r\nСпробуйте ще раз закрити чек", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 UpdateSumInfo_profile(currentProfileKey, false);
                 return;
             }
@@ -4284,7 +4214,7 @@ namespace PayDesk.Components.UI
 
                 //File.Delete(Cheque.ExtendedProperties["PATH"].ToString());
             }
-            
+            retriveChq = false;
             string closedInfo = string.Empty;
             if (chqNumbers.Count > 1)
                 closedInfo = string.Format("{0} {1} ", "Закриті чеки №", string.Join(",", chqNumbers.ToArray()));
@@ -4294,21 +4224,26 @@ namespace PayDesk.Components.UI
                 closedInfo += string.Format("{0} {1} ", "з рахунку №", DataWorkShared.ExtractBillProperty(this.PD_Order, CoreConst.BILL_NO, string.Empty));
 
             RowsRemoved_MyEvent(false, true, true);
-            CashLbl.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_RestFontColor;
-            CashLbl.Font = ConfigManager.Instance.CommonConfiguration.STYLE_RestFont;
-            CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", pMethod.Rest);
-            chequeInfoLabel.Text = string.Format("{0} {1:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", "залишок з суми", pMethod.CashSum);
-            this.addBillInfo.Text = string.Empty;
-            addChequeInfo.Text = closedInfo;
+            lbl_orderSuma.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_RestFontColor;
+            lbl_orderSuma.Font = ConfigManager.Instance.CommonConfiguration.STYLE_RestFont;
+            lbl_orderSuma.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", pMethod.Rest);
+            
+            // update summ label
+            _moneyInfo.Insert(0, string.Format("{0}: {1:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}; ||| ", "Гроші", pMethod.CashSum));
+            lbl_moneyInfo.Text = _moneyInfo.ToString().Trim();
+            
+            
+            this.lbl_billInfo.Text = string.Empty;
+            lbl_orderInfo.Text = closedInfo;
             
             if (isLegalMode && ConfigManager.Instance.CommonConfiguration.APP_ShowInfoOnIndicator)
                 try
                 {
                     string[] lines = new string[2];
                     lines[0] = string.Format("{0} : {1:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", "Гроші", pMethod.CashSum);
-                    lines[1] = string.Format("{0} : {1}", "Здача", CashLbl.Text);
+                    lines[1] = string.Format("{0} : {1}", "Здача", lbl_orderSuma.Text);
                     bool[] show = new bool[] { true, true };
-                    Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_SendCustomer", lines, show);
+                    Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunctionIgnoreAnswer("FP_SendCustomer", lines, show);
                 }
                 catch { }
 
@@ -4340,11 +4275,11 @@ namespace PayDesk.Components.UI
             }
 
             if (UserConfig.Properties[4] &&
-                DialogResult.Yes == MMessageBoxEx.Show(this.chequeDGV, "Видати накладну згідно цього чеку ?", Application.ProductName,
+                DialogResult.Yes == MMessageBoxEx.Show(this.grid_Order, "Видати накладну згідно цього чеку ?", Application.ProductName,
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2))
             {
                 nakladna = true;
-                CashLbl.Image = Properties.Resources.naklad;
+                lbl_orderSuma.Image = Properties.Resources.naklad;
             }
 
             localData[0] = clientID == string.Empty ? ConfigManager.Instance.CommonConfiguration.APP_ClientID : clientID;
@@ -4404,12 +4339,12 @@ namespace PayDesk.Components.UI
                 {
                     CoreLib.WriteLog(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name);
 
-                    MMessageBoxEx.Show(this.chequeDGV, "Помилка під час закриття чеку" + "\r\n" + ex.Message,
+                    MMessageBoxEx.Show(this.grid_Order, "Помилка під час закриття чеку" + "\r\n" + ex.Message,
                         Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                     bool customOrderNo = false;
                     uiWndChqNomRequest chqR = new uiWndChqNomRequest();
-                    if (chqR.ShowDialog(this.chequeDGV) == System.Windows.Forms.DialogResult.Yes)
+                    if (chqR.ShowDialog(this.grid_Order) == System.Windows.Forms.DialogResult.Yes)
                     {
                         customOrderNo = true;
                         chqNom = chqR.ChequeNumber.ToString();
@@ -4440,7 +4375,7 @@ namespace PayDesk.Components.UI
                 }
                 catch (Exception ex)
                 {
-                    MMessageBoxEx.Show(this.chequeDGV, "Помилка відкриття грошової скриньки" + "\r\n" + ex.Message,
+                    MMessageBoxEx.Show(this.grid_Order, "Помилка відкриття грошової скриньки" + "\r\n" + ex.Message,
                         Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     CoreLib.WriteLog(ex, System.Reflection.MethodInfo.GetCurrentMethod().Name);
                 }
@@ -4488,14 +4423,14 @@ namespace PayDesk.Components.UI
             RowsRemoved_MyEvent(false, true, true);
 
 
-            CashLbl.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_RestFontColor;
-            CashLbl.Font = ConfigManager.Instance.CommonConfiguration.STYLE_RestFont;
-            CashLbl.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", pMethod.Rest);
-            chequeInfoLabel.Text = string.Format("{0} {1:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", "залишок з суми", pMethod.CashSum);
-            addChequeInfo.Text = string.Format("{0} {1} ", "Закритий чек №", chqNom);
+            lbl_orderSuma.ForeColor = ConfigManager.Instance.CommonConfiguration.STYLE_RestFontColor;
+            lbl_orderSuma.Font = ConfigManager.Instance.CommonConfiguration.STYLE_RestFont;
+            lbl_orderSuma.Text = string.Format("{0:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", pMethod.Rest);
+            lbl_moneyInfo.Text = string.Format("{0} {1:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", "залишок з суми", pMethod.CashSum);
+            lbl_orderInfo.Text = string.Format("{0} {1} ", "Закритий чек №", chqNom);
             if (DataWorkShared.ExtractBillProperty(this.PD_Order, CoreConst.BILL_NO, string.Empty) != string.Empty)
-                addChequeInfo.Text += string.Format("{0} {1} ", "з рахунку №", DataWorkShared.ExtractBillProperty(this.PD_Order, CoreConst.BILL_NO, string.Empty));
-            this.addBillInfo.Text = string.Empty;
+                lbl_orderInfo.Text += string.Format("{0} {1} ", "з рахунку №", DataWorkShared.ExtractBillProperty(this.PD_Order, CoreConst.BILL_NO, string.Empty));
+            this.lbl_billInfo.Text = string.Empty;
 
 
             if (isLegalMode && ConfigManager.Instance.CommonConfiguration.APP_ShowInfoOnIndicator)
@@ -4503,9 +4438,9 @@ namespace PayDesk.Components.UI
                 {
                     string[] lines = new string[2];
                     lines[0] = string.Format("{0} : {1:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}", "Гроші", pMethod.CashSum);
-                    lines[1] = string.Format("{0} : {1}", "Здача", CashLbl.Text);
+                    lines[1] = string.Format("{0} : {1}", "Здача", lbl_orderSuma.Text);
                     bool[] show = new bool[] { true, true };
-                    Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunction("FP_SendCustomer", lines, show);
+                    Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunctionIgnoreAnswer("FP_SendCustomer", lines, show);
                 }
                 catch { }
 
@@ -4679,7 +4614,7 @@ namespace PayDesk.Components.UI
                         SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, false);
                     }
                     else
-                        MMessageBoxEx.Show(this.chequeDGV, "Немає клієнта з кодом" + " " + barcode, "Результат пошуку",
+                        MMessageBoxEx.Show(this.grid_Order, "Немає клієнта з кодом" + " " + barcode, "Результат пошуку",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     return allowToShow;
@@ -4752,7 +4687,7 @@ namespace PayDesk.Components.UI
             {
                 //MMessageBoxEx.Show(this.chequeDGV, "Немає товару з таким штрих-кодом");
                 if (showMsg)
-                    MMessageBoxEx.Show(this.chequeDGV, "Немає товару з таким штрих-кодом", Application.ProductName,
+                    MMessageBoxEx.Show(this.grid_Order, "Немає товару з таким штрих-кодом", Application.ProductName,
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 if (currSrchType != ConfigManager.Instance.CommonConfiguration.APP_SearchType)
                     SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
@@ -4763,7 +4698,7 @@ namespace PayDesk.Components.UI
 
             if (dr.Length == 1)
             {
-                CoreLib.AddArticleToCheque(chequeDGV, articleDGV, dr[0], weightOfArticle, Articles);
+                CoreLib.AddArticleToCheque(grid_Order, grid_Products, dr[0], weightOfArticle, Articles);
                 if (!UserConfig.Properties[22])
                     SearchFilter(true, currSrchType, true);
                 allowToShow = false;
@@ -4777,8 +4712,8 @@ namespace PayDesk.Components.UI
                     sTable.Rows.Add(dr[i].ItemArray);
                 sTable.EndLoadData();
 
-                articleDGV.DataSource = sTable;
-                articleDGV.Select();
+                grid_Products.DataSource = sTable;
+                grid_Products.Select();
                 allowToShow = true;
             }
 
@@ -4798,12 +4733,12 @@ namespace PayDesk.Components.UI
             if (close)
             {
                 Com_WinApi.OutputDebugString("MainWnd --- SearchFilter - reseting data begin");
-                articleDGV.DataSource = Articles;
+                grid_Products.DataSource = Articles;
                 Com_WinApi.OutputDebugString("MainWnd --- SearchFilter - reseting data end");
             }
 
             if (!saveSearchText)
-                SrchTbox.Text = string.Empty;
+                tb_search.Text = string.Empty;
 
             // hide product panel when it was displayed automatically
             if (splitContainer1.Panel2.Tag != null)
@@ -4819,30 +4754,30 @@ namespace PayDesk.Components.UI
             {
                 case 0:
                     {
-                        SrchTbox.BackColor = Color.FromArgb(255, 255, 192);
+                        tb_search.BackColor = Color.FromArgb(255, 255, 192);
                         searchImage.BackColor = Color.FromArgb(255, 255, 192);
                         searchImage.BackgroundImage = Properties.Resources.by_name;
                         break;
                     }
                 case 1:
                     {
-                        SrchTbox.BackColor = Color.FromArgb(192, 255, 192);
+                        tb_search.BackColor = Color.FromArgb(192, 255, 192);
                         searchImage.BackColor = Color.FromArgb(192, 255, 192);
                         searchImage.BackgroundImage = Properties.Resources.by_c;
                         break;
                     }
                 case 2:
                     {
-                        SrchTbox.BackColor = Color.FromArgb(255, 192, 192);
+                        tb_search.BackColor = Color.FromArgb(255, 192, 192);
                         searchImage.BackColor = Color.FromArgb(255, 192, 192);
                         searchImage.BackgroundImage = Properties.Resources.by_bc;
                         break;
                     }
             }
 
-            SrchTbox.Focus();
-            SrchTbox.Select();
-            SrchTbox.SelectAll();
+            tb_search.Focus();
+            tb_search.Select();
+            tb_search.SelectAll();
 
             currSrchType = SrchType;
         }
@@ -4985,40 +4920,6 @@ namespace PayDesk.Components.UI
             get { return new bool[3]; }
         }
 
-        public DataTable PD_DEMO_Order
-        {
-            get
-            {
-                Dictionary<string, object> chqInfo = DataWorkShared.GetStandartOrderInfoStructure();
-                // fill cheque structure
-                //chqInfo["DATA"] = this.Cheque.Copy();
-                chqInfo["STORE_NO"] = this.currentSubUnit;
-                chqInfo["CLIENT_ID"] = this.clientID;
-                chqInfo["IS_RET"] = this.retriveChq;
-                chqInfo["IS_LEGAL"] = false;
-                chqInfo["ORDER_NO"] = string.Empty;
-                chqInfo["ORDER_SUMA"] = this.chqSUMA;
-                chqInfo["ORDER_REAL_SUMA"] = this.realSUMA;
-                chqInfo["TAX_SUMA"] = this.realSUMA;
-                chqInfo["TAX_BILL"] = this.nakladna;
-                chqInfo["DISCOUNT"] = this.PD_DiscountInfo;
-
-                object bill = this.Cheque.ExtendedProperties["BILL"];
-                DataWorkShared.UpdateExtendedProperties(this.Cheque, chqInfo);
-                this.Cheque.ExtendedProperties["BILL"] = bill;
-                /*
-                chqInfo["BILL_NO"] = string.Empty;
-                chqInfo["BILL_COMMENT"] = string.Empty;
-                if (this.Cheque.ExtendedProperties.Contains("BILL")) {
-                    //Номер рахунку
-                    chqInfo["BILL_NO"] = Cheque.ExtendedProperties["NOM"];
-                    //Коментр рахунку
-                    chqInfo["BILL_COMMENT"] = Cheque.ExtendedProperties["CMT"];
-                }*/
-                return this.Cheque;
-            }
-        }
-
         public DataTable PD_Order
         {
             get
@@ -5128,7 +5029,7 @@ namespace PayDesk.Components.UI
         private void Navigator_OnFilterChanged(string filter, EventArgs e)
         {
             if (filter.Length == 0)
-                this.articleDGV.DataSource = this.Articles;
+                this.grid_Products.DataSource = this.Articles;
             else
             {
                 DataRow[] dr = this.Articles.Select("ID Like '" + filter + "%'");
@@ -5138,9 +5039,9 @@ namespace PayDesk.Components.UI
                 for (int i = 0; i < dr.Length; i++)
                     sTable.Rows.Add(dr[i].ItemArray);
                 sTable.EndLoadData();
-                this.articleDGV.DataSource = sTable;
+                this.grid_Products.DataSource = sTable;
             }
-            this.articleDGV.Select();
+            this.grid_Products.Select();
         }
 
         private void sensorPanel1_OnSensorButtonClicked(string buttonName, EventArgs e)
@@ -5149,13 +5050,13 @@ namespace PayDesk.Components.UI
             {
                 case "up":
                     {
-                        this.chequeDGV.Select();
+                        this.grid_Order.Select();
                         SendKeys.SendWait("{UP}");
                         break;
                     }
                 case "dn":
                     {
-                        this.chequeDGV.Select();
+                        this.grid_Order.Select();
                         SendKeys.SendWait("{DOWN}");
                         break;
                     }
@@ -5176,16 +5077,16 @@ namespace PayDesk.Components.UI
                     }
                 case "sub":
                     {
-                        if (this.articleDGV.RowCount == 0)
+                        if (this.grid_Products.RowCount == 0)
                             break;
-                        this.chequeDGV.Select();
-                        if (chequeDGV.CurrentRow != null)
+                        this.grid_Order.Select();
+                        if (grid_Order.CurrentRow != null)
                         {
                             //DataRow[] article = Articles.Select("ID =" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString());
-                            DataRow[] article = Articles.Select("ID =\'" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString() + "\'");
+                            DataRow[] article = Articles.Select("ID =\'" + grid_Order.CurrentRow.Cells["ID"].Value.ToString() + "\'");
                             if (article != null && article.Length == 1)
                             {
-                                CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article[0], -ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles);
+                                CoreLib.AddArticleToCheque(grid_Order, grid_Products, article[0], -ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles);
                                 SearchFilter(true, this.currSrchType, false);
                             }
                         }
@@ -5193,7 +5094,7 @@ namespace PayDesk.Components.UI
                     }
                 case "add":
                     {
-                        if (this.articleDGV.RowCount == 0)
+                        if (this.grid_Products.RowCount == 0)
                             break;
                         /*
                         if (this.articleDGV.Visible)
@@ -5216,13 +5117,13 @@ namespace PayDesk.Components.UI
                             break;
                         }*/
 
-                        this.chequeDGV.Select();
-                        if (chequeDGV.CurrentRow != null)
+                        this.grid_Order.Select();
+                        if (grid_Order.CurrentRow != null)
                         {
-                            DataRow[] article = Articles.Select("ID =\'" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString() + "\'");
+                            DataRow[] article = Articles.Select("ID =\'" + grid_Order.CurrentRow.Cells["ID"].Value.ToString() + "\'");
                             if (article != null && article.Length == 1)
                             {
-                                CoreLib.AddArticleToCheque(chequeDGV, articleDGV, article[0], ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles, false, false);
+                                CoreLib.AddArticleToCheque(grid_Order, grid_Products, article[0], ConfigManager.Instance.CommonConfiguration.APP_StartTotal, Articles, false, false);
                                 SearchFilter(true, this.currSrchType, false);
                             }
                         }
@@ -5230,19 +5131,19 @@ namespace PayDesk.Components.UI
                     }
                 case "edit":
                     {
-                        this.chequeDGV.Select();
+                        this.grid_Order.Select();
                         Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
                         break;
                     }
                 case "dell":
                     {
-                        this.chequeDGV.Select();
+                        this.grid_Order.Select();
                         Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_CtrlDel), new IntPtr(0x100));
                         break;
                     }
                 case "dellall":
                     {
-                        this.chequeDGV.Select();
+                        this.grid_Order.Select();
                         Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_CtrlShiftDel), new IntPtr(0x100));
                         break;
                     }

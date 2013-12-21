@@ -148,6 +148,8 @@ namespace DATECS_EXELLIO.Config
                 _driverData = (Hashtable)_dat[0];
                 _allowedMethods = (Hashtable)_dat[1];
                 _errorFlags = (Hashtable)_dat[2];
+                if (_dat[3] != null)
+                    _compatibility = (Hashtable)_dat[3];
             }
             catch { Save(); }
         }
@@ -156,10 +158,11 @@ namespace DATECS_EXELLIO.Config
         {
             try
             {
-                object[] _dat = new object[3];
+                object[] _dat = new object[4];
                 _dat[0] = _driverData.Clone();
                 _dat[1] = _allowedMethods.Clone();
                 _dat[2] = _errorFlags.Clone();
+                _dat[3] = _compatibility.Clone();
 
                 SaveData(Path.FULL_CFG_PARAM_PATH, _dat);
 

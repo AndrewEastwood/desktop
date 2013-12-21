@@ -11,6 +11,8 @@ namespace DATECS_EXELLIO.UI.AppUI
 {
     public partial class Compatibility : UserControl
     {
+        private bool _is_init;
+
         public Compatibility()
         {
             InitializeComponent();
@@ -24,6 +26,7 @@ namespace DATECS_EXELLIO.UI.AppUI
 
         private void RestoreSettings()
         {
+            _is_init = true;
             if (Params.Compatibility.ContainsKey("msg_comm_attemptsToRead"))
                 this.msg_comm_attemptsToRead.Value = decimal.Parse(Params.Compatibility["msg_comm_attemptsToRead"].ToString());
 
@@ -35,10 +38,23 @@ namespace DATECS_EXELLIO.UI.AppUI
 
             if (Params.Compatibility.ContainsKey("msg_comm_timeoutOnBusy"))
                 this.msg_comm_timeoutOnBusy.Value = decimal.Parse(Params.Compatibility["msg_comm_timeoutOnBusy"].ToString());
+            _is_init = false;
         }
 
-        private void checkBox_runAsOP6_CheckedChanged(object sender, EventArgs e)
+        private void msg_comm_ValueChanged(object sender, EventArgs e)
         {
+            if (_is_init)
+                return;
+            Params.Compatibility["msg_comm_attemptsToRead"] = this.msg_comm_attemptsToRead.Value;
+            Params.Compatibility["msg_comm_timeoutOnFail"] = this.msg_comm_timeoutOnFail.Value;
+            Params.Compatibility["msg_comm_attemptsToWait"] = this.msg_comm_attemptsToWait.Value;
+            Params.Compatibility["msg_comm_timeoutOnBusy"] = this.msg_comm_timeoutOnBusy.Value;
+        }
+
+        private void msg_comm_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (_is_init)
+                return;
             Params.Compatibility["msg_comm_attemptsToRead"] = this.msg_comm_attemptsToRead.Value;
             Params.Compatibility["msg_comm_timeoutOnFail"] = this.msg_comm_timeoutOnFail.Value;
             Params.Compatibility["msg_comm_attemptsToWait"] = this.msg_comm_attemptsToWait.Value;

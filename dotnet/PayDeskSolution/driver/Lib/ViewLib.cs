@@ -66,7 +66,7 @@ namespace driver.Lib
             for (g = 0; g < grids.Length; g++)
                 switch (grids[g].Name)
                 {
-                    case "chequeDGV":
+                    case "grid_Order":
                         {
                             grids[g].AllowUserToOrderColumns = !driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_ChqColumnLock;
                             grids[g].AllowUserToResizeColumns = !driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_ChqColumnLock;
@@ -203,7 +203,7 @@ namespace driver.Lib
                             #endregion
                             break;
                         }
-                    case "articleDGV":
+                    case "grid_Products":
                         {
                             grids[g].AllowUserToOrderColumns = !driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_ArtColumnLock;
                             grids[g].AllowUserToResizeColumns = !driver.Config.ConfigManager.Instance.CommonConfiguration.STYLE_ArtColumnLock;
@@ -392,7 +392,7 @@ namespace driver.Lib
             for (int g = 0; g < grids.Length; g++)
                 switch (grids[g].Name)
                 {
-                    case "chequeDGV":
+                    case "grid_Order":
                         {
                             chqColName = new string[grids[g].ColumnCount];
                             chqColVisible = new bool[grids[g].ColumnCount];
@@ -413,7 +413,7 @@ namespace driver.Lib
                             }
                             break;
                         }
-                    case "articleDGV":
+                    case "grid_Products":
                         {
                             artColName = new string[grids[g].ColumnCount];
                             artColVisible = new bool[grids[g].ColumnCount];

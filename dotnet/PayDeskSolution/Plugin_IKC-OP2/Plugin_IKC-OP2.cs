@@ -982,6 +982,16 @@ namespace IKC_OP2
             }
             return value;
         }
+        public void CallFunctionIgnoreAnswer(string name, params object[] param)
+        {
+            this.IgnoreAnswer = true;
+            try
+            {
+                CallFunction(name, param);
+            }
+            catch { }
+            finally { this.IgnoreAnswer = false; }
+        }
 
         // Driver implementation
         // Warning! Don't change this code region
@@ -3155,6 +3165,12 @@ namespace IKC_OP2
             {
                 components.Components.WinApi.Com_WinApi.OutputDebugString("Port Write InputData OK");
 
+                if (this.IgnoreAnswer)
+                {
+                    UpdateCriticalMethod(Params.DriverData["LastFunc"].ToString(), false);
+                    _port.Close();
+                    return true;
+                }
                 // TEST
                 // Thread.Sleep(1000);
                 // components.Components.WinApi.Com_WinApi.OutputDebugString("WRITE");
@@ -3476,6 +3492,8 @@ namespace IKC_OP2
                 return _compatibilityui;
             }
         }
+        public bool IgnoreAnswer { get; set; }
         #endregion
+
     }
 }

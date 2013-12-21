@@ -33,6 +33,7 @@ namespace PayDesk.Components.UI
             this.btn_no = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.RichTextBox();
             this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // btn_yes
@@ -68,7 +69,7 @@ namespace PayDesk.Components.UI
             this.label1.Name = "label1";
             this.label1.ReadOnly = true;
             this.label1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.label1.Size = new System.Drawing.Size(290, 191);
+            this.label1.Size = new System.Drawing.Size(290, 105);
             this.label1.TabIndex = 3;
             this.label1.Text = resources.GetString("label1.Text");
             // 
@@ -83,11 +84,28 @@ namespace PayDesk.Components.UI
             this.maskedTextBox1.Size = new System.Drawing.Size(290, 29);
             this.maskedTextBox1.TabIndex = 0;
             // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.richTextBox1.Location = new System.Drawing.Point(12, 117);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ReadOnly = true;
+            this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.richTextBox1.Size = new System.Drawing.Size(290, 80);
+            this.richTextBox1.TabIndex = 4;
+            this.richTextBox1.Text = "В іншому випадку натисніть НІ та усуньте проблему з принтером.\nПотім повторно зак" +
+                "рийте чек.";
+            // 
             // uiWndChqNomRequest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(314, 273);
+            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.maskedTextBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btn_no);
@@ -111,5 +129,6 @@ namespace PayDesk.Components.UI
         private System.Windows.Forms.Button btn_no;
         private System.Windows.Forms.RichTextBox label1;
         private System.Windows.Forms.MaskedTextBox maskedTextBox1;
+        private System.Windows.Forms.RichTextBox richTextBox1;
     }
 }

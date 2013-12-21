@@ -53,19 +53,23 @@
             this.panel6 = new System.Windows.Forms.Panel();
             this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
             this.panel7 = new System.Windows.Forms.Panel();
+            this.label9 = new System.Windows.Forms.Label();
+            this.button_billsList_madecopy = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label_billsList_listInfoPrefix = new System.Windows.Forms.Label();
             this.label_allBills_TotalRecords = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label_lastUpdateDateTime = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.button_billsList_Refresh = new System.Windows.Forms.Button();
-            this.button_billsList_madecopy = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.label_orderInfo_orderComment = new System.Windows.Forms.Label();
             this.label_orderInfo_orderNo = new System.Windows.Forms.Label();
             this.label_orderInfo_discount = new System.Windows.Forms.Label();
             this.label_orderInfo_suma = new System.Windows.Forms.Label();
@@ -76,6 +80,7 @@
             this.filterBy_billNo = new System.Windows.Forms.ComboBox();
             this.filterBy_billDesk = new System.Windows.Forms.ComboBox();
             this.filterBy_billTag = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.billGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.listGrid)).BeginInit();
             this.panel1.SuspendLayout();
@@ -112,7 +117,7 @@
             this.billGrid.ReadOnly = true;
             this.billGrid.RowHeadersVisible = false;
             this.billGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.billGrid.Size = new System.Drawing.Size(292, 335);
+            this.billGrid.Size = new System.Drawing.Size(292, 322);
             this.billGrid.StandardTab = true;
             this.billGrid.TabIndex = 11;
             this.billGrid.TabStop = false;
@@ -193,6 +198,7 @@
             this.dt.ReadOnly = true;
             this.dt.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.dt.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dt.Width = 90;
             // 
             // cmt
             // 
@@ -243,6 +249,7 @@
             this.CloseDT.HeaderText = "Закритий";
             this.CloseDT.Name = "CloseDT";
             this.CloseDT.ReadOnly = true;
+            this.CloseDT.Width = 90;
             // 
             // label2
             // 
@@ -256,35 +263,36 @@
             // 
             // button_billsList_Delete
             // 
+            this.button_billsList_Delete.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.button_billsList_Delete.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button_billsList_Delete.Enabled = false;
             this.button_billsList_Delete.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button_billsList_Delete.ForeColor = System.Drawing.Color.Red;
             this.button_billsList_Delete.Image = ((System.Drawing.Image)(resources.GetObject("button_billsList_Delete.Image")));
             this.button_billsList_Delete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button_billsList_Delete.Location = new System.Drawing.Point(726, 503);
+            this.button_billsList_Delete.Location = new System.Drawing.Point(588, 503);
             this.button_billsList_Delete.Name = "button_billsList_Delete";
-            this.button_billsList_Delete.Size = new System.Drawing.Size(156, 35);
+            this.button_billsList_Delete.Size = new System.Drawing.Size(294, 35);
             this.button_billsList_Delete.TabIndex = 11;
-            this.button_billsList_Delete.Text = "АНУЛЮВАТИ";
+            this.button_billsList_Delete.Text = "А Н У Л Ю В А Т И     Р А Х У Н О К";
             this.button_billsList_Delete.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.button_billsList_Delete.UseVisualStyleBackColor = true;
+            this.button_billsList_Delete.UseVisualStyleBackColor = false;
             this.button_billsList_Delete.Click += new System.EventHandler(this.button_billsList_Delete_Click);
             // 
             // button_billsList_Print
             // 
             this.button_billsList_Print.BackColor = System.Drawing.SystemColors.Control;
             this.button_billsList_Print.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button_billsList_Print.Dock = System.Windows.Forms.DockStyle.Right;
+            this.button_billsList_Print.Dock = System.Windows.Forms.DockStyle.Left;
             this.button_billsList_Print.Enabled = false;
             this.button_billsList_Print.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Bold);
             this.button_billsList_Print.Image = ((System.Drawing.Image)(resources.GetObject("button_billsList_Print.Image")));
             this.button_billsList_Print.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button_billsList_Print.Location = new System.Drawing.Point(363, 0);
+            this.button_billsList_Print.Location = new System.Drawing.Point(223, 0);
             this.button_billsList_Print.Name = "button_billsList_Print";
-            this.button_billsList_Print.Size = new System.Drawing.Size(205, 45);
+            this.button_billsList_Print.Size = new System.Drawing.Size(147, 45);
             this.button_billsList_Print.TabIndex = 7;
-            this.button_billsList_Print.Text = "Друкувати рахунок";
+            this.button_billsList_Print.Text = "        Друкувати";
             this.button_billsList_Print.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button_billsList_Print.UseVisualStyleBackColor = false;
             this.button_billsList_Print.Click += new System.EventHandler(this.button_billsList_Print_Click);
@@ -298,9 +306,9 @@
             this.button_billsList_Open.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button_billsList_Open.Location = new System.Drawing.Point(0, 0);
             this.button_billsList_Open.Name = "button_billsList_Open";
-            this.button_billsList_Open.Size = new System.Drawing.Size(303, 45);
+            this.button_billsList_Open.Size = new System.Drawing.Size(163, 45);
             this.button_billsList_Open.TabIndex = 6;
-            this.button_billsList_Open.Text = "        Відкрити позначений рахунок в основне вікно програми";
+            this.button_billsList_Open.Text = "        Відкрити";
             this.button_billsList_Open.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.button_billsList_Open.UseVisualStyleBackColor = true;
             this.button_billsList_Open.Click += new System.EventHandler(this.button_billsList_Open_Click);
@@ -358,8 +366,10 @@
             // 
             // panel7
             // 
-            this.panel7.Controls.Add(this.label1);
+            this.panel7.Controls.Add(this.label9);
             this.panel7.Controls.Add(this.button_billsList_Print);
+            this.panel7.Controls.Add(this.button_billsList_madecopy);
+            this.panel7.Controls.Add(this.label1);
             this.panel7.Controls.Add(this.button_billsList_Open);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel7.Location = new System.Drawing.Point(0, 372);
@@ -367,11 +377,40 @@
             this.panel7.Size = new System.Drawing.Size(568, 45);
             this.panel7.TabIndex = 25;
             // 
+            // label9
+            // 
+            this.label9.Dock = System.Windows.Forms.DockStyle.Left;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Bold);
+            this.label9.Location = new System.Drawing.Point(370, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(62, 45);
+            this.label9.TabIndex = 10;
+            this.label9.Text = "АБО";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // button_billsList_madecopy
+            // 
+            this.button_billsList_madecopy.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button_billsList_madecopy.Dock = System.Windows.Forms.DockStyle.Right;
+            this.button_billsList_madecopy.Enabled = false;
+            this.button_billsList_madecopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button_billsList_madecopy.ForeColor = System.Drawing.Color.Black;
+            this.button_billsList_madecopy.Image = ((System.Drawing.Image)(resources.GetObject("button_billsList_madecopy.Image")));
+            this.button_billsList_madecopy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button_billsList_madecopy.Location = new System.Drawing.Point(433, 0);
+            this.button_billsList_madecopy.Name = "button_billsList_madecopy";
+            this.button_billsList_madecopy.Size = new System.Drawing.Size(135, 45);
+            this.button_billsList_madecopy.TabIndex = 10;
+            this.button_billsList_madecopy.Text = "Копіювати";
+            this.button_billsList_madecopy.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.button_billsList_madecopy.UseVisualStyleBackColor = true;
+            this.button_billsList_madecopy.Click += new System.EventHandler(this.button_billsList_madecopy_Click);
+            // 
             // label1
             // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Left;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Bold);
-            this.label1.Location = new System.Drawing.Point(303, 0);
+            this.label1.Location = new System.Drawing.Point(163, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(60, 45);
             this.label1.TabIndex = 9;
@@ -385,6 +424,8 @@
             this.flowLayoutPanel1.Controls.Add(this.label_allBills_TotalRecords);
             this.flowLayoutPanel1.Controls.Add(this.label5);
             this.flowLayoutPanel1.Controls.Add(this.label6);
+            this.flowLayoutPanel1.Controls.Add(this.label4);
+            this.flowLayoutPanel1.Controls.Add(this.label_lastUpdateDateTime);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 417);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -438,6 +479,29 @@
             this.label6.TabIndex = 29;
             this.label6.Text = "000,00";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(229, 5);
+            this.label4.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.label4.Name = "label4";
+            this.label4.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
+            this.label4.Size = new System.Drawing.Size(110, 23);
+            this.label4.TabIndex = 30;
+            this.label4.Text = "Останнє оновлення:";
+            // 
+            // label_lastUpdateDateTime
+            // 
+            this.label_lastUpdateDateTime.AutoSize = true;
+            this.label_lastUpdateDateTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label_lastUpdateDateTime.Location = new System.Drawing.Point(339, 5);
+            this.label_lastUpdateDateTime.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.label_lastUpdateDateTime.Name = "label_lastUpdateDateTime";
+            this.label_lastUpdateDateTime.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
+            this.label_lastUpdateDateTime.Size = new System.Drawing.Size(93, 23);
+            this.label_lastUpdateDateTime.TabIndex = 31;
+            this.label_lastUpdateDateTime.Text = "00.00.00 00:00";
+            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.label3);
@@ -479,23 +543,6 @@
             this.button_billsList_Refresh.UseVisualStyleBackColor = true;
             this.button_billsList_Refresh.Click += new System.EventHandler(this.button_billsList_Refresh_Click);
             // 
-            // button_billsList_madecopy
-            // 
-            this.button_billsList_madecopy.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button_billsList_madecopy.Enabled = false;
-            this.button_billsList_madecopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button_billsList_madecopy.ForeColor = System.Drawing.Color.Black;
-            this.button_billsList_madecopy.Image = ((System.Drawing.Image)(resources.GetObject("button_billsList_madecopy.Image")));
-            this.button_billsList_madecopy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button_billsList_madecopy.Location = new System.Drawing.Point(588, 503);
-            this.button_billsList_madecopy.Name = "button_billsList_madecopy";
-            this.button_billsList_madecopy.Size = new System.Drawing.Size(132, 35);
-            this.button_billsList_madecopy.TabIndex = 10;
-            this.button_billsList_madecopy.Text = "Копія рах.";
-            this.button_billsList_madecopy.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.button_billsList_madecopy.UseVisualStyleBackColor = true;
-            this.button_billsList_madecopy.Click += new System.EventHandler(this.button_billsList_madecopy_Click);
-            // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -504,7 +551,7 @@
             this.panel3.Controls.Add(this.panel4);
             this.panel3.Location = new System.Drawing.Point(588, 12);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(294, 485);
+            this.panel3.Size = new System.Drawing.Size(294, 472);
             this.panel3.TabIndex = 21;
             // 
             // panel4
@@ -513,13 +560,14 @@
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel4.Controls.Add(this.panel5);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel4.Location = new System.Drawing.Point(0, 335);
+            this.panel4.Location = new System.Drawing.Point(0, 322);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(292, 148);
             this.panel4.TabIndex = 22;
             // 
             // panel5
             // 
+            this.panel5.Controls.Add(this.label_orderInfo_orderComment);
             this.panel5.Controls.Add(this.label_orderInfo_orderNo);
             this.panel5.Controls.Add(this.label_orderInfo_discount);
             this.panel5.Controls.Add(this.label_orderInfo_suma);
@@ -530,6 +578,18 @@
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(288, 144);
             this.panel5.TabIndex = 13;
+            // 
+            // label_orderInfo_orderComment
+            // 
+            this.label_orderInfo_orderComment.AutoSize = true;
+            this.label_orderInfo_orderComment.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_orderInfo_orderComment.Location = new System.Drawing.Point(0, 96);
+            this.label_orderInfo_orderComment.Margin = new System.Windows.Forms.Padding(0);
+            this.label_orderInfo_orderComment.Name = "label_orderInfo_orderComment";
+            this.label_orderInfo_orderComment.Padding = new System.Windows.Forms.Padding(20, 5, 5, 0);
+            this.label_orderInfo_orderComment.Size = new System.Drawing.Size(60, 18);
+            this.label_orderInfo_orderComment.TabIndex = 26;
+            this.label_orderInfo_orderComment.Text = "label1";
             // 
             // label_orderInfo_orderNo
             // 
@@ -594,6 +654,7 @@
             this.fileSystemWatcher_billIFolder.EnableRaisingEvents = true;
             this.fileSystemWatcher_billIFolder.SynchronizingObject = this;
             this.fileSystemWatcher_billIFolder.Changed += new System.IO.FileSystemEventHandler(this.fileSystemWatcher_billIFolder_Changed);
+            this.fileSystemWatcher_billIFolder.Deleted += new System.IO.FileSystemEventHandler(this.fileSystemWatcher_billIFolder_Changed);
             // 
             // filterBy_billWaiter
             // 
@@ -647,13 +708,22 @@
             this.filterBy_billTag.Tag = "filterBy_billTag";
             this.filterBy_billTag.TextChanged += new System.EventHandler(this.filterBy_TextChanged);
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(585, 487);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(199, 13);
+            this.label8.TabIndex = 31;
+            this.label8.Text = "Додтакові дії над поточним рахунком:";
+            // 
             // uiWndBillList
             // 
             this.AcceptButton = this.button_billsList_Open;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(894, 575);
-            this.Controls.Add(this.button_billsList_madecopy);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.filterBy_billTag);
             this.Controls.Add(this.filterBy_billDesk);
             this.Controls.Add(this.filterBy_billNo);
@@ -690,6 +760,7 @@
             this.panel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher_billIFolder)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -722,6 +793,18 @@
         private System.IO.FileSystemWatcher fileSystemWatcher_billIFolder;
         private System.Windows.Forms.VScrollBar vScrollBar1;
         private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.ComboBox filterBy_billTag;
+        private System.Windows.Forms.ComboBox filterBy_billDesk;
+        private System.Windows.Forms.ComboBox filterBy_billNo;
+        private System.Windows.Forms.ComboBox filterBy_billWaiter;
+        private System.Windows.Forms.Panel panel7;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label_lastUpdateDateTime;
+        private System.Windows.Forms.Label label_orderInfo_orderComment;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.DataGridViewTextBoxColumn oid;
         private System.Windows.Forms.DataGridViewTextBoxColumn nom;
         private System.Windows.Forms.DataGridViewTextBoxColumn dt;
@@ -731,12 +814,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn DeskNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn FxNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn CloseDT;
-        private System.Windows.Forms.ComboBox filterBy_billTag;
-        private System.Windows.Forms.ComboBox filterBy_billDesk;
-        private System.Windows.Forms.ComboBox filterBy_billNo;
-        private System.Windows.Forms.ComboBox filterBy_billWaiter;
-        private System.Windows.Forms.Panel panel7;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label3;
     }
 }

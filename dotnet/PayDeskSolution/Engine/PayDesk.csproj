@@ -183,12 +183,6 @@
     <Compile Include="Components\UI\uiWndUnitFilter.Designer.cs">
       <DependentUpon>uiWndUnitFilter.cs</DependentUpon>
     </Compile>
-    <Compile Include="Components\UI\uiWndBaseChanges.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Components\UI\uiWndBaseChanges.Designer.cs">
-      <DependentUpon>uiWndBaseChanges.cs</DependentUpon>
-    </Compile>
     <Compile Include="Components\UI\uiWndMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -319,10 +313,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Components\UI\uiWndUnitFilter.resx">
       <DependentUpon>uiWndUnitFilter.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Components\UI\uiWndBaseChanges.resx">
-      <DependentUpon>uiWndBaseChanges.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Components\UI\uiWndMain.resx">

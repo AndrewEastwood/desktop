@@ -55,7 +55,6 @@ namespace PayDesk.Components.UI
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage0 = new System.Windows.Forms.TabPage();
-            this.checkBox_useCommonPrinting = new System.Windows.Forms.CheckBox();
             this.button_addPrinter = new System.Windows.Forms.Button();
             this.printersGrid = new System.Windows.Forms.DataGridView();
             this.ColumnPrnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -66,12 +65,12 @@ namespace PayDesk.Components.UI
             this.ColumnPrnBrowse = new System.Windows.Forms.DataGridViewButtonColumn();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.controlGrid = new System.Windows.Forms.DataGridView();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.button_savePrnOnly = new System.Windows.Forms.Button();
             this.ColumnCtrlDelete = new System.Windows.Forms.DataGridViewButtonColumn();
             this.ColumnCtrlBrowse = new System.Windows.Forms.DataGridViewButtonColumn();
             this.ColumnCtrlActive = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ColumnCtrlType = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.button_savePrnOnly = new System.Windows.Forms.Button();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -332,16 +331,6 @@ namespace PayDesk.Components.UI
             this.tabPage0.Text = "Принтер";
             this.tabPage0.UseVisualStyleBackColor = true;
             // 
-            // checkBox_useCommonPrinting
-            // 
-            this.checkBox_useCommonPrinting.AutoSize = true;
-            this.checkBox_useCommonPrinting.Location = new System.Drawing.Point(12, 12);
-            this.checkBox_useCommonPrinting.Name = "checkBox_useCommonPrinting";
-            this.checkBox_useCommonPrinting.Size = new System.Drawing.Size(187, 17);
-            this.checkBox_useCommonPrinting.TabIndex = 25;
-            this.checkBox_useCommonPrinting.Text = "Використовувати спільний друк";
-            this.checkBox_useCommonPrinting.UseVisualStyleBackColor = true;
-            // 
             // button_addPrinter
             // 
             this.button_addPrinter.Location = new System.Drawing.Point(12, 377);
@@ -357,7 +346,7 @@ namespace PayDesk.Components.UI
             this.printersGrid.AllowUserToAddRows = false;
             this.printersGrid.AllowUserToResizeRows = false;
             this.printersGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.printersGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.printersGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.printersGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnPrnName,
             this.ColumnPrnPath,
@@ -369,7 +358,7 @@ namespace PayDesk.Components.UI
             this.printersGrid.Location = new System.Drawing.Point(251, 0);
             this.printersGrid.Name = "printersGrid";
             this.printersGrid.RowHeadersVisible = false;
-            this.printersGrid.Size = new System.Drawing.Size(317, 334);
+            this.printersGrid.Size = new System.Drawing.Size(317, 357);
             this.printersGrid.TabIndex = 23;
             // 
             // ColumnPrnName
@@ -383,10 +372,11 @@ namespace PayDesk.Components.UI
             // ColumnPrnPath
             // 
             this.ColumnPrnPath.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.ColumnPrnPath.HeaderText = "Шлях до програми друку";
+            this.ColumnPrnPath.HeaderText = "Програма друку";
             this.ColumnPrnPath.Name = "ColumnPrnPath";
             this.ColumnPrnPath.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.ColumnPrnPath.Width = 98;
+            this.ColumnPrnPath.Width = 150;
+            this.ColumnPrnPath.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             // 
             // ColumnPrnTpl
             // 
@@ -394,7 +384,8 @@ namespace PayDesk.Components.UI
             this.ColumnPrnTpl.HeaderText = "Шаблон";
             this.ColumnPrnTpl.Name = "ColumnPrnTpl";
             this.ColumnPrnTpl.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.ColumnPrnTpl.Width = 52;
+            this.ColumnPrnTpl.Width = 150;
+            this.ColumnPrnTpl.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             // 
             // ColumnPrnAction
             // 
@@ -442,7 +433,7 @@ namespace PayDesk.Components.UI
             this.controlGrid.AllowUserToResizeColumns = false;
             this.controlGrid.AllowUserToResizeRows = false;
             this.controlGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.controlGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.controlGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.controlGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnCtrlDelete,
             this.ColumnCtrlBrowse,
@@ -452,29 +443,9 @@ namespace PayDesk.Components.UI
             this.controlGrid.Location = new System.Drawing.Point(0, 0);
             this.controlGrid.Name = "controlGrid";
             this.controlGrid.RowHeadersVisible = false;
-            this.controlGrid.Size = new System.Drawing.Size(251, 334);
+            this.controlGrid.Size = new System.Drawing.Size(251, 357);
             this.controlGrid.TabIndex = 27;
             this.controlGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.controlGrid_CellContentClick);
-            // 
-            // panel1
-            // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.printersGrid);
-            this.panel1.Controls.Add(this.controlGrid);
-            this.panel1.Location = new System.Drawing.Point(12, 35);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(570, 336);
-            this.panel1.TabIndex = 28;
-            // 
-            // button_savePrnOnly
-            // 
-            this.button_savePrnOnly.Location = new System.Drawing.Point(121, 377);
-            this.button_savePrnOnly.Name = "button_savePrnOnly";
-            this.button_savePrnOnly.Size = new System.Drawing.Size(103, 23);
-            this.button_savePrnOnly.TabIndex = 26;
-            this.button_savePrnOnly.Text = "Зберегти Список";
-            this.button_savePrnOnly.UseVisualStyleBackColor = true;
-            this.button_savePrnOnly.Click += new System.EventHandler(this.button_savePrnOnly_Click);
             // 
             // ColumnCtrlDelete
             // 
@@ -513,6 +484,26 @@ namespace PayDesk.Components.UI
             "Звіт по чеках"});
             this.ColumnCtrlType.Name = "ColumnCtrlType";
             // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.printersGrid);
+            this.panel1.Controls.Add(this.controlGrid);
+            this.panel1.Location = new System.Drawing.Point(12, 12);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(570, 359);
+            this.panel1.TabIndex = 28;
+            // 
+            // button_savePrnOnly
+            // 
+            this.button_savePrnOnly.Location = new System.Drawing.Point(121, 377);
+            this.button_savePrnOnly.Name = "button_savePrnOnly";
+            this.button_savePrnOnly.Size = new System.Drawing.Size(103, 23);
+            this.button_savePrnOnly.TabIndex = 26;
+            this.button_savePrnOnly.Text = "Зберегти Список";
+            this.button_savePrnOnly.UseVisualStyleBackColor = true;
+            this.button_savePrnOnly.Click += new System.EventHandler(this.button_savePrnOnly_Click);
+            // 
             // uiWndPrinting
             // 
             this.AcceptButton = this.button_SaveAndClose;
@@ -522,7 +513,6 @@ namespace PayDesk.Components.UI
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.button_savePrnOnly);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.checkBox_useCommonPrinting);
             this.Controls.Add(this.button_SaveAndClose);
             this.Controls.Add(this.button_addPrinter);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -546,7 +536,6 @@ namespace PayDesk.Components.UI
             ((System.ComponentModel.ISupportInitialize)(this.controlGrid)).EndInit();
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -575,7 +564,6 @@ namespace PayDesk.Components.UI
         private System.Windows.Forms.Button button_addPrinter;
         private System.Windows.Forms.DataGridView printersGrid;
         private System.Windows.Forms.OpenFileDialog openFileDialog2;
-        private System.Windows.Forms.CheckBox checkBox_useCommonPrinting;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox textBox_currentTemplate;
         private System.Windows.Forms.Button button3;

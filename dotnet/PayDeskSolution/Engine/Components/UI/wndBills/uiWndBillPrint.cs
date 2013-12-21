@@ -16,7 +16,7 @@ namespace PayDesk.Components.UI.wndBills
     public partial class uiWndBillPrint : Form
     {
         private DataTable billEntry;
-        private object[] pData;
+        //private object[] pData;
 
         public uiWndBillPrint(DataTable bill)
         {
