@@ -218,7 +218,6 @@ namespace DATECS_EXELLIO.Config
         }
 
         /* PROPERTIES */
-
         public static Hashtable DriverData { get { return _driverData; } set { _driverData = value; } }
         public static Hashtable ErrorFlags { get { return _errorFlags; } set { _errorFlags = value; } }
         public static Hashtable AllowedMethods { get { return _allowedMethods; } set { _allowedMethods = value; } }
