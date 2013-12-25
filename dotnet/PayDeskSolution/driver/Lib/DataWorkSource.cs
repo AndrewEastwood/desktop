@@ -236,7 +236,7 @@ namespace driver.Lib
                 /* checking for updates */
                 //Com_WinApi.OutputDebugString("CheckUpdate_begin");
 
-                sourceDir = profile["SOURCE"].ToString();
+                sourceDir = profile.ContainsKey("SOURCE") ? profile["SOURCE"].ToString() : "";
                 if (sourceDir == string.Empty)
                     sourceDir = ConfigManager.Instance.CommonConfiguration.Path_Exchnage;
 

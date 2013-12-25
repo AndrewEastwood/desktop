@@ -2923,10 +2923,7 @@ namespace PayDesk.Components.UI
                         }
                     }
 
-
                     /* set discounts */
-
-
 
                     Hashtable _discount = (Hashtable)this.Discount[de.Key.ToString()];
                     _discount[CoreConst.DISC_ARRAY_PERCENT] = this.discArrPercent;
@@ -2936,16 +2933,16 @@ namespace PayDesk.Components.UI
                     //_discount[CoreConst.DISC_ONLY_PERCENT] = this.discOnlyPercent;
                     this.Discount[de.Key.ToString()] = _discount;
 
-
                     UpdateSumInfo_profile(de.Key.ToString(), updateCustomer);
 
-                    if (this.Cheque.Rows.Count == 0)
-                    {
-                        realSUMA = chqSUMA = taxSUMA = 0.0;
-                        UpdateSumDisplay(false, updateCustomer);
-                        // this.PD_EmptyOrder;
-                        return;
-                    }
+                }
+
+                if (this.Cheque.Rows.Count == 0)
+                {
+                    realSUMA = chqSUMA = taxSUMA = 0.0;
+                    UpdateSumDisplay(false, updateCustomer);
+                    // this.PD_EmptyOrder;
+                    return;
                 }
             }
         }
@@ -3276,8 +3273,7 @@ namespace PayDesk.Components.UI
             double _taxSUMA = CoreLib.GetValue<double>(_suma, CoreConst.DISC_FINAL_CASH);*/
 
 
-            if (!inventChq)
-                UpdateSumDisplay(true, updateCustomer);
+            //UpdateSumDisplay(true, updateCustomer);
 
             return;
             //winapi.Funcs.OutputDebugString("Z");
@@ -3585,8 +3581,7 @@ namespace PayDesk.Components.UI
             //taxSUMA = (double)Cheque.Compute("sum(TAX_MONEY)", "");
             taxSUMA = MathLib.GetRoundedMoney(taxSUMA);
 
-            if (!inventChq)
-                UpdateSumDisplay(true, updateCustomer);
+            UpdateSumDisplay(true, updateCustomer);
 
             //winapi.Funcs.OutputDebugString("Z");
         }//ok
@@ -3598,6 +3593,9 @@ namespace PayDesk.Components.UI
         /// <param name="updateCustomer">If true methid will update device display otherwise false</param>
         private void UpdateSumDisplay(bool updateAddChequeInfo, bool updateCustomer)
         {
+            if (inventChq)
+                return;
+
             if (updateAddChequeInfo)
                 lbl_orderInfo.Text = string.Empty;
             // if (updateAddChequeInfo && discCommonPercent != 0.0)
@@ -3702,16 +3700,16 @@ namespace PayDesk.Components.UI
                     if (discCommonPercent != 0)
                     {
                         if (discCommonPercent > 0)
-                            _topLabel += " Зн:";
+                            _topLabel += "  Зн: ";
                         else
-                            _topLabel += " Нб:";
+                            _topLabel += "  Нб: ";
                         _topLabel += Math.Abs(discCommonPercent) + "%";
                     }
 
                     string[] lines = new string[] { string.Empty, string.Empty };
                     bool[] show = new bool[] { true, true };
                     if (Cheque.Rows.Count != 0)
-                        lines = new string[] { _topLabel, grid_Order.CurrentRow.Cells["DESC"].Value.ToString() };
+                        lines = new string[] { _topLabel, grid_Order.CurrentRow.Cells["NAME"].Value.ToString() };
                     Program.AppPlugins.GetActive<ILegalPrinterDriver>().CallFunctionIgnoreAnswer("FP_SendCustomer", lines, show);
                 }
                 catch { }
