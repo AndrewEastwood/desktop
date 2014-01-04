@@ -207,7 +207,6 @@ namespace DATECS_EXELLIO.Config
             {
                 System.Runtime.Serialization.Formatters.Binary.BinaryFormatter binF = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                 _data = binF.Deserialize(stream);
-
             }
             catch { _data = null; }
 

@@ -393,6 +393,11 @@ namespace components.UI.Controls.CategoryNavBar
 
         }
 
+        public void GoHome()
+        {
+            ShowCategoryItems();
+        }
+
         private void flowLayoutPanel2_SizeChanged(object sender, EventArgs e)
         {
             UpdateCategoryButonsWidth();

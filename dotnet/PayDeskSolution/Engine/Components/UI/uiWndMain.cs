@@ -57,6 +57,7 @@ namespace PayDesk.Components.UI
         // Scanner Data
         private string chararray;
         private DateTime lastInputChar;
+        private string readedBuyerBarCode = string.Empty;
         // Order Data
         private double chqSUMA;
         private double realSUMA;
@@ -105,6 +106,9 @@ namespace PayDesk.Components.UI
         public uiWndMain()
         {
             InitializeComponent();
+
+            // adding custom event handlers
+            this.sensorDataPanel1.Navigator.OnFilterChanged += new global::components.UI.Controls.CategoryNavBar.CategoryNavBar.FilterChanged(Navigator_OnFilterChanged);
         }
 
         ~uiWndMain()
@@ -1256,7 +1260,8 @@ namespace PayDesk.Components.UI
                             {
                                 SearchFilter(false, ConfigManager.Instance.CommonConfiguration.APP_SearchType, true);
                                 //this.sensorDataPanel1.Navigator.DisplayedCategoryFilter = "";
-                                //this.Navigator_OnFilterChanged("", EventArgs.Empty);
+                                //this.Navigator_OnFilterChanged(string.Empty, EventArgs.Empty);
+                                this.sensorDataPanel1.Navigator.GoHome();
                             }
                             else
                                 this.Close();
@@ -1742,60 +1747,20 @@ namespace PayDesk.Components.UI
                 case "SensorType":
                     {
                         if (!((ToolStripMenuItem)e.ClickedItem).Checked)
-                        {/*
-                            if (splitContainer1.Orientation != Orientation.Vertical)
-                            {
-                                splitContainer1.Tag = "R";
-                            }*/
-                            //splitContainer1.Orientation = Orientation.Vertical;
-                            //AppConfig.STYLE_SplitOrient = Orientation.Vertical;
-                            //RefreshWindowMenu();
-                            //splitContainer1.SplitterDistance = splitContainer1.Width / 2;
-
+                        {
                             this.sensorDataPanel1.Navigator.SetAndShowNavigator(ApplicationConfiguration.Instance.GetValueByKey<Hashtable>("productFiltering"));
-
-
                             this.sensorDataPanel1.Visible = true;
                             this.chequeContainer.Panel2Collapsed = false;
-
-                            /*
-                            if (this.sensorPanel1.SensorType == 50 && ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_50 < this.chequeContainer.Height && this.chequeContainer.Height * 2 / 3 > ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_50)
-                                this.chequeContainer.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_50;
-                            else if (this.sensorPanel1.SensorType == 100 && ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_100 < this.chequeContainer.Height && this.chequeContainer.Height * 2 / 3 > ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_100)
-                                this.chequeContainer.SplitterDistance = ConfigManager.Instance.CommonConfiguration.skin_sensor_splitter_chq_100;
-                            else
-                                this.chequeContainer.SplitterDistance = this.chequeContainer.Height * 2 / 3;
-
-                            */
                             this.grid_Products.Parent = this.sensorDataPanel1.Placeholder;
-                            //this.articleDGV.BringToFront();
-
                             RefreshComponents(true);
-
-                            //-Sensor_EventHandler(null);
-
-                            //this.TopMost = true;
-                            //System.Diagnostics.Process.Start("vk.exe");
-
                             //enabling dependence menu
                             управліннToolStripMenuItem.Enabled = true; 
                         }
                         else
-                        {/*
-                            if (splitContainer1.Tag != null && splitContainer1.Tag.ToString() == "R")
-                            {
-                                splitContainer1.Orientation = Orientation.Horizontal;
-                                ConfigManager.Instance.CommonConfiguration.STYLE_SplitOrient = Orientation.Horizontal;
-                                RefreshWindowMenu();
-                                splitContainer1.SplitterDistance = splitContainer1.Height / 2;
-                            }*/
-
+                        {
                             this.sensorDataPanel1.Visible = false;
                             this.chequeContainer.Panel2Collapsed = true;
-                            
                             this.grid_Products.Parent = this.splitContainer1.Panel2;
-
-                            //this.TopMost = false;
                             управліннToolStripMenuItem.Enabled = false; 
                         }
                         break;
@@ -1837,8 +1802,6 @@ namespace PayDesk.Components.UI
                 case "SensorType_Components_ArtNav":
                     {
                         this.sensorDataPanel1.Container.Panel1Collapsed = ((ToolStripMenuItem)e.ClickedItem).Checked;
-                        //tableLayoutPanel1.Visible = !((ToolStripMenuItem)e.ClickedItem).Checked;
-                        //sensor_breadcrumb_container.Visible = !((ToolStripMenuItem)e.ClickedItem).Checked;
                         break;
                     }
                 case "SensorType_Components_ArtScroll":
@@ -2236,7 +2199,6 @@ namespace PayDesk.Components.UI
                         wndAdditional.uiWndAdditionalPortCommands cm = new wndAdditional.uiWndAdditionalPortCommands();
                         cm.ShowDialog();
                         cm.Dispose();
-                        //MessageBox.Show(cm.PortCommand);
                         break;
                     }
                 #endregion
@@ -4563,7 +4525,7 @@ namespace PayDesk.Components.UI
         /// <param name="SrchType">Type of search: 0- by name; 1- by code; 2- by barcode; Others type are not premitted.</param>
         /// <param name="close">Approve to close filetred data after searching. If false then filtered data will showing again</param>
 
-        private delegate void CreateFunc();
+        //private delegate void CreateFunc();
 
         private void SearchFilter(bool saveSearchText, int SrchType, bool close)
         {
@@ -4618,7 +4580,6 @@ namespace PayDesk.Components.UI
 
             currSrchType = SrchType;
         }
-
 
         // shold be removed after dataContainer2
 
@@ -4751,11 +4712,11 @@ namespace PayDesk.Components.UI
             }
         }
 
-        public bool[] PD_Statements
-        {
-            set { }
-            get { return new bool[3]; }
-        }
+        //public bool[] PD_Statements
+        //{
+        //    set { }
+        //    get { return new bool[3]; }
+        //}
 
         public DataTable PD_Order
         {
@@ -4919,7 +4880,6 @@ namespace PayDesk.Components.UI
                         this.grid_Order.Select();
                         if (grid_Order.CurrentRow != null)
                         {
-                            //DataRow[] article = Articles.Select("ID =" + chequeDGV.CurrentRow.Cells["ID"].Value.ToString());
                             DataRow[] article = Articles.Select("ID =\'" + grid_Order.CurrentRow.Cells["ID"].Value.ToString() + "\'");
                             if (article != null && article.Length == 1)
                             {
@@ -4933,26 +4893,6 @@ namespace PayDesk.Components.UI
                     {
                         if (this.grid_Products.RowCount == 0)
                             break;
-                        /*
-                        if (this.articleDGV.Visible)
-                        {
-                            Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
-                            break;
-                        }
-                        
-                        if (this.currSrchType == 2 && this.SrchTbox.Text != string.Empty)
-                        {
-                            Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_F7), new IntPtr(0));
-                            Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
-                            break;
-                        }
-
-                        if (this.chequeDGV.Visible)
-                        {
-                            this.chequeDGV.Select();
-                            Com_WinApi.SendMessage(this.Handle, (uint)CoreLib.MyMsgs.WM_HOTKEY, new IntPtr((int)CoreLib.MyHotKeys.HK_Enter), new IntPtr(0));
-                            break;
-                        }*/
 
                         this.grid_Order.Select();
                         if (grid_Order.CurrentRow != null)
@@ -5029,7 +4969,6 @@ namespace PayDesk.Components.UI
             }
         }
         
-        private string readedBuyerBarCode = string.Empty;
         private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
             if (serialPort1.BytesToRead >= ConfigManager.Instance.CommonConfiguration.APP_BuyerBarCodeMinLen)
