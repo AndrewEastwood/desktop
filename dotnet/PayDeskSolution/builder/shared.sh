@@ -171,7 +171,7 @@ function _setBuildVersion() {
     chat "$VER"
     echo "$VER" > $APP_HOME/VERSION.txt
     echo "source:" >> $APP_HOME/VERSION.txt
-    echo git branch >> $APP_HOME/VERSION.txt
+    git rev-parse --abbrev-ref HEAD >> $APP_HOME/VERSION.txt
     # generate github readme.md file
     echo "### PayDesk Solution" > $APP_HOME/README.md
     echo "-" >> $APP_HOME/README.md

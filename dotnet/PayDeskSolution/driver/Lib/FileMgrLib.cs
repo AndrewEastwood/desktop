@@ -54,31 +54,8 @@ namespace driver.Lib
                     }
                     catch
                     {
-                        fBrDlg.Description = "Вибрі шляху для папки товарів";
-                        dRez = MMessageBoxEx.Show("Не вдалося отримати доступ до папки: " + dirPath + "\r\nЩоб встановити новий шлях до папки натисніть ТАК.\r\nЩоб закрити програму натисніть НІ", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-                        pathSelected = false;
-                        if (dRez == DialogResult.Yes)
-                        {
-                            do
-                            {
-                                dRez = DialogResult.None;
-                                fBrDlg.ShowDialog();
-                                if (fBrDlg.SelectedPath == string.Empty)
-                                {
-                                    dRez = MMessageBoxEx.Show("Скасувати вибір нового шляху та закрити програму?", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                                    if (dRez == DialogResult.Yes)
-                                        Environment.Exit(0);
-                                }
-                                else
-                                {
-                                    newPath[idx] = fBrDlg.SelectedPath;
-                                    pathSelected = true;
-                                    saveSettings = true;
-                                }
-                            } while (!pathSelected);
-                        }
-                        if (dRez == DialogResult.No)
-                            Environment.Exit(0);
+                        dRez = MMessageBoxEx.Show("Не вдалося отримати доступ до папки: " + dirPath + "\r\nЗверніться до адміністратора.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Environment.Exit(0);
                     }
                 }
                 idx++;

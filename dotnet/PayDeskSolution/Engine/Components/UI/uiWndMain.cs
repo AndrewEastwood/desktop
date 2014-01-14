@@ -1266,7 +1266,7 @@ namespace PayDesk.Components.UI
                             else
                                 this.Close();
                             break;
-                        } 
+                        }
                         #endregion
                     case 0x1E:
                         #region CONTROL + Q
@@ -2420,7 +2420,7 @@ namespace PayDesk.Components.UI
                         thisTot = MathLib.GetDouble(grid_Order["TQ", e.RowIndex].Value);
                         if (thisTot != 0)
                             addedTot *= MathLib.GetDouble(grid_Order["TQ", e.RowIndex].Value);
-                        CoreLib.AddArticleToCheque(grid_Order, grid_Products, dr[0], addedTot, Articles);
+                        CoreLib.AddArticleToCheque(grid_Order, grid_Products, dr[0], addedTot, Articles, false, false);
                     }
                 }
                 catch { }
@@ -4356,6 +4356,7 @@ namespace PayDesk.Components.UI
             //winapi.WinAPI.OutputDebugString("BC=" + barcode + "____Ln=" + barcode.Length.ToString());
             bool allowToShow = false;//returned value
             bool allowBBC = true;
+            bool useProductUnitFiltering = true;
 
             DataTable sTable = Articles.Clone();
             DataRow[] dr = new DataRow[1];
@@ -4368,9 +4369,10 @@ namespace PayDesk.Components.UI
                 {
                     weightOfArticle = MathLib.GetDouble(barcode.Substring(7, 5)) / 1000;
                     barcode = barcode.Substring(2, 5);
+                    useProductUnitFiltering = false;
                 }
             }
-
+            
             // buyer BC resolver
             if (ConfigManager.Instance.CommonConfiguration.APP_BuyerBarCodeSource != 0)
             {
@@ -4497,7 +4499,7 @@ namespace PayDesk.Components.UI
 
             if (dr.Length == 1)
             {
-                CoreLib.AddArticleToCheque(grid_Order, grid_Products, dr[0], weightOfArticle, Articles);
+                CoreLib.AddArticleToCheque(grid_Order, grid_Products, dr[0], weightOfArticle, Articles, false, useProductUnitFiltering);
                 if (!UserConfig.Properties[22])
                     SearchFilter(true, currSrchType, true);
                 allowToShow = false;
