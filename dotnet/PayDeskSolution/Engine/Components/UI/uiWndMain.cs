@@ -2970,7 +2970,7 @@ namespace PayDesk.Components.UI
 
         private void UpdateSumInfo(bool updateCustomer)
         {
-            UpdateSumInfo_single(updateCustomer);
+            UpdateSumInfo_single();
             List<string> soldItems = new List<string>();
             /* perform update for all profiles if it necessary */
             if (ConfigManager.Instance.CommonConfiguration.PROFILES_UseProfiles)
@@ -3027,21 +3027,23 @@ namespace PayDesk.Components.UI
                     //_discount[CoreConst.DISC_ONLY_PERCENT] = this.discOnlyPercent;
                     this.Discount[de.Key.ToString()] = _discount;
 
-                    UpdateSumInfo_profile(de.Key.ToString(), updateCustomer);
+                    UpdateSumInfo_profile(de.Key.ToString());
 
                 }
 
                 if (this.Cheque.Rows.Count == 0)
                 {
                     realSUMA = chqSUMA = taxSUMA = 0.0;
-                    UpdateSumDisplay(false, updateCustomer);
+                    UpdateSumDisplay(false);
                     // this.PD_EmptyOrder;
-                    return;
                 }
             }
+
+            if (updateCustomer)
+                this.Order_UpdatePrinterDisplay();
         }
 
-        private void UpdateSumInfo_profile(object profileKey, bool updateCustomer)
+        private void UpdateSumInfo_profile(object profileKey)
         {
             //OnDeactivate(EventArgs.Empty);
             //winapi.Funcs.OutputDebugString("X");
@@ -3373,7 +3375,7 @@ namespace PayDesk.Components.UI
             //winapi.Funcs.OutputDebugString("Z");
         }//ok
 
-        private void UpdateSumInfo_single(bool updateCustomer)
+        private void UpdateSumInfo_single()
         {
             //OnDeactivate(EventArgs.Empty);
             //winapi.Funcs.OutputDebugString("X");
@@ -3405,7 +3407,7 @@ namespace PayDesk.Components.UI
             if (Cheque.Rows.Count == 0)
             {
                 realSUMA = chqSUMA = taxSUMA = 0.0;
-                UpdateSumDisplay(false, updateCustomer);
+                UpdateSumDisplay(false);
                 // this.PD_EmptyOrder;
                 return;
             }
@@ -3675,7 +3677,7 @@ namespace PayDesk.Components.UI
             //taxSUMA = (double)Cheque.Compute("sum(TAX_MONEY)", "");
             taxSUMA = MathLib.GetRoundedMoney(taxSUMA);
 
-            UpdateSumDisplay(true, updateCustomer);
+            UpdateSumDisplay(true);
 
             //winapi.Funcs.OutputDebugString("Z");
         }//ok
@@ -3685,7 +3687,7 @@ namespace PayDesk.Components.UI
         /// </summary>
         /// <param name="updateAddChequeInfo"></param>
         /// <param name="updateCustomer">If true methid will update device display otherwise false</param>
-        private void UpdateSumDisplay(bool updateAddChequeInfo, bool updateCustomer)
+        private void UpdateSumDisplay(bool updateAddChequeInfo)
         {
             if (inventChq)
                 return;
@@ -3787,16 +3789,20 @@ namespace PayDesk.Components.UI
             string cashLabelFormat = string.Format("{0: ;-; } {{0:F{1}}}", retriveChq ? -1 : 1, ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals);
             lbl_orderSuma.Text = string.Format(cashLabelFormat, realSUMA);
 
-            if (ConfigManager.Instance.CommonConfiguration.APP_ShowInfoOnIndicator && Program.AppPlugins.IsActive(PluginType.LegalPrinterDriver) && updateCustomer)
+        }
+
+        private void Order_UpdatePrinterDisplay()
+        {
+            if (ConfigManager.Instance.CommonConfiguration.APP_ShowInfoOnIndicator && Program.AppPlugins.IsActive(PluginType.LegalPrinterDriver))
                 try
                 {
                     string _topLabel = "СУМА:" + lbl_orderSuma.Text;
                     if (discCommonPercent != 0)
                     {
                         if (discCommonPercent > 0)
-                            _topLabel += "  Зн: ";
+                            _topLabel += " Зн:";
                         else
-                            _topLabel += "  Нб: ";
+                            _topLabel += " Нб:";
                         _topLabel += Math.Abs(discCommonPercent) + "%";
                     }
 
@@ -4121,7 +4127,7 @@ namespace PayDesk.Components.UI
             if (generalError)
             {
                 MMessageBox.Show(this.grid_Order, "Виникла помилка під час збереження частини чеку.\r\nСпробуйте ще раз закрити чек", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                UpdateSumInfo_profile(currentProfileKey, false);
+                UpdateSumInfo_profile(currentProfileKey);
                 return;
             }
             if (DataWorkShared.ExtractBillProperty(dtCopy, CoreConst.OID, string.Empty) != string.Empty)

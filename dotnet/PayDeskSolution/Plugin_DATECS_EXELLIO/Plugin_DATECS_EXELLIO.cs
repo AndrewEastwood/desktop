@@ -27,6 +27,7 @@ using components.Shared.Interfaces;
 using components.Components.SerialPort;
 using components.Lib;
 using components.Components.pdLogger;
+using components.Components.WinApi;
 
 namespace DATECS_EXELLIO
 {
@@ -43,6 +44,9 @@ namespace DATECS_EXELLIO
         private byte[] OutputData;
         private byte[] DataForSend;
         private uint ReadedBytes;
+
+        // internal trigger
+        private bool _keepPoprtOpened;
 
         // Number Format Provider
         //private NumberFormatInfo NumberFormat;
@@ -2571,36 +2575,48 @@ namespace DATECS_EXELLIO
             Params.DriverData["LastFunc"] = "DisplBotLine";
             CMD = 35;
 
+            //Com_WinApi.OutputDebugString("1");
+
             // Creating data
             line = line.Replace('і', 'i').Replace('І', 'I');
             DataForSend = Encoding.GetEncoding(1251).GetBytes(line);
 
+            //Com_WinApi.OutputDebugString("2");
             // Converting data to specific format
             InputData = CreateInputData(CMD, DataForSend);
 
+            //Com_WinApi.OutputDebugString("3");
+
             // Sending and reciving data
             SendGetData(20, true);
+            //Com_WinApi.OutputDebugString("4");
 
             // Next code for command
             GetNextCmdCode();
+            //Com_WinApi.OutputDebugString("5");
         }
         private void DisplTopLine(string line)
         {
             Params.DriverData["LastFunc"] = "DisplTopLine";
             CMD = 47;
 
+            //Com_WinApi.OutputDebugString("1");
             // Creating data
             line = line.Replace('і', 'i').Replace('І', 'I');
             DataForSend = Encoding.GetEncoding(1251).GetBytes(line);
 
+            //Com_WinApi.OutputDebugString("2");
             // Converting data to specific format
             InputData = CreateInputData(CMD, DataForSend);
 
+            //Com_WinApi.OutputDebugString("3");
             // Sending and reciving data
             SendGetData(20, true);
+            //Com_WinApi.OutputDebugString("4");
 
             // Next code for command
             GetNextCmdCode();
+            //Com_WinApi.OutputDebugString("5");
         }
         private void DisplayDateTime()
         {
@@ -3201,13 +3217,22 @@ namespace DATECS_EXELLIO
             // Try to perform commands
             try
             {
+                //Com_WinApi.OutputDebugString("test 1");
+
                 string[] _lines = (string[])param[0];
                 bool[] _show = (bool[])param[1];
 
+                //Com_WinApi.OutputDebugString("test 2");
+
+                this.IgnoreAnswer = false;
+                this._keepPoprtOpened = true;
                 if (_show[0])
                     this.DisplTopLine(_lines[0]);
+                this._keepPoprtOpened = false;
                 if (_show[1])
                     this.DisplBotLine(_lines[1]);
+                //Com_WinApi.OutputDebugString("test 3");
+
             }
             catch { }
         }
@@ -3268,7 +3293,9 @@ namespace DATECS_EXELLIO
                 if (this.IgnoreAnswer)
                 {
                     UpdateCriticalMethod(Params.DriverData["LastFunc"].ToString(), false);
-                    _port.Close();
+
+                    if (!this._keepPoprtOpened)
+                        _port.Close();
                     return true;
                 }
 
@@ -3336,7 +3363,7 @@ namespace DATECS_EXELLIO
                 //WinAPI.OutputDebugString("E");
             }
 
-            if (close)
+            if (close && !this._keepPoprtOpened)
                 _port.Close();
 
             UpdateCriticalMethod(Params.DriverData["LastFunc"].ToString(), true);
