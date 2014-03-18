@@ -358,6 +358,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="addplugins.bat" />
     <None Include="app.config" />
     <None Include="Resources\by_bc.png" />
     <None Include="Resources\by_c.png" />
@@ -424,7 +425,10 @@
     <VisualStudio AllowExistingFolder="true" />
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>cmd.exe call "$(ProjectDir)addplugins.bat"</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
 </Project>

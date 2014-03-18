@@ -3077,8 +3077,8 @@ namespace PayDesk.Components.UI
             //select rows with discount mode
             try
             {
-                dRows = _cheque.Select("USEDDISC = " + Boolean.TrueString);
-                _fl_useTotDisc = (dRows.Length == _cheque.Rows.Count);
+                dRows = Cheque.Select("USEDDISC = " + Boolean.TrueString);
+                _fl_useTotDisc = (dRows.Length == Cheque.Rows.Count);
                 object d = _cheque.Compute("Sum(SUM)", "USEDDISC = " + Boolean.TrueString);
                 if (d != DBNull.Value)
                     double.TryParse(d.ToString(), out discSUMA);
@@ -3131,6 +3131,7 @@ namespace PayDesk.Components.UI
             else
             {
                 _fl_useTotDisc = false;
+                // update common datatable rows
                 for (i = 0; i < dRows.Length; i++)
                 {
                     // don't use discount when client want to has another price for current article
@@ -3144,6 +3145,22 @@ namespace PayDesk.Components.UI
                     //discValue = AppFunc.GetRoundedMoney(discValue);
                     dValue = (double)dRows[i]["SUM"] - dValue;
                     dRows[i]["ASUM"] = MathLib.GetRoundedMoney(dValue);
+                }
+                // update profile table rows
+                DataRow[] _prRows = _cheque.Select("USEDDISC = " + Boolean.TrueString);
+                for (i = 0; i < _prRows.Length; i++)
+                {
+                    // don't use discount when client want to has another price for current article
+                    if (this.clientPriceNo != 0 && MathLib.GetDouble(_prRows[i]["PR" + this.clientPriceNo].ToString()) > 0.0)
+                    {
+                        _prRows[i]["DISC"] = 0.0;
+                        continue;
+                    }
+                    _prRows[i]["DISC"] = _discCommonPercent;
+                    dValue = (_discCommonPercent * (double)_prRows[i]["SUM"]) / 100;
+                    //discValue = AppFunc.GetRoundedMoney(discValue);
+                    dValue = (double)_prRows[i]["SUM"] - dValue;
+                    _prRows[i]["ASUM"] = MathLib.GetRoundedMoney(dValue);
                 }
                 _realSUMA = (double)_cheque.Compute("Sum(ASUM)", "");
             }
@@ -3689,7 +3706,6 @@ namespace PayDesk.Components.UI
         /// <param name="isLegalMode">Якщо true то чек є фіскальний</param>
         private void CloseCheque_profile(bool isLegalMode)//1_msg//lbl7
         {
-
             List<Hashtable> fullResult = new List<Hashtable>();
             Hashtable profileResult = new Hashtable();
             bool appIsLegal = isLegalMode;
@@ -3705,11 +3721,8 @@ namespace PayDesk.Components.UI
             pMethod.Dispose();
             StringBuilder _moneyInfo = new StringBuilder();
 
-
-
             if (pMethod.DialogResult != DialogResult.OK)
                 return;
-
 
             if (UserConfig.Properties[4] &&
                 DialogResult.Yes == MMessageBoxEx.Show(this.grid_Order, "Видати накладну згідно цього чеку ?", Application.ProductName,
@@ -3799,7 +3812,7 @@ namespace PayDesk.Components.UI
                     try
                     {
                         Hashtable _info = (Hashtable)ConfigManager.Instance.CommonConfiguration.PROFILES_Items[currentProfileKey];
-                        _moneyInfo.AppendFormat("{0}: {1:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}; ", _info["NAME"], _chqSUMA);
+                        _moneyInfo.AppendFormat("{0}: {1:F" + ConfigManager.Instance.CommonConfiguration.APP_MoneyDecimals + "}; ", _info["NAME"], _realSUMA);
                     }
                     catch { }
 

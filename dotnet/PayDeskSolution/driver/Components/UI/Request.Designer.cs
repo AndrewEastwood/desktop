@@ -174,7 +174,7 @@
             this.label4.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
             this.label4.Size = new System.Drawing.Size(139, 26);
             this.label4.TabIndex = 4;
-            this.label4.Text = "Додаткова Кількість";
+            this.label4.Text = "Кількість упаковок";
             // 
             // textBox1
             // 
@@ -197,7 +197,7 @@
             this.label1.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
             this.label1.Size = new System.Drawing.Size(65, 21);
             this.label1.TabIndex = 4;
-            this.label1.Text = "Кількість";
+            this.label1.Text = "Кількість товару";
             // 
             // label_scale_separator
             // 

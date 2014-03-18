@@ -48,8 +48,8 @@ namespace driver.Components.UI
             }*/
 
             double.TryParse(dRow["PACK"].ToString(), out this.articlePackage);
-            if (this.articlePackage == 0)
-                this.articlePackage = 1;
+            //if (this.articlePackage == 0)
+            //    this.articlePackage = 1;
             this.currTotal = tot;
 
             // window description
@@ -59,9 +59,15 @@ namespace driver.Components.UI
             this.textBox1.Text = this.currTotal.ToString();
             
             // additional quantity
-            if (driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal == "none")
-                this.textBox2.Visible = this.label4.Visible = false;
-                
+            if (this.articlePackage > 0 && driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal != "none")
+            {
+                if (this.currTotal > 0)
+                {
+                    this.addTotal = MathLib.GetRoundedDose(this.articlePackage / this.currTotal);
+                    this.textBox2.Text = this.addTotal.ToString();
+                }
+                this.textBox2.Visible = this.label4.Visible = true;
+            }
             /*
 
             startTotal = -1;
@@ -106,7 +112,7 @@ namespace driver.Components.UI
             comboBox1.SelectedIndex = 0;
 
             // helper
-            textBox3.Text = "1 " + dRow["UNIT"].ToString() + " = " + this.articlePackage.ToString();
+            textBox3.Text = "1уп. має " + this.articlePackage.ToString() + dRow["UNIT"].ToString();
 
             /*
             this.flowLayoutPanel1.AutoSize = false;
@@ -285,32 +291,40 @@ namespace driver.Components.UI
             {
                 case "main":
                     {
-                        this.currTotal = MathLib.GetDouble(textBox1.Text);
-                        if (driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal == "type1")
-                        {
-                            this.addTotal = MathLib.GetRoundedDose(this.currTotal * this.articlePackage);
-                        }
-                        if (driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal == "type2")
-                        {
-                            this.addTotal = MathLib.GetRoundedDose(this.currTotal / this.articlePackage);
-                        }
                         locked = true;
+                        this.currTotal = MathLib.GetDouble(textBox1.Text);
+                        if (this.currTotal == 0)
+                            this.addTotal = 0;
+                        if (this.articlePackage > 0 && this.currTotal > 0)
+                            this.addTotal = MathLib.GetRoundedDose(this.currTotal / this.articlePackage);
+                        //if (driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal == "type1")
+                        //{
+                        //    this.addTotal = MathLib.GetRoundedDose(this.currTotal * this.articlePackage);
+                        //}
+                        //if (driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal == "type2")
+                        //{
+                        //    this.addTotal = MathLib.GetRoundedDose(this.currTotal / this.articlePackage);
+                        //}
                         textBox2.Text = this.addTotal.ToString();
                         break;
 
                     }
                 case "add":
                     {
-                        this.addTotal = MathLib.GetDouble(textBox2.Text);
-                        if (driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal == "type1")
-                        {
-                            this.currTotal = MathLib.GetRoundedDose(this.addTotal / this.articlePackage);
-                        }
-                        if (driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal == "type2")
-                        {
-                            this.currTotal = MathLib.GetRoundedDose(this.addTotal * this.articlePackage);
-                        }
                         locked = true;
+                        this.addTotal = MathLib.GetDouble(textBox2.Text);
+                        if (this.addTotal == 0)
+                            this.currTotal = 0;
+                        if (this.articlePackage > 0 && this.addTotal > 0)
+                            this.currTotal = MathLib.GetRoundedDose(this.addTotal * this.articlePackage);
+                        //if (driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal == "type1")
+                        //{
+                        //    this.currTotal = MathLib.GetRoundedDose(this.addTotal / this.articlePackage);
+                        //}
+                        //if (driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal == "type2")
+                        //{
+                        //    this.currTotal = MathLib.GetRoundedDose(this.addTotal * this.articlePackage);
+                        //}
                         textBox1.Text = this.currTotal.ToString();
                         break;
                     }
