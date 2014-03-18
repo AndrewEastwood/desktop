@@ -190,11 +190,10 @@
             this.content_chq_chBox_useCustomClientCardBC = new System.Windows.Forms.CheckBox();
             this.content_chq_textBox_separatedArticleMaskById = new System.Windows.Forms.TextBox();
             this.content_chq_chBox_useSeparateCheque = new System.Windows.Forms.CheckBox();
-            this.content_order_groupBox_addQuantity = new System.Windows.Forms.GroupBox();
-            this.content_order_radioButton_addQuantity3 = new System.Windows.Forms.RadioButton();
-            this.content_order_radioButton_addQuantity2 = new System.Windows.Forms.RadioButton();
-            this.content_order_radioButton_addQuantity1 = new System.Windows.Forms.RadioButton();
             this.settings_content_tabControl_main_pBills = new System.Windows.Forms.TabPage();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.checkBox_pBills_ShowBillSumColumn = new System.Windows.Forms.CheckBox();
+            this.checkBox_pBills_ShowBillTotalSum = new System.Windows.Forms.CheckBox();
             this.content_bills_groupBox_secure = new System.Windows.Forms.GroupBox();
             this.checkBox_pBills_DeleteBillAtEnd = new System.Windows.Forms.CheckBox();
             this.content_bill_chBox_addCopyToArchive = new System.Windows.Forms.CheckBox();
@@ -211,9 +210,7 @@
             this.label29 = new System.Windows.Forms.Label();
             this.profiles_cBox_legalProfile = new System.Windows.Forms.ComboBox();
             this.profiles_btn_refresh = new System.Windows.Forms.Button();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.checkBox_pBills_ShowBillSumColumn = new System.Windows.Forms.CheckBox();
-            this.checkBox_pBills_ShowBillTotalSum = new System.Windows.Forms.CheckBox();
+            this.content_order_checkbox_useAddQuantity = new System.Windows.Forms.CheckBox();
             this.PanelStyle.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage4.SuspendLayout();
@@ -251,15 +248,14 @@
             this.settings_content_tabControl_main_pCheques.SuspendLayout();
             this.content_order_groupBox_secure.SuspendLayout();
             this.content_order_groupBox_additional.SuspendLayout();
-            this.content_order_groupBox_addQuantity.SuspendLayout();
             this.settings_content_tabControl_main_pBills.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.content_bills_groupBox_secure.SuspendLayout();
             this.settings_content_tabControl_main_pArticles.SuspendLayout();
             this.panelProfiles.SuspendLayout();
             this.panel4.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
-            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // SaveButton
@@ -1857,7 +1853,7 @@
             // 
             this.settings_content_tabControl_main_pCheques.Controls.Add(this.content_order_groupBox_secure);
             this.settings_content_tabControl_main_pCheques.Controls.Add(this.content_order_groupBox_additional);
-            this.settings_content_tabControl_main_pCheques.Controls.Add(this.content_order_groupBox_addQuantity);
+            this.settings_content_tabControl_main_pCheques.Controls.Add(this.content_order_checkbox_useAddQuantity);
             this.settings_content_tabControl_main_pCheques.Location = new System.Drawing.Point(4, 22);
             this.settings_content_tabControl_main_pCheques.Name = "settings_content_tabControl_main_pCheques";
             this.settings_content_tabControl_main_pCheques.Padding = new System.Windows.Forms.Padding(10);
@@ -1870,7 +1866,8 @@
             // 
             this.content_order_groupBox_secure.Controls.Add(this.content_chq_chBox_addCopyToArchive);
             this.content_order_groupBox_secure.Dock = System.Windows.Forms.DockStyle.Top;
-            this.content_order_groupBox_secure.Location = new System.Drawing.Point(10, 231);
+            this.content_order_groupBox_secure.Location = new System.Drawing.Point(10, 164);
+            this.content_order_groupBox_secure.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.content_order_groupBox_secure.Name = "content_order_groupBox_secure";
             this.content_order_groupBox_secure.Padding = new System.Windows.Forms.Padding(20, 5, 20, 5);
             this.content_order_groupBox_secure.Size = new System.Drawing.Size(312, 100);
@@ -1898,10 +1895,11 @@
             this.content_order_groupBox_additional.Controls.Add(this.content_chq_textBox_separatedArticleMaskById);
             this.content_order_groupBox_additional.Controls.Add(this.content_chq_chBox_useSeparateCheque);
             this.content_order_groupBox_additional.Dock = System.Windows.Forms.DockStyle.Top;
-            this.content_order_groupBox_additional.Location = new System.Drawing.Point(10, 114);
+            this.content_order_groupBox_additional.Location = new System.Drawing.Point(10, 37);
+            this.content_order_groupBox_additional.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
             this.content_order_groupBox_additional.Name = "content_order_groupBox_additional";
-            this.content_order_groupBox_additional.Padding = new System.Windows.Forms.Padding(20, 5, 20, 5);
-            this.content_order_groupBox_additional.Size = new System.Drawing.Size(312, 117);
+            this.content_order_groupBox_additional.Padding = new System.Windows.Forms.Padding(20, 5, 20, 15);
+            this.content_order_groupBox_additional.Size = new System.Drawing.Size(312, 127);
             this.content_order_groupBox_additional.TabIndex = 1;
             this.content_order_groupBox_additional.TabStop = false;
             this.content_order_groupBox_additional.Text = "Додатково";
@@ -1952,59 +1950,6 @@
             this.content_chq_chBox_useSeparateCheque.Visible = false;
             this.content_chq_chBox_useSeparateCheque.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
             // 
-            // content_order_groupBox_addQuantity
-            // 
-            this.content_order_groupBox_addQuantity.AutoSize = true;
-            this.content_order_groupBox_addQuantity.Controls.Add(this.content_order_radioButton_addQuantity3);
-            this.content_order_groupBox_addQuantity.Controls.Add(this.content_order_radioButton_addQuantity2);
-            this.content_order_groupBox_addQuantity.Controls.Add(this.content_order_radioButton_addQuantity1);
-            this.content_order_groupBox_addQuantity.Dock = System.Windows.Forms.DockStyle.Top;
-            this.content_order_groupBox_addQuantity.Location = new System.Drawing.Point(10, 10);
-            this.content_order_groupBox_addQuantity.Name = "content_order_groupBox_addQuantity";
-            this.content_order_groupBox_addQuantity.Padding = new System.Windows.Forms.Padding(20, 5, 5, 5);
-            this.content_order_groupBox_addQuantity.Size = new System.Drawing.Size(312, 104);
-            this.content_order_groupBox_addQuantity.TabIndex = 0;
-            this.content_order_groupBox_addQuantity.TabStop = false;
-            this.content_order_groupBox_addQuantity.Text = "Додаткова Кількість";
-            // 
-            // content_order_radioButton_addQuantity3
-            // 
-            this.content_order_radioButton_addQuantity3.AutoSize = true;
-            this.content_order_radioButton_addQuantity3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.content_order_radioButton_addQuantity3.Location = new System.Drawing.Point(20, 72);
-            this.content_order_radioButton_addQuantity3.Name = "content_order_radioButton_addQuantity3";
-            this.content_order_radioButton_addQuantity3.Padding = new System.Windows.Forms.Padding(0, 5, 5, 5);
-            this.content_order_radioButton_addQuantity3.Size = new System.Drawing.Size(287, 27);
-            this.content_order_radioButton_addQuantity3.TabIndex = 0;
-            this.content_order_radioButton_addQuantity3.Text = "внутрішня кількість упаковки";
-            this.content_order_radioButton_addQuantity3.UseVisualStyleBackColor = true;
-            // 
-            // content_order_radioButton_addQuantity2
-            // 
-            this.content_order_radioButton_addQuantity2.AutoSize = true;
-            this.content_order_radioButton_addQuantity2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.content_order_radioButton_addQuantity2.Location = new System.Drawing.Point(20, 45);
-            this.content_order_radioButton_addQuantity2.Name = "content_order_radioButton_addQuantity2";
-            this.content_order_radioButton_addQuantity2.Padding = new System.Windows.Forms.Padding(0, 5, 5, 5);
-            this.content_order_radioButton_addQuantity2.Size = new System.Drawing.Size(287, 27);
-            this.content_order_radioButton_addQuantity2.TabIndex = 0;
-            this.content_order_radioButton_addQuantity2.Text = "кількість упаковок відносно основної";
-            this.content_order_radioButton_addQuantity2.UseVisualStyleBackColor = true;
-            // 
-            // content_order_radioButton_addQuantity1
-            // 
-            this.content_order_radioButton_addQuantity1.AutoSize = true;
-            this.content_order_radioButton_addQuantity1.Checked = true;
-            this.content_order_radioButton_addQuantity1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.content_order_radioButton_addQuantity1.Location = new System.Drawing.Point(20, 18);
-            this.content_order_radioButton_addQuantity1.Name = "content_order_radioButton_addQuantity1";
-            this.content_order_radioButton_addQuantity1.Padding = new System.Windows.Forms.Padding(0, 5, 5, 5);
-            this.content_order_radioButton_addQuantity1.Size = new System.Drawing.Size(287, 27);
-            this.content_order_radioButton_addQuantity1.TabIndex = 0;
-            this.content_order_radioButton_addQuantity1.TabStop = true;
-            this.content_order_radioButton_addQuantity1.Text = "без додаткової кількості";
-            this.content_order_radioButton_addQuantity1.UseVisualStyleBackColor = true;
-            // 
             // settings_content_tabControl_main_pBills
             // 
             this.settings_content_tabControl_main_pBills.Controls.Add(this.groupBox6);
@@ -2016,6 +1961,44 @@
             this.settings_content_tabControl_main_pBills.TabIndex = 2;
             this.settings_content_tabControl_main_pBills.Text = "Рахунки";
             this.settings_content_tabControl_main_pBills.UseVisualStyleBackColor = true;
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.AutoSize = true;
+            this.groupBox6.Controls.Add(this.checkBox_pBills_ShowBillSumColumn);
+            this.groupBox6.Controls.Add(this.checkBox_pBills_ShowBillTotalSum);
+            this.groupBox6.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox6.Location = new System.Drawing.Point(3, 80);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Padding = new System.Windows.Forms.Padding(20, 5, 20, 5);
+            this.groupBox6.Size = new System.Drawing.Size(326, 77);
+            this.groupBox6.TabIndex = 4;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Загальний список чеків";
+            // 
+            // checkBox_pBills_ShowBillSumColumn
+            // 
+            this.checkBox_pBills_ShowBillSumColumn.AutoSize = true;
+            this.checkBox_pBills_ShowBillSumColumn.Dock = System.Windows.Forms.DockStyle.Top;
+            this.checkBox_pBills_ShowBillSumColumn.Location = new System.Drawing.Point(20, 45);
+            this.checkBox_pBills_ShowBillSumColumn.Name = "checkBox_pBills_ShowBillSumColumn";
+            this.checkBox_pBills_ShowBillSumColumn.Padding = new System.Windows.Forms.Padding(0, 5, 5, 5);
+            this.checkBox_pBills_ShowBillSumColumn.Size = new System.Drawing.Size(286, 27);
+            this.checkBox_pBills_ShowBillSumColumn.TabIndex = 1;
+            this.checkBox_pBills_ShowBillSumColumn.Text = "Показувати колонку суми чеку";
+            this.checkBox_pBills_ShowBillSumColumn.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_pBills_ShowBillTotalSum
+            // 
+            this.checkBox_pBills_ShowBillTotalSum.AutoSize = true;
+            this.checkBox_pBills_ShowBillTotalSum.Dock = System.Windows.Forms.DockStyle.Top;
+            this.checkBox_pBills_ShowBillTotalSum.Location = new System.Drawing.Point(20, 18);
+            this.checkBox_pBills_ShowBillTotalSum.Name = "checkBox_pBills_ShowBillTotalSum";
+            this.checkBox_pBills_ShowBillTotalSum.Padding = new System.Windows.Forms.Padding(0, 5, 5, 5);
+            this.checkBox_pBills_ShowBillTotalSum.Size = new System.Drawing.Size(286, 27);
+            this.checkBox_pBills_ShowBillTotalSum.TabIndex = 4;
+            this.checkBox_pBills_ShowBillTotalSum.Text = "Показувати загальну суму чеків";
+            this.checkBox_pBills_ShowBillTotalSum.UseVisualStyleBackColor = true;
             // 
             // content_bills_groupBox_secure
             // 
@@ -2203,43 +2186,17 @@
             this.profiles_btn_refresh.UseVisualStyleBackColor = true;
             this.profiles_btn_refresh.Click += new System.EventHandler(this.button_Click);
             // 
-            // groupBox6
+            // content_order_checkbox_useAddQuantity
             // 
-            this.groupBox6.AutoSize = true;
-            this.groupBox6.Controls.Add(this.checkBox_pBills_ShowBillSumColumn);
-            this.groupBox6.Controls.Add(this.checkBox_pBills_ShowBillTotalSum);
-            this.groupBox6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox6.Location = new System.Drawing.Point(3, 80);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Padding = new System.Windows.Forms.Padding(20, 5, 20, 5);
-            this.groupBox6.Size = new System.Drawing.Size(326, 77);
-            this.groupBox6.TabIndex = 4;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Загальний список чеків";
-            // 
-            // checkBox_pBills_ShowBillSumColumn
-            // 
-            this.checkBox_pBills_ShowBillSumColumn.AutoSize = true;
-            this.checkBox_pBills_ShowBillSumColumn.Dock = System.Windows.Forms.DockStyle.Top;
-            this.checkBox_pBills_ShowBillSumColumn.Location = new System.Drawing.Point(20, 45);
-            this.checkBox_pBills_ShowBillSumColumn.Name = "checkBox_pBills_ShowBillSumColumn";
-            this.checkBox_pBills_ShowBillSumColumn.Padding = new System.Windows.Forms.Padding(0, 5, 5, 5);
-            this.checkBox_pBills_ShowBillSumColumn.Size = new System.Drawing.Size(286, 27);
-            this.checkBox_pBills_ShowBillSumColumn.TabIndex = 1;
-            this.checkBox_pBills_ShowBillSumColumn.Text = "Показувати колонку суми чеку";
-            this.checkBox_pBills_ShowBillSumColumn.UseVisualStyleBackColor = true;
-            // 
-            // checkBox_pBills_ShowBillTotalSum
-            // 
-            this.checkBox_pBills_ShowBillTotalSum.AutoSize = true;
-            this.checkBox_pBills_ShowBillTotalSum.Dock = System.Windows.Forms.DockStyle.Top;
-            this.checkBox_pBills_ShowBillTotalSum.Location = new System.Drawing.Point(20, 18);
-            this.checkBox_pBills_ShowBillTotalSum.Name = "checkBox_pBills_ShowBillTotalSum";
-            this.checkBox_pBills_ShowBillTotalSum.Padding = new System.Windows.Forms.Padding(0, 5, 5, 5);
-            this.checkBox_pBills_ShowBillTotalSum.Size = new System.Drawing.Size(286, 27);
-            this.checkBox_pBills_ShowBillTotalSum.TabIndex = 4;
-            this.checkBox_pBills_ShowBillTotalSum.Text = "Показувати загальну суму чеків";
-            this.checkBox_pBills_ShowBillTotalSum.UseVisualStyleBackColor = true;
+            this.content_order_checkbox_useAddQuantity.AutoSize = true;
+            this.content_order_checkbox_useAddQuantity.Dock = System.Windows.Forms.DockStyle.Top;
+            this.content_order_checkbox_useAddQuantity.Location = new System.Drawing.Point(10, 10);
+            this.content_order_checkbox_useAddQuantity.Name = "content_order_checkbox_useAddQuantity";
+            this.content_order_checkbox_useAddQuantity.Padding = new System.Windows.Forms.Padding(20, 5, 20, 5);
+            this.content_order_checkbox_useAddQuantity.Size = new System.Drawing.Size(312, 27);
+            this.content_order_checkbox_useAddQuantity.TabIndex = 3;
+            this.content_order_checkbox_useAddQuantity.Text = "Використовувати додаткову к-сть";
+            this.content_order_checkbox_useAddQuantity.UseVisualStyleBackColor = true;
             // 
             // uiWndSettings
             // 
@@ -2315,10 +2272,10 @@
             this.content_order_groupBox_secure.PerformLayout();
             this.content_order_groupBox_additional.ResumeLayout(false);
             this.content_order_groupBox_additional.PerformLayout();
-            this.content_order_groupBox_addQuantity.ResumeLayout(false);
-            this.content_order_groupBox_addQuantity.PerformLayout();
             this.settings_content_tabControl_main_pBills.ResumeLayout(false);
             this.settings_content_tabControl_main_pBills.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.content_bills_groupBox_secure.ResumeLayout(false);
             this.content_bills_groupBox_secure.PerformLayout();
             this.settings_content_tabControl_main_pArticles.ResumeLayout(false);
@@ -2329,8 +2286,6 @@
             this.groupBox2.PerformLayout();
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2450,10 +2405,6 @@
         private System.Windows.Forms.TabPage settings_content_tabControl_main_pArticles;
         private System.Windows.Forms.CheckBox checkBox_pBills_DeleteBillAtEnd;
         private System.Windows.Forms.CheckBox checkBox_pArticles_KeepOriginData;
-        private System.Windows.Forms.GroupBox content_order_groupBox_addQuantity;
-        private System.Windows.Forms.RadioButton content_order_radioButton_addQuantity1;
-        private System.Windows.Forms.RadioButton content_order_radioButton_addQuantity3;
-        private System.Windows.Forms.RadioButton content_order_radioButton_addQuantity2;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label15;
@@ -2515,6 +2466,7 @@
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.CheckBox checkBox_pBills_ShowBillSumColumn;
         private System.Windows.Forms.CheckBox checkBox_pBills_ShowBillTotalSum;
+        private System.Windows.Forms.CheckBox content_order_checkbox_useAddQuantity;
 
     }
 }

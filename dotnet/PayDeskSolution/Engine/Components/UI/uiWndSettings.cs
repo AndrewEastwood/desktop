@@ -100,12 +100,7 @@ namespace PayDesk.Components.UI
             this.content_general_numeric_printDelay.Value = ConfigManager.Instance.CommonConfiguration.Content_Common_PrinterDelaySec;
             // --TabPage: Cheques
             // Add total
-            switch (ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal)
-            {
-                case "none": this.content_order_radioButton_addQuantity1.Checked = true; break;
-                case "type1": this.content_order_radioButton_addQuantity2.Checked = true; break;
-                case "type2": this.content_order_radioButton_addQuantity3.Checked = true; break;
-            }
+            this.content_order_checkbox_useAddQuantity.Checked = ConfigManager.Instance.CommonConfiguration.Content_Cheques_UseAddTotal;
             // split articles to different cheques
             // removed this.content_chq_chBox_useSeparateCheque.Checked = ConfigManager.Instance.CommonConfiguration.Content_Cheques_UseSeparateCheque;
             // removed this.content_chq_textBox_separatedArticleMaskById.Text = ConfigManager.Instance.CommonConfiguration.Content_Cheques_SeparatedArticleMaskById;
@@ -750,12 +745,7 @@ namespace PayDesk.Components.UI
                 // removed ConfigManager.Instance.CommonConfiguration.Content_Cheques_UseSeparateCheque = this.content_chq_chBox_useSeparateCheque.Checked;
                 // removed ConfigManager.Instance.CommonConfiguration.Content_Cheques_SeparatedArticleMaskById = this.content_chq_textBox_separatedArticleMaskById.Text;
                 // Add total
-                if (content_order_radioButton_addQuantity1.Checked)
-                    ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal = "none";
-                if (content_order_radioButton_addQuantity2.Checked)
-                    ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal = "type1";
-                if (content_order_radioButton_addQuantity3.Checked)
-                    ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal = "type2";
+                ConfigManager.Instance.CommonConfiguration.Content_Cheques_UseAddTotal = this.content_order_checkbox_useAddQuantity.Checked;
                 // split articles to different cheques
                 ConfigManager.Instance.CommonConfiguration.Content_Cheques_UseSeparateCheque = this.content_chq_chBox_useSeparateCheque.Checked;
                 ConfigManager.Instance.CommonConfiguration.Content_Cheques_SeparatedArticleMaskById = this.content_chq_textBox_separatedArticleMaskById.Text;

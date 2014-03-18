@@ -222,6 +222,7 @@ namespace driver.Config
         #endregion
         #region Cheques [6]
         public string Content_Cheques_AddTotal = "none";
+        public bool Content_Cheques_UseAddTotal = false;
         public bool Content_Cheques_UseSeparateCheque = false;
         public string Content_Cheques_SeparatedArticleMaskById = string.Empty;
         public bool Content_Cheques_UseCustomClientCardBC = false;

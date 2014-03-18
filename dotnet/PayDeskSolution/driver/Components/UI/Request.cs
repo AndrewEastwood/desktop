@@ -59,15 +59,17 @@ namespace driver.Components.UI
             this.textBox1.Text = this.currTotal.ToString();
             
             // additional quantity
-            if (this.articlePackage > 0 && driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal != "none")
+            if (this.articlePackage > 0 && driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_UseAddTotal)
             {
                 if (this.currTotal > 0)
                 {
-                    this.addTotal = MathLib.GetRoundedDose(this.articlePackage / this.currTotal);
+                    this.addTotal = MathLib.GetRoundedDose(this.currTotal / this.articlePackage);
                     this.textBox2.Text = this.addTotal.ToString();
                 }
                 this.textBox2.Visible = this.label4.Visible = true;
             }
+            else
+                this.textBox2.Visible = this.label4.Visible = false;
             /*
 
             startTotal = -1;
