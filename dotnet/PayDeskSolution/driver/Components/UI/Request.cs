@@ -84,6 +84,7 @@ namespace driver.Components.UI
 
             // helper
             textBox_informer.Text = "1уп. має " + this.articlePackage.ToString() + dRow["UNIT"].ToString();
+            label_unit_type.Text = dRow["UNIT"].ToString();
             this.panel_spacer.Height = 0;
             this.panel_spacer2.Height = 0;
             this.Height = 0;
@@ -235,6 +236,7 @@ namespace driver.Components.UI
                         if (this.articlePackage > 0 && this.currTotal > 0)
                             this.addTotal = MathLib.GetRoundedDose(this.currTotal / this.articlePackage);
                         textBox_quantity_additional.Text = this.addTotal.ToString();
+                        locked = false;
                         break;
 
                     }
@@ -247,6 +249,7 @@ namespace driver.Components.UI
                         if (this.articlePackage > 0 && this.addTotal > 0)
                             this.currTotal = MathLib.GetRoundedDose(this.addTotal * this.articlePackage);
                         textBox_quantity_main.Text = this.currTotal.ToString();
+                        locked = false;
                         break;
                     }
             }
@@ -438,6 +441,8 @@ namespace driver.Components.UI
             //this.Width = this.panel1.Width; this.Height = panel1.Height;
             this.Height = 0;
             this.Update();*/
+            this.textBox_quantity_main.Select();
+            this.textBox_quantity_main.SelectAll();
         }
     }
 }

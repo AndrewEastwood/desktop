@@ -40,10 +40,13 @@
             this.label_price = new System.Windows.Forms.Label();
             this.textBox_quantity_additional = new System.Windows.Forms.TextBox();
             this.label_quantity_additional = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.textBox_quantity_main = new System.Windows.Forms.TextBox();
+            this.label_unit_type = new System.Windows.Forms.Label();
             this.label_quantity_main = new System.Windows.Forms.Label();
             this.panel_spacer.SuspendLayout();
             this.panel_spacer2.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel_spacer
@@ -56,7 +59,7 @@
             this.panel_spacer.Controls.Add(this.label_price);
             this.panel_spacer.Controls.Add(this.textBox_quantity_additional);
             this.panel_spacer.Controls.Add(this.label_quantity_additional);
-            this.panel_spacer.Controls.Add(this.textBox_quantity_main);
+            this.panel_spacer.Controls.Add(this.panel1);
             this.panel_spacer.Controls.Add(this.label_quantity_main);
             this.panel_spacer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_spacer.Location = new System.Drawing.Point(15, 15);
@@ -96,7 +99,7 @@
             this.button_scale_value.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.button_scale_value.Name = "button_scale_value";
             this.button_scale_value.Size = new System.Drawing.Size(196, 30);
-            this.button_scale_value.TabIndex = 8;
+            this.button_scale_value.TabIndex = 4;
             this.button_scale_value.Text = "F9 - Отримати з ваги";
             this.button_scale_value.UseVisualStyleBackColor = true;
             this.button_scale_value.Click += new System.EventHandler(this.button_scale_value_Click);
@@ -109,7 +112,7 @@
             this.AddProductBtn.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.AddProductBtn.Name = "AddProductBtn";
             this.AddProductBtn.Size = new System.Drawing.Size(196, 30);
-            this.AddProductBtn.TabIndex = 4;
+            this.AddProductBtn.TabIndex = 5;
             this.AddProductBtn.Text = "Добре";
             this.AddProductBtn.UseVisualStyleBackColor = true;
             this.AddProductBtn.Click += new System.EventHandler(this.AddProductBtn_Click);
@@ -146,7 +149,7 @@
             this.comboBox_prices.MaxDropDownItems = 4;
             this.comboBox_prices.Name = "comboBox_prices";
             this.comboBox_prices.Size = new System.Drawing.Size(196, 28);
-            this.comboBox_prices.TabIndex = 2;
+            this.comboBox_prices.TabIndex = 3;
             this.comboBox_prices.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label_price
@@ -168,7 +171,7 @@
             this.textBox_quantity_additional.Location = new System.Drawing.Point(10, 83);
             this.textBox_quantity_additional.Name = "textBox_quantity_additional";
             this.textBox_quantity_additional.Size = new System.Drawing.Size(196, 26);
-            this.textBox_quantity_additional.TabIndex = 1;
+            this.textBox_quantity_additional.TabIndex = 2;
             this.textBox_quantity_additional.Tag = "add";
             this.textBox_quantity_additional.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
@@ -184,16 +187,40 @@
             this.label_quantity_additional.TabIndex = 4;
             this.label_quantity_additional.Text = "Кількість упаковок";
             // 
+            // panel1
+            // 
+            this.panel1.AutoSize = true;
+            this.panel1.Controls.Add(this.textBox_quantity_main);
+            this.panel1.Controls.Add(this.label_unit_type);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(10, 31);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(196, 26);
+            this.panel1.TabIndex = 9;
+            // 
             // textBox_quantity_main
             // 
             this.textBox_quantity_main.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBox_quantity_main.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox_quantity_main.Location = new System.Drawing.Point(10, 31);
+            this.textBox_quantity_main.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox_quantity_main.Location = new System.Drawing.Point(0, 0);
             this.textBox_quantity_main.Name = "textBox_quantity_main";
             this.textBox_quantity_main.Size = new System.Drawing.Size(196, 26);
-            this.textBox_quantity_main.TabIndex = 0;
+            this.textBox_quantity_main.TabIndex = 1;
             this.textBox_quantity_main.Tag = "main";
             this.textBox_quantity_main.TextChanged += new System.EventHandler(this.textBox_TextChanged);
+            // 
+            // label_unit_type
+            // 
+            this.label_unit_type.AutoSize = true;
+            this.label_unit_type.BackColor = System.Drawing.Color.Transparent;
+            this.label_unit_type.Dock = System.Windows.Forms.DockStyle.Right;
+            this.label_unit_type.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label_unit_type.Location = new System.Drawing.Point(196, 0);
+            this.label_unit_type.Name = "label_unit_type";
+            this.label_unit_type.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.label_unit_type.Size = new System.Drawing.Size(0, 20);
+            this.label_unit_type.TabIndex = 8;
+            this.label_unit_type.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label_quantity_main
             // 
@@ -234,6 +261,8 @@
             this.panel_spacer.PerformLayout();
             this.panel_spacer2.ResumeLayout(false);
             this.panel_spacer2.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -250,10 +279,12 @@
         private System.Windows.Forms.Label label_price;
         private System.Windows.Forms.TextBox textBox_quantity_additional;
         private System.Windows.Forms.Label label_quantity_additional;
-        private System.Windows.Forms.TextBox textBox_quantity_main;
         private System.Windows.Forms.Label label_quantity_main;
         private System.Windows.Forms.Button button_scale_value;
         private System.Windows.Forms.Label label_scale_separator;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TextBox textBox_quantity_main;
+        private System.Windows.Forms.Label label_unit_type;
 
 
     }
