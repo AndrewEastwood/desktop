@@ -24,39 +24,19 @@ namespace driver.Components.UI
         private double addTotal;
         private bool locked;
         private double articlePackage;
-        //Objects.ComPort comP;
-        //private ApplicationConfiguration appConfiguration;
 
         public Request(DataRow dRow, double tot)
         {
             InitializeComponent();
 
-            //appConfiguration = appConfig;
-
-            // restore position
-            /*try
-            {
-                this.Location = ((Point)ConfigManager.Instance.CommonConfiguration.WP_ALL["Q_REQUEST"]);
-                this.StartPosition = FormStartPosition.Manual;
-            }
-            catch
-            {
-                if (ConfigManager.Instance.CommonConfiguration.WP_ALL == null)
-                    ConfigManager.Instance.CommonConfiguration.WP_ALL = new System.Collections.Hashtable();
-                // saving position
-                ConfigManager.Instance.CommonConfiguration.WP_ALL["Q_REQUEST"] = this.Location;
-            }*/
-
             double.TryParse(dRow["PACK"].ToString(), out this.articlePackage);
-            //if (this.articlePackage == 0)
-            //    this.articlePackage = 1;
             this.currTotal = tot;
 
             // window description
             Text = dRow["DESC"].ToString();
 
             // general quantity
-            this.textBox1.Text = this.currTotal.ToString();
+            this.textBox_quantity_main.Text = this.currTotal.ToString();
             
             // additional quantity
             if (this.articlePackage > 0 && driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_UseAddTotal)
@@ -64,22 +44,12 @@ namespace driver.Components.UI
                 if (this.currTotal > 0)
                 {
                     this.addTotal = MathLib.GetRoundedDose(this.currTotal / this.articlePackage);
-                    this.textBox2.Text = this.addTotal.ToString();
+                    this.textBox_quantity_additional.Text = this.addTotal.ToString();
                 }
-                this.textBox2.Visible = this.label4.Visible = true;
+                this.textBox_quantity_additional.Visible = this.label_quantity_additional.Visible = true;
             }
             else
-                this.textBox2.Visible = this.label4.Visible = false;
-            /*
-
-            startTotal = -1;
-            if (tot < 0)
-                textBox1.Text = dRow["TOT"].ToString();
-            else
-            {
-                textBox1.Text = tot.ToString();
-                startTotal = AppFunc.GetDouble(dRow["TOT"]);
-            }*/
+                this.textBox_quantity_additional.Visible = this.label_quantity_additional.Visible = false;
 
             bool showGetScaleButton = false;
             for (byte i = 0; i < ((string[])driver.Config.ConfigManager.Instance.CommonConfiguration.APP_UnitFilter[0]).Length; i++)
@@ -91,100 +61,75 @@ namespace driver.Components.UI
 
             label_scale_separator.Visible = showGetScaleButton;
             button_scale_value.Visible = showGetScaleButton;
-            textBox1.Enabled = textBox2.Enabled = !showGetScaleButton;
-
+            textBox_quantity_main.Enabled = textBox_quantity_additional.Enabled = !showGetScaleButton;
 
             // price list
-            comboBox1.Items.Add(dRow["PRICE"]);
+            comboBox_prices.Items.Add(dRow["PRICE"]);
             if (UserConfig.Properties[1])
-                comboBox1.Items.AddRange(new object[]{
+                comboBox_prices.Items.AddRange(new object[]{
                     dRow["PR1"],
                     dRow["PR2"],
                     dRow["PR3"]});
 
             if (UserConfig.Properties[2])
             {
-                comboBox1.DropDownStyle = ComboBoxStyle.DropDown;
-                if (!comboBox1.Items.Contains(dRow["ORIGPRICE"]))
-                    comboBox1.Items.Add(dRow["ORIGPRICE"]);
+                comboBox_prices.DropDownStyle = ComboBoxStyle.DropDown;
+                if (!comboBox_prices.Items.Contains(dRow["ORIGPRICE"]))
+                    comboBox_prices.Items.Add(dRow["ORIGPRICE"]);
             }
             else
-                comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+                comboBox_prices.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            comboBox1.SelectedIndex = 0;
+            comboBox_prices.SelectedIndex = 0;
 
             // helper
-            textBox3.Text = "1уп. має " + this.articlePackage.ToString() + dRow["UNIT"].ToString();
-
-            /*
-            this.flowLayoutPanel1.AutoSize = false;
-            this.Height = this.flowLayoutPanel1.Height;
-            this.flowLayoutPanel1.Height = 0;
-            this.flowLayoutPanel1.Width = 0;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink; */
-            // old 17-08-2011 ***  this.Width = this.panel1.Width;
-            //this.Height;
-            this.panel1.Height = 0;
-            this.panel2.Height = 0;
-            //this.panel2.Refresh();
-            //this.button_scale_value.Visible = true;
-            //this.AddProductBtn.Visible = true;
-            //this.Width = this.panel1.Width; this.Height = panel1.Height;
+            textBox_informer.Text = "1уп. має " + this.articlePackage.ToString() + dRow["UNIT"].ToString();
+            this.panel_spacer.Height = 0;
+            this.panel_spacer2.Height = 0;
             this.Height = 0;
             this.Update();
             // current article data row
             this.dRow = dRow;
-            //this.TopMost = true;
-            //this.comP = new Objects.ComPort();
-            //this.comP.LoadPortConfig("ScalePort.xml");
-
-            global::components.Components.SerialPort.Com_SerialPort.GetAndConfigurePort("scales", (Hashtable)ApplicationConfiguration.Instance["serialPortConnect.additionalDevices.scale"]);
-            
         }
 
         ~Request()
         {
             global::components.Components.SerialPort.Com_SerialPort.ClosePort("scales");
-            /*if (this.comP != null)
-            {
-                this.comP.Close();
-                this.comP.Dispose();
-            }*/
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedIndex == 0)
+            if (comboBox_prices.SelectedIndex == 0)
             {
                 if (UserConfig.Properties[2])
-                    comboBox1.DropDownStyle = ComboBoxStyle.DropDown;
+                    comboBox_prices.DropDownStyle = ComboBoxStyle.DropDown;
             }
             else
-                comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+                comboBox_prices.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
         private void AddProductBtn_Click(object sender, EventArgs e)
         {
             try
             {
-                newTotal = MathLib.GetDouble(textBox1.Text);
-                newPrice = MathLib.GetDouble(comboBox1.Text);
+                newTotal = MathLib.GetDouble(textBox_quantity_main.Text);
+                newPrice = MathLib.GetDouble(comboBox_prices.Text);
 
                 newTotal = MathLib.GetRoundedDose(newTotal);
                 newPrice = MathLib.GetRoundedMoney(newPrice);
 
                 if (newTotal <= 0 || newTotal > 100000 )
                 {
-                    textBox1.Focus();
-                    textBox1.SelectAll();
+                    textBox_quantity_main.Focus();
+                    textBox_quantity_main.SelectAll();
                     MMessageBoxEx.Show(this, "Помилкове значення кількості", Application.ProductName);
                     return;
                 }
 
                 if (newPrice <= 0)
                 {
-                    textBox1.Focus();
-                    textBox1.SelectAll();
+                    textBox_quantity_main.Focus();
+                    textBox_quantity_main.SelectAll();
                     MMessageBoxEx.Show(this, "Ціна не може бути відємною", Application.ProductName);
                     return;
                 }
@@ -243,7 +188,6 @@ namespace driver.Components.UI
             Application.DoEvents();
             this.Enabled = true;
             System.Windows.Forms.SendKeys.Flush();
-            //this.Parent = Form.FromHandle(winOwner.Handle);
             if (this.ShowDialogEx(ctrlOwner) != DialogResult.OK)
                 return false;
             HUpdateRowSourceEndHook();
@@ -252,16 +196,7 @@ namespace driver.Components.UI
 
         private void HUpdateRowSourceEndHook()
         {
-           /* int pack = 1;
-            int.TryParse(dRow["PACK"].ToString(), out pack);
-            if (pack == 0) pack = 1;*/
             dRow["PRICE"] = newPrice;
-            /*
-            if (AppConfig.APP_AddTotal == "type1")
-                newTotal = AppFunc.GetRoundedDose(newTotal / pack);
-            if (AppConfig.APP_AddTotal == "type2")
-                newTotal = AppFunc.GetRoundedDose(newTotal * pack);
-            */
             dRow["TOT"] = newTotal;
             dRow["SUM"] = dRow["ASUM"] = MathLib.GetRoundedMoney(newTotal * newPrice);
         }
@@ -294,40 +229,24 @@ namespace driver.Components.UI
                 case "main":
                     {
                         locked = true;
-                        this.currTotal = MathLib.GetDouble(textBox1.Text);
+                        this.currTotal = MathLib.GetDouble(textBox_quantity_main.Text);
                         if (this.currTotal == 0)
                             this.addTotal = 0;
                         if (this.articlePackage > 0 && this.currTotal > 0)
                             this.addTotal = MathLib.GetRoundedDose(this.currTotal / this.articlePackage);
-                        //if (driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal == "type1")
-                        //{
-                        //    this.addTotal = MathLib.GetRoundedDose(this.currTotal * this.articlePackage);
-                        //}
-                        //if (driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal == "type2")
-                        //{
-                        //    this.addTotal = MathLib.GetRoundedDose(this.currTotal / this.articlePackage);
-                        //}
-                        textBox2.Text = this.addTotal.ToString();
+                        textBox_quantity_additional.Text = this.addTotal.ToString();
                         break;
 
                     }
                 case "add":
                     {
                         locked = true;
-                        this.addTotal = MathLib.GetDouble(textBox2.Text);
+                        this.addTotal = MathLib.GetDouble(textBox_quantity_additional.Text);
                         if (this.addTotal == 0)
                             this.currTotal = 0;
                         if (this.articlePackage > 0 && this.addTotal > 0)
                             this.currTotal = MathLib.GetRoundedDose(this.addTotal * this.articlePackage);
-                        //if (driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal == "type1")
-                        //{
-                        //    this.currTotal = MathLib.GetRoundedDose(this.addTotal / this.articlePackage);
-                        //}
-                        //if (driver.Config.ConfigManager.Instance.CommonConfiguration.Content_Cheques_AddTotal == "type2")
-                        //{
-                        //    this.currTotal = MathLib.GetRoundedDose(this.addTotal * this.articlePackage);
-                        //}
-                        textBox1.Text = this.currTotal.ToString();
+                        textBox_quantity_main.Text = this.currTotal.ToString();
                         break;
                     }
             }
@@ -335,7 +254,7 @@ namespace driver.Components.UI
 
         private void button_scale_value_Click(object sender, EventArgs e)
         {
-            global::components.Components.SerialPort.Com_SerialPort comP = global::components.Components.SerialPort.Com_SerialPort.GetPort("scales");
+            global::components.Components.SerialPort.Com_SerialPort comP = global::components.Components.SerialPort.Com_SerialPort.GetAndConfigurePort("scales", (Hashtable)ApplicationConfiguration.Instance["serialPortConnect.additionalDevices.scale"]);
 
             // get scale value or
             try
@@ -448,7 +367,7 @@ namespace driver.Components.UI
                                                         byte[] __weightValue = new byte[6];
                                                         Array.Copy(cleanReceivedData.ToArray(), (i + 3), __weightValue, 0, __weightValue.Length);
 
-                                                        textBox1.Text = Encoding.Default.GetString(__weightValue);
+                                                        textBox_quantity_main.Text = Encoding.Default.GetString(__weightValue);
                                                         weightReceived = true;
                                                     //}
 
@@ -494,6 +413,7 @@ namespace driver.Components.UI
             }
 
             comP.PortClear();
+            comP.Close();
 
             this.AddProductBtn.Select();
             this.AddProductBtn.Focus();
@@ -503,7 +423,7 @@ namespace driver.Components.UI
         {
             //this.comP.Close();
             //this.comP.Dispose();
-            global::components.Components.SerialPort.Com_SerialPort.ClosePort("scales");
+            // global::components.Components.SerialPort.Com_SerialPort.ClosePort("scales");
         }
 
         private void Request_Load(object sender, EventArgs e)
