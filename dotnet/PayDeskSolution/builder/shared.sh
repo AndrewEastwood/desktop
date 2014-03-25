@@ -120,7 +120,7 @@ function _updateStatic() {
     # copy source
     #
     start "copy source"
-    for f in ./src/*
+    for f in ./source/*
     do
         if [ -d "$f" ]
         then
@@ -193,7 +193,7 @@ function _createAppPatch() {
 
     ZIPNAME="../../AppUpdate_$TYPE`getVersionNumberFile`.7z"
     PASS=12345
-    COMPRESSOR=./src/tools/compressor/7z.exe
+    COMPRESSOR=./source/tools/compressor/7z.exe
     CARGS="a -t7z -p$PASS -mhe=on $APP_HOME/$ZIPNAME"
     CCMD="$COMPRESSOR $CARGS"
 

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="windows-1251" ?> 
+<document name="dinningRoom">
+
+    <!-- Список офіціантів 
+         Щоб відключити цію секцію встановіть значення value="false" в параметрів active
+         <property name="active" value="false"/>
+    -->
+    <section name="Waiters">
+        <property name="active" value="true"/>
+        <section name="items">
+            <property name="1" value="1 Леся"/>
+            <property name="2" value="2 Галя"/>
+            <property name="3" value="БАНКЕТ"/>
+           
+        </section>
+    </section>
+
+    <!-- Список доступних столиків в закладі
+         Щоб відключити цію секцію встановіть значення value="false" в параметрів active
+         <property name="active" value="false"/>
+    -->
+    <section name="DeskNumbers">
+        <property name="active" value="true"/>
+        <section name="items">
+            <property name="1" value="01 ст."/>
+            <property name="2" value="02 ст."/>
+            <property name="3" value="03 ст."/>
+            <property name="4" value="04 ст."/>
+            <property name="5" value="05 ст."/>
+            <property name="6" value="06 ст."/>
+            <property name="7" value="07 ст."/>
+            <property name="8" value="БАНКЕТ"/>
+            
+        </section>
+    </section>
+
+    <!-- Додаткові позначки (фішки)
+         Щоб відключити цію секцію встановіть значення value="false" в параметрів active
+         <property name="active" value="false"/>
+    -->
+    <section name="OrderNumbers">
+        <property name="active" value="false"/>
+        <section name="items">
+            <property name="1" value="(фішка.1)"/>
+            <property name="2" value="(фішка.2)"/>
+            <property name="3" value="(фішка.3)"/>
+            <property name="4" value="(фішка.4)"/>
+            <property name="5" value="(фішка.5)"/>
+            <property name="6" value="(фішка.6)"/>
+            <property name="7" value="(фішка.7)"/>
+            <property name="8" value="(фішка.8)"/>
+        </section>
+    </section>
+
+    <!-- Порядок показу секцій -->
+    <property name="patternBarOrderComment" value="Waiters DeskNumbers OrderNumbers"/>
+    
+    <!-- Додатковий коментар -->
+    <property name="useAdditionalComment" value="false"/>
+
+
+</document>

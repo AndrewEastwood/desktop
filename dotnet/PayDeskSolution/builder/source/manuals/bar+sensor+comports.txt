@@ -1,0 +1,16 @@
+Як вставляти столики і офіціанти?
+
+1."C:\InTech\PayDesk_bar\display\default\config\dinningRoom.xml"
+
+Як змінювати сенсорні кнопки страв ?
+
+1. "C:\InTech\PayDesk_bar_s\tools\ProductCategoryManager".  Тут запустити "ProductCategoryManager.exe"
+2. В поле "browse" шлях "C:\InTech\PayDesk_bar_s\display\default\config\productFiltering.xml" 
+3. Натиснути кнопку "Load"
+4. Покоригувати та натиснути "Save"
+5. З "C:\InTech\PayDesk_bar_s\tools\ProductCategoryManager\userdata" файл "productFiltering.xml" скопіювати в
+"C:\InTech\PayDesk_bar_s\display\default\config"
+
+Як добратися до установок com-портів?
+
+"C:\InTech\PayDesk_bar_s\display\default\config\serialPortConnect.xml"
